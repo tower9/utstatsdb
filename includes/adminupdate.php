@@ -39,21 +39,21 @@ function update302()
   if (strtolower($dbtype) == "sqlite")
     $result = sql_queryn($link, "UPDATE {$dbpre}matches SET gm_init=gm_start,gm_start=gm_init+(gm_starttime DIV 100)");
   else
-    $result = sql_queryn($link, "UPDATE {$dbpre}matches SET gm_init=gm_start,gm_start=ADDTIME(gm_init, gm_starttime DIV 100)");
+    $result = sql_queryn($link, "UPDATE {$dbpre}matches SET gm_init=gm_start,gm_start=ADDTIME(gm_init, SEC_TO_TIME(gm_starttime DIV 100))");
   if (!$result) {
     echo "<br />Error updating matches table.{$break}\n";
     exit;
   }
 
   echo "Updating map last match dates....<br />\n";
-  $result = sql_queryn($link, "UPDATE {$dbpre}maps SET mp_lastmatch=(SELECT gm_start FROM ut_matches WHERE gm_init=mp_lastmatch)");
+  $result = sql_queryn($link, "UPDATE {$dbpre}maps SET mp_lastmatch=(SELECT gm_start FROM {$dbpre}matches WHERE gm_map=mp_num ORDER BY gm_init DESC LIMIT 1)");
   if (!$result) {
     echo "<br />Error updating map table.{$break}\n";
     exit;
   }
 
   echo "Updating server last match dates....<br />\n";
-  $result = sql_queryn($link, "UPDATE {$dbpre}servers SET sv_lastmatch=(SELECT gm_start FROM ut_matches WHERE gm_init=sv_lastmatch)");
+  $result = sql_queryn($link, "UPDATE {$dbpre}servers SET sv_lastmatch=(SELECT gm_start FROM {$dbpre}matches WHERE gm_server=sv_num ORDER BY gm_init DESC LIMIT 1)");
   if (!$result) {
     echo "<br />Error updating server table.{$break}\n";
     exit;
