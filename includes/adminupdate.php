@@ -19,6 +19,57 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+function update302()
+{
+  global $dbtype, $dbpre, $break;
+
+  $link = sql_connect();
+
+  echo "Updating {$dbpre}matches...<br />\n";
+  if (strtolower($dbtype) == "sqlite")
+    $result = sql_queryn($link, "ALTER TABLE {$dbpre}matches ADD COLUMN gm_init datetime NOT NULL default '0000-00-00 00:00:00'");
+  else
+    $result = sql_queryn($link, "ALTER TABLE {$dbpre}matches ADD gm_init datetime NOT NULL default '0000-00-00 00:00:00' AFTER gm_uttype");
+  if (!$result) {
+    echo "<br />Error updating matches table.{$break}\n";
+    exit;
+  }
+
+  echo "Updating match start dates....<br />\n";
+  if (strtolower($dbtype) == "sqlite")
+    $result = sql_queryn($link, "UPDATE {$dbpre}matches SET gm_init=gm_start,gm_start=gm_init+(gm_starttime DIV 100)");
+  else
+    $result = sql_queryn($link, "UPDATE {$dbpre}matches SET gm_init=gm_start,gm_start=ADDTIME(gm_init, gm_starttime DIV 100)");
+  if (!$result) {
+    echo "<br />Error updating matches table.{$break}\n";
+    exit;
+  }
+
+  echo "Updating map last match dates....<br />\n";
+  $result = sql_queryn($link, "UPDATE {$dbpre}maps SET mp_lastmatch=(SELECT gm_start FROM ut_matches WHERE gm_init=mp_lastmatch)");
+  if (!$result) {
+    echo "<br />Error updating map table.{$break}\n";
+    exit;
+  }
+
+  echo "Updating server last match dates....<br />\n";
+  $result = sql_queryn($link, "UPDATE {$dbpre}servers SET sv_lastmatch=(SELECT gm_start FROM ut_matches WHERE gm_init=sv_lastmatch)");
+  if (!$result) {
+    echo "<br />Error updating server table.{$break}\n";
+    exit;
+  }
+
+  echo "Updating version....<br />\n";
+  $result = sql_queryn($link, "UPDATE {$dbpre}config SET value='3.02' WHERE conf='Version'");
+  if (!$result) {
+    echo "<br />Error updating version.{$break}\n";
+    exit;
+  }
+
+  sql_close($link);
+  echo "<br />Database updates complete.<br />\n";
+}
+
 function update301()
 {
   global $dbtype, $dbpre, $break;

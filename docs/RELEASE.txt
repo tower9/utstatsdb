@@ -1,5 +1,12 @@
 Release Notes:
 
+Version 3.02 (not released)
+  Fixed admin connections to MySQL database socket.
+  Added default port 3306 to MySQL connections.
+  Added check for RedeemerDeath in UT '99 logs.
+  Fixed problem with incorrect pickup values.
+  Match dates now based on actual match start time instead of map load time.
+
 Version 3.01
   Added database update utility.
   Adjusted time between kills to register multikills.

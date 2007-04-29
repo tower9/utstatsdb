@@ -52,6 +52,7 @@ class Match {
   var $mapfile = "";
   var $author = "";
   var $matchdate = "";
+  var $startdate = "";
   var $mutators = "";
   var $servername = "";
   var $shortname = "";

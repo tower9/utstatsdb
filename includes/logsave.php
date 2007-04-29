@@ -129,18 +129,19 @@ function storedata()
     return 0;
 
   $md = date("Y-m-d H:i:s", $match->matchdate); // YYYY-MM-DD HH:MM:SS
+  $sd = date("Y-m-d H:i:s", $match->startdate);
   $tot_ptime = 0;
   $match->tot_score = intval(floor($match->tot_score));
 
   // Update Map Data
-  $result = sql_queryn($link, "UPDATE {$dbpre}maps SET mp_matches=mp_matches+1,mp_score=mp_score+{$match->tot_score},mp_kills=mp_kills+{$match->tot_kills},mp_deaths=mp_deaths+{$match->tot_deaths},mp_suicides=mp_suicides+{$match->tot_suicides},mp_time=mp_time+{$match->length},mp_lastmatch='$md' WHERE mp_num={$match->mapnum}");
+  $result = sql_queryn($link, "UPDATE {$dbpre}maps SET mp_matches=mp_matches+1,mp_score=mp_score+{$match->tot_score},mp_kills=mp_kills+{$match->tot_kills},mp_deaths=mp_deaths+{$match->tot_deaths},mp_suicides=mp_suicides+{$match->tot_suicides},mp_time=mp_time+{$match->length},mp_lastmatch='$sd' WHERE mp_num={$match->mapnum}");
   if (!$result) {
     echo "Error updating map data in database.{$break}\n";
     exit;
   }
 
   // Update Server Data
-  $result = sql_queryn($link, "UPDATE {$dbpre}servers SET sv_matches=sv_matches+1,sv_frags=sv_frags+{$match->tot_kills}-{$match->tot_suicides},sv_score=sv_score+{$match->tot_score},sv_time=sv_time+{$match->length},sv_lastmatch='$md' WHERE sv_num={$match->servernum} LIMIT 1");
+  $result = sql_queryn($link, "UPDATE {$dbpre}servers SET sv_matches=sv_matches+1,sv_frags=sv_frags+{$match->tot_kills}-{$match->tot_suicides},sv_score=sv_score+{$match->tot_score},sv_time=sv_time+{$match->length},sv_lastmatch='$sd' WHERE sv_num={$match->servernum} LIMIT 1");
   if (!$result) {
     echo "Error updating server data in database.{$break}\n";
     exit;
@@ -157,7 +158,7 @@ function storedata()
   }
 
   // Save Match Data
-  $result = sql_queryn($link, "INSERT INTO {$dbpre}matches VALUES (NULL,{$match->servernum},'{$match->serverversion}',{$match->mapnum},{$match->gametnum},{$match->uttype},'$md',{$match->logger},'$logname',{$match->rpg},{$match->maxwave},{$match->difficulty},'{$match->mutators}',{$match->mapvoting},{$match->kickvoting},{$match->fraglimit},{$match->timelimit},{$match->overtime},{$match->minplayers},{$match->translocator},{$match->endtimedelay},{$match->balanceteams},{$match->playersbalanceteams},'{$match->friendlyfirescale}','{$match->linksetup}',{$match->gamespeed},{$match->healthforkills},{$match->allowsuperweapons},{$match->camperalarm},{$match->allowpickups},{$match->allowadrenaline},{$match->fullammo},{$match->starttime},{$match->length},{$match->numplayers},{$match->tot_kills},{$match->tot_deaths},{$match->tot_suicides},{$match->numteams},{$match->team[0]},{$match->team[1]},{$match->team[2]},{$match->team[3]},{$match->firstblood},{$match->headshots},0)");
+  $result = sql_queryn($link, "INSERT INTO {$dbpre}matches VALUES (NULL,{$match->servernum},'{$match->serverversion}',{$match->mapnum},{$match->gametnum},{$match->uttype},'$md','$sd',{$match->logger},'$logname',{$match->rpg},{$match->maxwave},{$match->difficulty},'{$match->mutators}',{$match->mapvoting},{$match->kickvoting},{$match->fraglimit},{$match->timelimit},{$match->overtime},{$match->minplayers},{$match->translocator},{$match->endtimedelay},{$match->balanceteams},{$match->playersbalanceteams},'{$match->friendlyfirescale}','{$match->linksetup}',{$match->gamespeed},{$match->healthforkills},{$match->allowsuperweapons},{$match->camperalarm},{$match->allowpickups},{$match->allowadrenaline},{$match->fullammo},{$match->starttime},{$match->length},{$match->numplayers},{$match->tot_kills},{$match->tot_deaths},{$match->tot_suicides},{$match->numteams},{$match->team[0]},{$match->team[1]},{$match->team[2]},{$match->team[3]},{$match->firstblood},{$match->headshots},0)");
   if (!$result) {
     echo "Error saving match data in database.{$break}\n";
     exit;
@@ -365,9 +366,16 @@ function storedata()
         }
       }
 
+      // Fix pickup - should not be negative.  Why 0 and -5 anyway?
       if ($match->gametype == 10 || $match->gametype == 19) { // Last Man Standing
-        $player[$i]->pickup[0] = $player[$player[$i]->plr]->lives;
-        $player[$i]->pickup[1] = $player[$player[$i]->plr]->lives - (array_sum($player[$i]->deaths) + array_sum($player[$i]->suicides));
+      	if ($player[$player[$i]->plr]->lives > 0)
+          $player[$i]->pickup[0] = $player[$player[$i]->plr]->lives;
+        else
+          $player[$i]->pickup[0] = 0;
+        if (array_sum($player[$i]->deaths) + array_sum($player[$i]->suicides) < $player[$player[$i]->plr]->lives)
+          $player[$i]->pickup[1] = $player[$player[$i]->plr]->lives - (array_sum($player[$i]->deaths) + array_sum($player[$i]->suicides));
+        else
+          $player[$i]->pickup[1] = 0;
       }
 
       if ($gt_time <= 0) {
@@ -656,42 +664,42 @@ function storedata()
           $tl_chfragssg_plr = $pnum;
           $tl_chfragssg_tm = array_sum($player[$i]->totaltime);
           $tl_chfragssg_map = $match->mapnum;
-          $tl_chfragssg_date = $md;
+          $tl_chfragssg_date = $sd;
         }
         if (array_sum($player[$i]->kills) > $tl_chkillssg) {
           $tl_chkillssg = array_sum($player[$i]->kills);
           $tl_chkillssg_plr = $pnum;
           $tl_chkillssg_tm = array_sum($player[$i]->totaltime);
           $tl_chkillssg_map = $match->mapnum;
-          $tl_chkillssg_date = $md;
+          $tl_chkillssg_date = $sd;
         }
         if (array_sum($player[$i]->deaths) > $tl_chdeathssg) {
           $tl_chdeathssg = array_sum($player[$i]->deaths);
           $tl_chdeathssg_plr = $pnum;
           $tl_chdeathssg_tm = array_sum($player[$i]->totaltime);
           $tl_chdeathssg_map = $match->mapnum;
-          $tl_chdeathssg_date = $md;
+          $tl_chdeathssg_date = $sd;
         }
         if (array_sum($player[$i]->suicides) > $tl_chsuicidessg) {
           $tl_chsuicidessg = array_sum($player[$i]->suicides);
           $tl_chsuicidessg_plr = $pnum;
           $tl_chsuicidessg_tm = array_sum($player[$i]->totaltime);
           $tl_chsuicidessg_map = $match->mapnum;
-          $tl_chsuicidessg_date = $md;
+          $tl_chsuicidessg_date = $sd;
         }
         if ($player[$i]->carjack > $tl_chcarjacksg) {
           $tl_chcarjacksg = $player[$i]->carjack;
           $tl_chcarjacksg_plr = $pnum;
           $tl_chcarjacksg_tm = array_sum($player[$i]->totaltime);
           $tl_chcarjacksg_map = $match->mapnum;
-          $tl_chcarjacksg_date = $md;
+          $tl_chcarjacksg_date = $sd;
         }
         if ($player[$i]->roadkills > $tl_chroadkillssg) {
           $tl_chroadkillssg = $player[$i]->roadkills;
           $tl_chroadkillssg_plr = $pnum;
           $tl_chroadkillssg_tm = array_sum($player[$i]->totaltime);
           $tl_chroadkillssg_map = $match->mapnum;
-          $tl_chroadkillssg_date = $md;
+          $tl_chroadkillssg_date = $sd;
         }
 
         // Career Highs
@@ -954,21 +962,21 @@ function storedata()
             $tl_chflagcapturesg_plr = $pnum;
             $tl_chflagcapturesg_tm = array_sum($player[$i]->totaltime);
             $tl_chflagcapturesg_map = $match->mapnum;
-            $tl_chflagcapturesg_date = $md;
+            $tl_chflagcapturesg_date = $sd;
           }
           if (array_sum($player[$i]->return) > $tl_chflagreturnsg && ($config["bothighs"] || !$player[$i]->is_bot())) {
             $tl_chflagreturnsg = array_sum($player[$i]->return);
             $tl_chflagreturnsg_plr = $pnum;
             $tl_chflagreturnsg_tm = array_sum($player[$i]->totaltime);
             $tl_chflagreturnsg_map = $match->mapnum;
-            $tl_chflagreturnsg_date = $md;
+            $tl_chflagreturnsg_date = $sd;
           }
           if (array_sum($player[$i]->typekill) > $tl_chflagkillsg && ($config["bothighs"] || !$player[$i]->is_bot())) {
             $tl_chflagkillsg = array_sum($player[$i]->typekill);
             $tl_chflagkillsg_plr = $pnum;
             $tl_chflagkillsg_tm = array_sum($player[$i]->totaltime);
             $tl_chflagkillsg_map = $match->mapnum;
-            $tl_chflagkillsg_date = $md;
+            $tl_chflagkillsg_date = $sd;
           }
           break;
         case 3: // Bombing Run
@@ -984,14 +992,14 @@ function storedata()
             $tl_chbombcarriedsg_plr = $pnum;
             $tl_chbombcarriedsg_tm = array_sum($player[$i]->totaltime);
             $tl_chbombcarriedsg_map = $match->mapnum;
-            $tl_chbombcarriedsg_date = $md;
+            $tl_chbombcarriedsg_date = $sd;
           }
           if (array_sum($player[$i]->tossed) > $tl_chbombtossedsg && ($config["bothighs"] || !$player[$i]->is_bot())) {
             $tl_chbombtossedsg = array_sum($player[$i]->tossed);
             $tl_chbombtossedsg_plr = $pnum;
             $tl_chbombtossedsg_tm = array_sum($player[$i]->totaltime);
             $tl_chbombtossedsg_map = $match->mapnum;
-            $tl_chbombtossedsg_date = $md;
+            $tl_chbombtossedsg_date = $sd;
           }
           break;
         case 4: // Team DeathMatch
@@ -1008,21 +1016,21 @@ function storedata()
             $tl_chnodeconstructedsg_plr = $pnum;
             $tl_chnodeconstructedsg_tm = array_sum($player[$i]->totaltime);
             $tl_chnodeconstructedsg_map = $match->mapnum;
-            $tl_chnodeconstructedsg_date = $md;
+            $tl_chnodeconstructedsg_date = $sd;
           }
           if (array_sum($player[$i]->dropped) > $tl_chnodeconstdestroyedsg && ($config["bothighs"] || !$player[$i]->is_bot())) {
             $tl_chnodeconstdestroyedsg = array_sum($player[$i]->dropped);
             $tl_chnodeconstdestroyedsg_plr = $pnum;
             $tl_chnodeconstdestroyedsg_tm = array_sum($player[$i]->totaltime);
             $tl_chnodeconstdestroyedsg_map = $match->mapnum;
-            $tl_chnodeconstdestroyedsg_date = $md;
+            $tl_chnodeconstdestroyedsg_date = $sd;
           }
           if (array_sum($player[$i]->taken) > $tl_chnodedestroyedsg && ($config["bothighs"] || !$player[$i]->is_bot())) {
             $tl_chnodedestroyedsg = array_sum($player[$i]->taken);
             $tl_chnodedestroyedsg_plr = $pnum;
             $tl_chnodedestroyedsg_tm = array_sum($player[$i]->totaltime);
             $tl_chnodedestroyedsg_map = $match->mapnum;
-            $tl_chnodedestroyedsg_date = $md;
+            $tl_chnodedestroyedsg_date = $sd;
           }
           $break;
         case 7: // Double Domination
@@ -1032,7 +1040,7 @@ function storedata()
             $tl_chcpcapturesg_plr = $pnum;
             $tl_chcpcapturesg_tm = array_sum($player[$i]->totaltime);
             $tl_chcpcapturesg_map = $match->mapnum;
-            $tl_chcpcapturesg_date = $md;
+            $tl_chcpcapturesg_date = $sd;
           }
           break;
         default: // Other
@@ -1441,7 +1449,7 @@ function storedata()
             // Kills
             if ($wtkills > $weapsg[$wtintnum]["wp_chkillssg"]) {
               $weapsg[$wtintnum]["wp_chkillssg"] = $wtkills;
-              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chkillssg=$wtkills,wp_chkillssg_plr=$pnum,wp_chkillssg_tm={$match->length},wp_chkillssg_map={$match->mapnum},wp_chkillssg_dt='$md' WHERE wp_num=$wtnum LIMIT 1");
+              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chkillssg=$wtkills,wp_chkillssg_plr=$pnum,wp_chkillssg_tm={$match->length},wp_chkillssg_map={$match->mapnum},wp_chkillssg_dt='$sd' WHERE wp_num=$wtnum LIMIT 1");
               if (!$result) {
                 echo "Error saving weapon single game kill highs.{$break}\n";
                 exit;
@@ -1451,7 +1459,7 @@ function storedata()
             // Deaths
             if ($wtdeaths > $weapsg[$wtintnum]["wp_chdeathssg"]) {
               $weapsg[$wtintnum]["wp_chdeathssg"] = $wtdeaths;
-              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chdeathssg=$wtdeaths,wp_chdeathssg_plr=$pnum,wp_chdeathssg_tm={$match->length},wp_chdeathssg_map={$match->mapnum},wp_chdeathssg_dt='$md' WHERE wp_num=$wtnum LIMIT 1");
+              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chdeathssg=$wtdeaths,wp_chdeathssg_plr=$pnum,wp_chdeathssg_tm={$match->length},wp_chdeathssg_map={$match->mapnum},wp_chdeathssg_dt='$sd' WHERE wp_num=$wtnum LIMIT 1");
               if (!$result) {
                 echo "Error saving weapon single game death highs.{$break}\n";
                 exit;
@@ -1461,7 +1469,7 @@ function storedata()
             // Suicides
             if ($wtsuicides > $weapsg[$wtintnum]["wp_chsuicidessg"]) {
               $weapsg[$wtintnum]["wp_chsuicidessg"] = $wtsuicides;
-              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chsuicidessg=$wtsuicides,wp_chsuicidessg_plr=$pnum,wp_chsuicidessg_tm={$match->length},wp_chsuicidessg_map={$match->mapnum},wp_chsuicidessg_dt='$md' WHERE wp_num=$wtnum LIMIT 1");
+              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chsuicidessg=$wtsuicides,wp_chsuicidessg_plr=$pnum,wp_chsuicidessg_tm={$match->length},wp_chsuicidessg_map={$match->mapnum},wp_chsuicidessg_dt='$sd' WHERE wp_num=$wtnum LIMIT 1");
               if (!$result) {
                 echo "Error saving weapon single game suicide highs.{$break}\n";
                 exit;
@@ -1471,7 +1479,7 @@ function storedata()
             // Held
             if ($wtheld > $weapsg[$wtintnum]["wp_chdeathshldsg"]) {
               $weapsg[$wtintnum]["wp_chdeathshldsg"] = $wtheld;
-              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chdeathshldsg=$wtheld,wp_chdeathshldsg_plr=$pnum,wp_chdeathshldsg_tm={$match->length},wp_chdeathshldsg_map={$match->mapnum},wp_chdeathshldsg_dt='$md' WHERE wp_num=$wtnum LIMIT 1");
+              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chdeathshldsg=$wtheld,wp_chdeathshldsg_plr=$pnum,wp_chdeathshldsg_tm={$match->length},wp_chdeathshldsg_map={$match->mapnum},wp_chdeathshldsg_dt='$sd' WHERE wp_num=$wtnum LIMIT 1");
               if (!$result) {
                 echo "Error saving weapon single game held death highs.{$break}\n";
                 exit;

@@ -219,7 +219,7 @@ function tagut_game($i, $data)
 
       // Check for existing match in database
       $md = date("Y-m-d H:i:s", $match->matchdate);
-      $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}matches WHERE gm_server={$match->servernum} AND gm_map={$match->mapnum} AND gm_type={$match->gametnum} AND gm_start='$md' LIMIT 1");
+      $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}matches WHERE gm_server={$match->servernum} AND gm_map={$match->mapnum} AND gm_type={$match->gametnum} AND gm_init='$md' LIMIT 1");
       if (!$result) {
         echo "Error accessing match database.{$break}\n";
         exit;
@@ -499,6 +499,7 @@ function tagut_game_start($i, $data)
 
   $match->starttime = ctime($data[0]);
   $match->started = 1;
+  $match->startdate = $match->matchdate + intval($match->starttime / 100);
 
   for ($n = 0; $n <= $match->maxplayer; $n++)
     if (isset($player[$n]))
@@ -666,14 +667,19 @@ function tagut_kill($killtype, $i, $data)
   // 2	Enforcer	1	Pulse Gun	shot
   // 1	Flak Cannon	3	Flak Cannon	shredded
   // 0	Sniper Rifle	1	Flak Cannon	Decapitated
+  // 0	Sniper Rifle	4	Double Enforcer	RedeemerDeath
+
+  if ($victim < 0 || $killer == -99)
+    return;
+
+  // Check for RedeemerDeath
+  if (stristr($damagetype, "RedeemerDeath"))
+    $killweapon = "Redeemer";
 
   // Get Kill Weapon
   list($killweaponnum,$killweaptype,$killweapsec) = get_weapon($killweapon, 0);
   // Get Victim Weapon
   list($victweaponnum,$victweaptype,$victweapsec) = get_weapon($victweapon, 0);
-
-  if ($victim < 0 || $killer == -99)
-    return;
 
   $tm = intval($player[$killer]->team);
   if ($tm < 0 || $tm > 3)

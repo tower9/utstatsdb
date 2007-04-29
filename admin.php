@@ -26,7 +26,7 @@ $magic = get_magic_quotes_gpc();
 $magicrt = get_magic_quotes_runtime();
 $adminver = new AdminVer;
 $adminver->major = 3;
-$adminver->minor = 01;
+$adminver->minor = 02;
 $adminver->extra = "";
 $updatereq = 0;
 
@@ -124,7 +124,9 @@ if ($error)
 
 switch (strtolower($dbtype)) {
   case "mysql":
-    $link = mysql_connect("$SQLhost","$SQLus","$SQLpw");
+    if (!isset($SQLport) || $SQLport == "")
+      $SQLport = 3306;
+    $link = mysql_connect("$SQLhost:$SQLport","$SQLus","$SQLpw");
     if (!$link) {
       echo "Database access error.\n";
       exit;
@@ -460,12 +462,56 @@ EOF;
 function updatedb() {
   menu_top();
 
-  echo "Updating database to version 3.01....<br /><br />\n";
-  include_once("includes/adminupdate.php");
-  update301();
+  $ver = currentver();
+  if ($ver == -1) {
+    $versioncheck = "Version check error!<br />\n";
+    menu_bottom();
+    exit;
+  }
+  list($vermajor, $verminor, $verextra) = $ver;
+  if ($vermajor == 3 && $verminor == 0) {
+    echo "Updating database to version 3.01....<br /><br />\n";
+    include_once("includes/adminupdate.php");
+    update301();
+  }
+
+  $ver = currentver();
+  if ($ver == -1) {
+    $versioncheck = "Version check error!<br />\n";
+    menu_bottom();
+    exit;
+  }
+  list($vermajor, $verminor, $verextra) = $ver;
+  if ($vermajor == 3 && $verminor == 1) {
+    echo "Updating database to version 3.02....<br /><br />\n";
+    include_once("includes/adminupdate.php");
+    update302();
+  }
 
   menu_bottom();
   exit;
+}
+
+function currentver() {
+  global $dbpre;
+
+  $result = sql_query("SELECT value FROM {$dbpre}config WHERE conf='Version' LIMIT 1");
+  if (!$result)
+    return -1;
+
+  $verextra = "";
+  $vermajor = $verminor = 0;
+  $row = sql_fetch_row($result);
+  sql_free_result($result);
+  $ver = $row[0];
+  if (($pos = strpos($ver, ".")) !== FALSE)
+    $vermajor = substr($ver, 0, $pos);
+  if (is_numeric(substr($ver, $pos + 1, 1)) && is_numeric(substr($ver, $pos + 2, 1)))
+    $verminor = substr($ver, $pos + 1, 2);
+  if (strlen($ver) > $pos + 2)
+    $verextra = substr($ver, $pos + 3);
+
+  return array($vermajor, $verminor, $verextra);
 }
 
 //=============================================================================

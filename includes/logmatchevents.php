@@ -306,7 +306,7 @@ function tag_si($i, $data)
 
   // Check for existing match in database
   $md = date("Y-m-d H:i:s", $match->matchdate);
-  $result = sql_queryn($link, "SELECT gm_status FROM {$dbpre}matches WHERE gm_server={$match->servernum} AND gm_map={$match->mapnum} AND gm_type={$match->gametnum} AND gm_start='$md' LIMIT 1");
+  $result = sql_queryn($link, "SELECT gm_status FROM {$dbpre}matches WHERE gm_server={$match->servernum} AND gm_map={$match->mapnum} AND gm_type={$match->gametnum} AND gm_init='$md' LIMIT 1");
   if (!$result) {
     echo "Error accessing match database.{$break}\n";
     exit;
@@ -331,6 +331,7 @@ function tag_sg($i, $data)
 
   $match->starttime = ctime($data[0]);
   $match->started = 1;
+  $match->startdate = $match->matchdate + intval($match->starttime / 100);
 
   for ($n = 0; $n <= $match->maxplayer; $n++)
     if (isset($player[$n]))
@@ -360,7 +361,7 @@ function tag_eg($i, $data)
     case "artifacts":
       $match->ended = 1;
       break;
-    case "lastman":
+    case "lastman": // *tag*
       $match->ended = 1;
       if ($i > 3) { // Retrieve rank list
         // $rankset = 1;

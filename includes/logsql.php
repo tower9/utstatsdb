@@ -24,6 +24,8 @@ function sql_query($query) {
 
   switch (strtolower($dbtype)) {
     case "mysql":
+      if (!isset($SQLport) || $SQLport == "")
+        $SQLport = 3306;
       $link = @mysql_connect("$SQLhost:$SQLport","$SQLus","$SQLpw");
       if (!$link) {
         echo "Database access error.\n";
@@ -103,6 +105,8 @@ function sql_connect() {
 
   switch (strtolower($dbtype)) {
     case "mysql":
+      if (!isset($SQLport) || $SQLport == "")
+        $SQLport = 3306;
       $link = @mysql_connect("$SQLhost:$SQLport","$SQLus","$SQLpw");
       if (!$link) {
         echo "Database access error.\n";
@@ -444,6 +448,8 @@ function sql_show_tables($query) {
 
   switch (strtolower($dbtype)) {
     case "mysql":
+      if (!isset($SQLport) || $SQLport == "")
+        $SQLport = 3306;
       $link = @mysql_connect("$SQLhost:$SQLport","$SQLus","$SQLpw");
       if (!$link) {
         echo "Database access error.\n";

@@ -193,7 +193,7 @@ web server and give the group write access.
 
 Map images can be installed with UTStatsDB for display on various pages.  To use 
 the map pack included on the UTStatsDB download site, simply extract the file to 
-your UTStatsDB direcotry.  See the notes in README.txt for mor details.
+your UTStatsDB direcotry.  See the notes in README.txt for more details.
 
 As a last note, I recommend the use of a PHP caching program such as Zend 
 Platform or eAccelerator. Caching allows your PHP scripts to be cached in memory 

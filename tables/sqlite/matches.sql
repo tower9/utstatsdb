@@ -5,6 +5,7 @@ CREATE TABLE %dbpre%matches (
   gm_map mediumint(8) NOT NULL default 0,
   gm_type tinyint(3) NOT NULL default 0,
   gm_uttype tinyint(1) NOT NULL default 0,
+  gm_init datetime NOT NULL default '0000-00-00 00:00:00',
   gm_start datetime NOT NULL default '0000-00-00 00:00:00',
   gm_logger tinyint(3) NOT NULL default 0,
   gm_logname varchar(45) NOT NULL default '',
