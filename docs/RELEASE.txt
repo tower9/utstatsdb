@@ -1,6 +1,6 @@
 Release Notes:
 
-Version 3.02 (not released)
+Version 3.02
   Fixed admin connections to MySQL database socket.
   Added default port 3306 to MySQL connections.
   Added check for RedeemerDeath in UT '99 logs.
