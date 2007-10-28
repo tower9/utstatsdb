@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2006  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -499,7 +499,7 @@ function tagut_game_start($i, $data)
 
   $match->starttime = ctime($data[0]);
   $match->started = 1;
-  $match->startdate = $match->matchdate + intval($match->starttime / 100);
+  $match->startdate = $match->matchdate + intval($match->starttime / 110);
 
   for ($n = 0; $n <= $match->maxplayer; $n++)
     if (isset($player[$n]))

@@ -1,7 +1,7 @@
 CREATE TABLE %dbpre%configset (
   cnfs_num smallint(5) NOT NULL default 0,
   title_msg text NOT NULL default '',
-  title_msgDesc varchar(150) NOT NULL default ''
+  title_msgDesc varchar(150) NOT NULL
 );
 
 CREATE INDEX cnfs_num ON %dbpre%configset (cnfs_num);

@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2006  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -58,7 +58,10 @@ while (list($key,$val) = each($row))
   ${$key} = $val;
 
 $start = strtotime($gm_start);
+$init = strtotime($gm_init);
+$delay = $start - strtotime($gm_init);
 $matchdate = formatdate($start, 1);
+$matchinit = formatdate($init, 1);
 
 // Set game type
 $result = sql_queryn($link, "SELECT tp_desc,tp_type,tp_team FROM {$dbpre}type WHERE tp_num=$gm_type LIMIT 1");
@@ -249,7 +252,7 @@ $demodl = "";
 if ($demodir != "" && $demoext != "") {
   if (substr($demodir, -1) != "/")
     $demodir.="/";
-  $demofile = date('md-Hi', $start)."-".$mp_name.".".$demoext;
+  $demofile = date('md-Hi', $init)."-".$mp_name.".".$demoext;
   $demopath = $demodir.$demofile;
   if (file_exists($demopath))
     $demodl = $demopath;
@@ -315,7 +318,7 @@ echo <<<EOF
   </tr>
   <tr>
     <td class="dark" align="center" width="100">Match Date</td>
-    <td class="grey" align="center" width="220">$matchdate</td>
+    <td class="grey" align="center" width="220" title="Match Init: $matchinit">$matchdate</td>
     <td class="dark" align="center" width="105">Server</td>
     <td class="grey" align="center"><a class="grey" href="serverstats.php?server=$gm_server">$servername</a></td>
   </tr>
@@ -2954,7 +2957,7 @@ while ($row = sql_fetch_assoc($result)) {
     $bot = 0;
   }
 
-  $time = sprintf("%0.1f", $row["ge_time"] / 6000);
+  $time = sprintf("%0.1f", ($row["ge_time"] - ($delay * 110)) / 6000);
   $quant = $row["ge_quant"];
   $reas = $row["ge_reason"];
 
@@ -2985,6 +2988,7 @@ while ($row = sql_fetch_assoc($result)) {
       switch ($row["ge_reason"]) {
         case 0:
           $reason = "Game Start";
+          $time = "0.0";
           break;
         case 1:
           $reason = "Game Ended";

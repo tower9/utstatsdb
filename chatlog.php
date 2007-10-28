@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2006  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -93,6 +93,7 @@ sql_free_result($result);
 //=============================================================================
 
 $start = strtotime($gm_start);
+$delay = $start - strtotime($gm_init);
 $matchdate = formatdate($start, 1);
 
 // Get Server Name
@@ -138,7 +139,7 @@ if (!$result) {
   exit;
 }
 while ($row = sql_fetch_assoc($result)) {
-  $time = $row["ge_time"];
+  $time = $row["ge_time"] - ($delay * 110);
   $event = $row["ge_event"];
   $plr = $row["ge_plr"];
   $reas = $row["ge_reason"];
@@ -171,6 +172,7 @@ while ($row = sql_fetch_assoc($result)) {
         case 0:
           $reason = "Match Start";
           $prior = 1;
+          $time = 0;
           break;
         case 1:
           $reason = "Match Ended";

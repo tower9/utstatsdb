@@ -6,6 +6,8 @@ Version 3.02 (not released)
   Added check for RedeemerDeath in UT '99 logs.
   Fixed problem with incorrect pickup values.
   Match dates now based on actual match start time instead of map load time.
+  Connection / Chat/Event log times now relative to match start time.
+  Fixed problem with configset table with newer versions of MySQL.
 
 Version 3.01
   Added database update utility.

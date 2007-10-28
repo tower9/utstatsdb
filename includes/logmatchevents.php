@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2006  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -47,6 +47,10 @@ function tag_ng ($i, $data)
   // Drop "Log " from beginning of game type description
   if ($config["ignorelogtype"] && substr($match->gname, 0, 4) == "Log ")
     $match->gname = substr($match->gname, 4);
+
+  // Drop "xGame.x" from beginning of game type description
+  if ($config["ignorelogtype"] && substr($match->gname, 0, 7) == "xGame.x")
+    $match->gname = substr($match->gname, 7);
 
   // Look up game type
   $result = sql_queryn($link, "SELECT tp_num,tp_type,tp_team FROM {$dbpre}type WHERE tp_desc='{$match->gname}' LIMIT 1");
@@ -331,7 +335,7 @@ function tag_sg($i, $data)
 
   $match->starttime = ctime($data[0]);
   $match->started = 1;
-  $match->startdate = $match->matchdate + intval($match->starttime / 100);
+  $match->startdate = $match->matchdate + intval($match->starttime / 110);
 
   for ($n = 0; $n <= $match->maxplayer; $n++)
     if (isset($player[$n]))
