@@ -24,6 +24,8 @@ function sql_query($query) {
 
   switch (strtolower($dbtype)) {
     case "mysql":
+      if (!function_exists("mysql_connect"))
+        die("No MySQL support found!");
       if (!isset($SQLport) || $SQLport == "")
         $SQLport = 3306;
       $link = @mysql_connect("$SQLhost:$SQLport","$SQLus","$SQLpw");
@@ -46,6 +48,8 @@ function sql_query($query) {
       @mysql_close($link);
       break;
     case "sqlite":
+      if (!function_exists("sqlite_open"))
+        die("No SQLite support found!");
       $link = @sqlite_open("$SQLdb", 0640, $sqlite_err);
       if (!$link) {
         echo "Database access error.\n";
@@ -60,6 +64,8 @@ function sql_query($query) {
       @sqlite_close($link);
       break;
     case "mssql":
+      if (!function_exists("mssql_connect"))
+        die("No MS SQL support found!");
       $link = @mssql_connect("$SQLhost","$SQLus","$SQLpw");
       if (!$link) {
         echo "Database access error.\n";
