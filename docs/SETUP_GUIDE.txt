@@ -12,7 +12,7 @@ you should have some basic knowledge of Windows systems and Internet security.
 ===== STEP 1: Apache Web Server ===============================================
 ===============================================================================
 If you don't currently have a web server installed I recommend installing
-Apache 2.0.  It's fast and stable.
+Apache 2.2.  It's fast and stable.
 
 Download and install Apache web server: http://httpd.apache.org/download.cgi
 Download the Win32 Binary (MSI Installer).
@@ -58,10 +58,9 @@ into PHP 5 and newer.  The MySQL database is a much more robust system but if
 you just want this for a small local server and don't want to bother with MySQL 
 then SQLite is fine.
 
-Download and install MySQL: http://www.mysql.com/downloads/index.html
-
-The latest stable release as of this writing is 4.1:
-http://dev.mysql.com/downloads/mysql/4.1.html
+MySQL: Download and install MySQL: http://www.mysql.com/downloads/index.html
+       The latest stable release as of this writing is 5.0:
+       http://dev.mysql.com/downloads/mysql/5.0.html
 
 Scroll down to the "Windows downloads" section and download the standard 
 installer (not the essentials or the zip without the installer).
@@ -113,13 +112,12 @@ You want the windows binary zip package, not the exe installer.
 
 Extract the files to "c:\php\".
 
-Copy c:\php\php.ini-recommended to your windows directory (c:\Windows or 
-c:\WINNT) and rename it to php.ini.  Edit php.ini and modify the following 
-variables:
+Rename c:\php\php.ini-recommended to php.ini.
+Edit php.ini and modify the following variables:
 
 memory_limit = 8M
   change to:
-memory_limit = 32M
+memory_limit = 64M
 
 error_reporting = E_ALL
   change to:
@@ -129,11 +127,14 @@ extension_dir = "./"
   change to:
 extension_dir = "c:\php\ext"
 
-Disable the comments (remove the semi-colons) on the following lines:
+MySQL: Disable the comments (remove the semi-colons) on the following lines:
+  extension=php_gd2.dll
+  extension=php_mysql.dll
 
-extension=php_gd2.dll
-extension=php_mysql.dll
-extension=php_sockets.dll
+SQLite: Disable the comments (remove the semi-colons) on the following lines:
+  extension=php_gd2.dll
+  extension=php_pdo.dll
+  extension=php_sqlite.dll
 
 ===============================================================================
 ===== STEP 4: UTStatsDB =======================================================
@@ -152,8 +153,14 @@ Rename "utstatsdb-3.00" to "utstats".
 Edit the file "includes/statsdb.inc.php" in your utstats directory.
 Change the $SQLpw variable from "statspass" to whatever you set for the new user 
 you created in MySQL (not the MySQL root password).  Set $InitPass to something 
-more secure.  Save and close the file.  If you are using the SQLite database 
-instead of MySQL, change $dbtype from "MySQL" to "SQLite".
+more secure.
+
+SQLite: If you are using the SQLite database instead of MySQL, change $dbtype 
+        from "MySQL" to "SQLite" and set $SQLdb to the name of the database file 
+        you wish to create.  The path must be writable by the web server, but 
+        can be outside your web path.
+
+Save and close the file.
 
 Open a web brower and enter the following URL:
 http://localhost/utstats/admin.php
