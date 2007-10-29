@@ -66,8 +66,11 @@ Scroll down to the "Windows downloads" section and download the standard
 installer (not the essentials or the zip without the installer).
 
 Unzip the archive to a temporary directory and run setup.  Follow the setup 
-prompts and select "Typical" for installation type.  Creating a MySQL.com account is not required to run MySQL, this step can be skipped.  Once the installation is 
-complete, click next to continue to the MySQL server configuration.
+prompts and select "Typical" for installation type.  Creating a MySQL.com 
+account is not required to run MySQL, this step can be skipped.  Once the 
+installation is complete, click next to continue to the MySQL server 
+configuration.
+
  Select "Detailed Configuration", click Next.
  Select "Server Machine", click Next.
  Select "Non-Transactional Database Only", click Next.

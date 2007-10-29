@@ -511,7 +511,7 @@ while ($row = sql_fetch_assoc($result)) {
           $chatlog[4][$numchat] = "$ktype $victim with a $weapon";
       }
     }
-    $chatlog[0][$numchat] = $row["gk_time"];
+    $chatlog[0][$numchat] = $row["gk_time"] - ($delay * 110);
     $chatlog[2][$numchat] = 0;
     $chatlog[3][$numchat] = "chatkill";
     $chatlog[5][$numchat++] = 2;
@@ -526,7 +526,7 @@ if (!$result) {
   exit;
 }
 while ($row = sql_fetch_assoc($result)) {
-  $chatlog[0][$numchat] = $row["gc_time"];
+  $chatlog[0][$numchat] = $row["gc_time"] - ($delay * 110);
   $chatlog[1][$numchat] = $row["gc_plr"];
   $chatlog[2][$numchat] = $row["gc_team"];
   $text = $row["gc_text"];
@@ -547,6 +547,7 @@ while ($row = sql_fetch_assoc($result)) {
 }
 sql_free_result($result);
 
+//========== Sort and display =================================================
 if ($numchat) {
   array_multisort($chatlog[0], SORT_ASC, SORT_NUMERIC, // Time
                   $chatlog[5], SORT_ASC, SORT_NUMERIC, // Priority
