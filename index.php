@@ -153,8 +153,57 @@ EOF;
   sql_free_result($result);
 }
 
-echo <<<EOF
+//=============================================================================
+//========== Hourly Activity Graph ============================================
+//=============================================================================
+$hactive = array_fill(0, 24, 0);
+$result = sql_query("SELECT HOUR(gm_start) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches, {$dbpre}playersgt WHERE gm_num=gt_num GROUP BY hour");
+while ($row = sql_fetch_row($result))
+  $hactive[$row[0]] = $row[1];
+sql_free_result($result);
 
+echo <<<EOF
+<br />
+<table cellpadding="1" cellspacing="0" border="0" width="500" class="box" align="center">
+  <tr>
+    <td class="tglheading" align="center"><b>Server Activity by Hour</b></td>
+  </tr>
+  <tr>
+    <td class="tgheading" align="center">
+      <div class="tgmainbox">
+        <div class="tgsubbox">&nbsp;</div>
+
+EOF;
+
+$hmax = max($hactive);
+for ($i = 0; $i < 24; $i++) {
+  $height = round(($hactive[$i] / $hmax) * 0.9 * 142);
+  $heightx = $height < 2 ? 2 : $height; // Did IE fall on its head?
+  $bottom = $height + 2;
+  $bottomx = $heightx + 1;
+  echo "          <div class=\"tgbarspace\">&nbsp;</div><div class=\"tgbar\" style=\"height: {$height}px; _height: {$heightx}px; bottom: {$bottom}px; _bottom: {$bottomx}px\">&nbsp;</div>\n";
+}
+
+echo "          <div class=\"tgblank\">&nbsp;</div>\n";
+
+for ($i = 0; $i < 24; $i++)
+{
+  $zi = sprintf("%02d", $i);
+  echo "          <div class=\"tgbarspace\">&nbsp;</div><div class=\"tglabel\" style=\"bottom: 127px\">$zi</div>\n";
+}
+
+echo <<<EOF
+          <div class="tgblank">&nbsp;</div>
+        </div>
+    </td>
+  </tr>
+</table>
+
+EOF;
+
+//=============================================================================
+
+echo <<<EOF
 </td>
 </tr>
 </table>

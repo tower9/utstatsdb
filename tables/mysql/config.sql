@@ -23,7 +23,7 @@ INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('serverspage','i5'
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('mapspage','i5','30','Maps Per Page','Number of maps to list per page.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('matchespage','i5','35','Matches Per Page','Number of matches to list per page.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('navbar','b2|Side|Top','0','Navigation Bar','Use standard side or top navigation bar.');
-INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('layout','i2','1','Layout','Layout to use: 1=Default ngStats, 2=Smaller fonts, 3=Dark colors/small fonts, 4=(2)-No bold');
+INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('layout','i2','1','Layout','Layout to use: 1=Default ngStats, 2=Smaller fonts, 3=Dark colors/small fonts, 4=Small/No bold');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('dateformat','b3|US-12hr|US-24hr|Europe','0','Date Format','Date Format');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('minchmatches','i5','5','Min. CH Matches','Minimum matches for player to appear on career highs.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('minchtime','i8','10','Min. CH Time','Minimum time in minutes for player to appear on career highs.');

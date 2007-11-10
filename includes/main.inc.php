@@ -69,7 +69,6 @@ function load_config()
     echo "Error loading configuration.<br />\n";
     exit;
   }
-  // *tag* This does not work with all configurations
   while ($row = sql_fetch_row($result))
   {
     global ${$row[0]};
