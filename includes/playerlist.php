@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2005  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 */
 
 if (preg_match("/playerlist.php/i", $_SERVER["PHP_SELF"])) {
-  echo "Access denied.\n";
+  echo "{$LANG_ACCESSDENIED}\n";
   die();
 }
 
@@ -96,7 +96,7 @@ else if ($searchname != "") {
   else
     $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}players WHERE plr_name LIKE '%{$slashedname}%' AND plr_bot=0");
   if (!$result) {
-    echo "Player database error.<br>\n";
+    echo "{$LANG_PLAYERDATABASEERROR}<br>\n";
     exit;
   }
   list($numplayers) = sql_fetch_row($result);
@@ -111,7 +111,7 @@ else {
   else
     $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}players WHERE plr_bot=0");
   if (!$result) {
-    echo "Database error.<br>\n";
+    echo "{$LANG_PLAYERDATABASEERROR}<br>\n";
     exit;
   }
   list($numplayers) = sql_fetch_row($result);
@@ -147,13 +147,13 @@ if ($playersearch == 1 || ($playersearch == 2 && $numpages > 1)) {
   <input type="hidden" name="type" value="$type">
   <table class="searchform">
     <tr>
-      <td align="right">ID:</td>
+      <td align="right">{$LANG_ID}:</td>
       <td width="90" align="left"><input type="text" name="SearchID" maxlength="10" size="10" $searchidvalue class="searchformbox"></td>
-      <td align="right">Name:</td>
+      <td align="right">{$LANG_NAME}:</td>
       <td width="150" align="left"><input type="text" name="SearchName" maxlength="35" size="20" value="$searchname" class="searchformbox"></td>
-      <td align="left"><input type="submit" name="Default" value="Search" class="searchform"></td>
+      <td align="left"><input type="submit" name="Default" value="{$LANG_SEARCH}" class="searchform"></td>
       <td>&nbsp;</td>
-      <td><input type="submit" name="Clear" value="Clear" class="searchform"></td>
+      <td><input type="submit" name="Clear" value="{$LANG_CLEAR}" class="searchform"></td>
 
 EOF;
 
@@ -161,9 +161,9 @@ EOF;
     echo <<<EOF
       <td width="120" align="right">
         <select name="plrbot" onChange="changePage(this.form.plrbot)">
-          <option value="humans" $selplayers>Humans</option>
-          <option value="bots" $selbots>Bots</option>
-          <option value="all" $selall>All</option>
+          <option value="humans" $selplayers>{$LANG_HUMANS}</option>
+          <option value="bots" $selbots>{$LANG_BOTS}</option>
+          <option value="all" $selall>{$LANG_ALL}</option>
         </select>
       </td>
 
@@ -181,12 +181,12 @@ else if ($showbots) {
   echo <<<EOF
 <div class="searchform">
   <form name="playersearch" method="post" action="index.php?stats=players">
-    <span class="opnote">*Select headings to change sort order (default=score).</span>
+    <span class="opnote">*{$LANG_SELECTHEADINGS}</span>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type:
     <select name="plrbot" onChange="changePage(this.form.plrbot)">
-      <option value="humans" $selplayers>Humans</option>
-      <option value="bots" $selbots>Bots</option>
-      <option value="all" $selall>All</option>
+      <option value="humans" $selplayers>{$LANG_HUMANS}</option>
+      <option value="bots" $selbots>{$LANG_BOTS}</option>
+      <option value="all" $selall>{$LANG_ALL}</option>
     </select>
   </form>
 </div>
@@ -195,7 +195,7 @@ EOF;
 }
 
 if ($numpages > 1) {
-  echo "<div class=\"pages\"><b>Page [$page/$numpages] Selection: ";
+  echo "<div class=\"pages\"><b>{$LANG_PAGE} [$page/$numpages] {$LANG_SELECTION}: ";
   $prev = $page - 1;
   $next = $page + 1;
   if ($rank)
@@ -203,13 +203,13 @@ if ($numpages > 1) {
   else
     $rankurl = "";
   if ($page != 1)
-    echo "<a class=\"pages\" href=\"index.php?stats=players{$rankurl}&amp;page=1{$typelink}{$searchstring}\">[First]</a> / <a class=\"pages\" href=\"index.php?stats=players{$rankurl}&amp;page={$prev}{$typelink}\">[Previous]</a> / ";
+    echo "<a class=\"pages\" href=\"index.php?stats=players{$rankurl}&amp;page=1{$typelink}{$searchstring}\">[{$LANG_FIRST}]</a> / <a class=\"pages\" href=\"index.php?stats=players{$rankurl}&amp;page={$prev}{$typelink}\">[{$LANG_PREVIOUS}]</a> / ";
   else
-    echo "[First] / [Previous] / ";
+    echo "[{$LANG_FIRST}] / [{$LANG_PREVIOUS}] / ";
   if ($page < $numpages)
-    echo "<a class=\"pages\" href=\"index.php?stats=players{$rankurl}&amp;page={$next}{$typelink}{$searchstring}\">[Next]</a> / <a class=\"pages\" href=\"index.php?stats=players{$rankurl}&amp;page={$numpages}{$typelink}{$searchstring}\">[Last]</a>";
+    echo "<a class=\"pages\" href=\"index.php?stats=players{$rankurl}&amp;page={$next}{$typelink}{$searchstring}\">[{$LANG_NEXT}]</a> / <a class=\"pages\" href=\"index.php?stats=players{$rankurl}&amp;page={$numpages}{$typelink}{$searchstring}\">[{$LANG_LAST}]</a>";
   else
-    echo "[Next] / [Last]";
+    echo "[{$LANG_NEXT}] / [{$LANG_LAST}]";
   echo "</b></div>\n";
 }
 
@@ -238,20 +238,20 @@ echo <<<EOF
     <td class="heading" colspan="14" align="center">Unreal Tournament Player Stats</td>
   </tr>
   <tr>
-    <th class="smheading" align="center" width="30">Sort</th>
-    <th class="smheading" align="center" width="18"><a class="smheading" href="index.php?stats=players&amp;rank=num{$typelink}{$searchstring}">ID</a></th>
-    <th class="smheading" align="center"><a class="smheading" href="index.php?stats=players&amp;rank=name{$typelink}{$searchstring}">Player</a></th>
-    <th class="smheading" align="center" width="35"><a class="smheading" href="index.php?stats=players&amp;rank=frags{$typelink}{$searchstring}">Frags</a></th>
-    <th class="smheading" align="center" width="37"><a class="smheading" href="index.php?stats=players&amp;rank=score{$typelink}{$searchstring}">Score</a></th>
-    <th class="smheading" align="center" width="32"><a class="smheading" href="index.php?stats=players&amp;rank=kills{$typelink}{$searchstring}">Kills</a></th>
-    <th class="smheading" align="center" width="40"><a class="smheading" href="index.php?stats=players&amp;rank=deaths{$typelink}{$searchstring}">Deaths</a></th>
-    <th class="smheading" align="center" width="55"><a class="smheading" href="index.php?stats=players&amp;rank=suicides{$typelink}{$searchstring}">Suicides</a></th>
-    <th class="smheading" align="center" width="40"><a class="smheading" href="index.php?stats=players&amp;rank=eff{$typelink}{$searchstring}">Eff.</a></th>
-    <th class="smheading" align="center" width="40"><a class="smheading" href="index.php?stats=players&amp;rank=fph{$typelink}{$searchstring}">FPH</a></th>
-    <th class="smheading" align="center" width="40"><a class="smheading" href="index.php?stats=players&amp;rank=sph{$typelink}{$searchstring}">SPH</a></th>
-    <th class="smheading" align="center" width="55"><a class="smheading" href="index.php?stats=players&amp;rank=matches{$typelink}{$searchstring}">Matches</a></th>
-    <th class="smheading" style="white-space: nowrap" align="center" width="50"><a class="smheading" href="index.php?stats=players&amp;rank=wins{$typelink}{$searchstring}">% Wins</a></th>
-    <th class="smheading" align="center" width="40"><a class="smheading" href="index.php?stats=players&amp;rank=time{$typelink}{$searchstring}">Hours</a></th>
+    <th class="smheading" align="center" width="30">{$LANG_SORT}</th>
+    <th class="smheading" align="center" width="18"><a class="smheading" href="index.php?stats=players&amp;rank=num{$typelink}{$searchstring}">{$LANG_ID}</a></th>
+    <th class="smheading" align="center"><a class="smheading" href="index.php?stats=players&amp;rank=name{$typelink}{$searchstring}">{$LANG_PLAYER}</a></th>
+    <th class="smheading" align="center" width="35"><a class="smheading" href="index.php?stats=players&amp;rank=frags{$typelink}{$searchstring}">{$LANG_FRAGS}</a></th>
+    <th class="smheading" align="center" width="37"><a class="smheading" href="index.php?stats=players&amp;rank=score{$typelink}{$searchstring}">{$LANG_SCORE}</a></th>
+    <th class="smheading" align="center" width="32"><a class="smheading" href="index.php?stats=players&amp;rank=kills{$typelink}{$searchstring}">{$LANG_KILLS}</a></th>
+    <th class="smheading" align="center" width="40"><a class="smheading" href="index.php?stats=players&amp;rank=deaths{$typelink}{$searchstring}">{$LANG_DEATHS}</a></th>
+    <th class="smheading" align="center" width="55"><a class="smheading" href="index.php?stats=players&amp;rank=suicides{$typelink}{$searchstring}">{$LANG_SUICIDES}</a></th>
+    <th class="smheading" align="center" width="40"><a class="smheading" href="index.php?stats=players&amp;rank=eff{$typelink}{$searchstring}">{$LANG_EFF}</a></th>
+    <th class="smheading" align="center" width="40"><a class="smheading" href="index.php?stats=players&amp;rank=fph{$typelink}{$searchstring}">{$LANG_FPH}</a></th>
+    <th class="smheading" align="center" width="40"><a class="smheading" href="index.php?stats=players&amp;rank=sph{$typelink}{$searchstring}">{$LANG_SPH}</a></th>
+    <th class="smheading" align="center" width="55"><a class="smheading" href="index.php?stats=players&amp;rank=matches{$typelink}{$searchstring}">{$LANG_MATCHES}</a></th>
+    <th class="smheading" style="white-space: nowrap" align="center" width="50"><a class="smheading" href="index.php?stats=players&amp;rank=wins{$typelink}{$searchstring}">{$LANG_PERCENTWINS}</a></th>
+    <th class="smheading" align="center" width="40"><a class="smheading" href="index.php?stats=players&amp;rank=time{$typelink}{$searchstring}">{$LANG_HOURS}</a></th>
   </tr>
 
 EOF;

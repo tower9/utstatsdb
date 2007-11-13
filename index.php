@@ -37,7 +37,7 @@ else if ($statview == 'help')
 else {
   $result = sql_query("SELECT tl_score,tl_kills,tl_suicides,tl_teamkills,tl_players,tl_matches,tl_playertime,tl_headshots FROM {$dbpre}totals LIMIT 1");
   if (!$result) {
-    echo "Stats database error.<br>\n";
+    echo "{$LANG_STATSDATABASEERROR}<br>\n";
     exit;
   }
   list($tl_score,$tl_kills,$tl_suicides,$tl_teamkills,$tl_players,$tl_matches,$tl_playertime,$tl_headshots) = sql_fetch_row($result);
@@ -47,7 +47,7 @@ else {
 
   $result = sql_query("SELECT COUNT(*) FROM {$dbpre}servers");
   if (!$result) {
-    echo "Stats database error.<br>\n";
+    echo "{$LANG_STATSDATABASEERROR}<br>\n";
     exit;
   }
   list($servers) = sql_fetch_row($result);
@@ -56,18 +56,18 @@ else {
   echo <<<EOF
 <table cellpadding="1" cellspacing="2" border="0" width="580" class="box">
   <tr>
-    <td class="heading" colspan="9" align="center">Unreal Tournament Stats Database v{$Version}</td>
+    <td class="heading" colspan="9" align="center">{$LANG_UTSTATSDATABASE} v{$Version}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Total Score</td>
-    <td class="smheading" align="center">Total Frags</td>
-    <td class="smheading" align="center">Total Kills</td>
-    <td class="smheading" align="center">Team Kills</td>
-    <td class="smheading" align="center">Total Headshots</td>
-    <td class="smheading" align="center">Human Players</td>
-    <td class="smheading" align="center">Servers</td>
-    <td class="smheading" align="center">Matches Logged</td>
-    <td class="smheading" align="center">Player Hours</td>
+    <td class="smheading" align="center">{$LANG_TOTALSCORE}</td>
+    <td class="smheading" align="center">{$LANG_TOTALFRAGS}</td>
+    <td class="smheading" align="center">{$LANG_TOTALKILLS}</td>
+    <td class="smheading" align="center">{$LANG_TEAMKILLS}</td>
+    <td class="smheading" align="center">{$LANG_TOTALHEADSHOTS}</td>
+    <td class="smheading" align="center">{$LANG_HUMANPLAYERS}</td>
+    <td class="smheading" align="center">{$LANG_SERVERS}</td>
+    <td class="smheading" align="center">{$LANG_MATCHESLOGGED}</td>
+    <td class="smheading" align="center">{$LANG_PLAYERHOURS}</td>
   </tr>
   <tr>
     <td class="grey" align="center">$tl_score</td>
@@ -88,11 +88,11 @@ EOF;
   $matches = 0;
   $result = sql_query("SELECT MAX(gm_start) FROM {$dbpre}matches");
   if (!$result) {
-    echo "Match database error (main).<br>\n";
+    echo "{$LANG_MATCHDATABASEERROR} (main).<br>\n";
     exit;
   }
   if (!list($recent) = sql_fetch_row($result)) {
-    echo "Match database error (main).<br>\n";
+    echo "{$LANG_MATCHDATABASEERROR} (main).<br>\n";
     exit;
   }
   $result = sql_query("SELECT gm_num,gm_map,gm_start FROM {$dbpre}matches WHERE gm_start='$recent' LIMIT 1");
@@ -104,7 +104,7 @@ EOF;
     $link = "matchstats.php?match=$gm_num";
     $result = sql_query("SELECT mp_name FROM {$dbpre}maps WHERE mp_num=$map LIMIT 1");
     if (!$result) {
-      echo "Map database error (main).<br>\n";
+      echo "{$LANG_MAPDATABASEERROR} (main).<br>\n";
       exit;
     }
     $row = sql_fetch_row($result);
@@ -114,7 +114,7 @@ EOF;
 <br />
 <table cellpadding="1" cellspacing="0" border="0" width="350" class="box">
   <tr>
-    <td class="lglheading" align="center"><b>Last Match Logged</b></td>
+    <td class="lglheading" align="center"><b>{$LANG_LASTMATCHLOGGED}</b></td>
   </tr>
   <tr>
     <td class="heading" align="center">
@@ -151,7 +151,6 @@ EOF;
     }
   }
   sql_free_result($result);
-}
 
 //=============================================================================
 //========== Hourly Activity Graph ============================================
@@ -166,7 +165,7 @@ echo <<<EOF
 <br />
 <table cellpadding="1" cellspacing="0" border="0" width="500" class="box" align="center">
   <tr>
-    <td class="tglheading" align="center"><b>Server Activity by Hour</b></td>
+    <td class="tglheading" align="center"><b>{$LANG_SERVERACTIVITYBYHOUR}</b></td>
   </tr>
   <tr>
     <td class="tgheading" align="center">
@@ -200,8 +199,7 @@ echo <<<EOF
 </table>
 
 EOF;
-
-//=============================================================================
+}
 
 echo <<<EOF
 </td>

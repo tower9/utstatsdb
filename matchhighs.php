@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2005  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,10 +22,11 @@
 function getplayer($plr)
 {
   global $link, $dbpre;
+  global $LANG_PLAYERDATABASEERROR;
 
   $result = sql_queryn($link, "SELECT pnum,plr_name,plr_bot FROM {$dbpre}players WHERE pnum=$plr LIMIT 1");
   if (!$result) {
-    echo "Player database error.<br />\n";
+    echo "{$LANG_PLAYERDATABASEERROR}<br />\n";
     exit;
   }
   if (list($pnum,$name,$bot) = sql_fetch_row($result)) {
@@ -46,6 +47,7 @@ function getplayer($plr)
 function showweapons($group)
 {
   global $weapons, $numweapons, $link, $dbpre;
+  global $LANG_NONE, $LANG_MAPDATABASEERROR;
 
   // Sort by num, date, description, time, player, map
   switch ($group) {
@@ -99,7 +101,7 @@ function showweapons($group)
     $num = $weapons[$group * 5 - 4][$i];
     if ($num > 0) {
       $wpdesc = $weapons[0][$i];
-      if (strcmp($wpdesc, "None")) {
+      if (strcmp($wpdesc, "{$LANG_NONE}")) {
         $player = getplayer($weapons[$group * 5 - 3][$i]);
         $time = sprintf("%0.1f", $weapons[$group * 5 - 2][$i] / 6000);
         $mapnum = $weapons[$group * 5 - 1][$i];
@@ -108,7 +110,7 @@ function showweapons($group)
         // Get Map Name
         $result = sql_queryn($link, "SELECT mp_name FROM {$dbpre}maps WHERE mp_num=$mapnum LIMIT 1");
         if (!$result) {
-          echo "Map database error.<br />\n";
+          echo "{$LANG_MAPDATABASEERROR}<br />\n";
           exit;
         }
         list($map) = sql_fetch_row($result);
@@ -134,11 +136,12 @@ EOF;
 function map_name($num)
 {
   global $link, $dbpre;
+  global $LANG_MAPDATABASEERROR;
 
   // Get Map Names
   $result = sql_queryn($link, "SELECT mp_name FROM {$dbpre}maps WHERE mp_num=$num LIMIT 1");
   if (!$result) {
-    echo "Map database error.<br />\n";
+    echo "{$LANG_MAPDATABASEERROR}<br />\n";
     exit;
   }
   list($map) = sql_fetch_row($result);
@@ -151,13 +154,13 @@ require("includes/main.inc.php");
 $link = sql_connect();
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}totals LIMIT 1");
 if (!$result) {
-  echo "Database error.<br />\n";
+  echo "{$LANG_DATABASEERROR}<br />\n";
   exit;
 }
 $row = sql_fetch_assoc($result);
 sql_free_result($result);
 if (!$row) {
-  echo "No data in stat totals database.<br />\n";
+  echo "{$LANG_NOTOTALSDATA}<br />\n";
   exit;
 }
 while (list ($key, $val) = each ($row))
@@ -175,16 +178,16 @@ echo <<<EOF
 <center>
 <table cellpadding="1" cellspacing="2" border="0" class="box">
   <tr>
-    <td class="heading" align="center" colspan="7">Totals Logged</td>
+    <td class="heading" align="center" colspan="7">{$LANG_TOTALSLOGGED}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="60">Frags</td>
-    <td class="smheading" align="center" width="60">Kills</td>
-    <td class="smheading" align="center" width="60">Deaths</td>
-    <td class="smheading" align="center" width="60">Suicides</td>
-    <td class="smheading" align="center" width="55">Matches</td>
-    <td class="smheading" align="center" width="85">Game Hours</td>
-    <td class="smheading" align="center" width="85">Player Hours</td>
+    <td class="smheading" align="center" width="60">{$LANG_FRAGS}</td>
+    <td class="smheading" align="center" width="60">{$LANG_KILLS}</td>
+    <td class="smheading" align="center" width="60">{$LANG_DEATHS}</td>
+    <td class="smheading" align="center" width="60">{$LANG_SUICIDES}</td>
+    <td class="smheading" align="center" width="55">{$LANG_MATCHES}</td>
+    <td class="smheading" align="center" width="85">{$LANG_GAMEHOURS}</td>
+    <td class="smheading" align="center" width="85">{$LANG_PLAYERHOURS}</td>
   </tr>
   <tr>
     <td class="grey" align="center">$frags</td>
@@ -205,7 +208,7 @@ EOF;
 
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}type");
 if (!$result) {
-  echo "Database error accessing game types.<br />\n";
+  echo "{$LANG_DBERRORGAMETYPES}<br />\n";
   exit;
 }
 
@@ -213,13 +216,13 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" class="box">
   <tr>
-    <td class="heading" colspan="4" align="center">Total Matches Played by Type</td>
+    <td class="heading" colspan="4" align="center">{$LANG_TOTALMATCHESPLAYEDBYTYPE}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="165">Game (Type)</td>
-    <td class="smheading" align="center" width="60">Number</td>
-    <td class="smheading" align="center" width="85">Game Hours</td>
-    <td class="smheading" align="center" width="85">Player Hours</td>
+    <td class="smheading" align="center" width="165">{$LANG_GAMEPTYPE}</td>
+    <td class="smheading" align="center" width="60">{$LANG_NUMBER}</td>
+    <td class="smheading" align="center" width="85">{$LANG_GAMEHOURS}</td>
+    <td class="smheading" align="center" width="85">{$LANG_PLAYERHOURS}</td>
   </tr>
 
 EOF;
@@ -253,7 +256,7 @@ $ghours = sprintf("%0.1f", $tot_gtime / 360000);
 $phours = sprintf("%0.1f", $tot_ptime / 360000);
 echo <<<EOF
   <tr>
-    <td class="dark" align="center">Totals</td>
+    <td class="dark" align="center">{$LANG_TOTALS}</td>
     <td class="darkgrey" align="center">$tot_played</td>
     <td class="darkgrey" align="center">$ghours</td>
     <td class="darkgrey" align="center">$phours</td>
@@ -383,18 +386,18 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="710" class="box">
   <tr>
-    <td class="heading" colspan="6" align="center">Highs - From a Single Match</td>
+    <td class="heading" colspan="6" align="center">{$LANG_HIGHSFROMASINGLEMATCH}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Category</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center">Score</td>
-    <td class="smheading" align="center">Time</td>
-    <td class="smheading" align="center">Map</td>
-    <td class="smheading" align="center">Date</td>
+    <td class="smheading" align="center">{$LANG_CATEGORY}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center">{$LANG_SCORE}</td>
+    <td class="smheading" align="center">{$LANG_TIME}</td>
+    <td class="smheading" align="center">{$LANG_MAP}</td>
+    <td class="smheading" align="center">{$LANG_DATE}</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Frags</td>
+    <td class="dark" align="center">{$LANG_MOSTFRAGS}</td>
     <td class="dark" align="center">$fragsplayer</td>
     <td class="grey" align="center">$tl_chfragssg</td>
     <td class="grey" align="center">$fragstime</td>
@@ -402,7 +405,7 @@ echo <<<EOF
     <td class="grey" align="center">$fragsdate</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTKILLS}</td>
     <td class="dark" align="center">$killsplayer</td>
     <td class="grey" align="center">$tl_chkillssg</td>
     <td class="grey" align="center">$killstime</td>
@@ -410,7 +413,7 @@ echo <<<EOF
     <td class="grey" align="center">$killsdate</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Deaths</td>
+    <td class="dark" align="center">{$LANG_MOSTDEATHS}</td>
     <td class="dark" align="center">$deathsplayer</td>
     <td class="grey" align="center">$tl_chdeathssg</td>
     <td class="grey" align="center">$deathstime</td>
@@ -418,7 +421,7 @@ echo <<<EOF
     <td class="grey" align="center">$deathsdate</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Suicides</td>
+    <td class="dark" align="center">{$LANG_MOSTSUICIDES}</td>
     <td class="dark" align="center">$suicidesplayer</td>
     <td class="grey" align="center">$tl_chsuicidessg</td>
     <td class="grey" align="center">$suicidestime</td>
@@ -426,7 +429,7 @@ echo <<<EOF
     <td class="grey" align="center">$suicidesdate</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Flag Captures</td>
+    <td class="dark" align="center">{$LANG_MOSTFLAGCAPTURES}</td>
     <td class="dark" align="center">$flagcaptureplayer</td>
     <td class="grey" align="center">$tl_chflagcapturesg</td>
     <td class="grey" align="center">$flagcapturetime</td>
@@ -434,7 +437,7 @@ echo <<<EOF
     <td class="grey" align="center">$flagcapturedate</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Flag Returns</td>
+    <td class="dark" align="center">{$LANG_MOSTFLAGRETURNS}</td>
     <td class="dark" align="center">$flagreturnplayer</td>
     <td class="grey" align="center">$tl_chflagreturnsg</td>
     <td class="grey" align="center">$flagreturntime</td>
@@ -442,7 +445,7 @@ echo <<<EOF
     <td class="grey" align="center">$flagreturndate</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Flag Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTFLAGKILLS}</td>
     <td class="dark" align="center">$flagkillplayer</td>
     <td class="grey" align="center">$tl_chflagkillsg</td>
     <td class="grey" align="center">$flagkilltime</td>
@@ -450,7 +453,7 @@ echo <<<EOF
     <td class="grey" align="center">$flagkilldate</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Control Point Captures</td>
+    <td class="dark" align="center">{$LANG_MOSTCONTROLPOINTCAPTURES}</td>
     <td class="dark" align="center">$cpcaptureplayer</td>
     <td class="grey" align="center">$tl_chcpcapturesg</td>
     <td class="grey" align="center">$cpcapturetime</td>
@@ -458,7 +461,7 @@ echo <<<EOF
     <td class="grey" align="center">$cpcapturedate</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Bombs Delivered (Carried)</td>
+    <td class="dark" align="center">{$LANG_MOSTBOMBSDELIVEREDCARRIED}</td>
     <td class="dark" align="center">$bombcarriedplayer</td>
     <td class="grey" align="center">$tl_chbombcarriedsg</td>
     <td class="grey" align="center">$bombcarriedtime</td>
@@ -466,7 +469,7 @@ echo <<<EOF
     <td class="grey" align="center">$bombcarrieddate</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Bombs Delivered (Tossed)</td>
+    <td class="dark" align="center">{$LANG_MOSTBOMBSDELIVEREDTOSSED}</td>
     <td class="dark" align="center">$bombtossedplayer</td>
     <td class="grey" align="center">$tl_chbombtossedsg</td>
     <td class="grey" align="center">$bombtossedtime</td>
@@ -474,7 +477,7 @@ echo <<<EOF
     <td class="grey" align="center">$bombtosseddate</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Bomb Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTBOMBKILLS}</td>
     <td class="dark" align="center">$bombkillplayer</td>
     <td class="grey" align="center">$tl_chbombkillsg</td>
     <td class="grey" align="center">$bombkilltime</td>
@@ -482,7 +485,7 @@ echo <<<EOF
     <td class="grey" align="center">$bombkilldate</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Nodes Constructed</td>
+    <td class="dark" align="center">{$LANG_MOSTNODESCONSTRUCTED}</td>
     <td class="dark" align="center">$nodeconstructedplayer</td>
     <td class="grey" align="center">$tl_chnodeconstructedsg</td>
     <td class="grey" align="center">$nodeconstructedtime</td>
@@ -490,7 +493,7 @@ echo <<<EOF
     <td class="grey" align="center">$nodeconstructeddate</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Nodes Destroyed</td>
+    <td class="dark" align="center">{$LANG_MOSTNODESDESTROYED}</td>
     <td class="dark" align="center">$nodedestroyedplayer</td>
     <td class="grey" align="center">$tl_chnodedestroyedsg</td>
     <td class="grey" align="center">$nodedestroyedtime</td>
@@ -498,7 +501,7 @@ echo <<<EOF
     <td class="grey" align="center">$nodedestroyeddate</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Constructing Nodes Destroyed</td>
+    <td class="dark" align="center">{$LANG_MOSTCONSTNODESDESTROYED}</td>
     <td class="dark" align="center">$nodeconstdestroyedplayer</td>
     <td class="grey" align="center">$tl_chnodeconstdestroyedsg</td>
     <td class="grey" align="center">$nodeconstdestroyedtime</td>
@@ -515,7 +518,7 @@ EOF;
 
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}weapons");
 if (!$result) {
-  echo "Database error accessing weapons table.<br />\n";
+  echo "{$LANG_WEAPDATABASEERROR}<br />\n";
   exit;
 }
 $numweapons = 0;
@@ -603,15 +606,15 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="710" class="box">
   <tr>
-    <td class="heading" colspan="6" align="center">Most Kills with a Weapon - From a Single Match</td>
+    <td class="heading" colspan="6" align="center">{$LANG_MOSTKILLSWITHWEAPONINGLEMATCH}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Weapon</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center">Kills</td>
-    <td class="smheading" align="center">Time</td>
-    <td class="smheading" align="center">Map</td>
-    <td class="smheading" align="center">Date</td>
+    <td class="smheading" align="center">{$LANG_WEAPON}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center">{$LANG_KILLS}</td>
+    <td class="smheading" align="center">{$LANG_TIME}</td>
+    <td class="smheading" align="center">{$LANG_MAP}</td>
+    <td class="smheading" align="center">{$LANG_DATE}</td>
   </tr>
 
 EOF;
@@ -625,15 +628,15 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="710" class="box">
   <tr>
-    <td class="heading" colspan="6" align="center">Most Deaths by a Weapon - From a Single Match</td>
+    <td class="heading" colspan="6" align="center">{$LANG_MOSTDEATHSBYWEAPONSINGLEMATCH}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Weapon</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center">Deaths</td>
-    <td class="smheading" align="center">Time</td>
-    <td class="smheading" align="center">Map</td>
-    <td class="smheading" align="center">Date</td>
+    <td class="smheading" align="center">{$LANG_WEAPON}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center">{$LANG_DEATHS}</td>
+    <td class="smheading" align="center">{$LANG_TIME}</td>
+    <td class="smheading" align="center">{$LANG_MAP}</td>
+    <td class="smheading" align="center">{$LANG_DATE}</td>
   </tr>
 
 EOF;
@@ -647,15 +650,15 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="710" class="box">
   <tr>
-    <td class="heading" colspan="6" align="center">Most Deaths While Holding a Weapon - From a Single Match</td>
+    <td class="heading" colspan="6" align="center">{$LANG_MOSTDEATHSHOLDINGWEAPONSINGLEMATCH}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Weapon</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center">Deaths</td>
-    <td class="smheading" align="center">Time</td>
-    <td class="smheading" align="center">Map</td>
-    <td class="smheading" align="center">Date</td>
+    <td class="smheading" align="center">{$LANG_WEAPON}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center">{$LANG_DEATHS}</td>
+    <td class="smheading" align="center">{$LANG_TIME}</td>
+    <td class="smheading" align="center">{$LANG_MAP}</td>
+    <td class="smheading" align="center">{$LANG_DATE}</td>
   </tr>
 
 EOF;
@@ -669,15 +672,15 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="710" class="box">
   <tr>
-    <td class="heading" colspan="6" align="center">Most Suicides - From a Single Match</td>
+    <td class="heading" colspan="6" align="center">{$LANG_MOSTSUICIDESFROMSINGLEMATCH}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Cause</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center">Suicides</td>
-    <td class="smheading" align="center">Time</td>
-    <td class="smheading" align="center">Map</td>
-    <td class="smheading" align="center">Date</td>
+    <td class="smheading" align="center">{$LANG_CAUSE}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center">{$LANG_SUICIDES}</td>
+    <td class="smheading" align="center">{$LANG_TIME}</td>
+    <td class="smheading" align="center">{$LANG_MAP}</td>
+    <td class="smheading" align="center">{$LANG_DATE}</td>
   </tr>
 
 EOF;

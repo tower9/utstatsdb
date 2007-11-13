@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2005  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,10 +22,11 @@
 function getplayer($plr)
 {
   global $link, $dbpre;
+  global $LANG_PLAYERDATABASEERROR;
 
   $result = sql_queryn($link, "SELECT pnum,plr_name,plr_bot FROM {$dbpre}players WHERE pnum=$plr LIMIT 1");
   if (!$result) {
-    echo "Player database error.<br />\n";
+    echo "{$LANG_PLAYERDATABASEERROR}<br />\n";
     exit;
   }
   if (list($pnum,$name,$bot) = sql_fetch_row($result)) {
@@ -121,13 +122,13 @@ require("includes/main.inc.php");
 $link = sql_connect();
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}totals LIMIT 1");
 if (!$result) {
-  echo "Database error.<br />\n";
+  echo "{$LANG_DATABASEERROR}<br />\n";
   exit;
 }
 $row = sql_fetch_array($result);
 sql_free_result($result);
 if (!$row) {
-  echo "No data in stat totals database.<br />\n";
+  echo "{$LANG_NOTOTALSDATA}<br />\n";
   exit;
 }
 while (list ($key, $val) = each ($row))
@@ -145,16 +146,16 @@ echo <<<EOF
 <center>
 <table cellpadding="1" cellspacing="2" border="0" class="box">
   <tr>
-    <td class="heading" align="center" colspan="7">Totals Logged</td>
+    <td class="heading" align="center" colspan="7">{$LANG_TOTALSLOGGED}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="60">Frags</td>
-    <td class="smheading" align="center" width="60">Kills</td>
-    <td class="smheading" align="center" width="60">Deaths</td>
-    <td class="smheading" align="center" width="60">Suicides</td>
-    <td class="smheading" align="center" width="55">Matches</td>
-    <td class="smheading" align="center" width="85">Game Hours</td>
-    <td class="smheading" align="center" width="85">Player Hours</td>
+    <td class="smheading" align="center" width="60">$LANG_FRAGS</td>
+    <td class="smheading" align="center" width="60">$LANG_KILLS</td>
+    <td class="smheading" align="center" width="60">$LANG_DEATHS</td>
+    <td class="smheading" align="center" width="60">$LANG_SUICIDES</td>
+    <td class="smheading" align="center" width="55">$LANG_MATCHES</td>
+    <td class="smheading" align="center" width="85">{$LANG_GAMEHOURS}</td>
+    <td class="smheading" align="center" width="85">{$LANG_PLAYERHOURS}</td>
   </tr>
   <tr>
     <td class="grey" align="center">$frags</td>
@@ -175,7 +176,7 @@ EOF;
 
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}type");
 if (!$result) {
-  echo "Database error accessing game types.<br />\n";
+  echo "{$LANG_DBERRORGAMETYPES}<br />\n";
   exit;
 }
 
@@ -183,13 +184,13 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" class="box">
   <tr>
-    <td class="heading" colspan="4" align="center">Total Matches Played by Type</td>
+    <td class="heading" colspan="4" align="center">{$LANG_TOTALMATCHESPLAYEDBYTYPE}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="165">Game (Type)</td>
-    <td class="smheading" align="center" width="60">Number</td>
-    <td class="smheading" align="center" width="85">Game Hours</td>
-    <td class="smheading" align="center" width="85">Player Hours</td>
+    <td class="smheading" align="center" width="165">{$LANG_GAMEPTYPE}</td>
+    <td class="smheading" align="center" width="60">{$LANG_NUMBER}</td>
+    <td class="smheading" align="center" width="85">{$LANG_GAMEHOURS}</td>
+    <td class="smheading" align="center" width="85">{$LANG_PLAYERHOURS}</td>
   </tr>
 
 EOF;
@@ -223,7 +224,7 @@ $ghours = sprintf("%0.1f", $tot_gtime / 360000);
 $phours = sprintf("%0.1f", $tot_ptime / 360000);
 echo <<<EOF
   <tr>
-    <td class="dark" align="center">Totals</td>
+    <td class="dark" align="center">{$LANG_TOTALS}</td>
     <td class="darkgrey" align="center">$tot_played</td>
     <td class="darkgrey" align="center">$ghours</td>
     <td class="darkgrey" align="center">$phours</td>
@@ -318,87 +319,87 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="580" class="box">
   <tr>
-    <td class="heading" colspan="5" align="center">Career Highs</td>
+    <td class="heading" colspan="5" align="center">{$LANG_CAREERHIGHS}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="220">Category</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="60">Score</td>
-    <td class="smheading" align="center" width="60">Matches</td>
-    <td class="smheading" align="center" width="60">Hours</td>
+    <td class="smheading" align="center" width="220">{$LANG_CATEGORY}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="60">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" width="60">{$LANG_MATCHES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_HOURS}</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Frags</td>
+    <td class="dark" align="center">{$LANG_MOSTFRAGS}</td>
     <td class="darkhuman" align="center">$fragsplayer</td>
     <td class="grey" align="center">$tl_chfrags</td>
     <td class="grey" align="center">$tl_chfrags_gms</td>
     <td class="grey" align="center">$fragstime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTKILLS}</td>
     <td class="darkhuman" align="center">$killsplayer</td>
     <td class="grey" align="center">$tl_chkills</td>
     <td class="grey" align="center">$tl_chkills_gms</td>
     <td class="grey" align="center">$killstime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Deaths</td>
+    <td class="dark" align="center">{$LANG_MOSTDEATHS}</td>
     <td class="darkhuman" align="center">$deathsplayer</td>
     <td class="grey" align="center">$tl_chdeaths</td>
     <td class="grey" align="center">$tl_chdeaths_gms</td>
     <td class="grey" align="center">$deathstime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Suicides</td>
+    <td class="dark" align="center">{$LANG_MOSTSUICIDES}</td>
     <td class="darkhuman" align="center">$suicidesplayer</td>
     <td class="grey" align="center">$tl_chsuicides</td>
     <td class="grey" align="center">$tl_chsuicides_gms</td>
     <td class="grey" align="center">$suicidestime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Wins</td>
+    <td class="dark" align="center">{$LANG_MOSTWINS}</td>
     <td class="darkhuman" align="center">$winsplayer</td>
     <td class="grey" align="center">$tl_chwins</td>
     <td class="grey" align="center">$tl_chwins_gms</td>
     <td class="grey" align="center">$winstime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Team Wins</td>
+    <td class="dark" align="center">{$LANG_MOSTTEAMWINS}</td>
     <td class="darkhuman" align="center">$teamwinsplayer</td>
     <td class="grey" align="center">$tl_chteamwins</td>
     <td class="grey" align="center">$tl_chteamwins_gms</td>
     <td class="grey" align="center">$teamwinstime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Head Shots</td>
+    <td class="dark" align="center">{$LANG_MOSTHEADSHOTS}</td>
     <td class="darkhuman" align="center">$headshotsplayer</td>
     <td class="grey" align="center">$tl_chheadshots</td>
     <td class="grey" align="center">$tl_chheadshots_gms</td>
     <td class="grey" align="center">$headshotstime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Highest FPH</td>
+    <td class="dark" align="center">{$LANG_HIGHESTFPH}</td>
     <td class="darkhuman" align="center">$fphplayer</td>
     <td class="grey" align="center">$fph</td>
     <td class="grey" align="center">$tl_chfph_gms</td>
     <td class="grey" align="center">$fphtime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most First Blood</td>
+    <td class="dark" align="center">{$LANG_MOSTFIRSTBLOOD}</td>
     <td class="darkhuman" align="center">$firstbloodplayer</td>
     <td class="grey" align="center">$tl_chfirstblood</td>
     <td class="grey" align="center">$tl_chfirstblood_gms</td>
     <td class="grey" align="center">$firstbloodtime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Carjackings</td>
+    <td class="dark" align="center">{$LANG_MOSTCARJACKINGS}</td>
     <td class="darkhuman" align="center">$carjackplayer</td>
     <td class="grey" align="center">$tl_chcarjack</td>
     <td class="grey" align="center">$tl_chcarjack_gms</td>
     <td class="grey" align="center">$carjacktime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Road Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTROADKILLS}</td>
     <td class="darkhuman" align="center">$roadkillsplayer</td>
     <td class="grey" align="center">$tl_chroadkills</td>
     <td class="grey" align="center">$tl_chroadkills_gms</td>
@@ -408,38 +409,38 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="580" class="box">
   <tr>
-    <td class="heading" colspan="5" align="center">Weapon Specials</td>
+    <td class="heading" colspan="5" align="center">{$LANG_WEAPONSPECIALS}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="220">Category</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="60">Score</td>
-    <td class="smheading" align="center" width="60">Matches</td>
-    <td class="smheading" align="center" width="60">Hours</td>
+    <td class="smheading" align="center" width="220">{$LANG_CATEGORY}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="60">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" width="60">{$LANG_MATCHES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_HOURS}</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Headhunter</td>
+    <td class="dark" align="center">{$LANG_MOSTHEADHUNTER}</td>
     <td class="darkhuman" align="center">$headhunterplayer</td>
     <td class="grey" align="center">$tl_chheadhunter</td>
     <td class="grey" align="center">$tl_chheadhunter_gms</td>
     <td class="grey" align="center">$headhuntertime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Flak Monkey</td>
+    <td class="dark" align="center">{$LANG_MOSTFLAKMONKEY}</td>
     <td class="darkhuman" align="center">$flakmonkeyplayer</td>
     <td class="grey" align="center">$tl_chflakmonkey</td>
     <td class="grey" align="center">$tl_chflakmonkey_gms</td>
     <td class="grey" align="center">$flakmonkeytime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Combo Whore</td>
+    <td class="dark" align="center">{$LANG_MOSTCOMBOWHORE}</td>
     <td class="darkhuman" align="center">$combowhoreplayer</td>
     <td class="grey" align="center">$tl_chcombowhore</td>
     <td class="grey" align="center">$tl_chcombowhore_gms</td>
     <td class="grey" align="center">$combowhoretime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Road Rampage</td>
+    <td class="dark" align="center">{$LANG_MOSTROADRAMPAGE}</td>
     <td class="darkhuman" align="center">$roadrampageplayer</td>
     <td class="grey" align="center">$tl_chroadrampage</td>
     <td class="grey" align="center">$tl_chroadrampage_gms</td>
@@ -449,59 +450,59 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="580" class="box">
   <tr>
-    <td class="heading" colspan="5" align="center">Multi-Kills</td>
+    <td class="heading" colspan="5" align="center">{$LANG_MULTIKILLS}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="220">Category</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="60">Score</td>
-    <td class="smheading" align="center" width="60">Matches</td>
-    <td class="smheading" align="center" width="60">Hours</td>
+    <td class="smheading" align="center" width="220">{$LANG_CATEGORY}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="60">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" width="60">{$LANG_MATCHES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_HOURS}</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Double Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTDOUBLEKILLS}</td>
     <td class="darkhuman" align="center">$multi1player</td>
     <td class="grey" align="center">$tl_chmulti1</td>
     <td class="grey" align="center">$tl_chmulti1_gms</td>
     <td class="grey" align="center">$multi1time</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Multi Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTMULTIKILLS}</td>
     <td class="darkhuman" align="center">$multi2player</td>
     <td class="grey" align="center">$tl_chmulti2</td>
     <td class="grey" align="center">$tl_chmulti2_gms</td>
     <td class="grey" align="center">$multi2time</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Mega Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTMEGAKILLS}</td>
     <td class="darkhuman" align="center">$multi3player</td>
     <td class="grey" align="center">$tl_chmulti3</td>
     <td class="grey" align="center">$tl_chmulti3_gms</td>
     <td class="grey" align="center">$multi3time</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Ultra Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTULTRAKILLS}</td>
     <td class="darkhuman" align="center">$multi4player</td>
     <td class="grey" align="center">$tl_chmulti4</td>
     <td class="grey" align="center">$tl_chmulti4_gms</td>
     <td class="grey" align="center">$multi4time</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Monster Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTMONSTERKILLS}</td>
     <td class="darkhuman" align="center">$multi5player</td>
     <td class="grey" align="center">$tl_chmulti5</td>
     <td class="grey" align="center">$tl_chmulti5_gms</td>
     <td class="grey" align="center">$multi5time</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Ludicrous Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTLUDICROUSKILLS}</td>
     <td class="darkhuman" align="center">$multi6player</td>
     <td class="grey" align="center">$tl_chmulti6</td>
     <td class="grey" align="center">$tl_chmulti6_gms</td>
     <td class="grey" align="center">$multi6time</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Holy Shit Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTHOLYSHITKILLS}</td>
     <td class="darkhuman" align="center">$multi7player</td>
     <td class="grey" align="center">$tl_chmulti7</td>
     <td class="grey" align="center">$tl_chmulti7_gms</td>
@@ -511,52 +512,52 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="580" class="box">
   <tr>
-    <td class="heading" colspan="5" align="center">Killing Sprees</td>
+    <td class="heading" colspan="5" align="center">{$LANG_KILLINGSPREES}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="220">Category</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="60">Score</td>
-    <td class="smheading" align="center" width="60">Matches</td>
-    <td class="smheading" align="center" width="60">Hours</td>
+    <td class="smheading" align="center" width="220">{$LANG_CATEGORY}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="60">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" width="60">{$LANG_MATCHES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_HOURS}</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Killing Sprees</td>
+    <td class="dark" align="center">{$LANG_MOSTKILLINGSPREES}</td>
     <td class="darkhuman" align="center">$spree1player</td>
     <td class="grey" align="center">$tl_chspree1</td>
     <td class="grey" align="center">$tl_chspree1_gms</td>
     <td class="grey" align="center">$spree1time</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Rampages</td>
+    <td class="dark" align="center">{$LANG_MOSTRAMPAGES}</td>
     <td class="darkhuman" align="center">$spree2player</td>
     <td class="grey" align="center">$tl_chspree2</td>
     <td class="grey" align="center">$tl_chspree2_gms</td>
     <td class="grey" align="center">$spree2time</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Dominating</td>
+    <td class="dark" align="center">{$LANG_MOSTDOMINATING}</td>
     <td class="darkhuman" align="center">$spree3player</td>
     <td class="grey" align="center">$tl_chspree3</td>
     <td class="grey" align="center">$tl_chspree3_gms</td>
     <td class="grey" align="center">$spree3time</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Unstoppable</td>
+    <td class="dark" align="center">{$LANG_MOSTUNSTOPPABLE}</td>
     <td class="darkhuman" align="center">$spree4player</td>
     <td class="grey" align="center">$tl_chspree4</td>
     <td class="grey" align="center">$tl_chspree4_gms</td>
     <td class="grey" align="center">$spree4time</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Godlike</td>
+    <td class="dark" align="center">{$LANG_MOSTGODLIKE}</td>
     <td class="darkhuman" align="center">$spree5player</td>
     <td class="grey" align="center">$tl_chspree5</td>
     <td class="grey" align="center">$tl_chspree5_gms</td>
     <td class="grey" align="center">$spree5time</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Wicked Sick</td>
+    <td class="dark" align="center">{$LANG_MOSTWICKEDSICK}</td>
     <td class="darkhuman" align="center">$spree6player</td>
     <td class="grey" align="center">$tl_chspree6</td>
     <td class="grey" align="center">$tl_chspree6_gms</td>
@@ -566,80 +567,80 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="580" class="box">
   <tr>
-    <td class="heading" colspan="5" align="center">Game Type Specific</td>
+    <td class="heading" colspan="5" align="center">{$LANG_GAMETYPESPECIFIC}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="220">Category</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="60">Score</td>
-    <td class="smheading" align="center" width="60">Matches</td>
-    <td class="smheading" align="center" width="60">Hours</td>
+    <td class="smheading" align="center" width="220">{$LANG_CATEGORY}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="60">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" width="60">{$LANG_MATCHES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_HOURS}</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Flag Captures</td>
+    <td class="dark" align="center">{$LANG_MOSTFLAGCAPTURES}</td>
     <td class="darkhuman" align="center">$flagcaptureplayer</td>
     <td class="grey" align="center">$tl_chflagcapture</td>
     <td class="grey" align="center">$tl_chflagcapture_gms</td>
     <td class="grey" align="center">$flagcapturetime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Flag Returns</td>
+    <td class="dark" align="center">{$LANG_MOSTFLAGRETURNS}</td>
     <td class="darkhuman" align="center">$flagreturnplayer</td>
     <td class="grey" align="center">$tl_chflagreturn</td>
     <td class="grey" align="center">$tl_chflagreturn_gms</td>
     <td class="grey" align="center">$flagreturntime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Flag Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTFLAGKILLS}</td>
     <td class="darkhuman" align="center">$flagkillplayer</td>
     <td class="grey" align="center">$tl_chflagkill</td>
     <td class="grey" align="center">$tl_chflagkill_gms</td>
     <td class="grey" align="center">$flagkilltime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Control Point Captures</td>
+    <td class="dark" align="center">{$LANG_MOSTCONTROLPOINTCAPTURES}</td>
     <td class="darkhuman" align="center">$cpcaptureplayer</td>
     <td class="grey" align="center">$tl_chcpcapture</td>
     <td class="grey" align="center">$tl_chcpcapture_gms</td>
     <td class="grey" align="center">$cpcapturetime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Bombs Delivered (Carried)</td>
+    <td class="dark" align="center">{$LANG_MOSTBOMBSDELIVEREDCARRIED}</td>
     <td class="darkhuman" align="center">$bombcarriedplayer</td>
     <td class="grey" align="center">$tl_chbombcarried</td>
     <td class="grey" align="center">$tl_chbombcarried_gms</td>
     <td class="grey" align="center">$bombcarriedtime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Bombs Delivered (Tossed)</td>
+    <td class="dark" align="center">{$LANG_MOSTBOMBSDELIVEREDTOSSED}</td>
     <td class="darkhuman" align="center">$bombtossedplayer</td>
     <td class="grey" align="center">$tl_chbombtossed</td>
     <td class="grey" align="center">$tl_chbombtossed_gms</td>
     <td class="grey" align="center">$bombtossedtime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Bomb Kills</td>
+    <td class="dark" align="center">{$LANG_MOSTBOMBKILLS}</td>
     <td class="darkhuman" align="center">$bombkillplayer</td>
     <td class="grey" align="center">$tl_chbombkill</td>
     <td class="grey" align="center">$tl_chbombkill_gms</td>
     <td class="grey" align="center">$bombkilltime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Nodes Constructed</td>
+    <td class="dark" align="center">{$LANG_MOSTNODESCONSTRUCTED}</td>
     <td class="darkhuman" align="center">$nodeconstructedplayer</td>
     <td class="grey" align="center">$tl_chnodeconstructed</td>
     <td class="grey" align="center">$tl_chnodeconstructed_gms</td>
     <td class="grey" align="center">$nodeconstructedtime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Nodes Destroyed</td>
+    <td class="dark" align="center">{$LANG_MOSTNODESDESTROYED}</td>
     <td class="darkhuman" align="center">$nodedestroyedplayer</td>
     <td class="grey" align="center">$tl_chnodedestroyed</td>
     <td class="grey" align="center">$tl_chnodedestroyed_gms</td>
     <td class="grey" align="center">$nodedestroyedtime</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Most Constructing Nodes Destroyed</td>
+    <td class="dark" align="center">{$LANG_MOSTCONSTNODESDESTROYED}</td>
     <td class="darkhuman" align="center">$nodeconstdestroyedplayer</td>
     <td class="grey" align="center">$tl_chnodeconstdestroyed</td>
     <td class="grey" align="center">$tl_chnodeconstdestroyed_gms</td>
@@ -655,7 +656,7 @@ EOF;
 
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}weapons");
 if (!$result) {
-  echo "Database error accessing weapons table.<br />\n";
+  echo "{$LANG_WEAPDATABASEERROR}<br />\n";
   exit;
 }
 $numweapons = 0;
@@ -760,14 +761,14 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="550" class="box">
   <tr>
-    <td class="heading" colspan="6" align="center">Most Career Kills with a Weapon</td>
+    <td class="heading" colspan="6" align="center">{$LANG_MOSTCAREERKILLSWITHAWEAPON}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="180">Weapon</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="60">Kills</td>
-    <td class="smheading" align="center" width="60">Matches</td>
-    <td class="smheading" align="center" width="60">Hours</td>
+    <td class="smheading" align="center" width="180">{$LANG_WEAPON}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="60">{$LANG_KILLS}</td>
+    <td class="smheading" align="center" width="60">{$LANG_MATCHES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_HOURS}</td>
   </tr>
 
 EOF;
@@ -781,14 +782,14 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="550" class="box">
   <tr>
-    <td class="heading" colspan="6" align="center">Most Career Deaths by a Weapon</td>
+    <td class="heading" colspan="6" align="center">{$LANG_MOSTCAREERDEATHSBYAWEAPON}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="180">Weapon</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="60">Deaths</td>
-    <td class="smheading" align="center" width="60">Matches</td>
-    <td class="smheading" align="center" width="60">Hours</td>
+    <td class="smheading" align="center" width="180">{$LANG_WEAPON}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="60">{$LANG_DEATHS}</td>
+    <td class="smheading" align="center" width="60">{$LANG_MATCHES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_HOURS}</td>
   </tr>
 
 EOF;
@@ -802,14 +803,14 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="550" class="box">
   <tr>
-    <td class="heading" colspan="6" align="center">Most Career Deaths While Holding a Weapon</td>
+    <td class="heading" colspan="6" align="center">{$LANG_MOSTCAREERDEATHSWHILEHOLDING}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="180">Weapon</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="60">Deaths</td>
-    <td class="smheading" align="center" width="60">Matches</td>
-    <td class="smheading" align="center" width="60">Hours</td>
+    <td class="smheading" align="center" width="180">{$LANG_WEAPON}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="60">{$LANG_DEATHS}</td>
+    <td class="smheading" align="center" width="60">{$LANG_MATCHES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_HOURS}</td>
   </tr>
 
 EOF;
@@ -823,14 +824,14 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="550" class="box">
   <tr>
-    <td class="heading" colspan="6" align="center">Most Career Suicides</td>
+    <td class="heading" colspan="6" align="center">{$LANG_MOSTCAREERSUICIDES}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="180">Cause</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="60">Suicides</td>
-    <td class="smheading" align="center" width="60">Matches</td>
-    <td class="smheading" align="center" width="60">Hours</td>
+    <td class="smheading" align="center" width="180">{$LANG_CAUSE}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="60">{$LANG_SUICIDES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_MATCHES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_HOURS}</td>
   </tr>
 
 EOF;

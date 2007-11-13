@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2005  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,13 +24,13 @@ require("includes/main.inc.php");
 $link = sql_connect();
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}totals LIMIT 1");
 if (!$result) {
-  echo "Database error.<br />\n";
+  echo "{$LANG_DATABASEERROR}<br />\n";
   exit;
 }
 $row = sql_fetch_assoc($result);
 sql_free_result($result);
 if (!$row) {
-  echo "No data in stat totals database.<br />\n";
+  echo "{$LANG_NOTOTALSDATA}<br />\n";
   exit;
 }
 while (list ($key, $val) = each ($row))
@@ -43,7 +43,7 @@ echo <<<EOF
 <center>
 <table cellpadding="1" cellspacing="2" border="0" width="710">
   <tr>
-    <td class="heading" align="center">Cumulative Totals for All Players</td>
+    <td class="heading" align="center">{$LANG_CUMULATIVETOTAL}</td>
   </tr>
 </table>
 
@@ -56,21 +56,21 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" class="box">
   <tr>
-    <td class="medheading" align="center" colspan="12">Summary</td>
+    <td class="medheading" align="center" colspan="12">{$LANG_SUMMARY}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="150">Game Type</td>
-    <td class="smheading" align="center" width="45">Score</td>
-    <td class="smheading" align="center" width="35">F</td>
-    <td class="smheading" align="center" width="35">K</td>
-    <td class="smheading" align="center" width="35">D</td>
-    <td class="smheading" align="center" width="35">S</td>
-    <td class="smheading" align="center" width="35">TK</td>
-    <td class="smheading" align="center" width="45">Eff.</td>
-    <td class="smheading" align="center" width="40">Avg FPH</td>
-    <td class="smheading" align="center" width="40">Avg TTL</td>
-    <td class="smheading" align="center" width="50">Matches</td>
-    <td class="smheading" align="center" width="45">Hours</td>
+    <td class="smheading" align="center" width="150">{$LANG_GAMETYPE}</td>
+    <td class="smheading" align="center" width="45">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" width="35">{$LANG_F}</td>
+    <td class="smheading" align="center" width="35">{$LANG_K}</td>
+    <td class="smheading" align="center" width="35">{$LANG_D}</td>
+    <td class="smheading" align="center" width="35">{$LANG_S}</td>
+    <td class="smheading" align="center" width="35">{$LANG_TK}</td>
+    <td class="smheading" align="center" width="45">{$LANG_EFF}</td>
+    <td class="smheading" align="center" width="40">{$LANG_AVGFPH}</td>
+    <td class="smheading" align="center" width="40">{$LANG_AVGTTL}</td>
+    <td class="smheading" align="center" width="50">{$LANG_MATCHES}</td>
+    <td class="smheading" align="center" width="45">{$LANG_HOURS}</td>
   </tr>
 
 EOF;
@@ -80,7 +80,7 @@ $tot_teamkills = $tot_played = $tot_time = 0;
 
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}type");
 if (!$result) {
-  echo "Database error accessing game types.<br />\n";
+  echo "{$LANG_DBERRORGAMETYPES}<br />\n";
   exit;
 }
 while ($row = sql_fetch_assoc($result)) {
@@ -144,7 +144,7 @@ $tot_hours = sprintf("%0.1f", $tot_time / 3600);
 
 echo <<<EOF
   <tr>
-    <td class="dark" align="center">Totals</td>
+    <td class="dark" align="center">{$LANG_TOTALS}</td>
     <td class="darkgrey" align="center">$tot_score</td>
     <td class="darkgrey" align="center">$tot_frags</td>
     <td class="darkgrey" align="center">$tot_kills</td>
@@ -168,20 +168,20 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="600" class="box">
   <tr>
-    <td class="medheading" align="center" colspan="11">CTF, Bombing Run, and Double Domination Events Summary</td>
+    <td class="medheading" align="center" colspan="11">{$LANG_CTFBRDDEVENTSSUMMARY}</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Flag Captures</td>
-    <td class="dark" align="center">Flag Kills</td>
-    <td class="dark" align="center">Flag Assists</td>
-    <td class="dark" align="center">Flag Saves</td>
-    <td class="dark" align="center">Flag Pickups</td>
-    <td class="dark" align="center">Flag Drops</td>
-    <td class="dark" align="center">Bomb Carried</td>
-    <td class="dark" align="center">Bomb Tossed</td>
-    <td class="dark" align="center">Bomb Kills</td>
-    <td class="dark" align="center">Bomb Drops</td>
-    <td class="dark" align="center">Control Point Captures</td>
+    <td class="dark" align="center">{$LANG_FLAGCAPTURES}</td>
+    <td class="dark" align="center">{$LANG_FLAGKILLS}</td>
+    <td class="dark" align="center">{$LANG_FLAGASSISTS}</td>
+    <td class="dark" align="center">{$LANG_FLAGSAVES}</td>
+    <td class="dark" align="center">{$LANG_FLAGPICKUPS}</td>
+    <td class="dark" align="center">{$LANG_FLAGDROPS}</td>
+    <td class="dark" align="center">{$LANG_BOMBCARRIED}</td>
+    <td class="dark" align="center">{$LANG_BOMBTOSSED}</td>
+    <td class="dark" align="center">{$LANG_BOMBKILLS}</td>
+    <td class="dark" align="center">{$LANG_BOMBDROPS}</td>
+    <td class="dark" align="center">{$LANG_CPCAPTURES}</td>
   </tr>
   <tr>
     <td class="grey" align="center">$tl_flagcapture</td>
@@ -207,13 +207,13 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="400" class="box">
   <tr>
-    <td class="medheading" align="center" colspan="11">Onslaught Events Summary</td>
+    <td class="medheading" align="center" colspan="11">{$LANG_ONSEVENTSSUMMARY}</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Nodes Constructed</td>
-    <td class="dark" align="center">Nodes Destroyed</td>
-    <td class="dark" align="center">Constructing Nodes Destroyed</td>
-    <td class="dark" align="center">Cores Destroyed</td>
+    <td class="dark" align="center">$LANG_NODESCONSTRUCTED</td>
+    <td class="dark" align="center">$LANG_NODESDESTROYED</td>
+    <td class="dark" align="center">$LANG_CONSTNODESDESTROYED</td>
+    <td class="dark" align="center">$LANG_CORESDESTROYED</td>
   </tr>
   <tr>
     <td class="grey" align="center">$tl_nodeconstructed</td>
@@ -232,46 +232,46 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" class="box">
   <tr>
-    <td class="medheading" align="center" colspan="6">Special Events</td>
+    <td class="medheading" align="center" colspan="6">$LANG_SPECTIALEVENTS</td>
   </tr>
   <tr>
-    <td class="dark" align="center" width="100">Headshots</td>
+    <td class="dark" align="center" width="100">{$LANG_HEADSHOTS}</td>
     <td class="grey" align="center" width="45">$tl_headshots</td>
-    <td class="dark" align="center" width="105">Failed Transloc</td>
+    <td class="dark" align="center" width="105">{$LANG_FAILEDTRANSLOC}</td>
     <td class="grey" align="center" width="45">$tl_transgib</td>
-    <td class="dark" align="center" width="95">Double Kills</td>
+    <td class="dark" align="center" width="95">{$LANG_DOUBLEKILLS}</td>
     <td class="grey" align="center" width="45">$tl_multi1</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Multi Kills</td>
+    <td class="dark" align="center">{$LANG_MULTIKILLS}</td>
     <td class="grey" align="center">$tl_multi2</td>
-    <td class="dark" align="center">Mega Kills</td>
+    <td class="dark" align="center">{$LANG_MEGAKILLS}</td>
     <td class="grey" align="center">$tl_multi3</td>
-    <td class="dark" align="center">Ultra Kills</td>
+    <td class="dark" align="center">{$LANG_ULTRAKILLS}</td>
     <td class="grey" align="center">$tl_multi4</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Monster Kills</td>
+    <td class="dark" align="center">{$LANG_MONSTERKILLS}</td>
     <td class="grey" align="center">$tl_multi5</td>
-    <td class="dark" align="center">Ludicrous Kills</td>
+    <td class="dark" align="center">{$LANG_LUDICROUSKILLS}</td>
     <td class="grey" align="center">$tl_multi6</td>
-    <td class="dark" align="center">Holy Shit Kills</td>
+    <td class="dark" align="center">{$LANG_HOLYSHITKILLS}</td>
     <td class="grey" align="center">$tl_multi7</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Headhunter</td>
+    <td class="dark" align="center">{$LANG_HEADHUNTER}</td>
     <td class="grey" align="center">$tl_headhunter</td>
-    <td class="dark" align="center">Flak Monkey</td>
+    <td class="dark" align="center">{$LANG_FLAKMONKEY}</td>
     <td class="grey" align="center">$tl_flakmonkey</td>
-    <td class="dark" align="center">Combo Whore</td>
+    <td class="dark" align="center">{$LANG_COMBOWHORE}</td>
     <td class="grey" align="center">$tl_combowhore</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Road Rampage</td>
+    <td class="dark" align="center">{$LANG_ROADRAMPAGE}</td>
     <td class="grey" align="center">$tl_roadrampage</td>
-    <td class="dark" align="center">Roadkills</td>
+    <td class="dark" align="center">{$LANG_ROADKILLS}</td>
     <td class="grey" align="center">$tl_roadkills</td>
-    <td class="dark" align="center">Carjackings</td>
+    <td class="dark" align="center">{$LANG_CARJACKINGS}</td>
     <td class="grey" align="center">$tl_carjack</td>
   </tr>
 </table>
@@ -283,7 +283,7 @@ EOF;
 //=============================================================================
 $result = sql_queryn($link, "SELECT wp_desc,wp_secondary,wp_frags,wp_kills,wp_deaths,wp_suicides,wp_nwsuicides FROM {$dbpre}weapons WHERE wp_weaptype=0");
 if (!$result) {
-  echo "Database error accessing weapons table.<br />\n";
+  echo "{$LANG_WEAPDATABASEERROR}<br />\n";
   exit;
 }
 
@@ -344,16 +344,16 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="590" class="box">
   <tr>
-    <td class="heading" colspan="7" align="center">Weapon Specific Totals</td>
+    <td class="heading" colspan="7" align="center">{$LANG_WEAPONSPECIFICTOTALS}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Weapon</td>
-    <td class="smheading" align="center" width="55">Frags</td>
-    <td class="smheading" align="center" width="70">Primary Kills</td>
-    <td class="smheading" align="center" width="70">Secondary Kills</td>
-    <td class="smheading" align="center" width="55">Deaths Holding</td>
-    <td class="smheading" align="center" width="55">Suicides</td>
-    <td class="smheading" align="center" width="60">Eff.</td>
+    <td class="smheading" align="center">{$LANG_WEAPON}</td>
+    <td class="smheading" align="center" width="55">{$LANG_FRAGS}</td>
+    <td class="smheading" align="center" width="70">{$LANG_PRIMARYKILLS}</td>
+    <td class="smheading" align="center" width="70">{$LANG_SECONDARYKILLS}</td>
+    <td class="smheading" align="center" width="55">{$LANG_DEATHSHOLDING}</td>
+    <td class="smheading" align="center" width="55">{$LANG_SUICIDES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_EFF}</td>
   </tr>
 
 EOF;
@@ -370,7 +370,7 @@ for ($i = 0; $i < $numweapons; $i++) {
   else
     $eff = sprintf("%0.1f", (($kills + $skills) / ($kills + $skills + $deaths + $suicides)) * 100.0);
 
-  if (($frags || $kills || $skills || $deaths) && strcmp($weapon, "None")) {
+  if (($frags || $kills || $skills || $deaths) && strcmp($weapon, "{$LANG_NONE}")) {
     echo <<< EOF
   <tr>
     <td class="dark" align="center">$weapon</td>
@@ -392,7 +392,7 @@ echo "</table>\n";
 //=============================================================================
 $result = sql_queryn($link, "SELECT wp_desc,wp_fired,wp_hits,wp_damage FROM {$dbpre}weapons WHERE wp_weaptype=0 AND wp_fired > 0");
 if (!$result) {
-  echo "Database error accessing weapons table.<br />\n";
+  echo "{$LANG_WEAPDATABASEERROR}<br />\n";
   exit;
 }
 
@@ -428,14 +428,14 @@ if ($numweapons) {
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="440" class="box">
   <tr>
-    <td class="heading" colspan="5" align="center">Weapon Accuracy Information</td>
+    <td class="heading" colspan="5" align="center">{$LANG_WEAPONACCURACYINFO}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Weapon</td>
-    <td class="smheading" align="center" width="55">Fired</td>
-    <td class="smheading" align="center" width="55">Hits</td>
-    <td class="smheading" align="center" width="60">Damage</td>
-    <td class="smheading" align="center" width="65">Accuracy</td>
+    <td class="smheading" align="center">{$LANG_WEAPON}</td>
+    <td class="smheading" align="center" width="55">{$LANG_FIRED}</td>
+    <td class="smheading" align="center" width="55">{$LANG_HITS}</td>
+    <td class="smheading" align="center" width="60">{$LANG_DAMAGE}</td>
+    <td class="smheading" align="center" width="65">{$LANG_ACCURACY}</td>
   </tr>
 
 EOF;
@@ -475,7 +475,7 @@ EOF;
 //=============================================================================
 $result = sql_queryn($link, "SELECT wp_desc,wp_secondary,wp_frags,wp_kills,wp_deaths,wp_suicides,wp_nwsuicides FROM {$dbpre}weapons WHERE wp_weaptype=1 OR wp_weaptype=2");
 if (!$result) {
-  echo "Database error accessing weapons table.<br />\n";
+  echo "{$LANG_WEAPDATABASEERROR}<br />\n";
   exit;
 }
 
@@ -556,17 +556,17 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="660" class="box">
   <tr>
-    <td class="heading" colspan="8" align="center">Vehicle and Turret Specific Totals</td>
+    <td class="heading" colspan="8" align="center">{$LANG_VEHICLETURRETSPECIFICTOTALS}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Vehicle/Turret</td>
-    <td class="smheading" align="center" width="55">Frags</td>
-    <td class="smheading" align="center" width="70">Primary Kills</td>
-    <td class="smheading" align="center" width="70">Secondary Kills</td>
-    <td class="smheading" align="center" width="55">Road Kills</td>
-    <td class="smheading" align="center" width="55">Deaths In</td>
-    <td class="smheading" align="center" width="55">Suicides</td>
-    <td class="smheading" align="center" width="60">Eff.</td>
+    <td class="smheading" align="center">{$LANG_VEHICLETURRET}</td>
+    <td class="smheading" align="center" width="55">{$LANG_FRAGS}</td>
+    <td class="smheading" align="center" width="70">{$LANG_PRIMARYKILLS}</td>
+    <td class="smheading" align="center" width="70">{$LANG_SECONDARYKILLS}</td>
+    <td class="smheading" align="center" width="55">{$LANG_ROADKILLS}</td>
+    <td class="smheading" align="center" width="55">{$LANG_DEATHSIN}</td>
+    <td class="smheading" align="center" width="55">{$LANG_SUICIDES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_EFF}</td>
   </tr>
 
 EOF;
@@ -608,7 +608,7 @@ echo "</table>\n";
 //=============================================================================
 $result = sql_queryn($link, "SELECT wp_desc,wp_kills,wp_deaths FROM {$dbpre}weapons WHERE wp_weaptype=3");
 if (!$result) {
-  echo "Database error accessing weapons table.<br />\n";
+  echo "{$LANG_WEAPDATABASEERROR}<br />\n";
   exit;
 }
 
@@ -643,12 +643,12 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="340" class="box">
   <tr>
-    <td class="heading" colspan="3" align="center">Invasion Monster Totals</td>
+    <td class="heading" colspan="3" align="center">{$LANG_INVASIONMONSTERTOTALS}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Monster</td>
-    <td class="smheading" align="center" width="95">Players Killed</td>
-    <td class="smheading" align="center" width="55">Deaths</td>
+    <td class="smheading" align="center">{$LANG_MONSTER}</td>
+    <td class="smheading" align="center" width="95">{$LANG_PLAYERSKILLED}</td>
+    <td class="smheading" align="center" width="55">{$LANG_DEATHS}</td>
   </tr>
 
 EOF;
@@ -676,7 +676,7 @@ echo "</table>\n";
 //=============================================================================
 $result = sql_queryn($link, "SELECT wp_desc,wp_suicides,wp_nwsuicides FROM {$dbpre}weapons WHERE (wp_suicides+wp_nwsuicides)>0");
 if (!$result) {
-  echo "Database error accessing weapons table.<br />\n";
+  echo "{$LANG_WEAPDATABASEERROR}<br />\n";
   exit;
 }
 
@@ -714,11 +714,11 @@ if ($numweapons) {
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="260" class="box">
   <tr>
-    <td class="heading" colspan="2" align="center">Suicide Totals</td>
+    <td class="heading" colspan="2" align="center">{$LANG_SUICIDETOTALS}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="200">Type</td>
-    <td class="smheading" align="center" width="60">Suicides</td>
+    <td class="smheading" align="center" width="200">{$LANG_TYPE}</td>
+    <td class="smheading" align="center" width="60">{$LANG_SUICIDES}</td>
   </tr>
 
 EOF;
@@ -754,46 +754,46 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="390" class="box">
   <tr>
-    <td class="medheading" align="center" colspan="4">Killing Sprees by Type</td>
+    <td class="medheading" align="center" colspan="4">{$LANG_KILLINGSPREESBYTYPE}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="110">Spree Type</td>
-    <td class="smheading" align="center" width="85"># of Sprees</td>
-    <td class="smheading" align="center" width="115">Total Time (min)</td>
-    <td class="smheading" align="center" width="80">Total Kills</td>
+    <td class="smheading" align="center" width="110">{$LANG_SPREETYPE}</td>
+    <td class="smheading" align="center" width="85">{$LANG_NUMOFSPREES}</td>
+    <td class="smheading" align="center" width="115">{$LANG_TOTALTIMEMIN}</td>
+    <td class="smheading" align="center" width="80">{$LANG_TOTALKILLS}</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Killing Spree</td>
+    <td class="dark" align="center">{$LANG_KILLINGSPREE}</td>
     <td class="grey" align="center">$tl_spree1</td>
     <td class="grey" align="center">$time1</td>
     <td class="grey" align="center">$tl_spreek1</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Rampage</td>
+    <td class="dark" align="center">{$LANG_RAMPAGE}</td>
     <td class="grey" align="center">$tl_spree2</td>
     <td class="grey" align="center">$time2</td>
     <td class="grey" align="center">$tl_spreek2</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Dominating</td>
+    <td class="dark" align="center">{$LANG_DOMINATING}</td>
     <td class="grey" align="center">$tl_spree3</td>
     <td class="grey" align="center">$time3</td>
     <td class="grey" align="center">$tl_spreek3</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Unstoppable</td>
+    <td class="dark" align="center">{$LANG_UNSTOPPABLE}</td>
     <td class="grey" align="center">$tl_spree4</td>
     <td class="grey" align="center">$time4</td>
     <td class="grey" align="center">$tl_spreek4</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Godlike</td>
+    <td class="dark" align="center">{$LANG_GODLIKE}</td>
     <td class="grey" align="center">$tl_spree5</td>
     <td class="grey" align="center">$time5</td>
     <td class="grey" align="center">$tl_spreek5</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Wicked Sick</td>
+    <td class="dark" align="center">{$LANG_WICKEDSICK}</td>
     <td class="grey" align="center">$tl_spree6</td>
     <td class="grey" align="center">$time6</td>
     <td class="grey" align="center">$tl_spreek6</td>
@@ -809,22 +809,22 @@ echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" width="600" class="box">
   <tr>
-    <td class="heading" colspan="6" align="center">Total Items Collected</td>
+    <td class="heading" colspan="6" align="center">{$LANG_TOTALITEMSCOLLECTED}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Item Type</td>
-    <td class="smheading" align="center" width="35">No.</td>
-    <td class="smheading" align="center">Item Type</td>
-    <td class="smheading" align="center" width="35">No.</td>
-    <td class="smheading" align="center">Item Type.</td>
-    <td class="smheading" align="center" width="35">No.</td>
+    <td class="smheading" align="center">{$LANG_ITEMTYPE}</td>
+    <td class="smheading" align="center" width="35">{$LANG_NO}</td>
+    <td class="smheading" align="center">{$LANG_ITEMTYPE}</td>
+    <td class="smheading" align="center" width="35">{$LANG_NO}</td>
+    <td class="smheading" align="center">{$LANG_ITEMTYPE}</td>
+    <td class="smheading" align="center" width="35">{$LANG_NO}</td>
   </tr>
 
 EOF;
 
 $result = sql_queryn($link, "SELECT it_desc,it_pickups FROM {$dbpre}items ORDER BY it_pickups DESC,it_desc ASC");
 if (!$result) {
-  echo "Error loading item pickup descriptions.<br />\n";
+  echo "{$LANG_ERRORLOADINGITEMPICKUPDESC}<br />\n";
   exit;
 }
 $col = $totpickups = 0;
@@ -852,7 +852,7 @@ sql_free_result($result);
 if (!$totpickups) {
   echo <<<EOF
   <tr>
-    <td class="dark" align="center" colspan="6">NO ITEM PICKUPS</td>
+    <td class="dark" align="center" colspan="6">{$LANG_NOITEMPICKUPS}</td>
   </tr>
 
 EOF;

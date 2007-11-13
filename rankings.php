@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2005  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ if ($rtype != "") {
   //=============================================================================
   $result = sql_queryn($link, "SELECT tp_desc FROM {$dbpre}type WHERE tp_num=$rtype LIMIT 1");
   if (!$result) {
-    echo "Database error accessing game types.<br>\n";
+    echo "{$LANG_DBERRORGAMETYPES}<br>\n";
     exit;
   }
   $row = sql_fetch_row($result);
@@ -42,25 +42,25 @@ if ($rtype != "") {
 <center>
 <table cellpadding="1" cellspacing="1" border="0" class="box">
   <tr>
-    <td class="heading" align="center" colspan="3">Top 100 Rankings</td>
+<td class="heading" align="center" colspan="3">{$LANG_TOPRANKINGS}</td>
   </tr>
   <tr>
     <td>
       <table>
         <tr>
-          <td class="hlheading" align="center" colspan="3">$label Rankings</td>
+          <td class="hlheading" align="center" colspan="3">$label {$LANG_RANKINGS}</td>
         </tr>
         <tr>
-          <td class="smheading" align="center" width="35">Rank</td>
-          <td class="smheading" align="center" width="180">Player</td>
-          <td class="smheading" align="center" width="60">Points</td>
+          <td class="smheading" align="center" width="35">{$LANG_RANK}</td>
+          <td class="smheading" align="center" width="180">{$LANG_PLAYER}</td>
+          <td class="smheading" align="center" width="60">{$LANG_POINTS}</td>
         </tr>
 
 EOF;
 
   $result = sql_queryn($link, "SELECT pnum,plr_name,plr_bot,gt_rank FROM {$dbpre}players LEFT JOIN {$dbpre}playersgt ON pnum=gt_pnum WHERE gt_tnum=$rtype AND gt_rank>0 ORDER BY gt_rank DESC LIMIT 100");
   if (!$result) {
-    echo "Player database error.<br />\n";
+    echo "{$LANG_PLAYERDATABASEERROR}<br />\n";
     exit;
   }
   $r = 1;
@@ -98,7 +98,7 @@ else {
 <center>
 <table cellpadding="1" cellspacing="1" border="0" class="box">
   <tr>
-    <td class="heading" align="center" colspan="6">Player Rankings</td>
+    <td class="heading" align="center" colspan="6">{$LANG_PLAYERRANKINGS}</td>
   </tr>
 
 EOF;
@@ -106,7 +106,7 @@ EOF;
   $col = 0;
   $result = sql_queryn($link, "SELECT tp_desc,tp_num FROM {$dbpre}type");
   if (!$result) {
-    echo "Database error accessing game types.<br>\n";
+    echo "{$LANG_DBERRORGAMETYPES}<br>\n";
     exit;
   }
   $gametypes = 0;
@@ -120,7 +120,7 @@ EOF;
   	$tp_desc = $gtype[$type];
     $result = sql_queryn($link, "SELECT pnum,plr_name,plr_bot,gt_rank FROM {$dbpre}players LEFT JOIN {$dbpre}playersgt ON pnum=gt_pnum WHERE gt_tnum=$type AND gt_rank>0 ORDER BY gt_rank DESC LIMIT 10");
     if (!$result) {
-      echo "Player database error.<br />\n";
+      echo "{$LANG_PLAYERDATABASEERROR}<br />\n";
       exit;
     }
     $r = 1;
@@ -136,9 +136,9 @@ EOF;
           <td class="hlheading" align="center" colspan="3"><a href="rankings.php?type=$type" class="hlheading">$tp_desc</a></td>
         </tr>
         <tr>
-          <td class="smheading" align="center" width="35">Rank</td>
-          <td class="smheading" align="center" width="180">Player</td>
-          <td class="smheading" align="center" width="60">Points</td>
+          <td class="smheading" align="center" width="35">{$LANG_RANK}</td>
+          <td class="smheading" align="center" width="180">{$LANG_PLAYER}</td>
+          <td class="smheading" align="center" width="60">{$LANG_POINTS}</td>
         </tr>
 
 EOF;

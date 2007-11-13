@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2005  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 */
 
 if (preg_match("/maplist.php/i", $_SERVER["PHP_SELF"])) {
-  echo "Access denied.\n";
+  echo "{$LANG_ACCESSDENIED}\n";
   die();
 }
 
@@ -53,7 +53,7 @@ if ($searchname != "") {
 
   $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}maps WHERE mp_name LIKE '%{$slashedname}%'");
   if (!$result) {
-    echo "Map database error.<br>\n";
+    echo "{$LANG_MAPDATABASEERROR}<br>\n";
     exit;
   }
   list($nummaps) = sql_fetch_row($result);
@@ -61,7 +61,7 @@ if ($searchname != "") {
 else {
   $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}maps");
   if (!$result) {
-    echo "Map database error.<br>\n";
+    echo "{$LANG_MAPDATABASEERROR}<br>\n";
     exit;
   }
   list($nummaps) = sql_fetch_row($result);
@@ -75,17 +75,17 @@ else if ($page < 1 || $page > $numpages)
   $page = 1;
 
 if ($numpages > 1) {
-  echo "<div class=\"pages\"><b>Page [$page/$numpages] Selection: ";
+  echo "<div class=\"pages\"><b>{$LANG_PAGE} [$page/$numpages] {$LANG_SELECTION}: ";
   $prev = $page - 1;
   $next = $page + 1;
   if ($page != 1)
-    echo "<a class=\"pages\" href=\"index.php?stats=maps&amp;page=1\">[First]</a> / <a class=\"pages\" href=\"index.php?stats=maps&amp;page=$prev\">[Previous]</a> / ";
+    echo "<a class=\"pages\" href=\"index.php?stats=maps&amp;page=1\">[{$LANG_FIRST}]</a> / <a class=\"pages\" href=\"index.php?stats=maps&amp;page=$prev\">[{$LANG_PREVIOUS}]</a> / ";
   else
-    echo "[First] / [Previous] / ";
+    echo "[{$LANG_FIRST}] / [{$LANG_PREVIOUS}] / ";
   if ($page < $numpages)
-    echo "<a class=\"pages\" href=\"index.php?stats=maps&amp;page=$next\">[Next]</a> / <a class=\"pages\" href=\"index.php?stats=maps&amp;page=$numpages\">[Last]</a>";
+    echo "<a class=\"pages\" href=\"index.php?stats=maps&amp;page=$next\">[{$LANG_NEXT}]</a> / <a class=\"pages\" href=\"index.php?stats=maps&amp;page=$numpages\">[{$LANG_LAST}]</a>";
   else
-    echo "[Next] / [Last]";
+    echo "[{$LANG_NEXT}] / [{$LANG_LAST}]";
   echo "</b></div>";
 }
 
@@ -95,11 +95,11 @@ if ($mapsearch == 1 || ($mapsearch == 2 && $numpages > 1)) {
 <form name="mapsearch" method="post" action="index.php?stats=maps">
   <table class="searchform">
     <tr>
-      <td align="right">Name:</td>
+      <td align="right">{$LANG_NAME}:</td>
       <td width="150" align="left"><input type="text" name="SearchName" maxlength="35" size="20" value="$searchname" class="searchformbox"></td>
-      <td align="left"><input type="submit" name="Default" value="Search" class="searchform"></td>
+      <td align="left"><input type="submit" name="Default" value="{$LANG_SEARCH}" class="searchform"></td>
       <td>&nbsp;</td>
-      <td><input type="submit" name="Clear" value="Clear" class="searchform"></td>
+      <td><input type="submit" name="Clear" value="{$LANG_CLEAR}" class="searchform"></td>
     </tr>
   </table>
 </form>
@@ -110,14 +110,14 @@ EOF;
 echo <<<EOF
 <table cellpadding="1" cellspacing="2" border="0" class="box">
   <tr>
-    <td class="heading" colspan="5" align="center">Unreal Tournament Map List</td>
+    <td class="heading" colspan="5" align="center">{$LANG_UTMAPLIST}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="100">Map Name</td>
-    <td class="smheading" align="center" width="50">Matches</td>
-    <td class="smheading" align="center" width="50">Score</td>
-    <td class="smheading" align="center" width="50">Hours</td>
-    <td class="smheading" align="center" width="40">Last Match</td>
+<td class="smheading" align="center" width="100">{$LANG_MAPNAME}</td>
+    <td class="smheading" align="center" width="50">{$LANG_MATCHES}</td>
+    <td class="smheading" align="center" width="50">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" width="50">{$LANG_HOURS}</td>
+    <td class="smheading" align="center" width="40">{$LANG_LASTMATCH}</td>
   </tr>
 
 EOF;
@@ -131,7 +131,7 @@ else
 
 $result = sql_queryn($link, "SELECT mp_num,mp_name,mp_matches,mp_score,mp_time,mp_lastmatch FROM {$dbpre}maps $where ORDER BY mp_matches DESC LIMIT $start,$mapspage");
 if (!$result) {
-  echo "Map database error.<br>\n";
+  echo "$LANG_MAPDATABASEERROR<br>\n";
   exit;
 }
 while($row = sql_fetch_assoc($result)) {
@@ -162,7 +162,7 @@ if (!$nummaps) {
   echo <<<EOF
 <table cellpadding="1" cellspacing="2" border="0" width="600">
   <tr>
-    <td align="center"><b>No maps available.</b></td>
+    <td align="center"><b>{$LANG_NOMAPSAVAILABLE}</b></td>
   </tr>
 </table>
 

@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2005  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 */
 
 if (preg_match("/serverlist.php/i", $_SERVER["PHP_SELF"])) {
-  echo "Access denied.\n";
+  echo "{$LANG_ACCESSDENIED}\n";
   die();
 }
 
@@ -42,33 +42,33 @@ else if ($page < 1 || $page > $numpages)
   $page = 1;
 
 if ($numpages > 1) {
-  echo "<div class=\"pages\"><b>Page [$page/$numpages] Selection: ";
+  echo "<div class=\"pages\"><b>{$LANG_PAGE} [$page/$numpages] {$LANG_SELECTION}: ";
   $prev = $page - 1;
   $next = $page + 1;
   if ($page != 1)
-    echo "<a class=\"pages\" href=\"index.php?stats=servers&amp;page=1\">[First]</a> / <a class=\"pages\" href=\"index.php?stats=servers&amp;page=$prev\">[Previous]</a> / ";
+    echo "<a class=\"pages\" href=\"index.php?stats=servers&amp;page=1\">[{$LANG_FIRST}]</a> / <a class=\"pages\" href=\"index.php?stats=servers&amp;page=$prev\">[{$LANG_PREVIOUS}]</a> / ";
   else
-    echo "[First] / [Previous] / ";
+    echo "[{$LANG_FIRST}] / [{$LANG_PREVIOUS}] / ";
   if ($page < $numpages)
-    echo "<a class=\"pages\" href=\"index.php?stats=servers&amp;page=$next\">[Next]</a> / <a class=\"pages\" href=\"index.php?stats=servers&amp;page=$numpages\">[Last]</a>";
+    echo "<a class=\"pages\" href=\"index.php?stats=servers&amp;page=$next\">[{$LANG_NEXT}]</a> / <a class=\"pages\" href=\"index.php?stats=servers&amp;page=$numpages\">[{$LANG_LAST}]</a>";
   else
-    echo "[Next] / [Last]";
+    echo "[{$LANG_NEXT}] / [{$LANG_LAST}]";
   echo "</b></div>";
 }
 
 echo <<<EOF
 <table cellpadding="1" cellspacing="2" border="0" class="box">
   <tr>
-    <td class="heading" colspan="7" align="center">Unreal Tournament Server List</td>
+    <td class="heading" colspan="7" align="center">{$LANG_UTSERVERLIST}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="25">ID</td>
-    <td class="smheading" align="center" width="150">Server Name</td>
-    <td class="smheading" align="center" width="60">Matches</td>
-    <td class="smheading" align="center" width="45">Frags</td>
-    <td class="smheading" align="center" width="45">Score</td>
-    <td class="smheading" align="center" width="45">Hours</td>
-    <td class="smheading" align="center" width="100">Last Match</td>
+    <td class="smheading" align="center" width="25">{$LANG_ID}</td>
+<td class="smheading" align="center" width="150">{$LANG_SERVERNAME}</td>
+    <td class="smheading" align="center" width="60">{$LANG_MATCHES}</td>
+    <td class="smheading" align="center" width="45">{$LANG_FRAGS}</td>
+    <td class="smheading" align="center" width="45">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" width="45">{$LANG_HOURS}</td>
+    <td class="smheading" align="center" width="100">{$LANG_LASTMATCH}</td>
   </tr>
 
 EOF;
@@ -77,7 +77,7 @@ EOF;
 $start = ($page * $serverspage) - $serverspage;
 $result = sql_queryn($link, "SELECT sv_num,sv_name,sv_matches,sv_frags,sv_score,sv_time,sv_lastmatch FROM {$dbpre}servers ORDER BY sv_matches DESC LIMIT $start,$serverspage");
 if (!$result) {
-  echo "Server database error.<br>\n";
+  echo "{$LANG_SERVERDATABASEERROR}<br>\n";
   exit;
 }
 while($row = sql_fetch_assoc($result)) {
@@ -112,7 +112,7 @@ if (!$numservers) {
     <td colspan="5">&nbsp;</td>
   </tr>
   <tr>
-    <td colspan="5" align="center"><b>No servers available.</b></td>
+    <td colspan="5" align="center"><b>{$LANG_NOSERVERSAVAILABLE}</b></td>
   </tr>
 </table>
 

@@ -19,6 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+require("languages/lang_en.php");
 require("statsdb.inc.php"); // Set to the location of your account settings file
 require("logsql.php");
 $magicrt = get_magic_quotes_runtime();

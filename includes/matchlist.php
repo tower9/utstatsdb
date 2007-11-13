@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2005  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 */
 
 if (preg_match("/matchlist.php/i", $_SERVER["PHP_SELF"])) {
-  echo "Access denied.\n";
+  echo "{$LANG_ACCESSDENIED}\n";
   die();
 }
 
@@ -42,17 +42,17 @@ else if ($page < 1 || $page > $numpages)
   $page = 1;
 
 if ($numpages > 1) {
-  echo "<div class=\"pages\"><b>Page [$page/$numpages] Selection: ";
+  echo "<div class=\"pages\"><b>{$LANG_PAGE} [$page/$numpages] {$LANG_SELECTION}: ";
   $prev = $page - 1;
   $next = $page + 1;
   if ($page != 1)
-    echo "<a class=\"pages\" href=\"index.php?stats=matches&page=1\">[First]</a> / <a class=\"pages\" href=\"index.php?stats=matches&page=$prev\">[Previous]</a> / ";
+    echo "<a class=\"pages\" href=\"index.php?stats=matches&page=1\">[{$LANG_FIRST}]</a> / <a class=\"pages\" href=\"index.php?stats=matches&page=$prev\">[{$LANG_PREVIOUS}]</a> / ";
   else
-    echo "[First] / [Previous] / ";
+    echo "[{$LANG_FIRST}] / [{$LANG_PREVIOUS}] / ";
   if ($page < $numpages)
-    echo "<a class=\"pages\" href=\"index.php?stats=matches&page=$next\">[Next]</a> / <a class=\"pages\" href=\"index.php?stats=matches&page=$numpages\">[Last]</a>";
+    echo "<a class=\"pages\" href=\"index.php?stats=matches&page=$next\">[{$LANG_NEXT}]</a> / <a class=\"pages\" href=\"index.php?stats=matches&page=$numpages\">[{$LANG_LAST}]</a>";
   else
-    echo "[Next] / [Last]";
+    echo "[{$LANG_NEXT}] / [{$LANG_LAST}]";
   echo "</b></div>";
 }
 
@@ -64,21 +64,21 @@ else
 echo <<<EOF
 <table cellpadding="1" cellspacing="2" border="0" class="box">
   <tr>
-    <th class="heading" colspan="$cols" align="center">Unreal Tournament Match List</th>
+    <th class="heading" colspan="$cols" align="center">{$LANG_UTMATCHLIST}</th>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="220">Date</td>
+    <td class="smheading" align="center" width="220">{$LANG_DATE}</td>
 
 EOF;
 
 if ($serverlist)
-  echo "    <td class=\"smheading\" align=\"center\" width=\"160\">Server</td>\n";
+  echo "    <td class=\"smheading\" align=\"center\" width=\"160\">{$LANG_SERVER}</td>\n";
 
 echo <<<EOF
-    <td class="smheading" align="center" width="160">Match Type</td>
-    <td class="smheading" align="center" width="200">Map</td>
-    <td class="smheading" align="center" width="30">Plrs</td>
-    <td class="smheading" align="center" width="40">Time</td>
+    <td class="smheading" align="center" width="160">{$LANG_MATCHTYPE}</td>
+    <td class="smheading" align="center" width="200">{$LANG_MAP}</td>
+    <td class="smheading" align="center" width="30">{$LANG_PLRS}</td>
+    <td class="smheading" align="center" width="40">{$LANG_TIME}</td>
   </tr>
 
 EOF;
@@ -95,7 +95,7 @@ $matches = 0;
 $start = ($page * $matchespage) - $matchespage;
 $result = sql_queryn($link, "SELECT gm_num,gm_server,gm_map,gm_type,gm_start,gm_length,gm_numplayers,mp_name,sv_name FROM {$dbpre}matches LEFT JOIN {$dbpre}maps ON mp_num=gm_map LEFT JOIN {$dbpre}servers ON sv_num=gm_server ORDER BY gm_start DESC LIMIT $start,$matchespage");
 if (!$result) {
-  echo "Game database error.<br>\n";
+  echo "{$LANG_GAMEDATABASEERROR}<br>\n";
   exit;
 }
 while($row = sql_fetch_assoc($result)) {
@@ -144,7 +144,7 @@ if (!$matches) {
     <td colspan="5">&nbsp;</td>
   </tr>
   <tr>
-    <td colspan="5" align="center"><b>No matches available.</b></td>
+    <td colspan="5" align="center"><b>{$LANG_NOMATCHESAVAILABLE}</b></td>
   </tr>
 </table>
 
