@@ -47,7 +47,7 @@ function getplayer($plr)
 function showweapons($group)
 {
   global $weapons, $numweapons, $link, $dbpre;
-  global $LANG_NONE, $LANG_MAPDATABASEERROR;
+  global $LANG_NONE, $LANG_MAPDATABASEERRORP;
 
   // Sort by num, date, description, time, player, map
   switch ($group) {
@@ -110,7 +110,7 @@ function showweapons($group)
         // Get Map Name
         $result = sql_queryn($link, "SELECT mp_name FROM {$dbpre}maps WHERE mp_num=$mapnum LIMIT 1");
         if (!$result) {
-          echo "{$LANG_MAPDATABASEERROR}<br />\n";
+          echo "{$LANG_MAPDATABASEERRORP}<br />\n";
           exit;
         }
         list($map) = sql_fetch_row($result);

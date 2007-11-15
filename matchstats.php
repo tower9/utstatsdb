@@ -36,7 +36,7 @@ check_get($matchnum, "match");
 if (!is_numeric($matchnum))
   $matchnum = -1;
 if ($matchnum <= 0) {
-  echo "Run from the main index program.<br>\n";
+  echo "{$LANG_RUNFROMTHEMAININDEX}<br>\n";
   exit;
 }
 
@@ -45,13 +45,13 @@ $link = sql_connect();
 // Load game data
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}matches WHERE gm_num=$matchnum LIMIT 1");
 if (!$result) {
-  echo "Match database error.<br>\n";
+  echo "{$LANG_MATCHDATABASEERROR}<br>\n";
   exit;
 }
 $row = sql_fetch_assoc($result);
 sql_free_result($result);
 if (!$row) {
-  echo "Match not found in database.<br>\n";
+  echo "{$LANG_MATCHNOTFOUNDINDATABASE}<br>\n";
   exit;
 }
 while (list($key,$val) = each($row))
@@ -66,11 +66,11 @@ $matchinit = formatdate($init, 1);
 // Set game type
 $result = sql_queryn($link, "SELECT tp_desc,tp_type,tp_team FROM {$dbpre}type WHERE tp_num=$gm_type LIMIT 1");
 if (!$result) {
-  echo "Game type database error.<br>\n";
+  echo "{$LANG_GAMETYPEDATABASEERROR}<br>\n";
   exit;
 }
 if (!(list($gametype,$gametval,$teams) = sql_fetch_row($result))) {
-  echo "Error locating game type.<br>\n";
+  echo "{$LANG_ERRORLOCATINGGAMETYPE}<br>\n";
   exit;
 }
 sql_free_result($result);
@@ -78,11 +78,11 @@ sql_free_result($result);
 // Load Server Data
 $result = sql_queryn($link, "SELECT sv_name,sv_admin,sv_email FROM {$dbpre}servers WHERE sv_num=$gm_server LIMIT 1");
 if (!$result) {
-  echo "Server database error.<br>\n";
+  echo "{$LANG_SERVERDATABASEERROR}<br>\n";
   exit;
 }
 if (!list($sv_name,$sv_admin,$sv_email) = sql_fetch_row($result)) {
-  echo "Server not found.<br>\n";
+  echo "{$LANG_SERVERNOTFOUND}<br>\n";
   exit;
 }
 sql_free_result($result);
@@ -93,11 +93,11 @@ $serveremail = stripspecialchars($sv_email);
 // Load Map Data
 $result = sql_queryn($link, "SELECT mp_name,mp_desc,mp_author FROM {$dbpre}maps WHERE mp_num=$gm_map LIMIT 1");
 if (!$result) {
-  echo "Map database error.<br>\n";
+  echo "{$LANG_MAPDATABASEERRORP}<br>\n";
   exit;
 }
 if (!list($mp_name,$mp_desc,$mp_author) = sql_fetch_row($result)) {
-  echo "Map not found.<br>\n";
+  echo "{$LANG_MAPNOTFOUND}<br>\n";
   exit;
 }
 sql_free_result($result);
@@ -112,7 +112,7 @@ if (strtolower($dbtype) == "sqlite")
 else
   $result = sql_queryn($link, "SELECT {$dbpre}gplayers.*,{$dbpre}players.plr_name FROM {$dbpre}gplayers,{$dbpre}players WHERE {$dbpre}gplayers.gp_match=$matchnum AND {$dbpre}players.pnum={$dbpre}gplayers.gp_pnum");
 if (!$result) {
-  echo "Game player list database error.<br>\n";
+  echo "{$LANG_GAMEPLAYERLISTDATABASEERROR}<br>\n";
   exit;
 }
 while($row = sql_fetch_assoc($result)) {
@@ -145,33 +145,33 @@ for ($r = 1; $r <= $gm_numplayers; $r++) {
 }
 
 if (isset($password) && $password)
-  $pw = "Enabled";
+  $pw = "{$LANG_ENABLED}";
 else
-  $pw = "Disabled";
+  $pw = "{$LANG_DISABLED}";
 if (isset($gamestats) && $gamestats)
-  $stats = "Enabled";
+  $stats = "{$LANG_ENABLED}";
 else
-  $stats = "Disabled";
+  $stats = "{$LANG_DISABLED}";
 if ($gm_translocator)
-  $trans = "Enabled";
+  $trans = "{$LANG_ENABLED}";
 else
-  $trans = "Disabled";
+  $trans = "{$LANG_DISABLED}";
 if ($gm_mapvoting)
-  $mapvoting = "Enabled";
+  $mapvoting = "{$LANG_ENABLED}";
 else
-  $mapvoting = "Disabled";
+  $mapvoting = "{$LANG_DISABLED}";
 if ($gm_kickvoting)
-  $kickvoting = "Enabled";
+  $kickvoting = "{$LANG_ENABLED}";
 else
-  $kickvoting = "Disabled";
+  $kickvoting = "{$LANG_DISABLED}";
 if ($gm_balanceteams)
-  $balanceteams = "Enabled";
+  $balanceteams = "{$LANG_ENABLED}";
 else
-  $balanceteams = "Disabled";
+  $balanceteams = "{$LANG_DISABLED}";
 if ($gm_playersbalanceteams)
-  $playersbalance = "Enabled";
+  $playersbalance = "{$LANG_ENABLED}";
 else
-  $playersbalance = "Disabled";
+  $playersbalance = "{$LANG_DISABLED}";
 $linksetup = stripspecialchars($gm_linksetup);
 if (isset($gm_gamespeed))
   $gamespeed = (floatval($gm_gamespeed) * 100.0)."%";
@@ -179,71 +179,54 @@ else
   $gamespeed = "100%";
 
 if ($gm_healthforkills)
-  $healthforkills = "Enabled";
+  $healthforkills = "{$LANG_ENABLED}";
 else
-  $healthforkills = "Disabled";
+  $healthforkills = "{$LANG_DISABLED}";
 if ($gm_allowsuperweapons)
-  $allowsuperweapons = "Enabled";
+  $allowsuperweapons = "{$LANG_ENABLED}";
 else
-  $allowsuperweapons = "Disabled";
+  $allowsuperweapons = "{$LANG_DISABLED}";
 if ($gm_camperalarm)
-  $camperalarm = "Enabled";
+  $camperalarm = "{$LANG_ENABLED}";
 else
-  $camperalarm = "Disabled";
+  $camperalarm = "{$LANG_DISABLED}";
 if ($gm_allowpickups)
-  $allowpickups = "Enabled";
+  $allowpickups = "{$LANG_ENABLED}";
 else
-  $allowpickups = "Disabled";
+  $allowpickups = "{$LANG_DISABLED}";
 if ($gm_allowadrenaline)
-  $allowadrenaline = "Enabled";
+  $allowadrenaline = "{$LANG_ENABLED}";
 else
-  $allowadrenaline = "Disabled";
+  $allowadrenaline = "{$LANG_DISABLED}";
 if ($gm_fullammo)
-  $fullammo = "Enabled";
+  $fullammo = "{$LANG_ENABLED}";
 else
-  $fullammo = "Disabled";
+  $fullammo = "{$LANG_DISABLED}";
 
 if ($gametval > 1)
-  $tlabel = "score";
+  $tlabel = "{$LANG_SCORE}";
 else
-  $tlabel = "frags";
+  $tlabel = "{$LANG_FRAGS}";
 
 if ($gm_fraglimit && $gm_timelimit)
-  $limits = "$gm_fraglimit $tlabel / $gm_timelimit minutes";
+  $limits = "$gm_fraglimit $tlabel / $gm_timelimit {$LANG_MINUTES}";
 else if ($gm_fraglimit)
   $limits = "$gm_fraglimit $tlabel";
 else if ($gm_timelimit)
-  $limits = "$gm_timelimit minutes";
+  $limits = "$gm_timelimit {$LANG_MINUTES}";
 else
   $limits = "No Limit";
 
 switch ($gm_difficulty) {
-  case 0:
-    $difficulty = "Novice";
-    break;
-  case 1:
-    $difficulty = "Average";
-    break;
-  case 2:
-    $difficulty = "Experienced";
-    break;
-  case 3:
-    $difficulty = "Skilled";
-    break;
-  case 4:
-    $difficulty = "Adept";
-    break;
-  case 5:
-    $difficulty = "Masterful";
-    break;
-  case 6:
-    $difficulty = "Inhuman";
-    break;
-  case 7:
-    $difficulty = "Godlike";
-    break;
-  default:
-    $difficulty = "";
+  case 0: $difficulty = "{$LANG_NOVICE}"; break;
+  case 1: $difficulty = "{$LANG_AVERAGE}"; break;
+  case 2: $difficulty = "{$LANG_EXPERIENCED}"; break;
+  case 3: $difficulty = "{$LANG_SKILLED}"; break;
+  case 4: $difficulty = "{$LANG_ADEPT}"; break;
+  case 5: $difficulty = "{$LANG_MASTERFUL}"; break;
+  case 6: $difficulty = "{$LANG_INHUMAN}"; break;
+  case 7: $difficulty = "{$LANG_GODLIKE}"; break;
+  default: $difficulty = "";
 }
 
 $total_frags = $gm_kills - $gm_suicides;
@@ -262,7 +245,7 @@ echo <<<EOF
 <center>
 <table cellpadding="1" cellspacing="2" border="0" width="720">
   <tr>
-    <td class="heading" align="center">Match Stats for $servername : $mapname</td>
+    <td class="heading" align="center">{$LANG_MATCHSTATSFOR} $servername : $mapname</td>
   </tr>
 </table>
 <br>
@@ -314,66 +297,66 @@ echo <<<EOF
 <br>
 <table cellpadding="1" cellspacing="2" border="0" width="650">
   <tr>
-    <td class="heading" colspan="4" align="center">Unreal Tournament Match Stats</td>
+    <td class="heading" colspan="4" align="center">{$LANG_UNREALTOURNAMENTMATCHSTATS}</td>
   </tr>
   <tr>
-    <td class="dark" align="center" width="100">Match Date</td>
-    <td class="grey" align="center" width="220" title="Match Init: $matchinit">$matchdate</td>
-    <td class="dark" align="center" width="105">Server</td>
+    <td class="dark" align="center" width="100">{$LANG_MATCHDATE}</td>
+    <td class="grey" align="center" width="220" title="{$LANG_MATCHINIT}: $matchinit">$matchdate</td>
+    <td class="dark" align="center" width="105">{$LANG_SERVER}</td>
     <td class="grey" align="center"><a class="grey" href="serverstats.php?server=$gm_server">$servername</a></td>
   </tr>
   <tr>
-    <td class="dark" align="center">Game Type</td>
+    <td class="dark" align="center">{$LANG_GAMETYPE}</td>
     <td class="grey" align="center">$gametype</td>
-    <td class="dark" align="center">Admin Name</td>
+    <td class="dark" align="center">{$LANG_ADMINNAME}</td>
     <td class="grey" align="center">$serveradmin</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Map Name</td>
+    <td class="dark" align="center">{$LANG_MAPNAME}</td>
     <td class="grey" align="center"><a class="grey" href="mapstats.php?map=$gm_map">$mapname</a></td>
-    <td class="dark" align="center">Admin Email</td>
+    <td class="dark" align="center">{$LANG_ADMINEMAIL}</td>
     <td class="grey" align="center">$serveremail</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Global Stats</td>
+    <td class="dark" align="center">{$LANG_GLOBALSTATS}</td>
     <td class="grey" align="center">$stats</td>
-    <td class="dark" align="center">Game Speed</td>
+    <td class="dark" align="center">{$LANG_GAMESPEED}</td>
     <td class="grey" align="center">$gamespeed</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Match Limit</td>
+    <td class="dark" align="center">{$LANG_MATCHLIMIT}</td>
     <td class="grey" align="center">$limits</td>
-    <td class="dark" align="center">No. Players</td>
+    <td class="dark" align="center">{$LANG_NUMPLAYERS}</td>
     <td class="grey" align="center">$gm_numplayers</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Difficulty</td>
+    <td class="dark" align="center">{$LANG_DIFFICULTY}</td>
     <td class="grey" align="center">$difficulty</td>
-    <td class="dark" align="center">Translocator</td>
+    <td class="dark" align="center">{$LANG_TRANSLOCATOR}</td>
     <td class="grey" align="center">$trans</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Map Voting</td>
+    <td class="dark" align="center">{$LANG_MAPVOTING}</td>
     <td class="grey" align="center">$mapvoting</td>
-    <td class="dark" align="center">Kick Voting</td>
+    <td class="dark" align="center">{$LANG_KICKVOTING}</td>
     <td class="grey" align="center">$kickvoting</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Full Ammo</td>
+    <td class="dark" align="center">{$LANG_FULLAMMO}</td>
     <td class="grey" align="center">$fullammo</td>
-    <td class="dark" align="center">Health for Kills</td>
+    <td class="dark" align="center">{$LANG_HEALTHFORKILLS}</td>
     <td class="grey" align="center">$healthforkills</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Camper Alarm</td>
+    <td class="dark" align="center">{$LANG_CAMPERALARM}</td>
     <td class="grey" align="center">$camperalarm</td>
-    <td class="dark" align="center">Super Weapons</td>
+    <td class="dark" align="center">{$LANG_SUPERWEAPONS}</td>
     <td class="grey" align="center">$allowsuperweapons</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Pickups</td>
+    <td class="dark" align="center">{$LANG_PICKUPS}</td>
     <td class="grey" align="center">$allowpickups</td>
-    <td class="dark" align="center">Adrenaline</td>
+    <td class="dark" align="center">{$LANG_ADRENALINE}</td>
     <td class="grey" align="center">$allowadrenaline</td>
   </tr>
 
@@ -382,25 +365,25 @@ EOF;
 if ($teams) {
   echo <<<EOF
   <tr>
-    <td class="dark" align="center">Balance Teams</td>
+    <td class="dark" align="center">{$LANG_BALANCETEAMS}</td>
     <td class="grey" align="center">$balanceteams</td>
-    <td class="dark" align="center">Players Balance</td>
+    <td class="dark" align="center">{$LANG_PLAYERSBALANCE}</td>
     <td class="grey" align="center">$playersbalance</td>
   </tr>
 
 EOF;
 
   if ($gametval == 6) {
-    $SpecialText = "Link Setup";
+    $SpecialText = "{$LANG_LINKSETUP}";
     $special = $linksetup;
   }
   else if ($gametval == 9 && $gm_logger == 1) {
-    $SpecialText = "Waves";
+    $SpecialText = "{$LANG_WAVES}";
     $special = $gm_maxwave;
   }
   else if ($gametval == 18) {
-  	$SpecialText = "Overtime";
-  	$special = "$gm_overtime minutes";
+  	$SpecialText = "{$LANG_OVERTIME}";
+  	$special = "$gm_overtime {$LANG_MINUTES}";
   }
   else {
     $SpecialText = "&nbsp;";
@@ -409,7 +392,7 @@ EOF;
 
   echo <<<EOF
   <tr>
-    <td class="dark" align="center">Friendly Fire</td>
+    <td class="dark" align="center">{$LANG_FRIENDLYFIRE}</td>
     <td class="grey" align="center">$gm_friendlyfirescale</td>
     <td class="dark" align="center">$SpecialText</td>
     <td class="grey" align="center">$special</td>
@@ -421,7 +404,7 @@ EOF;
 if ($demodl) {
   echo <<<EOF
   <tr>
-    <td class="dark" align="center">DemoRec</td>
+    <td class="dark" align="center">{$LANG_DEMOREC}</td>
     <td class="grey" align="center" colspan="3"><a href="$demodl" class="grey">$demofile</a></td>
   </tr>
 
@@ -430,7 +413,7 @@ EOF;
 
 echo <<<EOF
   <tr>
-    <td class="dark" align="center">Mutators</td>
+    <td class="dark" align="center">{$LANG_MUTATORS}</td>
     <td class="grey" align="center" colspan="3">$gm_mutators</td>
   </tr>
 </table>
@@ -445,7 +428,7 @@ if ($gametval == 2) {
 <br>
 <table cellpadding="0" cellspacing="2" border="0" width="690">
   <tr>
-    <td class="heading" colspan="11" align="center">Flag Event Summary</td>
+    <td class="heading" colspan="11" align="center">{$LANG_FLAGEVENTSUMMARY}</td>
   </tr>
 
 EOF;
@@ -453,23 +436,23 @@ EOF;
   for ($tm = 0; $tm < $gm_numteams; $tm++) {
     echo <<<EOF
   <tr>
-    <td class="hlheading" colspan="11" align="center">{$teamcolor[$tm]} Team</td>
+    <td class="hlheading" colspan="11" align="center">{$teamcolor[$tm]} {$LANG_TEAM}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" rowspan="2" width="40">Rank</td>
-    <td class="smheading" align="center" rowspan="2">Player</td>
-    <td class="smheading" align="center" colspan="2" width="90">Score</td>
-    <td class="smheading" align="center" rowspan="2" width="60">Flag Captures</td>
-    <td class="smheading" align="center" rowspan="2" width="60">Flag Assists</td>
-    <td class="smheading" align="center" rowspan="2" width="50">Flag Kills</td>
-    <td class="smheading" align="center" rowspan="2" width="50">Flag Saves</td>
-    <td class="smheading" align="center" rowspan="2" width="60">Flag Pickups</td>
-    <td class="smheading" align="center" rowspan="2" width="50">Flag Drops</td>
-    <td class="smheading" align="center" rowspan="2" width="50">Carry Time</td>
+    <td class="smheading" align="center" rowspan="2" width="40">{$LANG_RANK}</td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" colspan="2" width="90">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" rowspan="2" width="60">{$LANG_FLAGCAPTURES}</td>
+    <td class="smheading" align="center" rowspan="2" width="60">{$LANG_FLAGASSISTS}</td>
+    <td class="smheading" align="center" rowspan="2" width="50">{$LANG_FLAGKILLS}</td>
+    <td class="smheading" align="center" rowspan="2" width="50">{$LANG_FLAGSAVES}</td>
+    <td class="smheading" align="center" rowspan="2" width="60">{$LANG_FLAGPICKUPS}</td>
+    <td class="smheading" align="center" rowspan="2" width="50">{$LANG_FLAGDROPS}</td>
+    <td class="smheading" align="center" rowspan="2" width="50">{$LANG_CARRYTIME}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Team</td>
-    <td class="smheading" align="center">Player</td>
+    <td class="smheading" align="center">{$LANG_TEAM}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
   </tr>
 
 EOF;
@@ -532,7 +515,7 @@ EOF;
 
     echo <<<EOF
   <tr>
-    <td class="dark" align="center" colspan="2">Totals</td>
+    <td class="dark" align="center" colspan="2">{$LANG_TOTALS}</td>
     <td class="darkgrey" align="center">$teamscore</td>
     <td class="darkgrey" align="center">$tscore</td>
     <td class="darkgrey" align="center">$tcapture</td>
@@ -561,7 +544,7 @@ if ($gametval == 3) {
 <br>
 <table cellpadding="0" cellspacing="2" border="0">
   <tr>
-    <td class="heading" colspan="10" align="center">Bombing Run Event Summary</td>
+    <td class="heading" colspan="10" align="center">{$LANG_BOMBINGRUNEVENTSUMMARY}</td>
   </tr>
 
 EOF;
@@ -569,21 +552,21 @@ EOF;
   for ($tm = 0; $tm < $gm_numteams; $tm++) {
     echo <<<EOF
   <tr>
-    <td class="hlheading" colspan="9" align="center">{$teamcolor[$tm]} Team</td>
+    <td class="hlheading" colspan="9" align="center">{$teamcolor[$tm]} {$LANG_TEAM}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" rowspan="2" width="40">Rank</td>
-    <td class="smheading" align="center" rowspan="2">Player</td>
-    <td class="smheading" align="center" colspan="2" width="90">Score</td>
-    <td class="smheading" align="center" rowspan="2" width="55">Bombs Tossed</td>
-    <td class="smheading" align="center" rowspan="2" width="55">Bombs Carried</td>
-    <td class="smheading" align="center" rowspan="2" width="55">Critical Kills</td>
-    <td class="smheading" align="center" rowspan="2" width="55">Assists</td>
-    <td class="smheading" align="center" rowspan="2" width="50">Carry Time</td>
+    <td class="smheading" align="center" rowspan="2" width="40">{$LANG_RANK}</td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" colspan="2" width="90">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" rowspan="2" width="55">{$LANG_BOMBSTOSSED}</td>
+    <td class="smheading" align="center" rowspan="2" width="55">{$LANG_BOMBSCARRIED}</td>
+    <td class="smheading" align="center" rowspan="2" width="55">{$LANG_CRITICALKILLS}</td>
+    <td class="smheading" align="center" rowspan="2" width="55">{$LANG_ASSISTS}</td>
+    <td class="smheading" align="center" rowspan="2" width="50">{$LANG_CARRYTIME}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Team</td>
-    <td class="smheading" align="center">Player</td>
+    <td class="smheading" align="center">{$LANG_TEAM}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
   </tr>
 
 EOF;
@@ -640,7 +623,7 @@ EOF;
 
     echo <<<EOF
   <tr>
-    <td class="dark" align="center" colspan="2">Totals</td>
+    <td class="dark" align="center" colspan="2">{$LANG_TOTALS}</td>
     <td class="darkgrey" align="center">$teamscore</td>
     <td class="darkgrey" align="center">$tscore</td>
     <td class="darkgrey" align="center">$ttossed</td>
@@ -667,32 +650,32 @@ if ($gametval == 7) {
 <br>
 <table cellpadding="0" cellspacing="2" border="0" width="430">
   <tr>
-    <td class="heading" colspan="11" align="center">Control Point Summary</td>
+    <td class="heading" colspan="11" align="center">{$LANG_CONTROLPOINTSUMMARY}</td>
   </tr>
 
 EOF;
 
   for ($tm = 1; $tm >= 0; $tm--) {
     if ($tm == 1)
-      $tmcolor = "Blue";
+      $tmcolor = "{$LANG_BLUE}";
     else
-      $tmcolor = "Red";
+      $tmcolor = "{$LANG_RED}";
 
     echo <<<EOF
   <tr>
-    <td class="hlheading" colspan="7" align="center">$tmcolor Team</td>
+    <td class="hlheading" colspan="7" align="center">$tmcolor {$LANG_TEAM}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" rowspan="2" width="40">Rank</td>
-    <td class="smheading" align="center" rowspan="2">Player</td>
-    <td class="smheading" align="center" colspan="2" width="90">Score</td>
-    <td class="smheading" align="center" rowspan="2" width="65">Points Held</td>
-    <td class="smheading" align="center" rowspan="2" width="65">Points Captured</td>
-    <td class="smheading" align="center" rowspan="2" width="60">Critical Kills</td>
+    <td class="smheading" align="center" rowspan="2" width="40">{$LANG_RANK}</td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" colspan="2" width="90">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" rowspan="2" width="65">{$LANG_POINTSHELD}</td>
+    <td class="smheading" align="center" rowspan="2" width="65">{$LANG_POINTSCAPTURED}</td>
+    <td class="smheading" align="center" rowspan="2" width="60">{$LANG_CRITICALKILLS}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Team</td>
-    <td class="smheading" align="center">Player</td>
+    <td class="smheading" align="center">{$LANG_TEAM}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
   </tr>
 
 EOF;
@@ -741,7 +724,7 @@ EOF;
 
     echo <<<EOF
   <tr>
-    <td class="dark" align="center" colspan="2">Totals</td>
+    <td class="dark" align="center" colspan="2">{$LANG_TOTALS}</td>
     <td class="darkgrey" align="center">$teamscore</td>
     <td class="darkgrey" align="center">$tscore</td>
     <td class="darkgrey" align="center">$theld</td>
@@ -766,13 +749,13 @@ if ($gametval == 5) {
 <br>
 <table cellpadding="0" cellspacing="2" border="0">
   <tr>
-    <td class="heading" colspan="4" align="center">Assault Objectives</td>
+    <td class="heading" colspan="4" align="center">{$LANG_ASSAULTOBJECTIVES}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="20">#</td>
-    <td class="smheading" align="center" width="270">Objective</td>
-    <td class="smheading" align="center" width="50">Red Time</td>
-    <td class="smheading" align="center" width="50">Blue Time</td>
+    <td class="smheading" align="center" width="20">{$LANG_NUM}</td>
+    <td class="smheading" align="center" width="270">{$LANG_OBJECTIVE}</td>
+    <td class="smheading" align="center" width="50">{$LANG_REDTIME}</td>
+    <td class="smheading" align="center" width="50">{$LANG_BLUETIME}</td>
   </tr>
 
 EOF;
@@ -780,7 +763,7 @@ EOF;
   $objectives = array();
   $result = sql_querynb($link, "SELECT ge_num,ge_plr,ge_time,ge_length,ge_quant FROM {$dbpre}gevents WHERE ge_match=$matchnum AND ge_event=7 ORDER BY ge_num");
   if (!$result) {
-    echo "Error loading assault objective events.<br>\n";
+    echo "{$LANG_ERRORLOADINGASSAULTOBJECTIVE}<br>\n";
     exit;
   }
   while ($row = sql_fetch_row($result)) {
@@ -841,34 +824,34 @@ EOF;
   while ($row = sql_fetch_row($result)) {
     $team = $row[0];
     if ($team == 1)
-      $teamname = "Red";
+      $teamname = "{$LANG_RED}";
     else
-      $teamname = "Blue";
+      $teamname = "{$LANG_BLUE}";
     $length = $row[1];
     $lengtht = sprintf("%d:%02d", floor($length / 60), intval(fmod($length, 60)));
     $reason = $row[2];
     switch ($reason) {
       case 0:
-        $info = $teamname." team successfully defended";
+        $info = $teamname." {$LANG_TEAMSUCCESSFULLYDEFENDED}";
         $ttime[3-$team] = -1;
         $evclass = "darkgrey";
         break;
       case 1:
-        $info = $teamname." team successfully attacked in $lengtht";
+        $info = $teamname." {$LANG_TEAMSUCCESSFULLYATTACKEDIN} $lengtht";
         $ttime[$team] = $length;
         $evclass = "darkgrey";
         break;
       case 2:
         if ($team == 0) {
-          $info = "Red team wins!";
+          $info = "{$LANG_REDTEAMWINS}";
           $evclass = "chatred";
         }
         else if ($team == 1) {
-          $info = "Blue team wins!";
+          $info = "{$LANG_BLUETEAMWINS}";
           $evclass = "chatblue";
         }
         else {
-          $info = "Match is a draw!";
+          $info = "{$LANG_MATCHISADRAW}";
           $evclass = "chat";
         }
         break;
@@ -891,7 +874,7 @@ if ($gametval == 6) {
 <br>
 <table cellpadding="0" cellspacing="2" border="0" width="670">
   <tr>
-    <td class="heading" colspan="7" align="center">Onslaught Summary</td>
+    <td class="heading" colspan="7" align="center">{$LANG_ONSLAUGHTSUMMARY}</td>
   </tr>
 
 EOF;
@@ -899,28 +882,28 @@ EOF;
   for ($tm = 1; $tm >= 0; $tm--) {
     $wins = "";
     if ($tm == 1) {
-      $tmcolor = "Blue";
+      $tmcolor = "{$LANG_BLUE}";
       if ($gm_tscore1 > $gm_tscore0)
         $wins = " Wins!";
     }
     else {
-      $tmcolor = "Red";
+      $tmcolor = "{$LANG_RED}";
       if ($gm_tscore0 > $gm_tscore1)
         $wins = " Wins!";
     }
 
     echo <<<EOF
   <tr>
-    <td class="hlheading" colspan="7" align="center">$tmcolor Team{$wins}</td>
+    <td class="hlheading" colspan="7" align="center">$tmcolor {$LANG_TEAM}{$wins}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="40">Rank</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="45">Score</td>
-    <td class="smheading" align="center" width="90">Power Nodes Constructed</td>
-    <td class="smheading" align="center" width="90">Power Nodes Destroyed</td>
-    <td class="smheading" align="center" width="120">Constructing Nodes Destroyed</td>
-    <td class="smheading" align="center" width="90">Power Cores Destroyed</td>
+    <td class="smheading" align="center" width="40">{$LANG_RANK}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="45">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" width="90">{$LANG_POWERNODESCONSTRUCTED}</td>
+    <td class="smheading" align="center" width="90">{$LANG_POWERNODESDESTROYED}</td>
+    <td class="smheading" align="center" width="120">{$LANG_CONSTRUCTINGNODESDESTROYED}</td>
+    <td class="smheading" align="center" width="90">{$LANG_POWERCORESDESTROYED}</td>
   </tr>
 
 EOF;
@@ -972,14 +955,14 @@ if ($gametval == 8) {
 <br>
 <table cellpadding="0" cellspacing="2" border="0" width="300">
   <tr>
-    <td class="heading" colspan="6" align="center">Mutant Summary</td>
+    <td class="heading" colspan="6" align="center">{$LANG_MUTANTSUMMARY}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="40">Rank</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="55">Mutant</td>
-    <td class="smheading" align="center" width="55">Mutant Time</td>
-    <td class="smheading" align="center" width="55">Bottom Feeder</td>
+    <td class="smheading" align="center" width="40">{$LANG_RANK}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="55">{$LANG_MUTANT}</td>
+    <td class="smheading" align="center" width="55">{$LANG_MUTANTTIME}</td>
+    <td class="smheading" align="center" width="55">{$LANG_BOTTOMFEEDER}</td>
   </tr>
 
 EOF;
@@ -1030,13 +1013,13 @@ if ($gametval == 10 || $gametval == 19) {
 <br>
 <table cellpadding="0" cellspacing="2" border="0" width="335">
   <tr>
-    <td class="heading" colspan="5" align="center">Last Man Standing Summary</td>
+    <td class="heading" colspan="5" align="center">{$LANG_LASTMANSTANDINGSUMMARY}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="40">Rank</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="60">Starting Lives</td>
-    <td class="smheading" align="center" width="75">Lives Remaining</td>
+    <td class="smheading" align="center" width="40">{$LANG_RANK}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="60">{$LANG_STARTINGLIVES}</td>
+    <td class="smheading" align="center" width="75">{$LANG_LIVESREMAINING}</td>
   </tr>
 
 EOF;
@@ -1079,7 +1062,7 @@ if ($gametval == 18) {
 <br>
 <table cellpadding="0" cellspacing="2" border="0">
   <tr>
-    <td class="heading" colspan="10" align="center">DeathBall Event Summary</td>
+    <td class="heading" colspan="10" align="center">{$LANG_DEATHBALLEVENTSUMMARY}</td>
   </tr>
 
 EOF;
@@ -1087,19 +1070,19 @@ EOF;
   for ($tm = 0; $tm < $gm_numteams; $tm++) {
     echo <<<EOF
   <tr>
-    <td class="hlheading" colspan="10" align="center">{$teamcolor[$tm]} Team</td>
+    <td class="hlheading" colspan="10" align="center">{$teamcolor[$tm]} {$LANG_TEAM}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="40">Rank</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="55">Goals</td>
-    <td class="smheading" align="center" width="55">Passes</td>
-    <td class="smheading" align="center" width="55">Assists</td>
-    <td class="smheading" align="center" width="55">Saves</td>
-    <td class="smheading" align="center" width="55">Tackles</td>
-    <td class="smheading" align="center" width="55">Intercepts</td>
-    <td class="smheading" align="center" width="55">Misses</td>
-    <td class="smheading" align="center" width="70">Ball Time</td>
+    <td class="smheading" align="center" width="40">{$LANG_RANK}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="55">{$LANG_GOALS}</td>
+    <td class="smheading" align="center" width="55">{$LANG_PASSES}</td>
+    <td class="smheading" align="center" width="55">{$LANG_ASSISTS}</td>
+    <td class="smheading" align="center" width="55">{$LANG_SAVES}</td>
+    <td class="smheading" align="center" width="55">{$LANG_TACKLES}</td>
+    <td class="smheading" align="center" width="55">{$LANG_INTERCEPTS}</td>
+    <td class="smheading" align="center" width="55">{$LANG_MISSES}</td>
+    <td class="smheading" align="center" width="70">{$LANG_BALLTIME}</td>
   </tr>
 
 EOF;
@@ -1161,7 +1144,7 @@ EOF;
 
     echo <<<EOF
   <tr>
-    <td class="dark" align="center" colspan="2">Totals</td>
+    <td class="dark" align="center" colspan="2">{$LANG_TOTALS}</td>
     <td class="darkgrey" align="center">$tgoals</td>
     <td class="darkgrey" align="center">$tpasses</td>
     <td class="darkgrey" align="center">$tassists</td>
@@ -1189,7 +1172,7 @@ if ($gametval == 20) {
 <br>
 <table cellpadding="0" cellspacing="2" border="0">
   <tr>
-    <td class="heading" colspan="10" align="center">JailBreak Event Summary</td>
+    <td class="heading" colspan="10" align="center">{$LANG_JAILBREAKEVENTSUMMARY}</td>
   </tr>
 
 EOF;
@@ -1197,18 +1180,18 @@ EOF;
   for ($tm = 0; $tm < $gm_numteams; $tm++) {
     echo <<<EOF
   <tr>
-    <td class="hlheading" colspan="6" align="center">{$teamcolor[$tm]} Team</td>
+    <td class="hlheading" colspan="6" align="center">{$teamcolor[$tm]} {$LANG_TEAM}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" rowspan="2" width="40">Rank</td>
-    <td class="smheading" align="center" rowspan="2">Player</td>
-    <td class="smheading" align="center" colspan="2" width="90">Score</td>
-    <td class="smheading" align="center" rowspan="2" width="55">Team Captured</td>
-    <td class="smheading" align="center" rowspan="2" width="55">Team Released</td>
+    <td class="smheading" align="center" rowspan="2" width="40">{$LANG_RANK}</td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" colspan="2" width="90">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" rowspan="2" width="55">{$LANG_TEAMCAPTURED}</td>
+    <td class="smheading" align="center" rowspan="2" width="55">{$LANG_TEAMRELEASED}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Team</td>
-    <td class="smheading" align="center">Player</td>
+    <td class="smheading" align="center">{$LANG_TEAM}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
   </tr>
 
 EOF;
@@ -1254,7 +1237,7 @@ EOF;
 
     echo <<<EOF
   <tr>
-    <td class="dark" align="center" colspan="2">Totals</td>
+    <td class="dark" align="center" colspan="2">{$LANG_TOTALS}</td>
     <td class="darkgrey" align="center">$teamscore</td>
     <td class="darkgrey" align="center">$tscore</td>
     <td class="darkgrey" align="center">$tcapture</td>
@@ -1282,7 +1265,7 @@ if ($teams && $gametval != 9 && $gametval != 5 && function_exists('ImageTypes'))
     <td class="medheading" colspan="10" align="center">Team Scores</td>
   </tr>
   <tr>
-    <td><img src="graphs.php?type=2&amp;match=$matchnum" width="550" height="180" alt="Team Scoring Graph"></td>
+    <td><img src="graphs.php?type=2&amp;match=$matchnum" width="550" height="180" alt="{$LANG_TEAMSCORINGGRAPH}"></td>
   </tr>
 </table>
 
@@ -1298,7 +1281,7 @@ if ($teams && $gametval != 9 && $gametval != 18) {
 <br>
 <table cellpadding="0" cellspacing="2" border="0" width="720">
   <tr>
-    <td class="heading" colspan="21" align="center">Team Summary</td>
+    <td class="heading" colspan="21" align="center">{$LANG_TEAMSUMMARY}</td>
   </tr>
 
 EOF;
@@ -1307,34 +1290,34 @@ EOF;
   for ($tm = 0; $tm < $gm_numteams; $tm++) {
     echo <<<EOF
   <tr>
-    <td class="hlheading" colspan="21" align="center">{$teamcolor[$tm]} Team</td>
+    <td class="hlheading" colspan="21" align="center">{$teamcolor[$tm]} {$LANG_TEAM}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" rowspan="2" width="40">Rank</td>
-    <td class="smheading" align="center" rowspan="2">Player</td>
-    <td class="smheading" align="center" rowspan="2" width="20"><img src="resource/pcolors.gif" width="16" height="16" border="0" alt="Color Bar"></td>
-    <td class="smheading" align="center" colspan="2" width="90">Score</td>
-    <td class="smheading" align="center" rowspan="2" width="20">F</td>
-    <td class="smheading" align="center" rowspan="2" width="20">K</td>
-    <td class="smheading" align="center" rowspan="2" width="20">D</td>
-    <td class="smheading" align="center" rowspan="2" width="20">S</td>
-    <td class="smheading" align="center" rowspan="2" width="20">TK</td>
-    <td class="smheading" align="center" rowspan="2" width="20">TD</td>
-    <td class="smheading" align="center" rowspan="2" width="55">Eff.</td>
-    <td class="smheading" align="center" rowspan="2" width="50">Avg. SPH</td>
-    <td class="smheading" align="center" rowspan="2" width="50">Avg. TTL</td>
-    <td class="smheading" align="center" rowspan="2" width="40">Time</td>
-    <td class="smheading" align="center" colspan="6" width="100">Sprees</td>
+    <td class="smheading" align="center" rowspan="2" width="40">{$LANG_RANK}</td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" rowspan="2" width="20"><img src="resource/pcolors.gif" width="16" height="16" border="0" alt="{$LANG_COLORBAR}"></td>
+    <td class="smheading" align="center" colspan="2" width="90">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" rowspan="2" width="20">{$LANG_F}</td>
+    <td class="smheading" align="center" rowspan="2" width="20">{$LANG_K}</td>
+    <td class="smheading" align="center" rowspan="2" width="20">{$LANG_D}</td>
+    <td class="smheading" align="center" rowspan="2" width="20">{$LANG_S}</td>
+    <td class="smheading" align="center" rowspan="2" width="20">{$LANG_TK}</td>
+    <td class="smheading" align="center" rowspan="2" width="20">{$LANG_TD}</td>
+    <td class="smheading" align="center" rowspan="2" width="55">{$LANG_EFF}</td>
+    <td class="smheading" align="center" rowspan="2" width="50">{$LANG_AVGSPH}</td>
+    <td class="smheading" align="center" rowspan="2" width="50">{$LANG_AVGTTL}</td>
+    <td class="smheading" align="center" rowspan="2" width="40">{$LANG_TIME}</td>
+    <td class="smheading" align="center" colspan="6" width="100">{$LANG_SPREES}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Team</td>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center">K</td>
-    <td class="smheading" align="center">R</td>
-    <td class="smheading" align="center">D</td>
-    <td class="smheading" align="center">U</td>
-    <td class="smheading" align="center">G</td>
-    <td class="smheading" align="center">W</td>
+    <td class="smheading" align="center">{$LANG_TEAM}</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center">{$LANG_KSPREE}</td>
+    <td class="smheading" align="center">{$LANG_RSPREE}</td>
+    <td class="smheading" align="center">{$LANG_DSPREE}</td>
+    <td class="smheading" align="center">{$LANG_USPREE}</td>
+    <td class="smheading" align="center">{$LANG_GSPREE}</td>
+    <td class="smheading" align="center">{$LANG_WSPREE}</td>
   </tr>
 
 EOF;
@@ -1447,8 +1430,8 @@ EOF;
 
     echo <<<EOF
   <tr>
-    <td class="dark" align="center" colspan="2">Totals</td>
-    <td class="darkgrey" align="center"><img src="$cimage" width="16" height="16" border="0" alt="Player Color"></td>
+    <td class="dark" align="center" colspan="2">{$LANG_TOTALS}</td>
+    <td class="darkgrey" align="center"><img src="$cimage" width="16" height="16" border="0" alt="{$LANG_PLAYERCOLOR}"></td>
     <td class="darkgrey" align="center">$teamscore</td>
     <td class="darkgrey" align="center">$tscore</td>
     <td class="darkgrey" align="center">$frags</td>
@@ -1475,7 +1458,7 @@ EOF;
   if ($opend) {
     echo <<<EOF
   <tr>
-    <td class="opnote" colspan="20">* Player ended game on opposing team.</td>
+    <td class="opnote" colspan="20">{$LANG_ENDEDGAMEONOPPOSINGTEAM}</td>
   </tr>
 
 EOF;
@@ -1496,10 +1479,10 @@ if (function_exists('ImageTypes') && $gametval > 1 && $gametval != 10 && $gametv
 <br>
 <table>
   <tr>
-    <td class="medheading" colspan="10" align="center">Individual Scores</td>
+    <td class="medheading" colspan="10" align="center">{$LANG_INDIVIDUALSCORES}</td>
   </tr>
   <tr>
-    <td><img src="graphs.php?type=3&amp;match=$matchnum" width="550" height="180" alt="Score Graph"></td>
+    <td><img src="graphs.php?type=3&amp;match=$matchnum" width="550" height="180" alt="{$LANG_SCOREGRAPH}"></td>
   </tr>
 </table>
 
@@ -1517,10 +1500,10 @@ if (function_exists('ImageTypes') && ($gametval != 9 || $gm_logger == 1) && $gam
 <br>
 <table>
   <tr>
-    <td class="medheading" colspan="10" align="center">Individual Frags</td>
+    <td class="medheading" colspan="10" align="center">{$LANG_INDIVIDUALFRAGS}</td>
   </tr>
   <tr>
-    <td><img src="graphs.php?type=1&amp;match=$matchnum" width="550" height="180" alt="Frag Graph"></td>
+    <td><img src="graphs.php?type=1&amp;match=$matchnum" width="550" height="180" alt="{$LANG_FRAGGRAPH}"></td>
   </tr>
 </table>
 
@@ -1538,10 +1521,10 @@ if (function_exists('ImageTypes') && ($gametval == 10  || $gametval == 19)) {
 <br>
 <table>
   <tr>
-    <td class="medheading" colspan="10" align="center">LMS Lives Remaining</td>
+    <td class="medheading" colspan="10" align="center">{$LANG_LMSLIVESREMAINING}</td>
   </tr>
   <tr>
-    <td><img src="graphs.php?type=4&amp;match=$matchnum" width="550" height="180" alt="LMS Graph"></td>
+    <td><img src="graphs.php?type=4&amp;match=$matchnum" width="550" height="180" alt="{$LANG_LMSGRAPH}"></td>
   </tr>
 </table>
 
@@ -1554,30 +1537,30 @@ EOF;
 //=============================================================================
 if ($gm_type != 9 || $gm_logger == 1) {
   if ($teams)
-    $fphsph = "Avg. SPH";
+    $fphsph = "{$LANG_AVGSPH}";
   else
-    $fphsph = "Avg. FPH";
+    $fphsph = "{$LANG_AVGFPH}";
 
   echo <<<EOF
 <br>
 <table cellpadding="0" cellspacing="2" border="0" width="720">
   <tr>
-    <td class="heading" colspan="19" align="center">Player Summary</td>
+    <td class="heading" colspan="19" align="center">{$LANG_PLAYERSUMMARY}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" rowspan="2">Rank</td>
-    <td class="smheading" align="center" rowspan="2">Player</td>
-    <td class="smheading" align="center" rowspan="2" width="20"><img src="resource/pcolors.gif" width="16" height="16" border="0" alt="Color Bar"></td>
-    <td class="smheading" align="center" rowspan="2">Score</td>
-    <td class="smheading" align="center" rowspan="2">Frags</td>
-    <td class="smheading" align="center" rowspan="2">Kills</td>
-    <td class="smheading" align="center" rowspan="2">Deaths</td>
-    <td class="smheading" align="center" rowspan="2">Suicides</td>
-    <td class="smheading" align="center" rowspan="2">Eff.</td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_RANK}</td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" rowspan="2" width="20"><img src="resource/pcolors.gif" width="16" height="16" border="0" alt="{$LANG_COLORBAR}"></td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_SCORE}</td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_FRAGS}</td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_KILLS}</td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_DEATHS}</td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_SUICIDES}</td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_EFF}</td>
     <td width="50" class="smheading" align="center" rowspan="2">$fphsph</td>
-    <td width="50" class="smheading" align="center" rowspan="2">Avg. TTL</td>
-    <td class="smheading" align="center" rowspan="2">Time</td>
-    <td class="smheading" align="center" colspan="6">Sprees</td>
+    <td width="50" class="smheading" align="center" rowspan="2">{$LANG_AVGTTL}</td>
+    <td class="smheading" align="center" rowspan="2">{$LANG_TIME}</td>
+    <td class="smheading" align="center" colspan="6">{$LANG_SPREES}</td>
   </tr>
   <tr>
     <td class="smheading" align="center">K</td>
@@ -1623,12 +1606,7 @@ EOF;
       else
         $fph = sprintf("%0.1f", $frags * (3600 / $ptime));
     }
-/*
-    // Temp fix for buggy PHP 4.3.2
-    for ($i2 = 0; $i2 < strlen($fph); $i2++)
-      if (ord($fph[$i2]) == 0)
-        $fph = substr($fph, 0, $i2);
-*/
+
     $ttl = sprintf("%0.1f", $ptime / ($deaths + $suicides + 1));
     $time = sprintf("%0.1f", $ptime / 60.0);
 
@@ -1665,7 +1643,7 @@ EOF;
   <tr>
     <td class="dark" align="center">$gp_rank</td>
     <td class="$nameclass" align="center">$gpplayer</td>
-    <td class="grey" align="center" width="20"><img src="$cimage" width="16" height="16" border="0" alt="Player Color"></td>
+    <td class="grey" align="center" width="20"><img src="$cimage" width="16" height="16" border="0" alt="{$LANG_PLAYERCOLOR}"></td>
     <td class="grey" align="center">$score</td>
     <td class="grey" align="center">$frags</td>
     <td class="grey" align="center">$kills</td>
@@ -1703,8 +1681,8 @@ EOF;
 
   echo <<<EOF
   <tr>
-    <td class="dark" colspan="2" align="center">Totals</td>
-    <td class="dark" align="center" width="20"><img src="resource/blankcolor.gif" width="16" height="16" border="0" alt="Blank Color"></td>
+    <td class="dark" colspan="2" align="center">{$LANG_TOTALS}</td>
+    <td class="dark" align="center" width="20"><img src="resource/blankcolor.gif" width="16" height="16" border="0" alt="{$LANG_BLANKCOLOR}"></td>
     <td class="darkgrey" align="center">$total_score</td>
     <td class="darkgrey" align="center">$total_frags</td>
     <td class="darkgrey" align="center">$total_kills</td>
@@ -1734,14 +1712,14 @@ if (isset($ranksystem) && $ranksystem) {
 <br>
 <table cellpadding="0" cellspacing="2" border="0">
   <tr>
-    <td class="heading" colspan="5" align="center" width="340">Player Rank Points</td>
+    <td class="heading" colspan="5" align="center" width="340">{$LANG_PLAYERRANKPOINTS}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="60">Start</td>
-    <td class="smheading" align="center" width="60">Change</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="60">{$LANG_START}</td>
+    <td class="smheading" align="center" width="60">{$LANG_CHANGE}</td>
     <td class="smheading" align="center" width="8">&nbsp;</td>
-    <td class="smheading" align="center" width="60">New</td>
+    <td class="smheading" align="center" width="60">{$LANG_NEW}</td>
   </tr>
 
 EOF;
@@ -1777,11 +1755,11 @@ EOF;
       }
       else if ($change > 0) {
         $change = sprintf("+%0.2f", $change);
-        $ud = "<img src=\"resource/rank_up.gif\" alt=\"Rank Up\">";
+        $ud = "<img src=\"resource/rank_up.gif\" alt=\"{$LANG_RANKUP}\">";
       }
       else {
         $change = sprintf("%0.2f", $change);
-        $ud = "<img src=\"resource/rank_down.gif\" alt=\"Rank Down\">";
+        $ud = "<img src=\"resource/rank_down.gif\" alt=\"{$LANG_RANKDOWN}\">";
       }
       if ($gplayer[$num]["gp_bot"])
         $nameclass = "darkbot";
@@ -1849,7 +1827,7 @@ if ($gametval != 9 && $gametval != 18) {
     $firstblood = "&nbsp;";
 
   if ($gm_logger == 1)
-    $carjackt = "Carjackings";
+    $carjackt = "{$LANG_CARJACKINGS}";
   else {
     $carjack = "&nbsp;";
     $carjackt = "&nbsp;";
@@ -1859,56 +1837,56 @@ if ($gametval != 9 && $gametval != 18) {
 <br>
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
-    <td class="heading" colspan="8" align="center">Special Events</td>
+    <td class="heading" colspan="8" align="center">{$LANG_SPECTIALEVENTS}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="95">Category</td>
-    <td class="smheading" align="center" width="95">Value</td>
-    <td class="smheading" align="center" width="100">Category</td>
-    <td class="smheading" align="center" width="45">Value</td>
-    <td class="smheading" align="center" width="95">Category</td>
-    <td class="smheading" align="center" width="45">Value</td>
-    <td class="smheading" align="center" width="100">Category</td>
-    <td class="smheading" align="center" width="45">Value</td>
+    <td class="smheading" align="center" width="95">{$LANG_CATEGORY}</td>
+    <td class="smheading" align="center" width="95">{$LANG_VALUE}</td>
+    <td class="smheading" align="center" width="100">{$LANG_CATEGORY}</td>
+    <td class="smheading" align="center" width="45">{$LANG_VALUE}</td>
+    <td class="smheading" align="center" width="95">{$LANG_CATEGORY}</td>
+    <td class="smheading" align="center" width="45">{$LANG_VALUE}</td>
+    <td class="smheading" align="center" width="100">{$LANG_CATEGORY}</td>
+    <td class="smheading" align="center" width="45">{$LANG_VALUE}</td>
   </tr>
   <tr>
-    <td class="dark" align="center">First Blood</td>
+    <td class="dark" align="center">{$LANG_FIRSTBLOOD}</td>
     <td class="grey" align="center">$firstblood</td>
-    <td class="dark" align="center">Head Shots</td>
+    <td class="dark" align="center">{$LANG_HEADSHOTS}</td>
     <td class="grey" align="center">$gm_headshots</td>
-    <td class="dark" align="center">Roadkills</td>
+    <td class="dark" align="center">{$LANG_ROADKILLS}</td>
     <td class="grey" align="center">$roadkills</td>
     <td class="dark" align="center">$carjackt</td>
     <td class="grey" align="center">$carjack</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Double Kills</td>
+    <td class="dark" align="center">{$LANG_DOUBLEKILLS}</td>
     <td class="grey" align="center">$multi1</td>
-    <td class="dark" align="center">Multi Kills</td>
+    <td class="dark" align="center">{$LANG_MULTIKILLS}</td>
     <td class="grey" align="center">$multi2</td>
-    <td class="dark" align="center">Mega Kills</td>
+    <td class="dark" align="center">{$LANG_MEGAKILLS}</td>
     <td class="grey" align="center">$multi3</td>
-    <td class="dark" align="center">Ultra Kills</td>
+    <td class="dark" align="center">{$LANG_ULTRAKILLS}</td>
     <td class="grey" align="center">$multi4</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Monster Kills</td>
+    <td class="dark" align="center">{$LANG_MONSTERKILLS}</td>
     <td class="grey" align="center">$multi5</td>
-    <td class="dark" align="center">Ludicrous Kills</td>
+    <td class="dark" align="center">{$LANG_LUDICROUSKILLS}</td>
     <td class="grey" align="center">$multi6</td>
-    <td class="dark" align="center">Holy Shit Kills</td>
+    <td class="dark" align="center">{$LANG_HOLYSHITKILLS}</td>
     <td class="grey" align="center">$multi7</td>
-    <td class="dark" align="center">Failed Transloc</td>
+    <td class="dark" align="center">{$LANG_FAILEDTRANSLOC}</td>
     <td class="grey" align="center">$transgib</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Headhunter</td>
+    <td class="dark" align="center">{$LANG_HEADHUNTER}</td>
     <td class="grey" align="center">$headhunter</td>
-    <td class="dark" align="center">Flak Monkey</td>
+    <td class="dark" align="center">{$LANG_FLAKMONKEY}</td>
     <td class="grey" align="center">$flakmonkey</td>
-    <td class="dark" align="center">Combo Whore</td>
+    <td class="dark" align="center">{$LANG_COMBOWHORE}</td>
     <td class="grey" align="center">$combowhore</td>
-    <td class="dark" align="center">Road Rampage</td>
+    <td class="dark" align="center">{$LANG_ROADRAMPAGE}</td>
     <td class="grey" align="center">$roadrampage</td>
   </tr>
 </table>
@@ -1934,16 +1912,16 @@ if ($gametval != 18) {
 <br>
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
-    <td class="heading" colspan="8" align="center">Combos Used</td>
+    <td class="heading" colspan="8" align="center">{$LANG_COMBOSUSED}</td>
   </tr>
   <tr>
-    <td class="dark" align="center" width="60">Speed</td>
+    <td class="dark" align="center" width="60">{$LANG_SPEED}</td>
     <td class="grey" align="center" width="35">$combo1</td>
-    <td class="dark" align="center" width="60">Booster</td>
+    <td class="dark" align="center" width="60">{$LANG_BOOSTER}</td>
     <td class="grey" align="center" width="35">$combo2</td>
-    <td class="dark" align="center" width="60">Invisible</td>
+    <td class="dark" align="center" width="60">{$LANG_INVISIBLE}</td>
     <td class="grey" align="center" width="35">$combo3</td>
-    <td class="dark" align="center" width="60">Berzerk</td>
+    <td class="dark" align="center" width="60">{$LANG_BERZERK}</td>
     <td class="grey" align="center" width="35">$combo4</td>
   </tr>
 </table>
@@ -2000,11 +1978,11 @@ if ($gametval != 9 && $gametval != 18) {
 <div id="matchup">
 <table cellpadding="1" cellspacing="2" border="0" width="$twidth">
   <tr>
-    <td class="heading" align="center" colspan="$tcols">Kills Match Up</td>
+    <td class="heading" align="center" colspan="$tcols">{$LANG_KILLSMATCHUP}</td>
   </tr>
   <tr>
     <td class="dark" align="center" colspan="$blankspan" rowspan="$blankspan">&nbsp;</td>
-    <td class="dark" align="center" colspan="$gm_numplayers">Victim</td>
+    <td class="dark" align="center" colspan="$gm_numplayers">{$LANG_VICTIM}</td>
   </tr>
   <tr>
 
@@ -2038,10 +2016,14 @@ EOF;
       }
     }
 
+    for ($l = 0, $kstring = ""; $l < strlen($LANG_KILLER); $l++)
+      $kstring .= substr($LANG_KILLER, $l, 1) . "<br />";
+    $kstring .= substr($LANG_KILLER, $l, 1);
+
     echo <<<EOF
   </tr>
   <tr>
-    <td class="dark" align="center" rowspan="$gm_numplayers" width="20">K<br>i<br>l<br>l<br>e<br>r</td>
+    <td class="dark" align="center" rowspan="$gm_numplayers" width="20">$kstring</td>
 
 EOF;
     $firstrow = 1;
@@ -2097,10 +2079,14 @@ EOF;
       echo "    <td class=\"$nameclass\" align=\"center\"><a class=\"$nameclass\" href=\"matchplayer.php?match=$matchnum&amp;player=$gpnum\">$km_name[$i]</a></td>\n";
     }
 
+    for ($l = 0, $kstring = ""; $l < strlen($LANG_KILLER); $l++)
+      $kstring .= substr($LANG_KILLER, $l, 1) . "<br />";
+    $kstring .= substr($LANG_KILLER, $l, 1);
+
     echo <<<EOF
   </tr>
   <tr>
-    <td class="dark" align="center" rowspan="$gm_numplayers" width="20">K<br>i<br>l<br>l<br>e<br>r</td>
+    <td class="dark" align="center" rowspan="$gm_numplayers" width="20">$kstring</td>
 
 EOF;
     $firstrow = 1;
@@ -2151,16 +2137,16 @@ if ($gametval != 18) {
 <br>
 <table cellpadding="1" cellspacing="2" border="0" width="595">
   <tr>
-    <td class="heading" colspan="7" align="center">Weapon/Suicide Specific Information</td>
+    <td class="heading" colspan="7" align="center">{$LANG_WEAPONSUICIDESPECIFICINFO}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Weapon</td>
-    <td class="smheading" align="center" width="55">Frags</td>
-    <td class="smheading" align="center" width="70">Primary Kills</td>
-    <td class="smheading" align="center" width="70">Secondary Kills</td>
-    <td class="smheading" align="center" width="55">Deaths Holding</td>
-    <td class="smheading" align="center" width="55">Suicides</td>
-    <td class="smheading" align="center" width="60">Eff.</td>
+    <td class="smheading" align="center">{$LANG_WEAPON}</td>
+    <td class="smheading" align="center" width="55">{$LANG_FRAGS}</td>
+    <td class="smheading" align="center" width="70">{$LANG_PRIMARYKILLS}</td>
+    <td class="smheading" align="center" width="70">{$LANG_SECONDARYKILLS}</td>
+    <td class="smheading" align="center" width="55">{$LANG_DEATHSHOLDING}</td>
+    <td class="smheading" align="center" width="55">{$LANG_SUICIDES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_EFF}</td>
   </tr>
 
 EOF;
@@ -2168,7 +2154,7 @@ EOF;
   // Load Weapon Descriptions
   $result = sql_queryn($link, "SELECT wp_num,wp_secondary,wp_desc,wp_weaptype FROM {$dbpre}weapons");
   if (!$result) {
-    echo "Error loading weapons descriptions.<br>\n";
+    echo "{$LANG_ERRORLOADINGWEAPONSDESC}<br>\n";
     exit;
   }
   $maxweapon = 0;
@@ -2284,7 +2270,7 @@ if ($numweapons > 0) {
       $suicides = $wskills[3][$i];
       $frags = $wskills[5][$i];
   
-      if (($kills || $skills || $held || $suicides) && strcmp($weapon, "None")) {
+      if (($kills || $skills || $held || $suicides) && strcmp($weapon, "{$LANG_NONE}")) {
         if ($kills + $skills + $held + $suicides == 0)
           $eff = "0.0";
         else
@@ -2308,7 +2294,7 @@ EOF;
   else {
     echo <<< EOF
   <tr>
-    <td class="grey" align="center" colspan="7">No Weapon Kills or Deaths</td>
+    <td class="grey" align="center" colspan="7">{$LANG_NOWEAPONKILLSORDEATHS}</td>
   </tr>
 
 EOF;
@@ -2363,14 +2349,14 @@ if ($numgwaweaps > 0) {
 <br>
 <table cellpadding="1" cellspacing="2" border="0" width="470">
   <tr>
-    <td class="heading" colspan="5" align="center">Weapon Accuracy Information</td>
+    <td class="heading" colspan="5" align="center">{$LANG_WEAPONACCURACYINFORMATION}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Weapon</td>
-    <td class="smheading" align="center" width="78">Shots Fired</td>
-    <td class="smheading" align="center" width="55">Hits</td>
-    <td class="smheading" align="center" width="60">Damage</td>
-    <td class="smheading" align="center" width="65">Accuracy</td>
+    <td class="smheading" align="center">{$LANG_WEAPON}</td>
+    <td class="smheading" align="center" width="78">{$LANG_SHOTSFIRED}</td>
+    <td class="smheading" align="center" width="55">{$LANG_HITS}</td>
+    <td class="smheading" align="center" width="60">{$LANG_DAMAGE}</td>
+    <td class="smheading" align="center" width="65">{$LANG_ACCURACY}</td>
   </tr>
 
 EOF;
@@ -2415,17 +2401,17 @@ if ($gm_logger == 1 && $gametval != 18) {
 <br>
 <table cellpadding="1" cellspacing="2" border="0" width="660">
   <tr>
-    <td class="heading" colspan="8" align="center">Vehicle and Turret Specific Information</td>
+    <td class="heading" colspan="8" align="center">{$LANG_VEHICLETURRETSPECIFICINFORMATION}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Vehicle/Turret</td>
-    <td class="smheading" align="center" width="55">Frags</td>
-    <td class="smheading" align="center" width="70">Primary Kills</td>
-    <td class="smheading" align="center" width="70">Secondary Kills</td>
-    <td class="smheading" align="center" width="55">Road Kills</td>
-    <td class="smheading" align="center" width="55">Deaths In</td>
-    <td class="smheading" align="center" width="55">Suicides</td>
-    <td class="smheading" align="center" width="60">Eff.</td>
+    <td class="smheading" align="center">{$LANG_VEHICLETURRET}</td>
+    <td class="smheading" align="center" width="55">{$LANG_FRAGS}</td>
+    <td class="smheading" align="center" width="70">{$LANG_PRIMARYKILLS}</td>
+    <td class="smheading" align="center" width="70">{$LANG_SECONDARYKILLS}</td>
+    <td class="smheading" align="center" width="55">{$LANG_ROADKILLS}</td>
+    <td class="smheading" align="center" width="55">{$LANG_DEATHSIN}</td>
+    <td class="smheading" align="center" width="55">{$LANG_SUICIDES}</td>
+    <td class="smheading" align="center" width="60">{$LANG_EFF}</td>
   </tr>
 
 EOF;
@@ -2477,7 +2463,7 @@ EOF;
   else {
     echo <<< EOF
   <tr>
-    <td class="grey" align="center" colspan="5">No Vehicle or Turret Kills</td>
+    <td class="grey" align="center" colspan="5">{$LANG_NOVEHICLEORTURRETKILLS}</td>
   </tr>
 
 EOF;
@@ -2489,15 +2475,15 @@ else if ($gametval != 18) {
 <br>
 <table cellpadding="1" cellspacing="2" border="0" width="560">
   <tr>
-    <td class="heading" colspan="6" align="center">Vehicle and Turret Specific Information</td>
+    <td class="heading" colspan="6" align="center">{$LANG_VEHICLETURRETSPECIFICINFORMATION}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Vehicle/Turret</td>
-    <td class="smheading" align="center" width="55">Frags</td>
-    <td class="smheading" align="center" width="70">Primary Kills</td>
-    <td class="smheading" align="center" width="70">Secondary Kills</td>
-    <td class="smheading" align="center" width="55">Road Kills</td>
-    <td class="smheading" align="center" width="55">Suicides</td>
+    <td class="smheading" align="center">{$LANG_VEHICLETURRET}</td>
+    <td class="smheading" align="center" width="55">{$LANG_FRAGS}</td>
+    <td class="smheading" align="center" width="70">{$LANG_PRIMARYKILLS}</td>
+    <td class="smheading" align="center" width="70">{$LANG_SECONDARYKILLS}</td>
+    <td class="smheading" align="center" width="55">{$LANG_ROADKILLS}</td>
+    <td class="smheading" align="center" width="55">{$LANG_SUICIDES}</td>
   </tr>
 
 EOF;
@@ -2541,7 +2527,7 @@ EOF;
   else {
     echo <<< EOF
   <tr>
-    <td class="grey" align="center" colspan="5">No Vehicle or Turret Kills</td>
+    <td class="grey" align="center" colspan="5">{$LANG_NOVEHICLEORTURRETKILLS}</td>
   </tr>
 
 EOF;
@@ -2557,12 +2543,12 @@ if ($gametval == 9) {
 <br>
 <table cellpadding="1" cellspacing="2" border="0" width="340">
   <tr>
-    <td class="heading" colspan="3" align="center">Invasion Monster Information</td>
+    <td class="heading" colspan="3" align="center">{$LANG_INVASIONMONSTERINFORMATION}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Monster</td>
-    <td class="smheading" align="center" width="95">Players Killed</td>
-    <td class="smheading" align="center" width="55">Deaths</td>
+    <td class="smheading" align="center">{$LANG_MONSTER}</td>
+    <td class="smheading" align="center" width="95">{$LANG_PLAYERSKILLED}</td>
+    <td class="smheading" align="center" width="55">{$LANG_DEATHS}</td>
   </tr>
 
 EOF;
@@ -2614,7 +2600,7 @@ EOF;
 if ($gametval != 9 && $gametval != 18) {
   $result = sql_queryn($link, "SELECT * FROM {$dbpre}gevents WHERE ge_event=1 AND ge_match=$matchnum ORDER BY ge_num");
   if (!$result) {
-    echo "Error loading events.<br>\n";
+    echo "{$LANG_ERRORLOADINGEVENTS}<br>\n";
     exit;
   }
   $sprees = $header = 0;
@@ -2641,104 +2627,104 @@ if ($gametval != 9 && $gametval != 18) {
 
       $type = "";
       if ($ge_quant >= 5 && $ge_quant < 10)
-        $type = "Killing Spree";
+        $type = "{$LANG_KILLINGSPREE}";
       else if ($ge_quant >= 10 && $ge_quant < 15)
-        $type = "Rampage";
+        $type = "{$LANG_RAMPAGE}";
       else if ($ge_quant >= 15 && $ge_quant < 20)
-        $type = "Dominating";
+        $type = "{$LANG_DOMINATING}";
       else if ($ge_quant >= 20 && $ge_quant < 25)
-        $type = "Unstoppable";
+        $type = "{$LANG_UNSTOPPABLE}";
       else if ($ge_quant >= 25 && $ge_quant < 30)
-        $type = "Godlike";
+        $type = "{$LANG_GODLIKE}";
       else if ($ge_quant >= 30)
-        $type = "Wicked Sick";
+        $type = "{$LANG_WICKEDSICK}";
 
       switch ($ge_reason) {
         case 0: // Game Ended
-          $reason = "Game Ended";
+          $reason = "{$LANG_GAMEENDED}";
           break;
         case 1: // Killed by {player} with a {weapon}
           $killer = $gplayer[$ge_opponent]["gp_name"];
           $weapon = $weapons[$ge_item][0];
-          if (!strcmp($weapon, "Fell"))
-            $reason = "Knocked off a ledge by $killer";
-          else if (!strcmp($weapon, "Fell Into Lava"))
-            $reason = "Knocked into lava by $killer";
-          else if (!strcmp($weapon, "Crushed") || !strcmp($weapon, "Telefragged")  || !strcmp($weapon, "Depressurized"))
+          if (!strcmp($weapon, "{$LANG_FELL}"))
+            $reason = "{$LANG_KNOCKEDOFFALEDGEBY} $killer";
+          else if (!strcmp($weapon, "{$LANG_FELLINTOLAVA}"))
+            $reason = "{$LANG_KNOCKEDINTOLAVABY} $killer";
+          else if (!strcmp($weapon, "{$LANG_CRUSHED}") || !strcmp($weapon, "{$LANG_TELEFRAGGED}")  || !strcmp($weapon, "{$LANG_DEPRESSURIZED}"))
             $reason = "$weapon by $killer";
           else {
             $wfl = strtoupper($weapon[0]);
             if ($wfl == 'A' || $wfl == 'E' || $wfl == 'I' || $wfl == 'O' || $wfl == 'U' || $wfl == 'Y')
-              $reason = "Killed by $killer with an $weapon";
+              $reason = "{$LANG_KILLEDBY} $killer {$LANG_WITHAN} $weapon";
             else
-              $reason = "Killed by $killer with a $weapon";
+              $reason = "{$LANG_KILLEDBY} $killer {$LANG_WITHA} $weapon";
           }
           break;
         case 2: // Suicided with {weapon}
           $weapon = $weapons[$ge_item][0];
-          if (!strcmp($weapon, "Suicided") || !strcmp($weapon, "Drowned"))
+          if (!strcmp($weapon, "{$LANG_SUICIDED}") || !strcmp($weapon, "{$LANG_DROWNED}"))
             $reason = "$weapon";
-          else if (!strcmp($weapon, "Corroded") || !strcmp($weapon, "Crushed") || !strcmp($weapon, "Gibbed") || !strcmp($weapon, "Depressurized"))
+          else if (!strcmp($weapon, "{$LANG_CORRODED}") || !strcmp($weapon, "{$LANG_CRUSHED}") || !strcmp($weapon, "{$LANG_GIBBED}") || !strcmp($weapon, "{$LANG_DEPRESSURIZED}"))
             $reason = "Was $weapon";
-          else if (!strcmp($weapon, "Fell"))
-            $reason = "Fell to their death";
-          else if (!strcmp($weapon, "Fell Into Lava"))
-            $reason = "Fell into Lava";
-          else if (!strcmp($weapon, "Swam Too Far"))
-            $reason = "Tried to Swim Too Far";
-          else if (!strcmp($weapon, "Vehicle Explosion"))
-            $reason = "Suicided from a Vehicle Explosion";
-          else if (!strcmp($weapon, "Reckless Driving"))
-            $reason = "Suicided from Reckless Driving";
+          else if (!strcmp($weapon, "{$LANG_FELL}"))
+            $reason = "{$LANG_FELLTOTHEIRDEATH}";
+          else if (!strcmp($weapon, "{$LANG_FELLINTOLAVA}"))
+            $reason = "{$LANG_FELLINTOLAVA}";
+          else if (!strcmp($weapon, "{$LANG_SWAMTOOFAR}"))
+            $reason = "{$LANG_TRIEDTOSWIMTOOFAR}";
+          else if (!strcmp($weapon, "{$LANG_VEHICLEEXPLOSION}"))
+            $reason = "{$LANG_SUICIDEDFROMVEHICLEEXPLOSION}";
+          else if (!strcmp($weapon, "{$LANG_RECKLESSDRIVING}"))
+            $reason = "{$LANG_SUICIDEDFROMRECKLESSDRIVING}";
           else {
             $wfl = strtoupper($weapon[0]);
             if ($wfl == 'A' || $wfl == 'E' || $wfl == 'I' || $wfl == 'O' || $wfl == 'U' || $wfl == 'Y')
-              $reason = "Suicided with an $weapon";
+              $reason = "{$LANG_SUICIDEDWITHAN} $weapon";
             else
-              $reason = "Suicided with a $weapon";
+              $reason = "{$LANG_SUICIDEDWITHA} $weapon";
           }
           break;
         case 3: // Died from {weapon}
           $weapon = $weapons[$ge_item][0];
-          if (!strcmp($weapon, "Suicided") || !strcmp($weapon, "Drowned"))
+          if (!strcmp($weapon, "{$LANG_SUICIDED}") || !strcmp($weapon, "{$LANG_DROWNED}"))
             $reason = "$weapon";
-          else if (!strcmp($weapon, "Corroded") || !strcmp($weapon, "Crushed") || !strcmp($weapon, "Gibbed") || !strcmp($weapon, "Depressurized"))
+          else if (!strcmp($weapon, "{$LANG_CORRODED}") || !strcmp($weapon, "{$LANG_CRUSHED}") || !strcmp($weapon, "{$LANG_GIBBED}") || !strcmp($weapon, "{$LANG_DEPRESSURIZED}"))
             $reason = "Was $weapon";
-          else if (!strcmp($weapon, "Fell"))
-            $reason = "Fell to their death";
-          else if (!strcmp($weapon, "Fell Into Lava"))
-            $reason = "Fell into Lava";
-          else if (!strcmp($weapon, "Swam Too Far"))
-            $reason = "Tried to Swim Too Far";
+          else if (!strcmp($weapon, "{$LANG_FELL}"))
+            $reason = "{$LANG_FELLTOTHEIRDEATH}";
+          else if (!strcmp($weapon, "{$LANG_FELLINTOLAVA}"))
+            $reason = "{$LANG_FELLINTOLAVA}";
+          else if (!strcmp($weapon, "{$LANG_SWAMTOOFAR}"))
+            $reason = "{$LANG_TRIEDTOSWIMTOOFAR}";
           else {
             $wfl = strtoupper($weapon[0]);
             if ($wfl == 'A' || $wfl == 'E' || $wfl == 'I' || $wfl == 'O' || $wfl == 'U' || $wfl == 'Y')
-              $reason = "Died from an $weapon";
+              $reason = "{$LANG_DIEDFROMAN} $weapon";
             else
-              $reason = "Died from a $weapon";
+              $reason = "{$LANG_DIEDFROMA} $weapon";
           }
           break;
         case 4: // Disconnected
-          $reason = "Disconnected";
+          $reason = "{$LANG_DISCONNECTED}";
           break;
         case 5: // Team Killed
           $killer = $gplayer[$ge_opponent]["gp_name"];
           $weapon = $weapons[$ge_item][0];
-          if (!strcmp($weapon, "Crushed") || !strcmp($weapon, "Telefragged")  || !strcmp($weapon, "Depressurized"))
-            $reason = "Team Killed - $weapon by $killer";
+          if (!strcmp($weapon, "{$LANG_CRUSHED}") || !strcmp($weapon, "{$LANG_TELEFRAGGED}")  || !strcmp($weapon, "{$LANG_DEPRESSURIZED}"))
+            $reason = "{$LANG_TEAMKILLED} - $weapon {$LANG_BY} $killer";
           else {
             $wfl = strtoupper($weapon[0]);
             if ($wfl == 'A' || $wfl == 'E' || $wfl == 'I' || $wfl == 'O' || $wfl == 'U' || $wfl == 'Y')
-              $reason = "Team Killed by $killer with an $weapon";
+              $reason = "{$LANG_TEAMKILLEDBY} $killer {$LANG_WITHAN} $weapon";
             else
-              $reason = "Team Killed by $killer with a $weapon";
+              $reason = "{$LANG_TEAMKILLEDBY} $killer {$LANG_WITHA} $weapon";
           }
           break;
         case 6: // Team Change
-          $reason = "Changed Teams";
+          $reason = "{$LANG_CHANGEDTEAMS}";
           break;
         default:
-          $reason = "Unknown";
+          $reason = "{$LANG_UNKNOWN}";
       }
 
       if (!$header) {
@@ -2746,15 +2732,15 @@ if ($gametval != 9 && $gametval != 18) {
 <br>
 <table cellpadding="1" cellspacing="2" border="0" width="680">
   <tr>
-    <td class="heading" colspan="6" align="center">Killing Sprees</td>
+    <td class="heading" colspan="6" align="center">{$LANG_KILLINGSPREES}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="90">Spree Type</td>
-    <td class="smheading" align="center" width="45">Start Time</td>
-    <td class="smheading" align="center" width="55">Time In Spree</td>
-    <td class="smheading" align="center" width="80">Kills During Spree</td>
-    <td class="smheading" align="center">Reason Spree Stopped</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="90">{$LANG_SPREETYPE}</td>
+    <td class="smheading" align="center" width="45">{$LANG_STARTTIME}</td>
+    <td class="smheading" align="center" width="55">{$LANG_TIMEINSPREE}</td>
+    <td class="smheading" align="center" width="80">{$LANG_KILLSDURINGSPREE}</td>
+    <td class="smheading" align="center">{$LANG_REASONSPREESTOPPED}</td>
   </tr>
 
 EOF;
@@ -2781,7 +2767,7 @@ EOF;
 <br>
 <table cellpadding="1" cellspacing="2" border="0" width="600">
   <tr>
-    <td class="heading" align="center">No Killing Sprees</td>
+    <td class="heading" align="center">{$LANG_NOKILLINGSPREES}</td>
   </tr>
 
 EOF;
@@ -2797,22 +2783,22 @@ if ($gametval != 18) {
 <br>
 <table cellpadding="1" cellspacing="2" border="0" width="600">
   <tr>
-    <td class="heading" colspan="6" align="center">Total Items Collected</td>
+    <td class="heading" colspan="6" align="center">{$LANG_TOTALITEMSCOLLECTED}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Item Type</td>
-    <td class="smheading" align="center" width="35">No.</td>
-    <td class="smheading" align="center">Item Type</td>
-    <td class="smheading" align="center" width="35">No.</td>
-    <td class="smheading" align="center">Item Type.</td>
-    <td class="smheading" align="center" width="35">No.</td>
+    <td class="smheading" align="center">{$LANG_ITEMTYPE}</td>
+    <td class="smheading" align="center" width="35">{$LANG_NO}</td>
+    <td class="smheading" align="center">{$LANG_ITEMTYPE}</td>
+    <td class="smheading" align="center" width="35">{$LANG_NO}</td>
+    <td class="smheading" align="center">{$LANG_ITEMTYPE}</td>
+    <td class="smheading" align="center" width="35">{$LANG_NO}</td>
   </tr>
 
 EOF;
 
   $result = sql_queryn($link, "SELECT it_num,it_desc FROM {$dbpre}items");
   if (!$result) {
-    echo "Error loading item pickup descriptions.<br>\n";
+    echo "{$LANG_ERRORLOADINGITEMPICKUPDESC}<br>\n";
     exit;
   }
   $numitems = 0;
@@ -2826,7 +2812,7 @@ EOF;
 
   $result = sql_queryn($link, "SELECT gi_item,gi_pickups FROM {$dbpre}gitems WHERE gi_match=$matchnum");
   if (!$result) {
-    echo "Error loading item pickups.<br>\n";
+    echo "{$LANG_ERRORLOADINGITEMPICKUPS}<br>\n";
     exit;
   }
   while ($row = sql_fetch_row($result)) {
@@ -2863,7 +2849,7 @@ EOF;
   if (!$totpickups) {
     echo <<<EOF
   <tr>
-    <td class="dark" align="center" colspan="6">There Were No Item Pickups Logged</td>
+    <td class="dark" align="center" colspan="6">{$LANG_THEREWERENOITEMPICKUPSLOGGED}</td>
   </tr>
 
 EOF;
@@ -2889,12 +2875,12 @@ if ($gm_logger == 1) {
 <br>
 <table cellpadding="1" cellspacing="2" border="0" width="350">
   <tr>
-    <td class="heading" colspan="3" align="center">Player Netspeed and Ping Time</td>
+    <td class="heading" colspan="3" align="center">{$LANG_PLAYERNETSPEEDANDPINGTIME}</td>
   </tr>
   <tr>
-    <td class="smheading" align="center">Player</td>
-    <td class="smheading" align="center" width="70">Netspeed</td>
-    <td class="smheading" align="center" width="70">Avg. Ping</td>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="70">{$LANG_NETSPEED}</td>
+    <td class="smheading" align="center" width="70">{$LANG_AVGPING}</td>
   </tr>
 
 EOF;
@@ -2927,19 +2913,19 @@ echo <<<EOF
 <br>
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
-    <td class="heading" colspan="3" align="center">Connection Log</td>
+    <td class="heading" colspan="3" align="center">{$LANG_CONNECTIONLOG}</td>
   </tr>
   <tr>
-    <td class="smheading" align="right" width="50">Time</td>
-    <td class="smheading" align="center" width="200">Player</td>
-    <td class="smheading" align="center" width="100">Status</td>
+    <td class="smheading" align="right" width="50">{$LANG_TIME}</td>
+    <td class="smheading" align="center" width="200">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="100">{$LANG_STATUS}</td>
   </tr>
 
 EOF;
 
 $result = sql_querynb($link, "SELECT ge_plr,ge_event,ge_time,ge_quant,ge_reason FROM {$dbpre}gevents WHERE ge_match=$matchnum AND ((ge_event BETWEEN 2 AND 4) OR ge_event=10) ORDER BY ge_num");
 if (!$result) {
-  echo "Error loading connection events.<br>\n";
+  echo "{$LANG_ERRORLOADINGCONNECTIONEVENTS}<br>\n";
   exit;
 }
 while ($row = sql_fetch_assoc($result)) {
@@ -2966,20 +2952,20 @@ while ($row = sql_fetch_assoc($result)) {
       switch ($row["ge_reason"]) {
         case 0:
           if (($gametval < 2 || $gametval > 4) && $name != "")
-            $reason = "Connected";
+            $reason = "{$LANG_CONNECTED}";
           else
             $reason = "";
           $rclass = "grey";
           break;
         case 1:
           if ($name != "")
-            $reason = "Disconnected";
+            $reason = "{$LANG_DISCONNECTED}";
           else
             $reason = "";
           $rclass = "warn";
           break;
         default:
-          $reson = "Unknown";
+          $reson = "{$LANG_UNKNOWN}";
           $rclass = "grey";
       }
       $player = "<a class=\"$nameclass\" href=\"matchplayer.php?match=$matchnum&amp;player=$plr\">$name</a>";
@@ -2987,14 +2973,14 @@ while ($row = sql_fetch_assoc($result)) {
     case 3:
       switch ($row["ge_reason"]) {
         case 0:
-          $reason = "Game Start";
+          $reason = "{$LANG_GAMESTART}";
           $time = "0.0";
           break;
         case 1:
-          $reason = "Game Ended";
+          $reason = "{$LANG_GAMEENDED}";
           break;
         default:
-          $reason = "Unknown";
+          $reason = "{$LANG_UNKNOWN}";
       }
       $player = "";
       $rclass = "gselog";
@@ -3011,7 +2997,7 @@ while ($row = sql_fetch_assoc($result)) {
         case 2:
           $result2 = sql_queryn($link, "SELECT ed_desc FROM {$dbpre}eventdesc WHERE ed_num=$quant LIMIT 1");
           if (!$result2) {
-            echo "Error accessing event description database.{$break}\n";
+            echo "{$LANG_ERRORACCESSINGEVENTDESCDB}{$break}\n";
             exit;
           }
           $row2 = sql_fetch_row($result2);
@@ -3019,22 +3005,22 @@ while ($row = sql_fetch_assoc($result)) {
           if ($row2)
             $mapname = "'{$row2[0]}'";
           else
-            $mapname = "an unknown map";
+            $mapname = "{$LANG_ANUNKNOWNMAP}";
           if ($reas == 1) {
             if ($plr >= 0)
-              $reason = "Map Vote forced by admin for $mapname";
+              $reason = "{$LANG_MAPVOTEFORCEDBYADMINFOR} $mapname";
             else
-              $reason = "Map Vote succeeded for $mapname";
+              $reason = "{$LANG_MAPVOTESUCCEEDEDFOR} $mapname";
             $prior = 4;
           }
           else {
             if ($item == 1)
-              $votes = "$item vote";
+              $votes = "$item {$LANG_VOTE}";
             else if ($item == 0)
-              $votes = "admin";
+              $votes = "{$LANG_ADMIN}";
             else
-              $votes = "$item votes";
-            $reason = "Voted for $mapname ($votes)";
+              $votes = "$item {$LANG_VOTE}";
+            $reason = "{$LANG_VOTEDFOR} $mapname ($votes)";
           }
           if ($plr >= 0)
             $player = "<a class=\"$nameclass\" href=\"matchplayer.php?match=$matchnum&amp;player=$plr\">$name</a>";
@@ -3046,12 +3032,12 @@ while ($row = sql_fetch_assoc($result)) {
           $kplayer = stripspecialchars($gplayer[$quant]["gp_name"]);
           if ($reas == 3) {
             if ($plr >= 0)
-              $reason = "Kick Vote of $kplayer forced by admin";
+              $reason = "{$LANG_KICKVOTEOF} $kplayer {$LANG_FORCEDBYADMIN}";
             else
-              $reason = "Kick Vote for $kplayer succeeded";
+              $reason = "{$LANG_KICKVOTEFOR} $kplayer {$LANG_SUCCEEDED}";
           }
           else
-            $reason = "Voted to kick $kplayer";
+            $reason = "{$LANG_VOTEDTOKICK} $kplayer";
           if ($plr >= 0)
             $player = "<a class=\"$nameclass\" href=\"matchplayer.php?match=$matchnum&amp;player=$plr\">$name</a>";
           else
@@ -3061,7 +3047,7 @@ while ($row = sql_fetch_assoc($result)) {
         case 6:
           $result2 = sql_queryn($link, "SELECT ed_desc FROM {$dbpre}eventdesc WHERE ed_num=$quant LIMIT 1");
           if (!$result2) {
-            echo "Error accessing event descriptions database.{$break}\n";
+            echo "{$LANG_ERRORACCESSINGEVENTDESCDB}{$break}\n";
             exit;
           }
           $row2 = sql_fetch_row($result2);
@@ -3069,11 +3055,11 @@ while ($row = sql_fetch_assoc($result)) {
           if ($row2)
             $gamename = "'{$row2[0]}'";
           else
-            $gamename = "an unknown game type";
+            $gamename = "{$LANG_ANUNKNOWNGAMETYPE}";
           if ($plr >= 0)
-            $reason = "Game Type Vote forced by admin for $gamename";
+            $reason = "{$LANG_GAMETYPEVOTEFORCEDBYADMIN} $gamename";
           else
-            $reason = "Game Type Vote succeeded for $gamename";
+            $reason = "{$LANG_GAMETYPEVOTESUCCEEDEDFOR} $gamename";
           break;
         default:
           $reason = "";
@@ -3098,21 +3084,21 @@ echo "</table>\n";
 //=============================================================================
 $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}gchat WHERE gc_match=$matchnum ORDER BY gc_time");
 if (!$result) {
-  echo "Error accessing chat log.<br>\n";
+  echo "{$LANG_ERRORACCESSINGCHATLOG}<br>\n";
   exit;
 }
 list($numchat) = sql_fetch_row($result);
 sql_free_result($result);
 if ($numchat == 1)
-  $plural = "";
+  $cmsg = $LANG_CHATMESSAGE;
 else
-  $plural = "s";
+  $cmsg = $LANG_CHATMESSAGES;
 
 echo <<<EOF
 <br>
 <table cellpadding="1" cellspacing="2" border="0" width="400">
   <tr>
-    <td class="chatlink" colspan="3" align="center"><a class="chatlink" href="chatlog.php?match=$matchnum">Chat / Event Log</a> contains $numchat chat message{$plural}</td>
+    <td class="chatlink" colspan="3" align="center"><a class="chatlink" href="chatlog.php?match=$matchnum">{$LANG_CHATEVENTLOG}</a> {$LANG_CONTAINS} $numchat {$cmsg}</td>
   </tr>
 </table>
 

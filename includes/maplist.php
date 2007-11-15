@@ -53,7 +53,7 @@ if ($searchname != "") {
 
   $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}maps WHERE mp_name LIKE '%{$slashedname}%'");
   if (!$result) {
-    echo "{$LANG_MAPDATABASEERROR}<br>\n";
+    echo "{$LANG_MAPDATABASEERRORP}<br>\n";
     exit;
   }
   list($nummaps) = sql_fetch_row($result);
@@ -61,7 +61,7 @@ if ($searchname != "") {
 else {
   $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}maps");
   if (!$result) {
-    echo "{$LANG_MAPDATABASEERROR}<br>\n";
+    echo "{$LANG_MAPDATABASEERRORP}<br>\n";
     exit;
   }
   list($nummaps) = sql_fetch_row($result);
@@ -131,7 +131,7 @@ else
 
 $result = sql_queryn($link, "SELECT mp_num,mp_name,mp_matches,mp_score,mp_time,mp_lastmatch FROM {$dbpre}maps $where ORDER BY mp_matches DESC LIMIT $start,$mapspage");
 if (!$result) {
-  echo "$LANG_MAPDATABASEERROR<br>\n";
+  echo "$LANG_MAPDATABASEERRORP<br>\n";
   exit;
 }
 while($row = sql_fetch_assoc($result)) {
