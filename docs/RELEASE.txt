@@ -1,5 +1,12 @@
 Release Notes:
 
+Unreleased
+  Converted text to use language files, created English language file.
+  Added server activity graph to main page.
+  Added query support for UT3 servers.
+  Cleaned up HTML and CSS code.
+  Updated to XHTML 1.0 Transitional compliant.
+
 Version 3.02
   Fixed admin connections to MySQL database socket.
   Added default port 3306 to MySQL connections.
