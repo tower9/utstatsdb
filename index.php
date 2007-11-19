@@ -37,7 +37,7 @@ else if ($statview == 'help')
 else {
   $result = sql_query("SELECT tl_score,tl_kills,tl_suicides,tl_teamkills,tl_players,tl_matches,tl_playertime,tl_headshots FROM {$dbpre}totals LIMIT 1");
   if (!$result) {
-    echo "{$LANG_STATSDATABASEERROR}<br>\n";
+    echo "{$LANG_STATSDATABASEERROR}<br />\n";
     exit;
   }
   list($tl_score,$tl_kills,$tl_suicides,$tl_teamkills,$tl_players,$tl_matches,$tl_playertime,$tl_headshots) = sql_fetch_row($result);
@@ -47,7 +47,7 @@ else {
 
   $result = sql_query("SELECT COUNT(*) FROM {$dbpre}servers");
   if (!$result) {
-    echo "{$LANG_STATSDATABASEERROR}<br>\n";
+    echo "{$LANG_STATSDATABASEERROR}<br />\n";
     exit;
   }
   list($servers) = sql_fetch_row($result);
@@ -88,11 +88,11 @@ EOF;
   $matches = 0;
   $result = sql_query("SELECT MAX(gm_start) FROM {$dbpre}matches");
   if (!$result) {
-    echo "{$LANG_MATCHDATABASEERROR} (main).<br>\n";
+    echo "{$LANG_MATCHDATABASEERROR} (main).<br />\n";
     exit;
   }
   if (!list($recent) = sql_fetch_row($result)) {
-    echo "{$LANG_MATCHDATABASEERROR} (main).<br>\n";
+    echo "{$LANG_MATCHDATABASEERROR} (main).<br />\n";
     exit;
   }
   $result = sql_query("SELECT gm_num,gm_map,gm_start FROM {$dbpre}matches WHERE gm_start='$recent' LIMIT 1");
@@ -104,7 +104,7 @@ EOF;
     $link = "matchstats.php?match=$gm_num";
     $result = sql_query("SELECT mp_name FROM {$dbpre}maps WHERE mp_num=$map LIMIT 1");
     if (!$result) {
-      echo "{$LANG_MAPDATABASEERROR} (main).<br>\n";
+      echo "{$LANG_MAPDATABASEERROR} (main).<br />\n";
       exit;
     }
     $row = sql_fetch_row($result);
@@ -118,7 +118,7 @@ EOF;
   </tr>
   <tr>
     <td class="heading" align="center">
-      <a class="lglheading" href="$link"><b>$mapname</b><br>
+      <a class="lglheading" href="$link"><b>$mapname</b><br />
       <b>$matchdate</b></a>
     </td>
   </tr>
@@ -177,10 +177,8 @@ EOF;
 $hmax = max($hactive);
 for ($i = 0; $i < 24; $i++) {
   $height = round(($hactive[$i] / $hmax) * 0.9 * 142);
-  $heightx = $height < 2 ? 2 : $height; // Did IE fall on its head?
   $bottom = $height + 2;
-  $bottomx = $heightx + 1;
-  echo "          <div class=\"tgbarspace\">&nbsp;</div><div class=\"tgbar\" style=\"height: {$height}px; _height: {$heightx}px; bottom: {$bottom}px; _bottom: {$bottomx}px\">&nbsp;</div>\n";
+  echo "          <div class=\"tgbarspace\">&nbsp;</div><div class=\"tgbar\" style=\"height: {$height}px; bottom: {$bottom}px \">&nbsp;</div>\n";
 }
 
 echo "          <div class=\"tgblank\">&nbsp;</div>\n";
@@ -202,6 +200,7 @@ EOF;
 }
 
 echo <<<EOF
+
 </td>
 </tr>
 </table>

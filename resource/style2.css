@@ -99,8 +99,8 @@ a.status:hover {font-family: Verdana,Helvetica; font-size: 9pt; color: #bd0000; 
 .tgheading  {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #ffffff; background: #d5d5d5; font-weight: bold}
 .tglheading {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #000000; background: #d5d5d5; font-weight: bold}
 .tgmainbox  {overflow: hidden; text-align: left; width: 480px; height: 150px}
-.tgsubbox   {font-size: 0; width: 480px; height: 130px; background-color: #d5d5d5; border-bottom: 1px solid #666666; float: right}
-.tgbarspace {font-size; 0; width: 6px; float: left}
-.tgbar      {font-size: 0; width: 12px; background-color: #00ce00; border: 1px solid #000000; border-bottom-width: 0; float: left; position: relative}
-.tglabel    {font-size: 8pt; font-family: arial,sans-serif; color: #000000; font-weight: normal; font-style: normal; text-decoration; none; width: 12px; text-align: center; float: left; overflow: visible; position: relative; border: 1px solid transparent; _border: 1px solid none}
-.tgblank    {font-size: 0; height: 0; clear: both}
+.tgsubbox   {font-size: 0pt; width: 480px; height: 130px; background-color: #d5d5d5; border-bottom: 1px solid #666666; float: right}
+.tgbarspace {width: 6px; float: left}
+.tgbar      {font-size: 0pt; width: 12px; background-color: #00ce00; border: 1px solid #000000; border-bottom-width: 0; float: left; position: relative}
+.tglabel    {font-size: 8pt; font-family: arial,sans-serif; color: #000000; font-weight: normal; font-style: normal; text-decoration: none; width: 12px; text-align: center; float: left; overflow: visible; position: relative; border: 1px solid transparent}
+.tgblank    {font-size: 0pt; height: 0px; clear: both}

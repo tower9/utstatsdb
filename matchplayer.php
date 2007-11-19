@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2006  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ if (!is_numeric($matchnum))
 if (!is_numeric($plr))
   $plr = -1;
 if ($matchnum <= 0 || $plr < 0) {
-  echo "Run from the main index program.<br>\n";
+  echo "Run from the main index program.<br />\n";
   exit;
 }
 
@@ -45,13 +45,13 @@ sql_free_result($result);
 
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}matches WHERE gm_num=$matchnum LIMIT 1");
 if (!$result) {
-  echo "Match database error.<br>\n";
+  echo "Match database error.<br />\n";
   exit;
 }
 $row = sql_fetch_assoc($result);
 sql_free_result($result);
 if (!$row) {
-  echo "Match not found in database.<br>\n";
+  echo "Match not found in database.<br />\n";
   exit;
 }
 while (list ($key, $val) = each ($row))
@@ -71,13 +71,13 @@ $matchdate = formatdate($start, 1);
 // Load Player
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}gplayers WHERE gp_match=$matchnum AND gp_num=$plr LIMIT 1");
 if (!$result) {
-  echo "Match player list database error.<br>\n";
+  echo "Match player list database error.<br />\n";
   exit;
 }
 $row = sql_fetch_assoc($result);
 sql_free_result($result);
 if (!$row) {
-  echo "Invalid player number for match.<br>\n";
+  echo "Invalid player number for match.<br />\n";
   exit;
 }
 while (list ($key, $val) = each ($row))
@@ -104,7 +104,7 @@ sql_free_result($result);
 // Load Server Data
 $result = sql_queryn($link, "SELECT sv_name,sv_admin,sv_email FROM {$dbpre}servers WHERE sv_num=$gm_server LIMIT 1");
 if (!$result) {
-  echo "Server database error.<br>\n";
+  echo "Server database error.<br />\n";
   exit;
 }
 list($sv_name,$sv_admin,$sv_email) = sql_fetch_row($result);
@@ -116,7 +116,7 @@ $serveremail = stripspecialchars($sv_email);
 // Load Map Data
 $result = sql_queryn($link, "SELECT mp_name FROM {$dbpre}maps WHERE mp_num=$gm_map LIMIT 1");
 if (!$result) {
-  echo "Map database error.<br>\n";
+  echo "Map database error.<br />\n";
   exit;
 }
 list($mp_name) = sql_fetch_row($result);
@@ -186,7 +186,7 @@ echo <<<EOF
     <td class="heading" align="center">Individual Match Stats for $gp_name <a href="playerstats.php?player=$gp_pnum" class="heading">[ID=$gp_pnum]</a></td>
   </tr>
 </table>
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="650" class="box">
   <tr>
     <td class="heading" colspan="4" align="center">Match/Player Information</td>
@@ -243,7 +243,7 @@ EOF;
 if ($gp_bot) {
   $result = sql_queryn($link, "SELECT * FROM {$dbpre}gbots WHERE gb_match=$matchnum AND gb_bot=$plr LIMIT 1");
   if (!$result) {
-    echo "Bot database error.<br>\n";
+    echo "Bot database error.<br />\n";
     exit;
   }
   $row = sql_fetch_assoc($result);
@@ -294,7 +294,7 @@ if ($gp_bot) {
     if ($gb_favorite) {
       $result = sql_queryn($link, "SELECT wp_desc FROM {$dbpre}weapons WHERE wp_num=$gb_favorite");
       if (!$result) {
-        echo "Error accessing weapons data.<br>\n";
+        echo "Error accessing weapons data.<br />\n";
         exit;
       }
       if ($row = sql_fetch_row($result))
@@ -307,7 +307,7 @@ if ($gp_bot) {
       $favored = "Unknown";
 
     echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" class="box">
   <tr>
     <td class="heading" colspan="4" align="center">Bot Stats</td>
@@ -370,21 +370,21 @@ else
   $nameclass = "darkhuman";
 
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="0" cellspacing="2" border="0" width="600">
   <tr>
     <td class="heading" colspan="15" align="center">Match Summary</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" ROWSPAN="2" width="40">Rank</td>
-    <td class="smheading" align="center" ROWSPAN="2" width="40">Frags</td>
-    <td class="smheading" align="center" ROWSPAN="2" width="40">Kills</td>
-    <td class="smheading" align="center" ROWSPAN="2" width="50">Deaths</td>
-    <td class="smheading" align="center" ROWSPAN="2" width="60">Suicides</td>
-    <td class="smheading" align="center" ROWSPAN="2" width="70">Efficiency</td>
-    <td class="smheading" align="center" ROWSPAN="2" width="50">Avg. FPH</td>
-    <td class="smheading" align="center" ROWSPAN="2" width="50">Avg. TTL</td>
-    <td class="smheading" align="center" ROWSPAN="2" width="45">Time</td>
+    <td class="smheading" align="center" rowspan="2" width="40">Rank</td>
+    <td class="smheading" align="center" rowspan="2" width="40">Frags</td>
+    <td class="smheading" align="center" rowspan="2" width="40">Kills</td>
+    <td class="smheading" align="center" rowspan="2" width="50">Deaths</td>
+    <td class="smheading" align="center" rowspan="2" width="60">Suicides</td>
+    <td class="smheading" align="center" rowspan="2" width="70">Efficiency</td>
+    <td class="smheading" align="center" rowspan="2" width="50">Avg. FPH</td>
+    <td class="smheading" align="center" rowspan="2" width="50">Avg. TTL</td>
+    <td class="smheading" align="center" rowspan="2" width="45">Time</td>
     <td class="smheading" align="center" colspan="6">Sprees</td>
   </tr>
   <tr>
@@ -451,7 +451,7 @@ if ($gametval != 9) {
   }
 
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="8" align="center">Special Events</td>
@@ -515,7 +515,7 @@ EOF;
 //========== Combos ===========================================================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="8" align="center">Combos Used</td>
@@ -537,7 +537,7 @@ EOF;
 //========== Weapon Specific Information ======================================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="595">
   <tr>
     <td class="heading" colspan="8" align="center">Weapon Specific Information</td>
@@ -558,7 +558,7 @@ EOF;
 // Load Weapon Descriptions
 $result = sql_queryn($link, "SELECT wp_num,wp_secondary,wp_desc,wp_weaptype FROM {$dbpre}weapons");
 if (!$result) {
-  echo "Error loading weapons descriptions.<br>\n";
+  echo "Error loading weapons descriptions.<br />\n";
   exit;
 }
 $maxweapon = 0;
@@ -770,7 +770,7 @@ sql_free_result($result);
 
 if ($numgwaweaps > 0) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="470">
   <tr>
     <td class="heading" colspan="5" align="center">Weapon Accuracy Information</td>
@@ -822,7 +822,7 @@ EOF;
 //=============================================================================
 if ($gm_logger == 1) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="660">
   <tr>
     <td class="heading" colspan="9" align="center">Vehicle and Turret Specific Information</td>
@@ -900,7 +900,7 @@ EOF;
 }
 else {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="560">
   <tr>
     <td class="heading" colspan="7" align="center">Vehicle and Turret Specific Information</td>
@@ -972,7 +972,7 @@ EOF;
 //=============================================================================
 if ($gametval == 9) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="340">
   <tr>
     <td class="heading" colspan="3" align="center">Invasion Monster Information</td>
@@ -1031,7 +1031,7 @@ EOF;
 //========== Suicides =========================================================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="255">
   <tr>
     <td class="heading" align="center" colspan="2">Suicides</td>
@@ -1082,7 +1082,7 @@ echo "</table>\n";
 //========== Player Specific Kills and Deaths =================================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="580">
   <tr>
     <td class="heading" colspan="8" align="center">Player Specific Kills and Deaths</td>
@@ -1104,7 +1104,7 @@ EOF;
 $maxplayer = 0;
 $result = sql_queryn($link, "SELECT gp_num,gp_pnum,gp_bot,plr_name FROM {$dbpre}gplayers,{$dbpre}players WHERE gp_match=$matchnum AND {$dbpre}players.pnum=gp_pnum");
 if (!$result) {
-  echo "Match player list database error.<br>\n";
+  echo "Match player list database error.<br />\n";
   exit;
 }
 $numplr = 0;
@@ -1123,7 +1123,7 @@ sql_free_result($result);
 // Read Kill Log
 $result = sql_queryn($link, "SELECT gk_killer,gk_victim FROM {$dbpre}gkills WHERE gk_match=$matchnum");
 if (!$result) {
-  echo "Error reading gkills player data.<br>\n";
+  echo "Error reading gkills player data.<br />\n";
   exit;
 }
 while ($row = sql_fetch_row($result)) {
@@ -1192,7 +1192,7 @@ echo "</table>\n";
 //=============================================================================
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}gevents USE INDEX (ge_kstype) WHERE ge_event=1 AND ge_match=$matchnum AND ge_plr=$plr ORDER BY ge_time");
 if (!$result) {
-  echo "Error loading events.<br>\n";
+  echo "Error loading events.<br />\n";
   exit;
 }
 $sprees = $header = 0;
@@ -1304,7 +1304,7 @@ while ($row = sql_fetch_assoc($result)) {
 
     if (!$header) {
       echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="620">
   <tr>
     <td class="heading" colspan="5" align="center">Killing Sprees</td>
@@ -1337,7 +1337,7 @@ EOF;
 sql_free_result($result);
 if (!$sprees) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="600">
   <tr>
     <td class="heading" align="center">No Killing Sprees</td>
@@ -1351,7 +1351,7 @@ echo "</table>\n";
 //========== Total Items Picked Up By Type ====================================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="600">
   <tr>
     <td class="heading" colspan="6" align="center">Total Items Picked Up By Type</td>
@@ -1369,7 +1369,7 @@ EOF;
 
 $result = sql_queryn($link, "SELECT it_num,it_desc FROM {$dbpre}items");
 if (!$result) {
-  echo "Error loading item pickup descriptions.<br>\n";
+  echo "Error loading item pickup descriptions.<br />\n";
   exit;
 }
 $numitems = 0;
@@ -1383,7 +1383,7 @@ sql_free_result($result);
 
 $result = sql_queryn($link, "SELECT gi_item,gi_pickups FROM {$dbpre}gitems WHERE gi_match=$matchnum AND gi_plr=$gp_num");
 if (!$result) {
-  echo "Error loading item pickups.<br>\n";
+  echo "Error loading item pickups.<br />\n";
   exit;
 }
 while ($row = sql_fetch_row($result)) {
@@ -1441,7 +1441,7 @@ echo "</table>\n";
 //========== Connection Log ===================================================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="3" align="center">Connection Log</td>
@@ -1455,7 +1455,7 @@ EOF;
 
 $result = sql_queryn($link, "SELECT ge_event,ge_plr,ge_time,ge_reason FROM {$dbpre}gevents WHERE ge_match=$matchnum AND ge_event BETWEEN 2 AND 3 ORDER BY ge_time");
 if (!$result) {
-  echo "Error loading connection events.<br>\n";
+  echo "Error loading connection events.<br />\n";
   exit;
 }
 while ($row = sql_fetch_assoc($result)) {

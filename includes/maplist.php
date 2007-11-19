@@ -53,7 +53,7 @@ if ($searchname != "") {
 
   $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}maps WHERE mp_name LIKE '%{$slashedname}%'");
   if (!$result) {
-    echo "{$LANG_MAPDATABASEERRORP}<br>\n";
+    echo "{$LANG_MAPDATABASEERRORP}<br />\n";
     exit;
   }
   list($nummaps) = sql_fetch_row($result);
@@ -61,7 +61,7 @@ if ($searchname != "") {
 else {
   $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}maps");
   if (!$result) {
-    echo "{$LANG_MAPDATABASEERRORP}<br>\n";
+    echo "{$LANG_MAPDATABASEERRORP}<br />\n";
     exit;
   }
   list($nummaps) = sql_fetch_row($result);
@@ -96,10 +96,10 @@ if ($mapsearch == 1 || ($mapsearch == 2 && $numpages > 1)) {
   <table class="searchform">
     <tr>
       <td align="right">{$LANG_NAME}:</td>
-      <td width="150" align="left"><input type="text" name="SearchName" maxlength="35" size="20" value="$searchname" class="searchformbox"></td>
-      <td align="left"><input type="submit" name="Default" value="{$LANG_SEARCH}" class="searchform"></td>
+      <td width="150" align="left"><input type="text" name="SearchName" maxlength="35" size="20" value="$searchname" class="searchformbox" /></td>
+      <td align="left"><input type="submit" name="Default" value="{$LANG_SEARCH}" class="searchform" /></td>
       <td>&nbsp;</td>
-      <td><input type="submit" name="Clear" value="{$LANG_CLEAR}" class="searchform"></td>
+      <td><input type="submit" name="Clear" value="{$LANG_CLEAR}" class="searchform" /></td>
     </tr>
   </table>
 </form>
@@ -113,11 +113,11 @@ echo <<<EOF
     <td class="heading" colspan="5" align="center">{$LANG_UTMAPLIST}</td>
   </tr>
   <tr>
-<td class="smheading" align="center" width="100">{$LANG_MAPNAME}</td>
+    <td class="smheading" align="center" width="140">{$LANG_MAPNAME}</td>
     <td class="smheading" align="center" width="50">{$LANG_MATCHES}</td>
     <td class="smheading" align="center" width="50">{$LANG_SCORE}</td>
     <td class="smheading" align="center" width="50">{$LANG_HOURS}</td>
-    <td class="smheading" align="center" width="40">{$LANG_LASTMATCH}</td>
+    <td class="smheading" align="center" width="200">{$LANG_LASTMATCH}</td>
   </tr>
 
 EOF;
@@ -131,7 +131,7 @@ else
 
 $result = sql_queryn($link, "SELECT mp_num,mp_name,mp_matches,mp_score,mp_time,mp_lastmatch FROM {$dbpre}maps $where ORDER BY mp_matches DESC LIMIT $start,$mapspage");
 if (!$result) {
-  echo "$LANG_MAPDATABASEERRORP<br>\n";
+  echo "$LANG_MAPDATABASEERRORP<br />\n";
   exit;
 }
 while($row = sql_fetch_assoc($result)) {

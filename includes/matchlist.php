@@ -46,11 +46,11 @@ if ($numpages > 1) {
   $prev = $page - 1;
   $next = $page + 1;
   if ($page != 1)
-    echo "<a class=\"pages\" href=\"index.php?stats=matches&page=1\">[{$LANG_FIRST}]</a> / <a class=\"pages\" href=\"index.php?stats=matches&page=$prev\">[{$LANG_PREVIOUS}]</a> / ";
+    echo "<a class=\"pages\" href=\"index.php?stats=matches&amp;page=1\">[{$LANG_FIRST}]</a> / <a class=\"pages\" href=\"index.php?stats=matches&amp;page=$prev\">[{$LANG_PREVIOUS}]</a> / ";
   else
     echo "[{$LANG_FIRST}] / [{$LANG_PREVIOUS}] / ";
   if ($page < $numpages)
-    echo "<a class=\"pages\" href=\"index.php?stats=matches&page=$next\">[{$LANG_NEXT}]</a> / <a class=\"pages\" href=\"index.php?stats=matches&page=$numpages\">[{$LANG_LAST}]</a>";
+    echo "<a class=\"pages\" href=\"index.php?stats=matches&amp;page=$next\">[{$LANG_NEXT}]</a> / <a class=\"pages\" href=\"index.php?stats=matches&amp;page=$numpages\">[{$LANG_LAST}]</a>";
   else
     echo "[{$LANG_NEXT}] / [{$LANG_LAST}]";
   echo "</b></div>";

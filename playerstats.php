@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2005  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,13 +31,13 @@ function get_rankpos($type, $rank)
   else {
     $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}playersgt WHERE gt_tnum=$type AND gt_rank>0 AND gt_rank>$rank");
     if (!$result) {
-      echo "Player Database Error.<br>\n";
+      echo "Player Database Error.<br />\n";
       exit;
     }
     $row = sql_fetch_row($result);
     sql_free_result($result);
     if (!$row) {
-      echo "Error retrieving rank position..<br>\n";
+      echo "Error retrieving rank position..<br />\n";
       exit;
     }
     $pos = intval($row[0]) + 1;
@@ -52,21 +52,21 @@ if (!is_numeric($plr))
   $plr = -1;
 
 if ($plr <= 0) {
-  echo "Invalid player number.<br>\n";
-  echo "Run from the main index program.<br>\n";
+  echo "Invalid player number.<br />\n";
+  echo "Run from the main index program.<br />\n";
   exit;
 }
 
 $link = sql_connect();
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}players WHERE pnum=$plr LIMIT 1");
 if (!$result) {
-  echo "Player Database Error.<br>\n";
+  echo "Player Database Error.<br />\n";
   exit;
 }
 $row = sql_fetch_assoc($result);
 sql_free_result($result);
 if (!$row) {
-  echo "Player not found in database.<br>\n";
+  echo "Player not found in database.<br />\n";
   exit;
 }
 while (list ($key, $val) = each ($row))
@@ -87,7 +87,7 @@ $total_wins = $total_losses = $total_matches = 0;
 // Load game type descriptions
 $result = sql_queryn($link, "SELECT tp_desc,tp_num FROM {$dbpre}type");
 if (!$result) {
-  echo "Database error accessing game types.<br>\n";
+  echo "Database error accessing game types.<br />\n";
   exit;
 }
 while ($row = sql_fetch_row($result))
@@ -122,7 +122,7 @@ EOF;
 
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}playersgt WHERE gt_pnum=$plr ORDER BY gt_tnum");
 if (!$result) {
-  echo "Player Database Error.<br>\n";
+  echo "Player Database Error.<br />\n";
   exit;
 }
 $gametypes = 0;
@@ -177,7 +177,7 @@ EOF;
 sql_free_result($result);
 
 if (!$gametypes) {
-  echo "No gametype data for player.<br>\n";
+  echo "No gametype data for player.<br />\n";
   exit;
 }
 
@@ -219,7 +219,7 @@ EOF;
 //=============================================================================
 if (isset($ranksystem) && $ranksystem) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
     <td class="medheading" align="center" colspan="3">Ranking</td>
@@ -234,7 +234,7 @@ EOF;
 
   $result = sql_queryn($link, "SELECT gt_tnum,gt_rank FROM {$dbpre}playersgt WHERE gt_pnum=$plr ORDER BY gt_tnum");
   if (!$result) {
-    echo "Player Database Error.<br>\n";
+    echo "Player Database Error.<br />\n";
     exit;
   }
   $ranks = 0;
@@ -266,7 +266,7 @@ EOF;
 //=============================================================================
 $result = sql_queryn($link, "SELECT gt_capcarry,gt_drop,gt_pickup,gt_return,gt_typekill,gt_assist,gt_holdtime FROM {$dbpre}playersgt WHERE gt_pnum=$plr AND gt_type=2");
 if (!$result) {
-  echo "Player Database Error.<br>\n";
+  echo "Player Database Error.<br />\n";
   exit;
 }
 $flagcapture = $flagassist = $flagkill = $flagreturn = $flagpickup = $flagdrop = $holdtime = 0;
@@ -283,7 +283,7 @@ sql_free_result($result);
 
 $flagtime = sprintf("%0.1f", $holdtime / 6000.0);
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
     <td class="medheading" align="center" colspan="7">Capture the Flag Events Summary</td>
@@ -314,7 +314,7 @@ EOF;
 //=============================================================================
 $result = sql_queryn($link, "SELECT gt_capcarry,gt_tossed,gt_drop,gt_typekill,gt_assist,gt_holdtime FROM {$dbpre}playersgt WHERE gt_pnum=$plr AND gt_type=3");
 if (!$result) {
-  echo "Player Database Error.<br>\n";
+  echo "Player Database Error.<br />\n";
   exit;
 }
 $bombcarried = $bombtossed = $bombassist = $bombkill = $bombdrop = $holdtime = 0;
@@ -332,7 +332,7 @@ $bombtime = sprintf("%0.1f", $holdtime / 6000.0);
 
 $result = sql_queryn($link, "SELECT gt_capcarry FROM {$dbpre}playersgt WHERE gt_pnum=$plr AND gt_type=7");
 if (!$result) {
-  echo "Player Database Error.<br>\n";
+  echo "Player Database Error.<br />\n";
   exit;
 }
 $cpcapture = 0;
@@ -341,7 +341,7 @@ while ($row = sql_fetch_row($result))
 sql_free_result($result);
 
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
     <td class="medheading" align="center" colspan="7">Bombing Run and Double Domination Events Summary</td>
@@ -372,7 +372,7 @@ EOF;
 //=============================================================================
 $result = sql_queryn($link, "SELECT gt_capcarry FROM {$dbpre}playersgt WHERE gt_pnum=$plr AND gt_type=5");
 if (!$result) {
-  echo "Player Database Error.<br>\n";
+  echo "Player Database Error.<br />\n";
   exit;
 }
 $objectives = 0;
@@ -382,7 +382,7 @@ sql_free_result($result);
 
 $result = sql_queryn($link, "SELECT gt_capcarry,gt_drop,gt_pickup,gt_taken FROM {$dbpre}playersgt WHERE gt_pnum=$plr AND gt_type=6");
 if (!$result) {
-  echo "Player Database Error.<br>\n";
+  echo "Player Database Error.<br />\n";
   exit;
 }
 $nodeconstructed = $nodedestroyed = $nodeconstdestroyed = $coredestroyed = 0;
@@ -395,7 +395,7 @@ while ($row = sql_fetch_row($result)) {
 sql_free_result($result);
 
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
     <td class="medheading" align="center" colspan="5">Assault &amp; Onslaught Events Summary</td>
@@ -425,7 +425,7 @@ EOF;
 //========== Special Events ===================================================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="8" align="center">Special Events</td>
@@ -488,7 +488,7 @@ EOF;
 //========== Combos ===========================================================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="8" align="center">Combos Used</td>
@@ -521,7 +521,7 @@ if ($rpgini != "" && $plr_rpg) {
 //========== Weapon Specific Totals ===========================================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="595">
   <tr>
     <td class="heading" colspan="8" align="center">Weapon Specific Totals</td>
@@ -542,7 +542,7 @@ EOF;
 // Load Weapon Descriptions
 $result = sql_queryn($link, "SELECT wp_num,wp_secondary,wp_desc,wp_weaptype FROM {$dbpre}weapons");
 if (!$result) {
-  echo "Error loading weapons descriptions.<br>\n";
+  echo "Error loading weapons descriptions.<br />\n";
   exit;
 }
 $maxweapon = 0;
@@ -672,7 +672,7 @@ echo "</table>\n";
 //========== Weapon Accuracy Information ======================================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="440">
   <tr>
     <td class="heading" colspan="5" align="center">Weapon Accuracy Information</td>
@@ -734,7 +734,7 @@ echo "</table>\n";
 //========== Vehicle and Turret Specific Totals ===============================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="670">
   <tr>
     <td class="heading" colspan="9" align="center">Vehicle and Turret Specific Totals</td>
@@ -809,7 +809,7 @@ echo "</table>\n";
 //========== Invasion Monster Totals ==========================================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="340">
   <tr>
     <td class="heading" colspan="3" align="center">Invasion Monster Totals</td>
@@ -862,7 +862,7 @@ echo "</table>\n";
 //========== Suicides Totals ==================================================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="255">
   <tr>
     <td class="medheading" align="center" colspan="2">Suicides Totals</td>
@@ -923,7 +923,7 @@ $time5 = sprintf("%0.1f", $plr_spreet5 / 6000);
 $time6 = sprintf("%0.1f", $plr_spreet6 / 6000);
 
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="390">
   <tr>
     <td class="medheading" align="center" colspan="4">Killing Sprees by Type</td>
@@ -980,7 +980,7 @@ EOF;
 // Load Item Descriptions
 $result = sql_queryn($link, "SELECT it_num,it_desc FROM {$dbpre}items");
 if (!$result) {
-  echo "Error loading item descriptions.<br>\n";
+  echo "Error loading item descriptions.<br />\n";
   exit;
 }
 while ($row = sql_fetch_row($result))
@@ -988,7 +988,7 @@ while ($row = sql_fetch_row($result))
 sql_free_result($result);
 
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="600">
   <tr>
     <td class="heading" colspan="6" align="center">Total Items Collected</td>
@@ -1006,7 +1006,7 @@ EOF;
 
 $result = sql_queryn($link, "SELECT pi_item,pi_pickups FROM {$dbpre}pitems WHERE pi_plr=$pnum");
 if (!$result) {
-  echo "Error loading player item pickups.<br>\n";
+  echo "Error loading player item pickups.<br />\n";
   exit;
 }
 
@@ -1048,13 +1048,16 @@ if (!$totpickups) {
 EOF;
 }
 else {
-  while ($col < 3) {
-    echo <<<EOF
+  if ($col < 3) {
+    while ($col < 3) {
+      echo <<<EOF
   <td class="dark" align="center">&nbsp;</td>
   <td class="grey" align="center">&nbsp;</td>
 
 EOF;
-    $col++;
+      $col++;
+    }
+    echo "</tr>\n";
   }
 }
 echo "</table>\n";
@@ -1070,7 +1073,7 @@ while($row = sql_fetch_row($result))
 sql_free_result($result);
 
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="5" align="center">Most Recent Matches Played</td>
@@ -1091,7 +1094,7 @@ $result = sql_querynb($link, "SELECT gm_num,gm_map,gm_type,gm_start,gm_length,gm
                        WHERE {$dbpre}gplayers.gp_pnum=$pnum AND {$dbpre}matches.gm_num={$dbpre}gplayers.gp_match
                        ORDER BY {$dbpre}matches.gm_num DESC LIMIT 11");
 if (!$result) {
-  echo "Error accessing game and game player tables.<br>\n";
+  echo "Error accessing game and game player tables.<br />\n";
   exit;
 }
 while ($row = sql_fetch_assoc($result)) {
@@ -1111,7 +1114,7 @@ while ($row = sql_fetch_assoc($result)) {
     // Load Map Name
     $result2 = sql_queryn($link, "SELECT mp_name FROM {$dbpre}maps WHERE mp_num=$gm_map LIMIT 1");
     if (!$result2) {
-      echo "Map database error.<br>\n";
+      echo "Map database error.<br />\n";
       exit;
     }
     list($mp_name) = sql_fetch_row($result2);

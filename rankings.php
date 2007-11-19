@@ -193,6 +193,9 @@ EOF;
 
 sql_close($link);
 
+if ($col)
+  echo "  </tr>\n";
+
 echo <<<EOF
 </table>
 </center>

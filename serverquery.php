@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2006  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,89 +19,95 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-function SendQuery($ip, $port, $query)
+function InitQuery($ip, $port)
+{
+  if (($fs = fsockopen("udp://$ip", $port, $errno, $errstr, 3)) === FALSE)
+    return false;
+
+  if (function_exists('stream_set_blocking'))
+    stream_set_blocking($fs, TRUE);
+  else if (function_exists('socket_set_blocking'))
+    socket_set_blocking($fs, TRUE);
+  else
+    set_socket_blocking($fs, TRUE);
+  socket_set_timeout($fs, 1, 0);
+
+  return $fs;
+}
+
+function SendQuery($fs, $query)
 {
   global $bytes_read;
 
   $data = "";
   $bytes_read = 0;
-  if (($fs = fsockopen("udp://$ip", $port, $errno, $errstr, 3)) === FALSE)
+
+  if (fwrite($fs, $query) < 0) {
+    fclose($fs);
     return $data;
-  else {
-    if (function_exists('stream_set_blocking'))
-      stream_set_blocking($fs, TRUE);
-    else if (function_exists('socket_set_blocking'))
-      socket_set_blocking($fs, TRUE);
-    else
-      set_socket_blocking($fs, TRUE);
-    socket_set_timeout($fs, 1, 0);
-    if (fwrite($fs, $query) < 0) {
-      fclose($fs);
-      return $data;
-    }
+  }
 
-    $packets = array();
-    $done = $final = 0;
-    $qstart = time() + 5;
-    while (!$done) {
+  $packets = array();
+  $done = $final = 0;
+  $qstart = time() + 5;
+  while (!$done) {
+    $received = 0;
+    do {
+      $data .= fgetc($fs);
+      $received++;
+      if (function_exists('stream_get_meta_data'))
+        $status = stream_get_meta_data($fs);
+      else
+        $status = socket_get_status($fs);
+    } while($status["unread_bytes"]);
+    if ($received == 1)
       $received = 0;
-      do {
-        $data .= fgetc($fs);
-        $received++;
-        if (function_exists('stream_get_meta_data'))
-          $status = stream_get_meta_data($fs);
-        else
-          $status = socket_get_status($fs);
-      } while($status["unread_bytes"]);
-      if ($received == 1)
-        $received = 0;
 
-      if (substr($query, 0, 1) != "\\") {
-      	$bytes_read = $received;
-        $done = 1;
-      }
-      else {
-        if ($received) {
-          $bytes_read += $received;
-          if (substr($data, -7) == "\\final\\") {
-            if (substr($data, -9, 1) == ".")
-              $packet_id = intval(substr($data, -8, 1));
-            else
-              $packet_id = intval(substr($data, -9, 2));
-            $packets[$packet_id] = 2;
-            $final = $packet_id;
-            if ($packet_id == 1)
+    if (substr($query, 0, 1) != "\\") {
+    	$bytes_read = $received;
+      $done = 1;
+    }
+    else {
+      if ($received) {
+        $bytes_read += $received;
+        if (substr($data, -7) == "\\final\\") {
+          if (substr($data, -9, 1) == ".")
+            $packet_id = intval(substr($data, -8, 1));
+          else
+            $packet_id = intval(substr($data, -9, 2));
+          $packets[$packet_id] = 2;
+          $final = $packet_id;
+          if ($packet_id == 1)
+            $done = 1;
+        }
+        else {
+          if (substr($data, -2, 1) == ".")
+            $packet_id = intval(substr($data, -1, 1));
+          else
+            $packet_id = intval(substr($data, -2, 2));
+          $packets[$packet_id] = 1;
+        }
+        if (!$done) {
+          if (!$packet_id) // Error in packet
+            $done = 1;
+          else if ($final) {
+            // Check to make sure all packets have been received
+            $ok = 1;
+            for ($i = 1; $i < $final; $i++)
+              if (!isset($packets[$i]) || !$packets[$i])
+                $ok = 0;
+            if ($ok)
               $done = 1;
-          }
-          else {
-            if (substr($data, -2, 1) == ".")
-              $packet_id = intval(substr($data, -1, 1));
-            else
-              $packet_id = intval(substr($data, -2, 2));
-            $packets[$packet_id] = 1;
-          }
-          if (!$done) {
-            if (!$packet_id) // Error in packet
-              $done = 1;
-            else if ($final) {
-              // Check to make sure all packets have been received
-              $ok = 1;
-              for ($i = 1; $i < $final; $i++)
-                if (!isset($packets[$i]) || !$packets[$i])
-                  $ok = 0;
-              if ($ok)
-                $done = 1;
-            }
           }
         }
-        else
-          $done = 1;
-        if (!$done && time() > $qstart) // Timeout
-          $done = 1;
       }
+      else
+        $done = 1;
+      if (!$done && time() > $qstart) // Timeout
+        $done = 1;
     }
-    fclose($fs);
   }
+
   return $data;
 }
 
@@ -159,12 +165,24 @@ function GetStatus($ip, $port)
   for ($i = 0; $i < 4; $i++)
     $teamcount[$i] = 0;
 
+  switch ($query_type) {
+  	case 0: $port += 10; break;
+  	case 1:
+    case 2: $port++; break;
+  }
+
+  if (($fs = InitQuery($ip, $port)) == FALSE)
+    return false;
+
   if ($query_type == 1) {
     // Server Info
-    $data = SendQuery($ip, $port + 1, "\x7f\x00\x00\x00\x00");
+    $data = SendQuery($fs, "\x7f\x00\x00\x00\x00");
     $len2 = 0;
     if ($bytes_read < 32)
-      return 0;
+    {
+      fclose($fs);
+      return false;
+    }
 
     $sq_server["hostport"] = ord($data[11]) * 256 + ord($data[10]);
     for ($i = 0; $i < 3; $i++) {
@@ -235,7 +253,7 @@ function GetStatus($ip, $port)
     $sq_server["maxplayers"] = ord($data[$len2 + 25]);
 
     // Game Info
-    $data = SendQuery($ip, $port + 1, "\x7f\x00\x00\x00\x01");
+    $data = SendQuery($fs, "\x7f\x00\x00\x00\x01");
     $len2 = $i = 0;
     while ($len2 < $bytes_read - 2 && $len2 + $i + 7 < strlen($data)) {
       $ok = 1;
@@ -290,7 +308,7 @@ function GetStatus($ip, $port)
       $sq_server["mutator"] = "None";
 
     // Player Info
-    $data = SendQuery($ip, $port + 1, "\x7f\x00\x00\x00\x02");
+    $data = SendQuery($fs, "\x7f\x00\x00\x00\x02");
     $len2 = 0;
     $num = 0;
     while ($len2 < $bytes_read - 21) {
@@ -304,13 +322,8 @@ function GetStatus($ip, $port)
       $len2 += $len + 17;
     }
   }
-  else {
-    if ($query_type == 2)
-      $qport = $port + 1;
-    else
-      $qport = $port + 10;
-
-    $data = SendQuery($ip, $qport, "\\basic\\\\info\\\\rules\\\\gamestatus\\\\echo\\nothing");
+  else if ($query_type == 0 || $query_type == 2) {
+    $data = SendQuery($fs, "\\basic\\\\info\\\\rules\\\\gamestatus\\\\echo\\nothing");
     while (strlen($data)) {
       $ok = 1;
       if (ParseQuery($data, $param, $val, $num)) {
@@ -432,7 +445,7 @@ function GetStatus($ip, $port)
     $query_string .= "\\echo\\nothing";
 
 	$lastparam = "";
-    $data = SendQuery($ip, $qport, $query_string);
+    $data = SendQuery($fs, $query_string);
     while (strlen($data)) {
       if (ParseQuery($data, $param, $val, $num)) {
         if ($num >= 0) {
@@ -478,7 +491,7 @@ function GetStatus($ip, $port)
     }
 
 	$lastparam = "";
-    $data = SendQuery($ip, $qport, "\\teams\\");
+    $data = SendQuery($fs, "\\teams\\");
     while (strlen($data)) {
       if (ParseQuery($data, $param, $val, $num)) {
         if ($num >= 0) {
@@ -489,7 +502,109 @@ function GetStatus($ip, $port)
       }
     }
   }
+  else if ($query_type == 3) {
+    $data = SendQuery($fs, "\xFE\xFD\x09\x00\x00\x00\x01");
+    if ($bytes_read < 6)
+    {
+      fclose($fs);
+      return false;
+    }
+    $challenge = substr($data, 5);
+    while (strlen($challenge) > 1 && $challenge[strlen($challenge) - 1] == 0)
+      $challenge = substr($challenge, 0, strlen($challenge) - 1);
+    if ($challenge < 0)
+      $challenge = 4294967296 + $challenge;
 
+    $qstring = sprintf("\xFE\xFD\x00\x00\x00\x02\x01%c%c%c%c\xFF\xFF\xFF\x01", $challenge >> 24, $challenge >> 16, $challenge >> 8, $challenge );
+    $data = SendQuery($fs, $qstring);
+    if ($bytes_read < 17)
+    {
+      fclose($fs);
+      return false;
+    }
+    $data = substr($data, 16, -6);
+    $sdata = explode("\x00", $data);
+
+    $sd = 0;
+    while (isset($sdata[$sd])) {
+      $ok = 1;
+      $param = $sdata[$sd++];
+      $val = $sdata[$sd++];
+      if ($param == "mapname")
+      {
+        $mdata = explode(",", $val);
+        $md = 0;
+        while (isset($mdata[$md])) {
+          if (($eq = strpos($mdata[$md], "=")) !== FALSE) {
+            $param = substr($mdata[$md], 0, $eq - 1);
+            $val = substr($mdata[$md], $eq + 1);
+          }
+          $md++;
+        }
+      }
+      else {
+        switch ($param) {
+          case "hostname": $sq_server["hostname"] = $val; break;
+          case "hostport": $sq_server["hostport"] = $val; break;
+          case "p1073741826":
+            switch ($val) {
+              case "UTGame.UTDeathmatch": $sq_server["gametype"] = "Deathmatch"; break;
+              case "UTGameContent.UTCTFGame_Content": $sq_server["gametype"] = "CTF"; break;
+              case "UTGameContent.UTOnslaughtGame_Content": $sq_server["gametype"] = "Warfare"; break;
+              case "UTGameContent.UTVehicleCTFGame_Content": $sq_server["gametype"] = "Vehicle CTF"; break;
+              case "UTGame.UTTeamGame": $sq_server["gametype"] = "Team Deathmatch"; break;
+              case "UTGame.UTGame.UTDuelGame": $sq_server["gametype"] = "Duel"; break;
+              default: $sq_server["gametype"] = $val;
+            }
+            break;
+          case "p1073741825": $sq_server["mapname"] = $val; break;
+          case "numplayers": $sq_server["numplayers"] = $val; break;
+          case "maxplayers": $sq_server["maxplayers"] = $val; break;
+          case "p268435704": $sq_server["goalscore"] = $val; break;
+          case "p268435705": $sq_server["timelimit"] = $val; break;
+          case "p268435703": $sq_server["numbots"] = $val; break;
+          case "bUsesStats": $sq_server["gamestats"] = ($val ? "Enabled" : "Disabled"); break;
+          case "gamemode": $sq_server["joininprogress"] = ($val == "openplaying" ? "Allowed" : "Disallowed"); break;
+          case "NumOpenPublicConnections": $sq_server["playerslots"] = $val; break;
+          case "s0":
+            switch ($val) {
+              case 1: $sq_server["botskill"] = "Novice"; break;
+              case 2: $sq_server["botskill"] = "Average"; break;
+              case 3: $sq_server["botskill"] = "Experienced"; break;
+              case 4: $sq_server["botskill"] = "Skilled"; break;
+              case 5: $sq_server["botskill"] = "Adept"; break;
+              case 6: $sq_server["botskill"] = "Masterful"; break;
+              case 7: $sq_server["botskill"] = "Inhuman"; break;
+              case 8: $sq_server["botskill"] = "Godlike"; break;
+              default: $sq_server["botskill"] = $val;
+            }
+            break;
+          case "s6": $sq_server["instagib"] = ($val == 0 ? "Yes" : "No"); break;
+          case "s7": $sq_server["password"] = ($val == 0 ? "Required" : "None"); break;
+          case "s8":
+            switch ($val) {
+              case 0: $sq_server["vsbots"] = "Disabled"; break;
+              case 1: $sq_server["vsbots"] = "Enabled"; break;
+              case 2: $sq_server["vsbots"] = "1:1"; break;
+              case 3: $sq_server["vsbots"] = "3:2"; break;
+              case 4: $sq_server["vsbots"] = "2:1"; break;
+              default: $sq_server["vsbots"] = $val;
+            }
+            break;
+          case "s10": $sq_server["forcedrespawn"] = ($val == 0 ? "No" : "Yes"); break;
+          case "p1073741827": $sq_server["description"] = $val; break;
+          case "p268435717": $sq_server["ictf"] = $val; break; // 8=iCTF else 0
+          case "NumPrivateConnections": $sq_server["maxspectators"] = $val; break;
+          case "NumOpenPrivateConnections": $sq_server["spectateslots"] = $val; break;
+        }
+      }
+    }
+    $i = strpos($sq_server["mapname"], '-');
+    if (strlen($sq_server["mapname"]) > $i + 2)
+      $sq_server["mapname"] = substr($sq_server["mapname"], 0, $i + 2).strtolower(substr($sq_server["mapname"], $i + 2));
+  }
+
+  fclose($fs);
   return $ok;
 }
 
@@ -573,7 +688,13 @@ function DisplayStatus($query_link)
 
 EOF;
 
-  if ($query_type) {
+  if ($query_type == 3) {
+  	if ($display_map)
+      include("templates/serverquery-ut3map.php");
+    else
+      include("templates/serverquery-ut3.php");
+  }
+  else if ($query_type) {
   	if ($display_map)
       include("templates/serverquery-gamespymap.php");
     else
@@ -763,7 +884,8 @@ EOF;
         </tr>
 EOF;
     }
-    echo "      </table>\n";
+    if ($header)
+      echo "      </table>\n";
   }
   else {
     if ($teamnum)

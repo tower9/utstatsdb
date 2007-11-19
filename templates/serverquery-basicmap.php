@@ -59,7 +59,7 @@ echo <<<EOF
             </table>
           </td>
           <td align="right" valign="middle" width="260">
-            <img src="mapimages/$mapimage" width="256" height="192" border="1" alt="Map Image">
+            <img src="mapimages/$mapimage" width="256" height="192" border="1" alt="Map Image" />
           </td>
         </tr>
       </table>

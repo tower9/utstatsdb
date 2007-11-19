@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2006  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -111,9 +111,7 @@ if (file_exists("mapimages/$mapimage")) {
         </tr>
       </table>
     </td>
-    </td>
-    <td width="300" align="center"><img src="mapimages/$mapimage" width="256" height="192" border="1" alt="Map Image"></td>
-  </tr>
+    <td width="300" align="center"><img src="mapimages/$mapimage" width="256" height="192" border="1" alt="Map Image" /></td>
   </tr>
 </table>
 
@@ -534,9 +532,10 @@ EOF;
 }
 echo <<<EOF
 </table>
-</td>
-</tr>
-</table>
+</td></tr></table>
+
+</body>
+</html>
 
 EOF;
 sql_close($link);

@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2006  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,13 +32,13 @@ function trackplayer() {
     <tr>
       <td align="right" width="130" title="Player ID to track."><b>Player ID:</b></td>
       <td align="left">
-        <input type="text" name="player" value="" size="8" maxlength="8">
+        <input type="text" name="player" value="" size="8" maxlength="8" />
       </td>
     </tr>
     <tr>
       <td align="center" colspan="2">
       	<br />
-        <input type="submit" name="Mode" value="Track" class="formsb">
+        <input type="submit" name="Mode" value="Track" class="formsb" />
       </td>
     </tr>
   </table>

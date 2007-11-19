@@ -96,7 +96,7 @@ else if ($searchname != "") {
   else
     $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}players WHERE plr_name LIKE '%{$slashedname}%' AND plr_bot=0");
   if (!$result) {
-    echo "{$LANG_PLAYERDATABASEERROR}<br>\n";
+    echo "{$LANG_PLAYERDATABASEERROR}<br />\n";
     exit;
   }
   list($numplayers) = sql_fetch_row($result);
@@ -111,7 +111,7 @@ else {
   else
     $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}players WHERE plr_bot=0");
   if (!$result) {
-    echo "{$LANG_PLAYERDATABASEERROR}<br>\n";
+    echo "{$LANG_PLAYERDATABASEERROR}<br />\n";
     exit;
   }
   list($numplayers) = sql_fetch_row($result);
@@ -126,16 +126,16 @@ else if ($page < 1 || $page > $numpages)
 
 if ($type == "bots") {
   $selplayers = "";
-  $selbots = "SELECTED";
+  $selbots = "selected=\"selected\"";
   $selall = "";
 }
 else if ($type == "all") {
   $selplayers = "";
   $selbots = "";
-  $selall = "SELECTED";
+  $selall = "selected=\"selected\"";
 }
 else {
-  $selplayers = "SELECTED";
+  $selplayers = "selected=\"selected\"";
   $selbots = "";
   $selall = "";
 }
@@ -144,23 +144,23 @@ if ($playersearch == 1 || ($playersearch == 2 && $numpages > 1)) {
   echo <<<EOF
 <font size="1"><br /></font>
 <form name="playersearch" method="post" action="index.php?stats=players">
-  <input type="hidden" name="type" value="$type">
+  <input type="hidden" name="type" value="$type" />
   <table class="searchform">
     <tr>
       <td align="right">{$LANG_ID}:</td>
-      <td width="90" align="left"><input type="text" name="SearchID" maxlength="10" size="10" $searchidvalue class="searchformbox"></td>
+      <td width="90" align="left"><input type="text" name="SearchID" maxlength="10" size="10" $searchidvalue class="searchformbox" /></td>
       <td align="right">{$LANG_NAME}:</td>
-      <td width="150" align="left"><input type="text" name="SearchName" maxlength="35" size="20" value="$searchname" class="searchformbox"></td>
-      <td align="left"><input type="submit" name="Default" value="{$LANG_SEARCH}" class="searchform"></td>
+      <td width="150" align="left"><input type="text" name="SearchName" maxlength="35" size="20" value="$searchname" class="searchformbox" /></td>
+      <td align="left"><input type="submit" name="Default" value="{$LANG_SEARCH}" class="searchform" /></td>
       <td>&nbsp;</td>
-      <td><input type="submit" name="Clear" value="{$LANG_CLEAR}" class="searchform"></td>
+      <td><input type="submit" name="Clear" value="{$LANG_CLEAR}" class="searchform" /></td>
 
 EOF;
 
   if ($showbots) {
     echo <<<EOF
       <td width="120" align="right">
-        <select name="plrbot" onChange="changePage(this.form.plrbot)">
+        <select name="plrbot" onchange="changePage(this.form.plrbot)">
           <option value="humans" $selplayers>{$LANG_HUMANS}</option>
           <option value="bots" $selbots>{$LANG_BOTS}</option>
           <option value="all" $selall>{$LANG_ALL}</option>
@@ -285,7 +285,7 @@ else {
 
 $result = sql_queryn($link, "SELECT pnum,plr_name,plr_bot,plr_frags,plr_score,plr_kills,plr_deaths,plr_suicides,plr_matches,plr_time,plr_wins,plr_teamwins{$extra} FROM {$dbpre}players USE INDEX $index $where ORDER BY $order LIMIT $limit");
 if (!$result) {
-  echo "Player database error.<br>\n";
+  echo "Player database error.<br />\n";
   exit;
 }
 $rank = $start + 1;

@@ -26,12 +26,13 @@ function initcheck($reinit) {
   global $dbtype;
 
   echo <<<EOF
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html>
 <head>
   <title>UTStatsDB Initialization</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="icon" href="resource/uicon.png" type="image/png">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="icon" href="resource/uicon.png" type="image/png" />
   <style type="text/css">
     .sidebox {border: 1px #000000 solid}
   </style>
@@ -42,7 +43,7 @@ function initcheck($reinit) {
   </script>
 </head>
 
-<body text="#101031" onLoad="setFocus()">
+<body text="#101031" onload="setFocus()">
 
 EOF;
 
@@ -53,8 +54,8 @@ EOF;
 
   echo <<<EOF
 <form name="login_form" method="post" action="admin.php">
-  <input type="hidden" name="InitType" value="$reinit">
-  <input type="hidden" name="Mode" value="Initialize">
+  <input type="hidden" name="InitType" value="$reinit" />
+  <input type="hidden" name="Mode" value="Initialize" />
   <table bgcolor="#cccccc" cellspacing="0" cellpadding="5" class="sidebox" width="300">
     <tr>
       <td bgcolor="#000066" align="center" colspan="2">
@@ -66,14 +67,14 @@ EOF;
         <b>Init Password:</b>
       </td>
       <td align="left">
-        <input type="password" name="IPass" maxlength="25">
+        <input type="password" name="IPass" maxlength="25" />
       </td>
     </tr>
     <tr>
       <td align="center" colspan="2">
-        <input type="submit" name="Mode" value="Initialize">
+        <input type="submit" name="Mode" value="Initialize" />
         &nbsp;&nbsp;
-        <input type="submit" name="Mode" value="Cancel">
+        <input type="submit" name="Mode" value="Cancel" />
       </td>
     </tr>
   </table>

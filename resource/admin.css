@@ -106,7 +106,7 @@ a[name] {
 #sidenav li {
 	margin: 0;
 	padding: 0;
-	border-top: 1px solid #2a579a; #4e30b7;
+	border-top: 1px solid #2a579a;
 	border-bottom: 1px solid #2e1097;
 }
 #sidenav a {
@@ -193,11 +193,6 @@ html>body .corner-tr { background: #d0d0d0 url("corner-tr.png") no-repeat right 
 html>body .corner-bl { background: #d0d0d0 url("corner-bl.png") no-repeat left bottom; }
 html>body .corner-br { background: #d0d0d0 url("corner-br.png") no-repeat right bottom; }
 
-.corner-tl { filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resource/corner-tl.png',sizingMethod='scale'); }
-.corner-tr { filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resource/corner-tr.png',sizingMethod='scale'); }
-.corner-br { filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resource/corner-br.png',sizingMethod='scale'); }
-.corner-bl { filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resource/corner-bl.png',sizingMethod='scale'); }
-
 .corner-tl, .corner-tr, .corner-bl, .corner-br {
 	display: block;
 }
@@ -215,8 +210,6 @@ html>body .corner-br { background: #d0d0d0 url("corner-br.png") no-repeat right 
 	padding: 3px !important;
 	border: 1px solid #bbb;
 	background-color: #ccc;
-	border-radius: 2.5px;
-	-moz-border-radius: 2.5px;
 }
 #sidelist strong a {
 	font-weight: normal;
@@ -240,8 +233,6 @@ html>body .corner-br { background: #d0d0d0 url("corner-br.png") no-repeat right 
 	text-decoration: none;
 	display: block;
 	padding: 6px 8px;
-	border-radius: 2.5px;
-	-moz-border-radius: 2.5px;
 }
 #sidelist li a:hover {
 	background-color: #999;

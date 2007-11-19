@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2006  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ function mainconfig() {
 
   echo <<<EOF
 <form action="admin.php" method="post">
-  <input type="hidden" name="SaveType" value="Main">
+  <input type="hidden" name="SaveType" value="Main" />
   <table class="forms">
     <tr>
       <th width="110">&nbsp;</th>
@@ -78,7 +78,7 @@ EOF;
     <tr>
       <td align="right" class="forms" title="$desc"><b>$name:</b></td>
       <td align="left" class="forms">
-        <input type="text" name="$option" value="$value" size="$len" maxlength="$maxlen" class="forms">
+        <input type="text" name="$option" value="$value" size="$len" maxlength="$maxlen" class="forms" />
       </td>
     </tr>
 
@@ -91,7 +91,7 @@ EOF;
     <tr>
       <td align="right" class="forms" title="$desc"><b>$name:</b></td>
       <td align="left" class="forms">
-        <input type="password" name="$option" value="$value" size="$len" maxlength="$len" class="forms">
+        <input type="password" name="$option" value="$value" size="$len" maxlength="$len" class="forms" />
       </td>
     </tr>
 
@@ -109,10 +109,10 @@ EOF;
 
         for ($i = 0; $i < $len; $i++) {
           if ($i == $value)
-            $setcheck = "checked";
+            $setcheck = "checked=\"checked\"";
           else
             $setcheck = "";
-          echo "<input type=\"radio\" name=\"$option\" value=\"$i\" $setcheck>{$buttons[$i]}\n";
+          echo "<input type=\"radio\" name=\"$option\" value=\"$i\" $setcheck />{$buttons[$i]}\n";
         }
 
         echo <<<EOF
@@ -153,7 +153,7 @@ EOF;
       <td colspan="2" class="forms">
       	<br />
       	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" name="Mode" value="Save" class="formsb">
+        <input type="submit" name="Mode" value="Save" class="formsb" />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mouse over text for full description.
       </td>
     </tr>
@@ -175,7 +175,7 @@ function logsconfig() {
 
   echo <<<EOF
 <form action="admin.php" method="post">
-  <input type="hidden" name="SaveType" value="Logs">
+  <input type="hidden" name="SaveType" value="Logs" />
   <table class="forms">
     <tr>
       <th width="85">&nbsp;</th>
@@ -211,16 +211,16 @@ EOF;
     $demoftppath = $magicrt ? stripslashes($row[13]) : $row[13];
     $multicheck = intval($row[14]);
 
-    $noportx0 = $noport ? "" : "checked";
-    $noportx1 = $noport ? "checked" : "";
-    $passivex0 = $passive ? "" : "checked";
-    $passivex1 = $passive ? "checked" : "";
-    $alllogsx0 = $alllogs ? "" : "checked";
-    $alllogsx1 = $alllogs ? "checked" : "";
-    $defteamx0 = $defteam ? "" : "checked";
-    $defteamx1 = $defteam ? "checked" : "";
-    $multicheckx0 = $multicheck ? "" : "checked";
-    $multicheckx1 = $multicheck ? "checked" : "";
+    $noportx0 = $noport ? "" : "checked=\"checked\"";
+    $noportx1 = $noport ? "checked=\"checked\"" : "";
+    $passivex0 = $passive ? "" : "checked=\"checked\"";
+    $passivex1 = $passive ? "checked=\"checked\"" : "";
+    $alllogsx0 = $alllogs ? "" : "checked=\"checked\"";
+    $alllogsx1 = $alllogs ? "checked=\"checked\"" : "";
+    $defteamx0 = $defteam ? "" : "checked=\"checked\"";
+    $defteamx1 = $defteam ? "checked=\"checked\"" : "";
+    $multicheckx0 = $multicheck ? "" : "checked=\"checked\"";
+    $multicheckx1 = $multicheck ? "checked=\"checked\"" : "";
 
     if ($logsets > 1)
       echo <<<EOF
@@ -234,78 +234,78 @@ EOF;
     <tr>
       <td align="right" class="forms" title="Path to where log files are stored or downloaded to on stats server (relative or absolute)."><b>Log Path:</b></td>
       <td align="left" colspan="3" class="forms">
-        <input type="text" name="logpath{$num}" value="$logpath" size="120" maxlength="200" class="forms">
+        <input type="text" name="logpath{$num}" value="$logpath" size="120" maxlength="200" class="forms" />
       </td>
     </tr>
     <tr>
       <td align="right" class="forms" title="Path to where log files are backed up after successfully parsing.  Leave blank to not backup."><b>Backup Path:</b></td>
       <td align="left" colspan="3" class="forms">
-        <input type="text" name="backuppath{$num}" value="$backuppath" size="120" maxlength="200" class="forms">
+        <input type="text" name="backuppath{$num}" value="$backuppath" size="120" maxlength="200" class="forms" />
       </td>
     </tr>
     <tr>
       <td align="right" class="forms" title="Prefix of log files, before the timestamp or port number."><b>Log Prefix:</b></td>
       <td align="left" class="forms">
-        <input type="text" name="prefix{$num}" value="$prefix" size="80" maxlength="60" class="forms">
+        <input type="text" name="prefix{$num}" value="$prefix" size="80" maxlength="60" class="forms" />
       </td>
       <td align="right" class="forms" title="Set true if the log filenames do not contain the server port number."><b>No Port:</b></td>
       <td align="left" class="forms">
-        <input type="radio" name="noport{$num}" value="0" $noportx0>False
-        <input type="radio" name="noport{$num}" value="1" $noportx1>True
+        <input type="radio" name="noport{$num}" value="0" $noportx0 />False
+        <input type="radio" name="noport{$num}" value="1" $noportx1 />True
       </td>
     </tr>
     <tr>
       <td align="right" class="forms" title="FTP server address, including ftp:// or ftps// and port number (:21 default)."><b>FTP Server:</b></td>
       <td align="left" class="forms">
-        <input type="text" name="ftpserver{$num}" value="$ftpserver" size="80" maxlength="100" class="forms">
+        <input type="text" name="ftpserver{$num}" value="$ftpserver" size="80" maxlength="100" class="forms" />
       </td>
       <td align="right" class="forms" title="Set true to use FTP passive mode, false for active mode."><b>Passive Mode:</b></td>
       <td align="left" class="forms">
-        <input type="radio" name="passive{$num}" value="0" $passivex0>False
-        <input type="radio" name="passive{$num}" value="1" $passivex1>True
+        <input type="radio" name="passive{$num}" value="0" $passivex0 />False
+        <input type="radio" name="passive{$num}" value="1" $passivex1 />True
       </td>
     </tr>
     <tr>
       <td align="right" class="forms" title="FTP server username."><b>FTP User:</b></td>
       <td align="left" class="forms">
-        <input type="text" name="ftpuser{$num}" value="$ftpuser" size="80" maxlength="30" class="forms">
+        <input type="text" name="ftpuser{$num}" value="$ftpuser" size="80" maxlength="30" class="forms" />
       </td>
       <td align="right" class="forms" title="Set to default game type (0=Other,1=DM,2=CTF,3=BR,4=TDM,5=AS,6=ONS,7=DD,8=MU,9=INV,10=LMS)."><b>Default Type:</b></td>
       <td align="left" class="forms">
-        <input type="text" name="deftype{$num}" value="$deftype" size="4" maxlength="2" class="forms">
+        <input type="text" name="deftype{$num}" value="$deftype" size="4" maxlength="2" class="forms" />
       </td>
     </tr>
     <tr>
       <td align="right" class="forms" title="FTP server password."><b>FTP Password:</b></td>
       <td align="left" class="forms">
-        <input type="password" name="ftppass{$num}" value="$ftppass" size="80" maxlength="30" class="forms">
+        <input type="password" name="ftppass{$num}" value="$ftppass" size="80" maxlength="30" class="forms" />
       </td>
       <td align="right" class="forms" title="Set true to have new game types default as team games."><b>Team Game:</b></td>
       <td align="left" class="forms">
-        <input type="radio" name="defteam{$num}" value="0" $defteamx0>False
-        <input type="radio" name="defteam{$num}" value="1" $defteamx1>True
+        <input type="radio" name="defteam{$num}" value="0" $defteamx0 />False
+        <input type="radio" name="defteam{$num}" value="1" $defteamx1 />True
       </td>
     </tr>
     <tr>
       <td align="right" class="forms" title="Path to logs on FTP server - relative to path at login."><b>FTP Path:</b></td>
       <td align="left" class="forms">
-        <input type="text" name="ftppath{$num}" value="$ftppath" size="80" maxlength="200" class="forms">
+        <input type="text" name="ftppath{$num}" value="$ftppath" size="80" maxlength="200" class="forms" />
       </td>
       <td align="right" class="forms" title="Set false to leave the most recent log on the server."><b>All Logs:</b></td>
       <td align="left" class="forms">
-        <input type="radio" name="alllogs{$num}" value="0" $alllogsx0>False
-        <input type="radio" name="alllogs{$num}" value="1" $alllogsx1>True
+        <input type="radio" name="alllogs{$num}" value="0" $alllogsx0 />False
+        <input type="radio" name="alllogs{$num}" value="1" $alllogsx1 />True
       </td>
     </tr>
     <tr>
       <td align="right" class="forms" title="Path to demorec logs on FTP server - relative to path at login."><b>Demorec Path:</b></td>
       <td align="left" class="forms">
-        <input type="text" name="demoftppath{$num}" value="$demoftppath" size="80" maxlength="200" class="forms">
+        <input type="text" name="demoftppath{$num}" value="$demoftppath" size="80" maxlength="200" class="forms" />
       </td>
       <td align="right" class="forms" title="Set true for UTStatsDB to handle calculating multi-kills."><b>Multi-check:</b></td>
       <td align="left" class="forms">
-        <input type="radio" name="multicheck{$num}" value="0" $multicheckx0>False
-        <input type="radio" name="multicheck{$num}" value="1" $multicheckx1>True
+        <input type="radio" name="multicheck{$num}" value="0" $multicheckx0 />False
+        <input type="radio" name="multicheck{$num}" value="1" $multicheckx1 />True
       </td>
     </tr>
 
@@ -318,9 +318,9 @@ EOF;
       <td colspan="4">
       	<br />
       	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" name="Mode" value="Save" class="formsb">
+        <input type="submit" name="Mode" value="Save" class="formsb" />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" name="Mode" value="Add" class="formsb">
+        <input type="submit" name="Mode" value="Add" class="formsb" />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To delete a record: clear the log path field and save. Mouse-over headings for full descriptions.
       </td>
     </tr>
@@ -342,7 +342,7 @@ function queryconfig() {
 
   echo <<<EOF
 <form action="admin.php" method="post">
-  <input type="hidden" name="SaveType" value="Query">
+  <input type="hidden" name="SaveType" value="Query" />
   <table class="forms">
     <tr>
       <th width="5">&nbsp;</th>
@@ -373,12 +373,12 @@ EOF;
     $spectators = intval($row[6]);
     $bots = intval($row[7]);
 
-    $typex = array("", "", "");
-    $typex[$type] = "checked";
-    $spectatorsx0 = $spectators ? "" : "checked";
-    $spectatorsx1 = $spectators ? "checked" : "";
-    $botsx0 = $bots ? "" : "checked";
-    $botsx1 = $bots ? "checked" : "";
+    $typex = array("", "", "", "");
+    $typex[$type] = "checked=\"checked\"";
+    $spectatorsx0 = $spectators ? "" : "checked=\"checked\"";
+    $spectatorsx1 = $spectators ? "checked=\"checked\"" : "";
+    $botsx0 = $bots ? "" : "checked=\"checked\"";
+    $botsx1 = $bots ? "checked=\"checked\"" : "";
 
     if ($queryset > 1)
       echo <<<EOF
@@ -391,18 +391,18 @@ EOF;
     echo "    <tr>\n";
 
     if ($queryset > 1)
-      echo "      <td align=\"left\" class=\"forms\" title=\"Move server up on list\"><input type=\"image\" name=\"QueryUp\" value=\"$queryset\" class=\"formsb\" src=\"resource/move_up.gif\"></td>\n";
+      echo "      <td align=\"left\" class=\"forms\" title=\"Move server up on list\"><input type=\"image\" name=\"QueryUp\" value=\"$queryset\" class=\"formsb\" src=\"resource/move_up.gif\" /></td>\n";
     else
       echo "      <td align=\"left\" class=\"forms\">&nbsp;</td>\n";
 
     echo <<<EOF
       <td align="right" class="forms" title="Server address (domain or IP) to query (excluding port)."><b>Query Server:</b></td>
       <td align="left" class="forms">
-        <input type="text" name="server{$num}" value="$server" size="60" maxlength="200" class="forms">
+        <input type="text" name="server{$num}" value="$server" size="60" maxlength="200" class="forms" />
       </td>
       <td align="right" class="forms" title="Query password for playerhashes query (ServerExt)."><b>Password:</b></td>
       <td align="left" class="forms">
-        <input type="text" name="password{$num}" value="$password" size="25" maxlength="40" class="forms">
+        <input type="text" name="password{$num}" value="$password" size="25" maxlength="40" class="forms" />
       </td>
     </tr>
     <tr>
@@ -410,38 +410,39 @@ EOF;
 EOF;
 
     if ($queryset < $numrows)
-      echo "      <td align=\"left\" class=\"forms\" title=\"Move server down on list\"><input type=\"image\" name=\"QueryDown\" value=\"$queryset\" class=\"formsb\" src=\"resource/move_down.gif\"></td>\n";
+      echo "      <td align=\"left\" class=\"forms\" title=\"Move server down on list\"><input type=\"image\" name=\"QueryDown\" value=\"$queryset\" class=\"formsb\" src=\"resource/move_down.gif\" /></td>\n";
     else
       echo "      <td align=\"left\" class=\"forms\">&nbsp;</td>\n";
 
     echo <<<EOF
       <td align="right" class="forms" title="Port number of server (game port)."><b>Game Port:</b></td>
       <td align="left" class="forms">
-        <input type="text" name="port{$num}" value="$port" size="60" maxlength="60" class="forms">
+        <input type="text" name="port{$num}" value="$port" size="60" maxlength="60" class="forms" />
       </td>
-      <td align="right" class="forms" title="Query type (GameSpy or UT). Use UT style query if possible."><b>Query Type:</b></td>
+      <td align="right" class="forms" title="Query type (UT, GameSpy, UT'99, or UT3)."><b>Query Type:</b></td>
       <td align="left" class="forms">
-    <input type="radio" name="type{$num}" value="0" {$typex[0]}>Unreal
-    <input type="radio" name="type{$num}" value="1" {$typex[1]}>Game Spy
-    <input type="radio" name="type{$num}" value="2" {$typex[2]}>UT 99
+        <input type="radio" name="type{$num}" value="0" {$typex[0]} />Unreal
+        <input type="radio" name="type{$num}" value="1" {$typex[1]} />Game Spy
+        <input type="radio" name="type{$num}" value="2" {$typex[2]} />UT 99
+        <input type="radio" name="type{$num}" value="3" {$typex[3]} />UT3
       </td>
     </tr>
     <tr>
       <td align="right" class="forms" title="Full URL to game server." colspan="2"><b>Server Link:</b></td>
       <td align="left" colspan="3" class="forms">
-        <input type="text" name="link{$num}" value="$link" size="120" maxlength="200" class="forms">
+        <input type="text" name="link{$num}" value="$link" size="120" maxlength="200" class="forms" />
       </td>
     </tr>
     <tr>
       <td align="right" class="forms" title="Include spectators in server query status." colspan="2"><b>Spectators:</b></td>
       <td align="left" class="forms">
-        <input type="radio" name="spectators{$num}" value="0" $spectatorsx0>Disable
-        <input type="radio" name="spectators{$num}" value="1" $spectatorsx1>Enable
+        <input type="radio" name="spectators{$num}" value="0" $spectatorsx0 />Disable
+        <input type="radio" name="spectators{$num}" value="1" $spectatorsx1 />Enable
       </td>
       <td align="right" class="forms" title="Include bots in server query status."><b>Bots:</b></td>
       <td align="left" class="forms">
-        <input type="radio" name="bots{$num}" value="0" $botsx0>Disable
-        <input type="radio" name="bots{$num}" value="1" $botsx1>Enable
+        <input type="radio" name="bots{$num}" value="0" $botsx0 />Disable
+        <input type="radio" name="bots{$num}" value="1" $botsx1 />Enable
       </td>
     </tr>
 
@@ -459,8 +460,8 @@ EOF;
       <td colspan="4">
         <table cellspacing="0" cellpadding="10">
           <tr>
-            <td><input type="submit" name="Mode" value="Save" class="formsb"></td>
-            <td><input type="submit" name="Mode" value="Add" class="formsb"></td>
+            <td><input type="submit" name="Mode" value="Save" class="formsb" /></td>
+            <td><input type="submit" name="Mode" value="Add" class="formsb" /></td>
             <td>{$qstxt}</td>
           </tr>
         </table>
@@ -484,7 +485,7 @@ function menuconfig() {
 
   echo <<<EOF
 <form action="admin.php" method="post">
-  <input type="hidden" name="SaveType" value="Menu">
+  <input type="hidden" name="SaveType" value="Menu" />
   <table class="forms">
     <tr>
       <th width="60">&nbsp;</th>
@@ -522,13 +523,13 @@ EOF;
     <tr>
       <td align="right" class="forms" title="Full or relative URL."><b>URL:</b></td>
       <td align="left" colspan="3" class="forms">
-        <input type="text" name="url{$num}" value="$urls" size="120" maxlength="200" class="forms">
+        <input type="text" name="url{$num}" value="$urls" size="120" maxlength="200" class="forms" />
       </td>
     </tr>
     <tr>
       <td align="right" class="forms" title="Description to display on menu."><b>Description:</b></td>
       <td align="left" colspan="3" class="forms">
-        <input type="text" name="descr{$num}" value="$descrs" size="120" maxlength="200" class="forms">
+        <input type="text" name="descr{$num}" value="$descrs" size="120" maxlength="200" class="forms" />
       </td>
     </tr>
 
@@ -541,9 +542,9 @@ EOF;
       <td colspan="4">
       	<br />
       	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" name="Mode" value="Save" class="formsb">
+        <input type="submit" name="Mode" value="Save" class="formsb" />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" name="Mode" value="Add" class="formsb">
+        <input type="submit" name="Mode" value="Add" class="formsb" />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To delete a record: clear the URL field and save.
       </td>
     </tr>

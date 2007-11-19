@@ -133,8 +133,6 @@ function unhtmlspecialchars($string)
   return $string;
 }
 
-$statview = "";
-
 $twidth = 720;
 $twidthm = $twidth + 160;
 
@@ -154,17 +152,17 @@ $teamchat = array("chatred","chatblue","chatgreen","chatgold");
 $teamscore = array("redteamscore","blueteamscore","greenteamscore","goldteamscore");
 
 echo <<<EOF
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html>
 <head>
   <title>$title</title>
-  <meta http-equiv="Content-Type" content="text/html; CHARSET=iso-8859-1">
-  <link rel="icon" href="resource/uicon.png" type="image/png">
-  <link rel="stylesheet" href="resource/{$stylefile}" type="text/css">
+  <meta http-equiv="Content-Type" content="text/html; CHARSET=iso-8859-1" />
+  <link rel="icon" href="resource/uicon.png" type="image/png" />
+  <link rel="stylesheet" href="resource/{$stylefile}" type="text/css" />
   <script language="JavaScript" type="text/JavaScript">
     function changePage(newLoc) {
-      nextPage = "index.php?stats=players&type=" + newLoc.options[newLoc.selectedIndex].value
+      nextPage = "index.php?stats=players&amp;type=" + newLoc.options[newLoc.selectedIndex].value
       if (nextPage != "")
         document.location.href = nextPage
     }
@@ -180,8 +178,8 @@ if (!$navbar) {
 
 <table cellpadding="0" cellspacing="0" border="0"><tr>
 <td width="159" class="sidebar" valign="top">
-  <a href="http://www.unrealtournament.com"><img src="resource/{$utlogofile}" border="0" alt="Unreal Tournament Logo"></a>
-  <br>
+  <a href="http://www.unrealtournament.com"><img src="resource/{$utlogofile}" border="0" alt="Unreal Tournament Logo" /></a>
+  <br />
   <p>&nbsp;<a class="sidebar" href="index.php">Main</a></p>
   <p>&nbsp;<a class="sidebar" href="index.php?stats=matches">Matches</a></p>
   <p>&nbsp;<a class="sidebar" href="index.php?stats=players">Players</a></p>
@@ -228,7 +226,7 @@ EOF;
 <table cellpadding="0" cellspacing="0" border="0" width="100%" align="center">
   <tr>
     <td align="center">
-      <a href="http://www.utstatsdb.com"><img src="resource/{$logofile}" border="0" alt="UTStatsDB Logo"></a>
+      <a href="http://www.utstatsdb.com"><img src="resource/{$logofile}" border="0" alt="UTStatsDB Logo" /></a>
     </td>
   </tr>
 </table>
@@ -244,10 +242,10 @@ else {
 <table cellpadding="0" cellspacing="0" border="0" align="center">
   <tr>
     <td align="center">
-      <a href="http://www.unrealtournament.com"><img src="resource/{$utlogofile}" border="0" alt="Unreal Tournament Logo"></a>
+      <a href="http://www.unrealtournament.com"><img src="resource/{$utlogofile}" border="0" alt="Unreal Tournament Logo" /></a>
     </td>
     <td align="center">
-      <a href="http://www.utstatsdb.com"><img src="resource/{$logofile}" border="0" alt="UTStatsDB Logo"></a>
+      <a href="http://www.utstatsdb.com"><img src="resource/{$logofile}" border="0" alt="UTStatsDB Logo" /></a>
     </td>
   </tr>
   <tr><td>&nbsp;</td></tr>

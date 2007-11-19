@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2006  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -274,7 +274,7 @@ if ($nohtml) {
   $ebold = "";
 }
 else {
-  $break = "<br>";
+  $break = "<br />";
   $bold = "<b>";
   $ebold = "</b>";
 }
@@ -295,13 +295,13 @@ if (strtolower($dbtype) == "mysql") {
   $mysqlver = mysql_get_server_info();
   $dot = strpos($mysqlver, ".");
   if ($dot === FALSE) {
-    echo "Unable to determine MySQL version.<br>\n";
+    echo "Unable to determine MySQL version.<br />\n";
     exit;
   }
   $mysqlverh = (int) substr($mysqlver, 0, $dot);
   $dot2 = strpos($mysqlver, ".", $dot + 1);
   if ($dot2 === FALSE) {
-    echo "Unable to determine MySQL version.<br>\n";
+    echo "Unable to determine MySQL version.<br />\n";
     exit;
   }
   $mysqlverl = (int) substr($mysqlver, $dot + 1, $dot2 - $dot - 1);

@@ -385,21 +385,22 @@ function menu_top() {
     $versioncheck = "";
 
   echo <<<EOF
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html>
 <head>
   <title>UTStatsDB Admin</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="stylesheet" type="text/css" media="screen" href="resource/admin.css">
-  <meta name="MSSmartTagsPreventParsing" content="TRUE">
-  <link rel="shortcut icon" href="resource/favicon.ico">
-  <link rel="icon" href="resource/favicon.ico">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" type="text/css" media="screen" href="resource/admin.css" />
+  <meta name="MSSmartTagsPreventParsing" content="TRUE" />
+  <link rel="shortcut icon" href="resource/favicon.ico" />
+  <link rel="icon" href="resource/favicon.ico" />
 </head>
 <body>
 
 <div id="header">
   <div id="header-logo">
-    <a href="index.php"><img src="resource/adminlogo.gif" alt="UTStatsDB Logo"></a>
+    <a href="index.php"><img src="resource/adminlogo.gif" alt="UTStatsDB Logo" /></a>
   </div>
 </div>
 
@@ -564,12 +565,13 @@ function logparse() {
 //=============================================================================
 function login() {
   echo <<<EOF
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html>
 <head>
   <title>UTStatsDB Admin Login</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="icon" href="resource/uicon.png" type="image/png">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="icon" href="resource/uicon.png" type="image/png" />
   <style type="text/css">
     .sidebox {border: 1px #000000 solid}
   </style>
@@ -580,10 +582,10 @@ function login() {
   </script>
 </head>
 
-<body text="#101031" onLoad="setFocus()">
+<body text="#101031" onload="setFocus()">
 
 <form name="login_form" method="post" action="admin.php">
-  <input type="hidden" name="Mode" value="Login">
+  <input type="hidden" name="Mode" value="Login" />
   <table bgcolor="#cccccc" cellspacing="0" cellpadding="5" class="sidebox" width="250">
     <tr>
       <td bgcolor="#000066" align="center" colspan="2">
@@ -595,12 +597,12 @@ function login() {
         <b>Password:</b>
       </td>
       <td align="left">
-        <input type="password" name="Pass" maxlength="25">
+        <input type="password" name="Pass" maxlength="25" />
       </td>
     </tr>
     <tr>
       <td align="center" colspan="2">
-        <input type="submit" name="ModeS" value="Login">
+        <input type="submit" name="ModeS" value="Login" />
       </td>
     </tr>
   </table>
@@ -615,12 +617,13 @@ EOF;
 
 function invalid_login() {
   echo <<<EOF
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html>
 <head>
   <title>Invalid Login</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="icon" href="resource/uicon.png" type="image/png">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="icon" href="resource/uicon.png" type="image/png" />
 </head>
 <body text="#ff0000">
 
@@ -636,12 +639,13 @@ EOF;
 
 function auth_required() {
   echo <<<EOF
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html>
 <head>
   <title>Authorization Required</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="icon" href="resource/uicon.png" type="image/png">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="icon" href="resource/uicon.png" type="image/png" />
 </head>
 <body text="#ff0000">
 

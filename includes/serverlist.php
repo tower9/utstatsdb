@@ -63,12 +63,12 @@ echo <<<EOF
   </tr>
   <tr>
     <td class="smheading" align="center" width="25">{$LANG_ID}</td>
-<td class="smheading" align="center" width="150">{$LANG_SERVERNAME}</td>
+    <td class="smheading" align="center" width="150">{$LANG_SERVERNAME}</td>
     <td class="smheading" align="center" width="60">{$LANG_MATCHES}</td>
     <td class="smheading" align="center" width="45">{$LANG_FRAGS}</td>
     <td class="smheading" align="center" width="45">{$LANG_SCORE}</td>
     <td class="smheading" align="center" width="45">{$LANG_HOURS}</td>
-    <td class="smheading" align="center" width="100">{$LANG_LASTMATCH}</td>
+    <td class="smheading" align="center" width="200">{$LANG_LASTMATCH}</td>
   </tr>
 
 EOF;

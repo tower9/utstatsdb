@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2006  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -37,24 +37,24 @@ function mergeentry($type) {
   echo <<<EOF
 <p class="header">UTStatsDB $typeu Merge</p>
 <form action="admin.php" method="post">
-  <input type="hidden" name="MergeType" value="{$typeu}s">
+  <input type="hidden" name="MergeType" value="{$typeu}s" />
   <table>
     <tr>
       <td align="right" width="130" title="$typeu to copy from ($typel ID will be removed upon completion)."><b>Source $typeu:</b></td>
       <td align="left">
-        <input type="text" name="srcmerge" value="" size="8" maxlength="8">
+        <input type="text" name="srcmerge" value="" size="8" maxlength="8" />
       </td>
     </tr>
     <tr>
       <td align="right" title="$typeu to copy to ($typel ID will be kept with joined stats upon completion)."><b>Destination $typeu:</b></td>
       <td align="left">
-        <input type="text" name="dstmerge" value="" size="8" maxlength="8">
+        <input type="text" name="dstmerge" value="" size="8" maxlength="8" />
       </td>
     </tr>
     <tr>
       <td align="center" colspan="2">
       	<br />
-        <input type="submit" name="Mode" value="Merge" class="formsb">
+        <input type="submit" name="Mode" value="Merge" class="formsb" />
       </td>
     </tr>
   </table>
@@ -183,13 +183,13 @@ EOF;
 echo <<<EOF
 
 <form action="admin.php" method="post">
-  <input type="hidden" name="Mode" value="DoMerge">
-  <input type="hidden" name="MergeType" value="$mtype">
-  <input type="hidden" name="srcmerge" value="$src">
-  <input type="hidden" name="dstmerge" value="$dst">
-  <input type="submit" name="Default" value="Merge">
+  <input type="hidden" name="Mode" value="DoMerge" />
+  <input type="hidden" name="MergeType" value="$mtype" />
+  <input type="hidden" name="srcmerge" value="$src" />
+  <input type="hidden" name="dstmerge" value="$dst" />
+  <input type="submit" name="Default" value="Merge" />
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <input type="submit" name="Mode" value="Cancel">
+  <input type="submit" name="Mode" value="Cancel" />
 </form>
 
 EOF;

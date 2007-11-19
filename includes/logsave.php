@@ -33,7 +33,7 @@ function findpwk($player, $weapon) // Player, Weapon
   if ($nohtml)
     $break = "";
   else
-    $break = "<br>";
+    $break = "<br />";
 
   $result = sql_queryn($link, "SELECT pwk_num FROM {$dbpre}pwkills WHERE pwk_player=$player AND pwk_weapon=$weapon LIMIT 1");
   if (!$result) {
@@ -62,7 +62,7 @@ function findmwk($map, $weapon) // Map, Weapon
   if ($nohtml)
     $break = "";
   else
-    $break = "<br>";
+    $break = "<br />";
 
   $result = sql_queryn($link, "SELECT mwk_num FROM {$dbpre}mwkills WHERE mwk_map=$map AND mwk_weapon=$weapon LIMIT 1");
   if (!$result) {
@@ -91,7 +91,7 @@ function findgwa($match, $player, $weapon) // Match, Player, Weapon
   if ($nohtml)
     $break = "";
   else
-    $break = "<br>";
+    $break = "<br />";
 
   $result = sql_queryn($link, "SELECT gwa_num FROM {$dbpre}gwaccuracy WHERE gwa_match=$match AND gwa_player=$player AND gwa_weapon=$weapon LIMIT 1");
   if (!$result) {
@@ -123,7 +123,7 @@ function storedata()
   if ($nohtml)
     $break = "";
   else
-    $break = "<br>";
+    $break = "<br />";
 
   if ($match->length <= 0)
     return 0;
@@ -1497,7 +1497,7 @@ function storedata()
                 $weapsg[$wpn]["wp_chkills"] = $pwkkills;
                 $pwkresult = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chkills=$pwkkills, wp_chkills_plr=$pnum, wp_chkills_gms=$plr_matches, wp_chkills_tm=$plr_time WHERE wp_num=$wpn LIMIT 1");
                 if (!$pwkresult) {
-                  echo "Error updating weapon entry [1].<br>\n";
+                  echo "Error updating weapon entry [1].<br />\n";
                   exit;
                 }
               }
@@ -1505,7 +1505,7 @@ function storedata()
                 $weapsg[$wpn]["wp_chdeaths"] = $pwkdeaths;
                 $pwkresult = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chdeaths=$pwkdeaths, wp_chdeaths_plr=$pnum, wp_chdeaths_gms=$plr_matches, wp_chdeaths_tm=$plr_time WHERE wp_num=$wpn LIMIT 1");
                 if (!$pwkresult) {
-                  echo "Error updating weapon entry [2].<br>\n";
+                  echo "Error updating weapon entry [2].<br />\n";
                   exit;
                 }
               }
@@ -1513,7 +1513,7 @@ function storedata()
                 $weapsg[$wpn]["wp_chdeathshld"] = $pwkheld;
                 $pwkresult = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chdeathshld=$pwkheld, wp_chdeathshld_plr=$pnum, wp_chdeathshld_gms=$plr_matches, wp_chdeathshld_tm=$plr_time WHERE wp_num=$wpn LIMIT 1");
                 if (!$pwkresult) {
-                  echo "Error updating weapon entry [3].<br>\n";
+                  echo "Error updating weapon entry [3].<br />\n";
                   exit;
                 }
               }
@@ -1521,7 +1521,7 @@ function storedata()
                 $weapsg[$wpn]["wp_chsuicides"] = $pwksuicides;
                 $pwkresult = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chsuicides=$pwksuicides, wp_chsuicides_plr=$pnum, wp_chsuicides_gms=$plr_matches, wp_chsuicides_tm=$plr_time WHERE wp_num=$wpn LIMIT 1");
                 if (!$pwkresult) {
-                  echo "Error updating weapon entry [4].<br>\n";
+                  echo "Error updating weapon entry [4].<br />\n";
                   exit;
                 }
               }

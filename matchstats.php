@@ -36,7 +36,7 @@ check_get($matchnum, "match");
 if (!is_numeric($matchnum))
   $matchnum = -1;
 if ($matchnum <= 0) {
-  echo "{$LANG_RUNFROMTHEMAININDEX}<br>\n";
+  echo "{$LANG_RUNFROMTHEMAININDEX}<br />\n";
   exit;
 }
 
@@ -45,13 +45,13 @@ $link = sql_connect();
 // Load game data
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}matches WHERE gm_num=$matchnum LIMIT 1");
 if (!$result) {
-  echo "{$LANG_MATCHDATABASEERROR}<br>\n";
+  echo "{$LANG_MATCHDATABASEERROR}<br />\n";
   exit;
 }
 $row = sql_fetch_assoc($result);
 sql_free_result($result);
 if (!$row) {
-  echo "{$LANG_MATCHNOTFOUNDINDATABASE}<br>\n";
+  echo "{$LANG_MATCHNOTFOUNDINDATABASE}<br />\n";
   exit;
 }
 while (list($key,$val) = each($row))
@@ -66,11 +66,11 @@ $matchinit = formatdate($init, 1);
 // Set game type
 $result = sql_queryn($link, "SELECT tp_desc,tp_type,tp_team FROM {$dbpre}type WHERE tp_num=$gm_type LIMIT 1");
 if (!$result) {
-  echo "{$LANG_GAMETYPEDATABASEERROR}<br>\n";
+  echo "{$LANG_GAMETYPEDATABASEERROR}<br />\n";
   exit;
 }
 if (!(list($gametype,$gametval,$teams) = sql_fetch_row($result))) {
-  echo "{$LANG_ERRORLOCATINGGAMETYPE}<br>\n";
+  echo "{$LANG_ERRORLOCATINGGAMETYPE}<br />\n";
   exit;
 }
 sql_free_result($result);
@@ -78,11 +78,11 @@ sql_free_result($result);
 // Load Server Data
 $result = sql_queryn($link, "SELECT sv_name,sv_admin,sv_email FROM {$dbpre}servers WHERE sv_num=$gm_server LIMIT 1");
 if (!$result) {
-  echo "{$LANG_SERVERDATABASEERROR}<br>\n";
+  echo "{$LANG_SERVERDATABASEERROR}<br />\n";
   exit;
 }
 if (!list($sv_name,$sv_admin,$sv_email) = sql_fetch_row($result)) {
-  echo "{$LANG_SERVERNOTFOUND}<br>\n";
+  echo "{$LANG_SERVERNOTFOUND}<br />\n";
   exit;
 }
 sql_free_result($result);
@@ -93,11 +93,11 @@ $serveremail = stripspecialchars($sv_email);
 // Load Map Data
 $result = sql_queryn($link, "SELECT mp_name,mp_desc,mp_author FROM {$dbpre}maps WHERE mp_num=$gm_map LIMIT 1");
 if (!$result) {
-  echo "{$LANG_MAPDATABASEERRORP}<br>\n";
+  echo "{$LANG_MAPDATABASEERRORP}<br />\n";
   exit;
 }
 if (!list($mp_name,$mp_desc,$mp_author) = sql_fetch_row($result)) {
-  echo "{$LANG_MAPNOTFOUND}<br>\n";
+  echo "{$LANG_MAPNOTFOUND}<br />\n";
   exit;
 }
 sql_free_result($result);
@@ -112,7 +112,7 @@ if (strtolower($dbtype) == "sqlite")
 else
   $result = sql_queryn($link, "SELECT {$dbpre}gplayers.*,{$dbpre}players.plr_name FROM {$dbpre}gplayers,{$dbpre}players WHERE {$dbpre}gplayers.gp_match=$matchnum AND {$dbpre}players.pnum={$dbpre}gplayers.gp_pnum");
 if (!$result) {
-  echo "{$LANG_GAMEPLAYERLISTDATABASEERROR}<br>\n";
+  echo "{$LANG_GAMEPLAYERLISTDATABASEERROR}<br />\n";
   exit;
 }
 while($row = sql_fetch_assoc($result)) {
@@ -248,7 +248,7 @@ echo <<<EOF
     <td class="heading" align="center">{$LANG_MATCHSTATSFOR} $servername : $mapname</td>
   </tr>
 </table>
-<br>
+<br />
 
 EOF;
 
@@ -294,7 +294,7 @@ else {
 }
 
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="650">
   <tr>
     <td class="heading" colspan="4" align="center">{$LANG_UNREALTOURNAMENTMATCHSTATS}</td>
@@ -425,7 +425,7 @@ EOF;
 //=============================================================================
 if ($gametval == 2) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="0" cellspacing="2" border="0" width="690">
   <tr>
     <td class="heading" colspan="11" align="center">{$LANG_FLAGEVENTSUMMARY}</td>
@@ -541,7 +541,7 @@ EOF;
 //=============================================================================
 if ($gametval == 3) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="0" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="10" align="center">{$LANG_BOMBINGRUNEVENTSUMMARY}</td>
@@ -647,7 +647,7 @@ EOF;
 //=============================================================================
 if ($gametval == 7) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="0" cellspacing="2" border="0" width="430">
   <tr>
     <td class="heading" colspan="11" align="center">{$LANG_CONTROLPOINTSUMMARY}</td>
@@ -746,7 +746,7 @@ EOF;
 //=============================================================================
 if ($gametval == 5) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="0" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="4" align="center">{$LANG_ASSAULTOBJECTIVES}</td>
@@ -763,7 +763,7 @@ EOF;
   $objectives = array();
   $result = sql_querynb($link, "SELECT ge_num,ge_plr,ge_time,ge_length,ge_quant FROM {$dbpre}gevents WHERE ge_match=$matchnum AND ge_event=7 ORDER BY ge_num");
   if (!$result) {
-    echo "{$LANG_ERRORLOADINGASSAULTOBJECTIVE}<br>\n";
+    echo "{$LANG_ERRORLOADINGASSAULTOBJECTIVE}<br />\n";
     exit;
   }
   while ($row = sql_fetch_row($result)) {
@@ -871,7 +871,7 @@ EOF;
 //=============================================================================
 if ($gametval == 6) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="0" cellspacing="2" border="0" width="670">
   <tr>
     <td class="heading" colspan="7" align="center">{$LANG_ONSLAUGHTSUMMARY}</td>
@@ -952,7 +952,7 @@ EOF;
 //=============================================================================
 if ($gametval == 8) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="0" cellspacing="2" border="0" width="300">
   <tr>
     <td class="heading" colspan="6" align="center">{$LANG_MUTANTSUMMARY}</td>
@@ -1010,7 +1010,7 @@ if ($gametval == 10 || $gametval == 19) {
 
   if ($displaylms) {
     echo <<<EOF
-<br>
+<br />
 <table cellpadding="0" cellspacing="2" border="0" width="335">
   <tr>
     <td class="heading" colspan="5" align="center">{$LANG_LASTMANSTANDINGSUMMARY}</td>
@@ -1059,7 +1059,7 @@ EOF;
 //=============================================================================
 if ($gametval == 18) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="0" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="10" align="center">{$LANG_DEATHBALLEVENTSUMMARY}</td>
@@ -1169,7 +1169,7 @@ EOF;
 //=============================================================================
 if ($gametval == 20) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="0" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="10" align="center">{$LANG_JAILBREAKEVENTSUMMARY}</td>
@@ -1259,13 +1259,13 @@ EOF;
 if ($teams && $gametval != 9 && $gametval != 5 && function_exists('ImageTypes')) {
   if (ImageTypes() & (IMG_JPG | IMG_GIF | IMG_PNG)) {
     echo <<<EOF
-<br>
+<br />
 <table>
   <tr>
     <td class="medheading" colspan="10" align="center">Team Scores</td>
   </tr>
   <tr>
-    <td><img src="graphs.php?type=2&amp;match=$matchnum" width="550" height="180" alt="{$LANG_TEAMSCORINGGRAPH}"></td>
+    <td><img src="graphs.php?type=2&amp;match=$matchnum" width="550" height="180" alt="{$LANG_TEAMSCORINGGRAPH}" /></td>
   </tr>
 </table>
 
@@ -1278,7 +1278,7 @@ EOF;
 //=============================================================================
 if ($teams && $gametval != 9 && $gametval != 18) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="0" cellspacing="2" border="0" width="720">
   <tr>
     <td class="heading" colspan="21" align="center">{$LANG_TEAMSUMMARY}</td>
@@ -1295,7 +1295,7 @@ EOF;
   <tr>
     <td class="smheading" align="center" rowspan="2" width="40">{$LANG_RANK}</td>
     <td class="smheading" align="center" rowspan="2">{$LANG_PLAYER}</td>
-    <td class="smheading" align="center" rowspan="2" width="20"><img src="resource/pcolors.gif" width="16" height="16" border="0" alt="{$LANG_COLORBAR}"></td>
+    <td class="smheading" align="center" rowspan="2" width="20"><img src="resource/pcolors.gif" width="16" height="16" border="0" alt="{$LANG_COLORBAR}" /></td>
     <td class="smheading" align="center" colspan="2" width="90">{$LANG_SCORE}</td>
     <td class="smheading" align="center" rowspan="2" width="20">{$LANG_F}</td>
     <td class="smheading" align="center" rowspan="2" width="20">{$LANG_K}</td>
@@ -1431,7 +1431,7 @@ EOF;
     echo <<<EOF
   <tr>
     <td class="dark" align="center" colspan="2">{$LANG_TOTALS}</td>
-    <td class="darkgrey" align="center"><img src="$cimage" width="16" height="16" border="0" alt="{$LANG_PLAYERCOLOR}"></td>
+    <td class="darkgrey" align="center"><img src="$cimage" width="16" height="16" border="0" alt="{$LANG_PLAYERCOLOR}" /></td>
     <td class="darkgrey" align="center">$teamscore</td>
     <td class="darkgrey" align="center">$tscore</td>
     <td class="darkgrey" align="center">$frags</td>
@@ -1476,13 +1476,13 @@ EOF;
 if (function_exists('ImageTypes') && $gametval > 1 && $gametval != 10 && $gametval != 18) {
   if (ImageTypes() & (IMG_JPG | IMG_GIF | IMG_PNG)) {
     echo <<<EOF
-<br>
+<br />
 <table>
   <tr>
     <td class="medheading" colspan="10" align="center">{$LANG_INDIVIDUALSCORES}</td>
   </tr>
   <tr>
-    <td><img src="graphs.php?type=3&amp;match=$matchnum" width="550" height="180" alt="{$LANG_SCOREGRAPH}"></td>
+    <td><img src="graphs.php?type=3&amp;match=$matchnum" width="550" height="180" alt="{$LANG_SCOREGRAPH}" /></td>
   </tr>
 </table>
 
@@ -1497,13 +1497,13 @@ EOF;
 if (function_exists('ImageTypes') && ($gametval != 9 || $gm_logger == 1) && $gametval != 18) {
   if (ImageTypes() & (IMG_JPG | IMG_GIF | IMG_PNG)) {
     echo <<<EOF
-<br>
+<br />
 <table>
   <tr>
     <td class="medheading" colspan="10" align="center">{$LANG_INDIVIDUALFRAGS}</td>
   </tr>
   <tr>
-    <td><img src="graphs.php?type=1&amp;match=$matchnum" width="550" height="180" alt="{$LANG_FRAGGRAPH}"></td>
+    <td><img src="graphs.php?type=1&amp;match=$matchnum" width="550" height="180" alt="{$LANG_FRAGGRAPH}" /></td>
   </tr>
 </table>
 
@@ -1518,13 +1518,13 @@ EOF;
 if (function_exists('ImageTypes') && ($gametval == 10  || $gametval == 19)) {
   if (ImageTypes() & (IMG_JPG | IMG_GIF | IMG_PNG)) {
     echo <<<EOF
-<br>
+<br />
 <table>
   <tr>
     <td class="medheading" colspan="10" align="center">{$LANG_LMSLIVESREMAINING}</td>
   </tr>
   <tr>
-    <td><img src="graphs.php?type=4&amp;match=$matchnum" width="550" height="180" alt="{$LANG_LMSGRAPH}"></td>
+    <td><img src="graphs.php?type=4&amp;match=$matchnum" width="550" height="180" alt="{$LANG_LMSGRAPH}" /></td>
   </tr>
 </table>
 
@@ -1542,7 +1542,7 @@ if ($gm_type != 9 || $gm_logger == 1) {
     $fphsph = "{$LANG_AVGFPH}";
 
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="0" cellspacing="2" border="0" width="720">
   <tr>
     <td class="heading" colspan="19" align="center">{$LANG_PLAYERSUMMARY}</td>
@@ -1550,7 +1550,7 @@ if ($gm_type != 9 || $gm_logger == 1) {
   <tr>
     <td class="smheading" align="center" rowspan="2">{$LANG_RANK}</td>
     <td class="smheading" align="center" rowspan="2">{$LANG_PLAYER}</td>
-    <td class="smheading" align="center" rowspan="2" width="20"><img src="resource/pcolors.gif" width="16" height="16" border="0" alt="{$LANG_COLORBAR}"></td>
+    <td class="smheading" align="center" rowspan="2" width="20"><img src="resource/pcolors.gif" width="16" height="16" border="0" alt="{$LANG_COLORBAR}" /></td>
     <td class="smheading" align="center" rowspan="2">{$LANG_SCORE}</td>
     <td class="smheading" align="center" rowspan="2">{$LANG_FRAGS}</td>
     <td class="smheading" align="center" rowspan="2">{$LANG_KILLS}</td>
@@ -1643,7 +1643,7 @@ EOF;
   <tr>
     <td class="dark" align="center">$gp_rank</td>
     <td class="$nameclass" align="center">$gpplayer</td>
-    <td class="grey" align="center" width="20"><img src="$cimage" width="16" height="16" border="0" alt="{$LANG_PLAYERCOLOR}"></td>
+    <td class="grey" align="center" width="20"><img src="$cimage" width="16" height="16" border="0" alt="{$LANG_PLAYERCOLOR}" /></td>
     <td class="grey" align="center">$score</td>
     <td class="grey" align="center">$frags</td>
     <td class="grey" align="center">$kills</td>
@@ -1682,7 +1682,7 @@ EOF;
   echo <<<EOF
   <tr>
     <td class="dark" colspan="2" align="center">{$LANG_TOTALS}</td>
-    <td class="dark" align="center" width="20"><img src="resource/blankcolor.gif" width="16" height="16" border="0" alt="{$LANG_BLANKCOLOR}"></td>
+    <td class="dark" align="center" width="20"><img src="resource/blankcolor.gif" width="16" height="16" border="0" alt="{$LANG_BLANKCOLOR}" /></td>
     <td class="darkgrey" align="center">$total_score</td>
     <td class="darkgrey" align="center">$total_frags</td>
     <td class="darkgrey" align="center">$total_kills</td>
@@ -1709,7 +1709,7 @@ EOF;
 //=============================================================================
 if (isset($ranksystem) && $ranksystem) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="0" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="5" align="center" width="340">{$LANG_PLAYERRANKPOINTS}</td>
@@ -1755,11 +1755,11 @@ EOF;
       }
       else if ($change > 0) {
         $change = sprintf("+%0.2f", $change);
-        $ud = "<img src=\"resource/rank_up.gif\" alt=\"{$LANG_RANKUP}\">";
+        $ud = "<img src=\"resource/rank_up.gif\" alt=\"{$LANG_RANKUP}\" />";
       }
       else {
         $change = sprintf("%0.2f", $change);
-        $ud = "<img src=\"resource/rank_down.gif\" alt=\"{$LANG_RANKDOWN}\">";
+        $ud = "<img src=\"resource/rank_down.gif\" alt=\"{$LANG_RANKDOWN}\" />";
       }
       if ($gplayer[$num]["gp_bot"])
         $nameclass = "darkbot";
@@ -1834,7 +1834,7 @@ if ($gametval != 9 && $gametval != 18) {
   }
 
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="8" align="center">{$LANG_SPECTIALEVENTS}</td>
@@ -1909,7 +1909,7 @@ if ($gametval != 18) {
   }
 
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="8" align="center">{$LANG_COMBOSUSED}</td>
@@ -1947,13 +1947,13 @@ if ($gametval != 9 && $gametval != 18) {
     $name = nostripspecialchars($gplayer[$i]['gp_name']);
     $km_name[$i] = "";
     for ($i2 = 0; $i2 < strlen($name); $i2++)
-      $km_name[$i].=substr($name, $i2, 1)."<br>";
+      $km_name[$i].=substr($name, $i2, 1)."<br />";
   }
 
   // Read Individual Kill Log
   $result = sql_queryn($link, "SELECT * FROM {$dbpre}gkills WHERE gk_match=$matchnum");
   if (!$result) {
-    echo "Error reading gkills data.<br>\n";
+    echo "Error reading gkills data.<br />\n";
     exit;
   }
   for ($r = 1; $r <= $gm_numplayers; $r++) {
@@ -2134,7 +2134,7 @@ EOF;
 //=============================================================================
 if ($gametval != 18) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="595">
   <tr>
     <td class="heading" colspan="7" align="center">{$LANG_WEAPONSUICIDESPECIFICINFO}</td>
@@ -2154,7 +2154,7 @@ EOF;
   // Load Weapon Descriptions
   $result = sql_queryn($link, "SELECT wp_num,wp_secondary,wp_desc,wp_weaptype FROM {$dbpre}weapons");
   if (!$result) {
-    echo "{$LANG_ERRORLOADINGWEAPONSDESC}<br>\n";
+    echo "{$LANG_ERRORLOADINGWEAPONSDESC}<br />\n";
     exit;
   }
   $maxweapon = 0;
@@ -2346,7 +2346,7 @@ sql_free_result($result);
 
 if ($numgwaweaps > 0) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="470">
   <tr>
     <td class="heading" colspan="5" align="center">{$LANG_WEAPONACCURACYINFORMATION}</td>
@@ -2398,7 +2398,7 @@ EOF;
 //=============================================================================
 if ($gm_logger == 1 && $gametval != 18) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="660">
   <tr>
     <td class="heading" colspan="8" align="center">{$LANG_VEHICLETURRETSPECIFICINFORMATION}</td>
@@ -2472,7 +2472,7 @@ EOF;
 }
 else if ($gametval != 18) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="560">
   <tr>
     <td class="heading" colspan="6" align="center">{$LANG_VEHICLETURRETSPECIFICINFORMATION}</td>
@@ -2540,7 +2540,7 @@ EOF;
 //=============================================================================
 if ($gametval == 9) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="340">
   <tr>
     <td class="heading" colspan="3" align="center">{$LANG_INVASIONMONSTERINFORMATION}</td>
@@ -2600,7 +2600,7 @@ EOF;
 if ($gametval != 9 && $gametval != 18) {
   $result = sql_queryn($link, "SELECT * FROM {$dbpre}gevents WHERE ge_event=1 AND ge_match=$matchnum ORDER BY ge_num");
   if (!$result) {
-    echo "{$LANG_ERRORLOADINGEVENTS}<br>\n";
+    echo "{$LANG_ERRORLOADINGEVENTS}<br />\n";
     exit;
   }
   $sprees = $header = 0;
@@ -2729,7 +2729,7 @@ if ($gametval != 9 && $gametval != 18) {
 
       if (!$header) {
         echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="680">
   <tr>
     <td class="heading" colspan="6" align="center">{$LANG_KILLINGSPREES}</td>
@@ -2764,7 +2764,7 @@ EOF;
   sql_free_result($result);
   if (!$sprees) {
     echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="600">
   <tr>
     <td class="heading" align="center">{$LANG_NOKILLINGSPREES}</td>
@@ -2780,7 +2780,7 @@ EOF;
 //=============================================================================
 if ($gametval != 18) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="600">
   <tr>
     <td class="heading" colspan="6" align="center">{$LANG_TOTALITEMSCOLLECTED}</td>
@@ -2798,7 +2798,7 @@ EOF;
 
   $result = sql_queryn($link, "SELECT it_num,it_desc FROM {$dbpre}items");
   if (!$result) {
-    echo "{$LANG_ERRORLOADINGITEMPICKUPDESC}<br>\n";
+    echo "{$LANG_ERRORLOADINGITEMPICKUPDESC}<br />\n";
     exit;
   }
   $numitems = 0;
@@ -2812,7 +2812,7 @@ EOF;
 
   $result = sql_queryn($link, "SELECT gi_item,gi_pickups FROM {$dbpre}gitems WHERE gi_match=$matchnum");
   if (!$result) {
-    echo "{$LANG_ERRORLOADINGITEMPICKUPS}<br>\n";
+    echo "{$LANG_ERRORLOADINGITEMPICKUPS}<br />\n";
     exit;
   }
   while ($row = sql_fetch_row($result)) {
@@ -2855,13 +2855,16 @@ EOF;
 EOF;
   }
   else {
-    while ($col < 3) {
-      echo <<<EOF
+    if ($col < 3) {
+      while ($col < 3) {
+        echo <<<EOF
   <td class="dark" align="center">&nbsp;</td>
   <td class="grey" align="center">&nbsp;</td>
 
 EOF;
-      $col++;
+        $col++;
+      }
+      echo "</tr>\n";
     }
   }
   echo "</table>\n";
@@ -2872,7 +2875,7 @@ EOF;
 //=============================================================================
 if ($gm_logger == 1) {
   echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="350">
   <tr>
     <td class="heading" colspan="3" align="center">{$LANG_PLAYERNETSPEEDANDPINGTIME}</td>
@@ -2910,7 +2913,7 @@ EOF;
 //========== Connection Log ===================================================
 //=============================================================================
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0">
   <tr>
     <td class="heading" colspan="3" align="center">{$LANG_CONNECTIONLOG}</td>
@@ -2925,7 +2928,7 @@ EOF;
 
 $result = sql_querynb($link, "SELECT ge_plr,ge_event,ge_time,ge_quant,ge_reason FROM {$dbpre}gevents WHERE ge_match=$matchnum AND ((ge_event BETWEEN 2 AND 4) OR ge_event=10) ORDER BY ge_num");
 if (!$result) {
-  echo "{$LANG_ERRORLOADINGCONNECTIONEVENTS}<br>\n";
+  echo "{$LANG_ERRORLOADINGCONNECTIONEVENTS}<br />\n";
   exit;
 }
 while ($row = sql_fetch_assoc($result)) {
@@ -3084,7 +3087,7 @@ echo "</table>\n";
 //=============================================================================
 $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}gchat WHERE gc_match=$matchnum ORDER BY gc_time");
 if (!$result) {
-  echo "{$LANG_ERRORACCESSINGCHATLOG}<br>\n";
+  echo "{$LANG_ERRORACCESSINGCHATLOG}<br />\n";
   exit;
 }
 list($numchat) = sql_fetch_row($result);
@@ -3095,7 +3098,7 @@ else
   $cmsg = $LANG_CHATMESSAGES;
 
 echo <<<EOF
-<br>
+<br />
 <table cellpadding="1" cellspacing="2" border="0" width="400">
   <tr>
     <td class="chatlink" colspan="3" align="center"><a class="chatlink" href="chatlog.php?match=$matchnum">{$LANG_CHATEVENTLOG}</a> {$LANG_CONTAINS} $numchat {$cmsg}</td>
