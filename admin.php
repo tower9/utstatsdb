@@ -387,7 +387,7 @@ function menu_top() {
   echo <<<EOF
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>UTStatsDB Admin</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -567,7 +567,7 @@ function login() {
   echo <<<EOF
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>UTStatsDB Admin Login</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -619,7 +619,7 @@ function invalid_login() {
   echo <<<EOF
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>Invalid Login</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -641,7 +641,7 @@ function auth_required() {
   echo <<<EOF
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>Authorization Required</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />

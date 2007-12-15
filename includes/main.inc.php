@@ -141,8 +141,8 @@ if (!isset($layout) || !$layout) {
   exit;
 }
 $stylefile = "style{$layout}.css";
-$logofile = "statsdblogo{$layout}.gif";
-$utlogofile = "ut2k3logo{$layout}.gif";
+$logofile = "utstatsdblogo.png";
+$utlogofile = "utlogo.png";
 
 // Team colors
 $teamcolor = array("Red","Blue","Green","Gold");
@@ -154,10 +154,10 @@ $teamscore = array("redteamscore","blueteamscore","greenteamscore","goldteamscor
 echo <<<EOF
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>$title</title>
-  <meta http-equiv="Content-Type" content="text/html; CHARSET=iso-8859-1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <link rel="icon" href="resource/uicon.png" type="image/png" />
   <link rel="stylesheet" href="resource/{$stylefile}" type="text/css" />
   <script language="JavaScript" type="text/JavaScript">

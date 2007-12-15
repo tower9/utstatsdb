@@ -23,6 +23,10 @@ echo <<<EOF
                 <td class="statusnbw" align="left">&nbsp;{$sq_server['gametype']}</td>
               </tr>
               <tr>
+                <td class="statusnbw" align="right">Standard Game:</td>
+                <td class="statusnbw" align="left">&nbsp;{$sq_server['standard']}</td>
+              </tr>
+              <tr>
                 <td class="statusnbw" align="right">Password:</td>
                 <td class="statusnbw" align="left">&nbsp;$password</td>
               </tr>
@@ -57,10 +61,6 @@ echo <<<EOF
               <tr>
                 <td class="statusnbw" align="right">Vs. Bots:</td>
                 <td class="statusnbw" align="left">&nbsp;{$sq_server['vsbots']}</td>
-              </tr>
-              <tr>
-                <td class="statusnbw" align="right">InstaGib:</td>
-                <td class="statusnbw" align="left">&nbsp;{$sq_server['instagib']}</td>
               </tr>
               <tr>
                 <td class="statusnbw" align="right">Forced Respawn:</td>

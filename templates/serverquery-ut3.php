@@ -39,8 +39,8 @@ echo <<<EOF
           <td class="statusnbw" align="right">Bots:</td>
           <td class="statusnbw" align="left">&nbsp;{$sq_server['numbots']} ({$sq_server['botskill']})</td>
           <td>&nbsp;</td>
-          <td class="statusnbw" align="right">InstaGib:</td>
-          <td class="statusnbw" align="left">&nbsp;{$sq_server['instagib']}</td>
+          <td class="statusnbw" align="right">Standard Game:</td>
+          <td class="statusnbw" align="left">&nbsp;{$sq_server['standard']}</td>
         </tr>
         <tr>
           <td class="statusnbw" align="right">Vs. Bots:</td>

@@ -579,8 +579,8 @@ function GetStatus($ip, $port)
               default: $sq_server["botskill"] = $val;
             }
             break;
-          case "s6": $sq_server["instagib"] = ($val == 0 ? "Yes" : "No"); break;
-          case "s7": $sq_server["password"] = ($val == 0 ? "Required" : "None"); break;
+          case "s6": $sq_server["standard"] = ($val ? "Yes" : "No"); break;
+          case "s7": $sq_server["password"] = ($val == 0 ? "None" : "Required"); break;
           case "s8":
             switch ($val) {
               case 0: $sq_server["vsbots"] = "Disabled"; break;

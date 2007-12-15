@@ -63,7 +63,7 @@ echo <<<EOF
   </tr>
   <tr>
     <td class="smheading" align="center" width="25">{$LANG_ID}</td>
-    <td class="smheading" align="center" width="150">{$LANG_SERVERNAME}</td>
+    <td class="smheading" align="center" width="175">{$LANG_SERVERNAME}</td>
     <td class="smheading" align="center" width="60">{$LANG_MATCHES}</td>
     <td class="smheading" align="center" width="45">{$LANG_FRAGS}</td>
     <td class="smheading" align="center" width="45">{$LANG_SCORE}</td>
@@ -92,12 +92,12 @@ while($row = sql_fetch_assoc($result)) {
   echo <<<EOF
   <tr>
     <td class="dark" align="center"><a class="dark" href="serverstats.php?server=$sv_num">$sv_num</a></td>
-    <td class="dark" align="center"><a class="dark" href="serverstats.php?server=$sv_num">$servername</a></td>
+    <td class="dark" align="center" style="white-space: nowrap"><a class="dark" href="serverstats.php?server=$sv_num">$servername</a></td>
     <td class="grey" align="center">$sv_matches</td>
     <td class="grey" align="center">$sv_frags</td>
     <td class="grey" align="center">$sv_score</td>
     <td class="grey" align="center">$tottime</td>
-    <td class="grey" align="center">$matchdate</td>
+    <td class="grey" align="center" style="white-space: nowrap">$matchdate</td>
   </tr>
 
 EOF;
