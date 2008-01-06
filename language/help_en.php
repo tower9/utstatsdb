@@ -135,7 +135,7 @@ Kill, 3 kills within 3 seconds apart from another a Multi Kill and so on:<br />
 <li>Ultra Kill = 5 kills</li>
 <li>Monster Kill = 6 kills</li>
 <li>Ludicrous Kill = 7 kills</li>
-<li>Holy Shit Kill = 8 kills</li>
+<li>Holy Shit Kill = 8+ kills</li>
 </ul></blockquote>
 
 <p><a name="fPing"></a><b>Ping</b></p>
@@ -153,7 +153,7 @@ opponents, you are on a rampage, etc.:
   <li>Dominating! 15 kills</li>
   <li>Unstoppable! 20 kills</li>
   <li>God Like! 25 kills</li>
-  <li>Wicked Sick! 30 kills</li>
+  <li>Wicked Sick! 30+ kills</li>
 </ul></blockquote>
 
 <p><a name="fSuicides"></a><b>Suicides (S)</b></p>
