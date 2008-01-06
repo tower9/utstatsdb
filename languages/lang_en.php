@@ -204,7 +204,7 @@ $LANG_DBERRORGAMETYPES = "Database error accessing game types.";
 $LANG_RANK = "Rank";
 
 // rankings.php
-$LANG_TOPRANKINGS = "Top 100 Rankings";
+$LANG_TOPRANKINGS = "Top Rankings";
 $LANG_RANKINGS = "Rankings";
 $LANG_POINTS = "Points";
 $LANG_PLAYERRANKINGS = "Player Rankings";

@@ -8,6 +8,9 @@ Unreleased
   Updated to XHTML 1.0 Transitional compliant.
   Query configuration now saved when adding or moving query configs.
   Fixed notice on top ranking by gametype.
+  Truncated very long mutator lists to prevent parse errors.
+  Added page selection to view full ranking list.
+  Added player ID search to top ranking list.
 
 Version 3.02
   Fixed admin connections to MySQL database socket.

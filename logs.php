@@ -690,7 +690,7 @@ while (isset($conflogs["logpath"][$lognum])) {
         echo "bad parse in database.{$break}\n";
         break;
       case 11:
-        echo "warmup match.{$break}\n";
+        echo "warm-up match.{$break}\n";
         if (!$save)
           dellog($file);
         break;
