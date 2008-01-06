@@ -11,6 +11,7 @@ Unreleased
   Truncated very long mutator lists to prevent parse errors.
   Added page selection to view full ranking list.
   Added player ID search to top ranking list.
+  Updated help page, moved to language directory.
 
 Version 3.02
   Fixed admin connections to MySQL database socket.
