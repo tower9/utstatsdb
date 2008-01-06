@@ -105,3 +105,7 @@ a.status:hover {font-family: Verdana,Helvetica; font-size: 9pt; color: #bd0000; 
 .tgbar      {font-size: 0pt; width: 12px; background-color: #00ce00; border: 1px solid #000000; border-bottom-width: 0; float: left; position: relative}
 .tglabel    {font-size: 8pt; font-family: arial,sans-serif; color: #000000; font-weight: normal; font-style: normal; text-decoration: none; width: 12px; text-align: center; float: left; overflow: visible; position: relative; border: 1px solid transparent}
 .tgblank    {font-size: 0pt; height: 0px; clear: both}
+
+.help    {font-family: Arial, Helvetica, Sans-serif; color: #ffffff; font-size: 12pt; text-align: left}
+.helphdr {font-family: Verdana, Helvetica; font-size: 16pt; font-weight: bold}
+a.help   {color: #fdd932; text-decoration: none}
