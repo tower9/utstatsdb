@@ -6,6 +6,8 @@ Unreleased
   Added query support for UT3 servers.
   Cleaned up HTML and CSS code.
   Updated to XHTML 1.0 Transitional compliant.
+  Query configuration now saved when adding or moving query configs.
+  Fixed notice on top ranking by gametype.
 
 Version 3.02
   Fixed admin connections to MySQL database socket.

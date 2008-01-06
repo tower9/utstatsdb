@@ -593,7 +593,40 @@ function GetStatus($ip, $port)
             break;
           case "s10": $sq_server["forcedrespawn"] = ($val == 0 ? "No" : "Yes"); break;
           case "p1073741827": $sq_server["description"] = $val; break;
-          case "p268435717": $sq_server["ictf"] = $val; break; // 8=iCTF else 0
+          case "p268435717":
+          {
+            $mut = "";
+            $ival = intval($val);
+            if ($ival & 0x0001)
+              $mut .= "Big Head, "; // UTGame.UTMutator_BigHead = 1
+            if ($ival & 0x0002)
+              $mut .= "Friendly Fire, "; // UTGame.UTMutator_FriendlyFire = 2
+            if ($ival & 0x0004)
+              $mut .= "Handicap, "; // UTGame.UTMutator_Handicap = 4
+            if ($ival & 0x0008)
+              $mut .= "Instagib, "; // UTGame.UTMutator_Instagib = 8
+            if ($ival & 0x0010)
+              $mut .= "Low Gravity, "; // UTGame.UTMutator_LowGrav = 16
+            if ($ival & 0x0040)
+              $mut .= "No Powerups, "; // UTGame.UTMutator_NoPowerups = 64
+            if ($ival & 0x0080)
+              $mut .= "No Translocator, "; // UTGame.UTMutator_NoTranslocator = 128
+            if ($ival & 0x0100)
+              $mut .= "Slomo, "; // UTGame.UTMutator_Slomo = 256
+            if ($ival & 0x0400)
+              $mut .= "Speed Freak, "; // UTGame.UTMutator_SpeedFreak = 1024
+            if ($ival & 0x0800)
+              $mut .= "Super Berserk, "; // UTGame.UTMutator_SuperBerserk = 2048
+            if ($ival & 0x2000)
+              $mut .= "Weapon Replacement, "; // UTGame.UTMutator_WeaponReplacement = 8192
+            if ($ival & 0x4000)
+              $mut .= "Weapons Respawn, "; // UTGame.UTMutator_WeaponsRespawn = 16384
+            if ($mut == "")
+              $sq_server["mutator"] = "None";
+            else
+              $sq_server["mutator"] = substr($mut, 0, -2);
+            break;
+          }
           case "NumPrivateConnections": $sq_server["maxspectators"] = $val; break;
           case "NumOpenPrivateConnections": $sq_server["spectateslots"] = $val; break;
         }
@@ -671,7 +704,12 @@ function DisplayStatus($query_link)
   }
 
   $display_map = false;
-  $mapimage = strtolower($sq_server["mapname"]).".jpg";
+  if ($query_type == 3) {
+    $sname = str_replace(" ", "", $sq_server["mapname"]);
+    $mapimage = strtolower($sname).".jpg";
+  }
+  else
+    $mapimage = strtolower($sq_server["mapname"]).".jpg";
   if (file_exists("mapimages/$mapimage"))
     $display_map = true;
   else {

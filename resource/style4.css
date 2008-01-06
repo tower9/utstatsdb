@@ -86,13 +86,14 @@ a.lglheading:hover {font-family: Verdana, Arial, Helvetica; font-size: 10pt; col
 .status {font-family: Verdana,Helvetica; font-size: 9pt; border: 1px #666666 solid}
 a.status {font-family: Verdana,Helvetica; font-size: 9pt; color: #edca2e; text-decoration: none; border: none}
 a.status:hover {font-family: Verdana,Helvetica; font-size: 9pt; color: #bd0000; text-decoration: none; border: none}
-.statusnb {font-family: Verdana,Helvetica; font-size: 9pt}
-.statusnbw {font-family: Verdana,Helvetica; font-size: 9pt; white-space: nowrap}
+.statusnb {font-family: Verdana,Helvetica; font-size: 9pt; padding-left: 4px}
+.statusnbw {font-family: Verdana,Helvetica; font-size: 9pt; white-space: nowrap; padding-left: 4px}
 .statustitle {font-family: Verdana,Helvetica; font-size: 9pt; color: #ffffcc; background: #303441}
 .spectitle {font-family: Verdana,Helvetica; font-size: 9pt; color: #ffffcc; background: #303441}
 .blueteambar {font-family: Verdana,Helvetica; font-size: 9pt; color: #efefbc; background: #000042}
 .redteambar {font-family: Verdana,Helvetica; font-size: 9pt; color: #efefbc; background: #420000}
 .offline {color: #a50000}
+.mapimage {padding-left: 4px; padding-right: 2px}
 
 #matchup { width: 720px; overflow: auto }
 

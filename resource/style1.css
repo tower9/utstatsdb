@@ -86,13 +86,14 @@ a.lglheading:hover {font-family: Arial, Helvetica, sans-serif; font-size: 14pt; 
 .status {font-family: Verdana,Helvetica; font-size: 9pt; color: #000000; background: #cccccc; border: 1px #000000 solid}
 a.status {font-family: Verdana,Helvetica; font-size: 9pt; color: #7B6613; text-decoration: none; border: none}
 a.status:hover {font-family: Verdana,Helvetica; font-size: 9pt; color: #bd0000; text-decoration: none; border: none}
-.statusnb {font-family: Verdana,Helvetica; font-size: 9pt; color: #000000; background: #cccccc}
-.statusnbw {font-family: Verdana,Helvetica; font-size: 9pt; color: #000000; background: #cccccc; white-space: nowrap}
+.statusnb {font-family: Verdana,Helvetica; font-size: 9pt; color: #000000; background: #cccccc; padding-left: 4px}
+.statusnbw {font-family: Verdana,Helvetica; font-size: 9pt; color: #000000; background: #cccccc; white-space: nowrap; padding-left: 4px}
 .statustitle {font-family: Verdana,Helvetica; font-size: 9pt; color: #ffffff; background: #000066}
 .spectitle {font-family: Verdana,Helvetica; font-size: 9pt; color: #ffffff; background: #000066}
 .blueteambar {font-family: Verdana,Helvetica; font-size: 9pt; color: #ffffff; background: #000066}
 .redteambar {font-family: Verdana,Helvetica; font-size: 9pt; color: #ffffff; background: #660000}
 .offline {color: #a50000}
+.mapimage {padding-left: 4px; padding-right: 2px}
 
 #matchup { width: 720px; overflow: auto }
 

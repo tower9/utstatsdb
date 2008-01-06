@@ -301,6 +301,7 @@ switch($Mode) {
     break;
   case "Add": // Add Configuration
     require_once("includes/adminconfig.php");
+    saveconfig();
     addconfig();
     break;
   case "Merge": // Verify Merge
@@ -313,6 +314,7 @@ switch($Mode) {
     break;
   case "MoveQuery": // Modify Query order
     require_once("includes/adminconfig.php");
+    saveconfig();
     movequery();
     break;
   case "Track": // Track Player Display

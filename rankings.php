@@ -38,6 +38,8 @@ if ($rtype != "") {
   $label = $row[0];
   sql_free_result($result);
 
+  $col = 0;
+
   echo <<<EOF
 <center>
 <table cellpadding="1" cellspacing="1" border="0" class="box">

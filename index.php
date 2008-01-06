@@ -155,13 +155,16 @@ EOF;
 //=============================================================================
 //========== Hourly Activity Graph ============================================
 //=============================================================================
-$hactive = array_fill(0, 24, 0);
-$result = sql_query("SELECT HOUR(gm_start) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches, {$dbpre}playersgt WHERE gm_num=gt_num GROUP BY hour");
-while ($row = sql_fetch_row($result))
-  $hactive[$row[0]] = $row[1];
-sql_free_result($result);
+  $hactive = array_fill(0, 24, 0);
+  $result = sql_query("SELECT HOUR(gm_start) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches, {$dbpre}playersgt WHERE gm_num=gt_num GROUP BY hour");
+  while ($row = sql_fetch_row($result))
+    $hactive[$row[0]] = $row[1];
+  sql_free_result($result);
 
-echo <<<EOF
+  $hmax = max($hactive);
+
+  if ($hmax > 0) {
+    echo <<<EOF
 <br />
 <table cellpadding="1" cellspacing="0" border="0" width="500" class="box" align="center">
   <tr>
@@ -174,22 +177,21 @@ echo <<<EOF
 
 EOF;
 
-$hmax = max($hactive);
-for ($i = 0; $i < 24; $i++) {
-  $height = round(($hactive[$i] / $hmax) * 0.9 * 142);
-  $bottom = $height + 2;
-  echo "          <div class=\"tgbarspace\">&nbsp;</div><div class=\"tgbar\" style=\"height: {$height}px; bottom: {$bottom}px \">&nbsp;</div>\n";
-}
+    for ($i = 0; $i < 24; $i++) {
+      $height = round(($hactive[$i] / $hmax) * 0.9 * 142);
+      $bottom = $height + 2;
+      echo "          <div class=\"tgbarspace\">&nbsp;</div><div class=\"tgbar\" style=\"height: {$height}px; bottom: {$bottom}px \">&nbsp;</div>\n";
+    }
 
-echo "          <div class=\"tgblank\">&nbsp;</div>\n";
+    echo "          <div class=\"tgblank\">&nbsp;</div>\n";
 
-for ($i = 0; $i < 24; $i++)
-{
-  $zi = sprintf("%02d", $i);
-  echo "          <div class=\"tgbarspace\">&nbsp;</div><div class=\"tglabel\" style=\"bottom: 127px\">$zi</div>\n";
-}
+    for ($i = 0; $i < 24; $i++)
+    {
+      $hr = sprintf("%02d", $i);
+      echo "          <div class=\"tgbarspace\">&nbsp;</div><div class=\"tglabel\" style=\"bottom: 127px\">$hr</div>\n";
+    }
 
-echo <<<EOF
+    echo <<<EOF
           <div class="tgblank">&nbsp;</div>
         </div>
     </td>
@@ -197,6 +199,7 @@ echo <<<EOF
 </table>
 
 EOF;
+  }
 }
 
 echo <<<EOF
