@@ -160,7 +160,6 @@ EOF;
   while ($row = sql_fetch_row($result))
     $hactive[$row[0]] = $row[1];
   sql_free_result($result);
-
   $hmax = max($hactive);
 
   if ($hmax > 0) {
