@@ -1,6 +1,6 @@
 <div class="help">
 
-<span class="helphdr">Frequently Asked Questions</span>
+<p><span class="helphdr">Frequently Asked Questions</span></p>
 
 <ol>
   <li><a class="help" href="#info">Information about how the stats work</a></li>
