@@ -163,7 +163,9 @@ EOF;
   $r = $start + 1;
   while (list($pnum,$plr_name,$bot,$rankp) = sql_fetch_row($result)) {
     $name = stripspecialchars($plr_name)." [$pnum]";
-    if ($bot)
+    if ($searchid && $pnum == $searchid)
+      $nameclass = "idmatch";
+    else if ($bot)
       $nameclass = "darkbot";
     else
       $nameclass = "darkhuman";

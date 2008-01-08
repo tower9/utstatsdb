@@ -109,3 +109,4 @@ a.status:hover {font-family: Verdana,Helvetica; font-size: 9pt; color: #bd0000; 
 .help    {font-family: Arial, Helvetica, Sans-serif; color: #ffffff; font-size: 10pt; text-align: left}
 .helphdr {font-family: Verdana, Helvetica; font-size: 14pt; font-weight: bold}
 a.help   {color: #fdd932; text-decoration: none}
+a.idmatch {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #ff0000; background: #000000; font-weight: normal; text-decoration: none}
