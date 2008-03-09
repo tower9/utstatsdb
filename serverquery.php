@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -526,6 +526,7 @@ function GetStatus($ip, $port)
     $sdata = explode("\x00", $data);
 
     $sd = 0;
+    $xmut = "";
     while (isset($sdata[$sd])) {
       $ok = 1;
       $param = $sdata[$sd++];
@@ -627,11 +628,24 @@ function GetStatus($ip, $port)
               $sq_server["mutator"] = substr($mut, 0, -2);
             break;
           }
+          case "p1073741828":
+          {
+            $xmut = ", ";
+          	for ($i = 0; $i < strlen($val); $i++)
+          	{
+          	  if (ord($val[$i]) == 28)
+          	    $xmut .= ", ";
+          	  else
+          	    $xmut .= $val[$i];
+          	}
+          	break;
+          }
           case "NumPrivateConnections": $sq_server["maxspectators"] = $val; break;
           case "NumOpenPrivateConnections": $sq_server["spectateslots"] = $val; break;
         }
       }
     }
+    $sq_server["mutator"] .= $xmut;
     $i = strpos($sq_server["mapname"], '-');
     if (strlen($sq_server["mapname"]) > $i + 2)
       $sq_server["mapname"] = substr($sq_server["mapname"], 0, $i + 2).strtolower(substr($sq_server["mapname"], $i + 2));

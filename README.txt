@@ -1,5 +1,5 @@
 UTStatsDB
-  Copyright (C) 2002-2006  Patrick Contreras / Paul Gallier
+  Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
 UTStatsDB is designed to work with PHP 4.2 and MySQL 3.2 or newer. The 
 latest version can always be found at http://ut2003stats.sourceforge.net.  You 

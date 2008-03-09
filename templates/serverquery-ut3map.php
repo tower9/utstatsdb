@@ -71,7 +71,7 @@ echo <<<EOF
               </tr>
               <tr>
                 <td class="statusnbw" align="right">Mutators:</td>
-                <td class="statusnb" align="left">{$sq_server['mutator']}</td>
+                <td class="statusnb" colspan="2" align="left">{$sq_server['mutator']}</td>
               </tr>
             </table>
           </td>
