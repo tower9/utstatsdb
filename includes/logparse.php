@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -91,8 +91,12 @@ function parselog($file)
     $i = 0;
     while (parseline($line, $param))
       $data[$i++] = trim($param);
-    if ($line_num == 1 && $i == 1 && substr($data[0], 0, 7) == "OLStats")
-      $match->logger = 1;
+    if ($line_num == 1 && $i == 1) {
+      if (substr($data[0], 0, 7) == "OLStats")
+        $match->logger = 1;
+      if (substr($data[0], 0, 8) == "UT3Stats")
+        $match->logger = 2;
+    }
     if ($i > 1) {
       $tt = strtoupper($data[1]);
       switch ($tt) {

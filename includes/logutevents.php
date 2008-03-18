@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ if (preg_match("/logutevents.php/i", $_SERVER["PHP_SELF"])) {
   die();
 }
 
+// Server Info
 function tagut_info($i, $data)
 {
   global $match;
@@ -75,6 +76,7 @@ function tagut_info($i, $data)
   }
 }
 
+// Map Info
 function tagut_map($i, $data)
 {
   global $match;
@@ -99,6 +101,7 @@ function tagut_map($i, $data)
   }
 }
 
+// Match Info (New Game)
 function tagut_game($i, $data)
 {
   global $link, $dbpre, $config, $match, $break;
@@ -313,6 +316,7 @@ function tagut_game($i, $data)
   return 0;
 }
 
+// Player Event
 function tagut_player($i, $data)
 {
   global $match, $player, $relog;
@@ -490,6 +494,7 @@ function tagut_player($i, $data)
   }
 }
 
+// Start Game
 function tagut_game_start($i, $data)
 {
   global $match, $player;
@@ -509,6 +514,7 @@ function tagut_game_start($i, $data)
   gameevent($match->starttime, 0);
 }
 
+// Item Pickup
 function tagut_item_get($i, $data)
 {
   global $link, $dbpre, $match, $pickups, $break;
@@ -568,6 +574,7 @@ function tagut_item_get($i, $data)
     $match->maxpickups = $num;
 }
 
+// Kill Event
 function tagut_kill($killtype, $i, $data)
 {
   global $match, $player, $gkills, $gscores, $spree, $multi, $killmatch;
@@ -799,6 +806,7 @@ function tagut_kill($killtype, $i, $data)
   }
 }
 
+// Suicide Event
 function tagut_suicide($i, $data)
 {
   global $match, $player, $gkills, $gscores;
@@ -865,12 +873,14 @@ function tagut_suicide($i, $data)
   }
 }
 
+// Headshot
 function tagut_headshot($i, $data)
 {
   if ($i < 4)
     return;
 }
 
+// Flag Taken
 function tagut_flag_taken($i, $data)
 {
   global $match, $player;
@@ -891,6 +901,7 @@ function tagut_flag_taken($i, $data)
   flag_check($plr, $time, 1);
 }
 
+// Flag Dropped
 function tagut_flag_dropped($i, $data)
 {
   global $match, $player;
@@ -913,6 +924,7 @@ function tagut_flag_dropped($i, $data)
   $match->flagdropplr = $plr;
 }
 
+// Flag Pickup
 function tagut_flag_pickedup($i, $data)
 {
   global $match, $player;
@@ -934,6 +946,7 @@ function tagut_flag_pickedup($i, $data)
   }
 }
 
+// Flag Returned
 function tagut_flag_returned($i, $data)
 {
   global $match, $player;
@@ -954,6 +967,7 @@ function tagut_flag_returned($i, $data)
   flag_check($plr, $time, 0);
 }
 
+// Flag Timeout
 function tagut_flag_returned_timeout($i, $data)
 {
   global $match;
@@ -965,6 +979,7 @@ function tagut_flag_returned_timeout($i, $data)
   $tm = intval($data[2]);
 }
 
+// Flag Captured
 function tagut_flag_captured($i, $data)
 {
   global $match, $player, $gscores, $assist;
@@ -1010,6 +1025,7 @@ function tagut_flag_captured($i, $data)
   flag_check($plr, $time, 0);
 }
 
+// Translocator Throw
 function tagut_throw_translocator($i, $data)
 {
   if ($i < 3)
@@ -1019,6 +1035,7 @@ function tagut_throw_translocator($i, $data)
   $plr = check_player($data[2]);
 }
 
+// Translocate
 function tagut_translocate($i, $data)
 {
   if ($i < 3)
@@ -1028,6 +1045,7 @@ function tagut_translocate($i, $data)
   $plr = check_player($data[2]);
 }
 
+// Failed Translocate
 function tagut_translocate_fail($i, $data)
 {
   if ($i < 3)
@@ -1039,6 +1057,7 @@ function tagut_translocate_fail($i, $data)
 
 // Add TransGib
 
+// Powerup Activate
 function tagut_item_activate($i, $data)
 {
   if ($i < 4)
@@ -1051,6 +1070,7 @@ function tagut_item_activate($i, $data)
   $plr = check_player($data[3]);
 }
 
+// Powerup Deactivate
 function tagut_item_deactivate($i, $data)
 {
   if ($i < 4)

@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ if (preg_match("/logplrevents.php/i", $_SERVER["PHP_SELF"])) {
   die();
 }
 
+// Player Connect
 function tag_c ($i, $data)
 {
   global $match, $player, $relog;
@@ -40,6 +41,31 @@ function tag_c ($i, $data)
 
   if ($i == 4)
     $player[$plr]->name = substr($data[3], 0, 30);
+  else if ($i == 5 || $i == 7) {
+    $player[$plr]->team = intval($data[3]);
+    set_name($plr, substr($data[4], 0, 30));
+    // Check for existing player name
+    $relogged = 0;
+    if ($plr == intval($data[3]) && !$player[$plr]->is_bot()) {
+      for ($i2 = 0; $i2 <= $match->maxplayer && $relog[$plr] < 0; $i2++) {
+        if (isset($player[$i2]) && !strcmp($player[$plr]->name, $player[$i2]->name) && !$player[$i2]->connected && !$player[$i2]->user && !$player[$i2]->id) {
+          $relog[$plr] = $i2;
+          $player[$plr]->name = "";
+          $player[$i2]->connected = 1;
+          $player[$i2]->starttime = $time;
+          connections($i2, $time, 0);
+        }
+      }
+    }
+    if ($i == 5)
+      $player[$plr]->bot = true;
+    if ($i == 7) {
+      $player[$plr]->key = intval($data[5]);
+      $player[$plr]->ip = substr($data[6], 0, 21);
+    }
+    if ($player[$plr]->team == 255)
+      $player[$plr]->team = 0;
+  }
   else if ($i > 5) {
     $player[$plr]->key = substr($data[3], 0, 32);
     $player[$plr]->user = substr($data[4], 0, 35);
@@ -87,6 +113,7 @@ function tag_c ($i, $data)
     $match->maxplayer = $plr;
 }
 
+// Player Disconnect
 function tag_d ($i, $data)
 {
   global $match, $player, $relog;
@@ -122,6 +149,7 @@ function tag_d ($i, $data)
   connections($plr, $time, 1);
 }
 
+// Player Info
 function tag_ps ($i, $data)
 {
   global $player;
@@ -139,6 +167,7 @@ function tag_ps ($i, $data)
   }
 }
 
+// Player Ping
 function tag_pp ($i, $data)
 {
   global $player;
@@ -157,6 +186,7 @@ function tag_pp ($i, $data)
   $player[$plr]->pingcount++;
 }
 
+// Player Accuracy
 function tag_pa ($i, $data)
 {
   global $player;
@@ -179,6 +209,7 @@ function tag_pa ($i, $data)
   pwa_add($plr, $weaponnum, $fired, $hit, $damage);
 }
 
+// Bot Info
 function tag_bi ($i, $data)
 {
   global $player;
@@ -207,6 +238,7 @@ function tag_bi ($i, $data)
   bot_add($plr,$bot_skill,$bot_alertness,$bot_accuracy,$bot_aggressive,$bot_strafing,$bot_style,$bot_tactics,$bot_transloc,$bot_reaction,$bot_jumpiness,$bot_favorite);
 }
 
+// Chat
 function tag_v ($i, $data)
 {
   global $player, $match, $chatlog;
@@ -229,6 +261,7 @@ function tag_v ($i, $data)
   $chatlog[$match->numchat++][3] = $data[3];
 }
 
+// Team Chat
 function tag_tv ($i, $data)
 {
   global $player, $match, $chatlog;
@@ -247,6 +280,7 @@ function tag_tv ($i, $data)
   $chatlog[$match->numchat++][3] = $data[3];
 }
 
+// Map Vote
 function tag_mv ($i, $data)
 {
   global $player;
@@ -263,6 +297,7 @@ function tag_mv ($i, $data)
     map_vote($time, $plr, $map, $votes, 2);
 }
 
+// Kick Vote
 function tag_kv ($i, $data)
 {
   global $player;
@@ -279,6 +314,7 @@ function tag_kv ($i, $data)
     map_vote($time, $plr, $kick, $votes, 4);
 }
 
+// Game Vote
 function tag_gv ($i, $data)
 {
   global $player;
@@ -295,6 +331,7 @@ function tag_gv ($i, $data)
     map_vote($time, $plr, $game, $votes, 5);
 }
 
+// Item Pickup
 function tag_i ($i, $data)
 {
   global $link, $dbpre, $match, $pickups, $break;

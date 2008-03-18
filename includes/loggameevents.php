@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ if (preg_match("/loggameevents.php/i", $_SERVER["PHP_SELF"])) {
   die();
 }
 
+// Game Event
 function tag_g ($i, $data)
 {
   global $link, $dbpre, $match, $player, $assist, $relog;
@@ -319,6 +320,7 @@ function tag_g ($i, $data)
   }
 }
 
+// Special Event
 function tag_p ($i, $data)
 {
   global $link, $dbpre, $match, $player;

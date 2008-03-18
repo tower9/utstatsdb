@@ -191,4 +191,46 @@ INSERT INTO %dbpre%items (it_type,it_desc) VALUES('RelicDeathInventory','Death R
 #
 INSERT INTO %dbpre%items (it_type,it_desc) VALUES('XMPEnergyPickup','XMP Engergy');
 #
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_ImpactHammer','Impack Hammer');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_BioRifle','Bio Rifle');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Enforcer','Enforcer');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_LinkGun','Link Gun');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_ShockRifle','Shock Rifle');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_InstagibRifle','InstaGib Rifle');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Stinger','Stinger Minigun');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_FlakCannon','Flak Cannon');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_RocketLauncher','Rocket Launcher');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_SniperRifle','Sniper Rifle');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Redeemer','Redeemer');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Translocator','Translocator');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Avril','AVRiL');
+#--------------------------------------------------------------------------------------------------
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTAmmo_Enforcer','Enforcer Ammo');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTAmmo_BioRifle','Bio Rifle Ammo');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTAmmo_BioRifle_Content','Bio Rifle Ammo');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTAmmo_LinkGun','Link Gun Ammo');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTAmmo_ShockRifle','Shock Rifle Ammo');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTAmmo_Stinger','Stinger Minigun Ammo');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTAmmo_FlakCannon','Flak Cannon Ammo');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTAmmo_RocketLauncher','Rocket Launcher Ammo');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTAmmo_SniperRifle','Sniper Rifle Ammo');
+#--------------------------------------------------------------------------------------------------
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('HealthVial','Health Vial');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('MediumHealth','Medium Health Pack');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('SuperHealth','Super Health Pack');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTArmorPickup_Thighpads','Armor Thigh Pads');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTArmorPickup_Vest','Armor Vest');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTArmorPickup_ShieldBelt','Shield Belt');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTDroppedShieldBelt','Used Shield Belt');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTJumpBoots','Jump Boots');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTUDamage','Damage Amplifier');
+#--------------------------------------------------------------------------------------------------
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Physicsgun','Physics Gun');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeaponLocker_Content','Weapon Locker');
+#--------------------------------------------------------------------------------------------------
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_BioRifle_Content','Bio Rifle');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Redeemer_Content','Redeemer');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Translocator_Content','Translocator');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Avril_Content','AVRiL');
+#
 #INSERT INTO %dbpre%items (it_type,it_desc) VALUES('','');
