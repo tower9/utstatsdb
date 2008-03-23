@@ -46,9 +46,9 @@ function tag_c ($i, $data)
     set_name($plr, substr($data[4], 0, 30));
     // Check for existing player name
     $relogged = 0;
-    if ($plr == intval($data[3]) && !$player[$plr]->is_bot()) {
+    if (!$player[$plr]->is_bot()) {
       for ($i2 = 0; $i2 <= $match->maxplayer && $relog[$plr] < 0; $i2++) {
-        if (isset($player[$i2]) && !strcmp($player[$plr]->name, $player[$i2]->name) && !$player[$i2]->connected && !$player[$i2]->user && !$player[$i2]->id) {
+        if (isset($player[$i2]) && $plr != $i2 && !strcmp($player[$plr]->name, $player[$i2]->name) && !$player[$i2]->connected && !$player[$i2]->user && !$player[$i2]->id) {
           $relog[$plr] = $i2;
           $player[$plr]->name = "";
           $player[$i2]->connected = 1;
@@ -65,6 +65,13 @@ function tag_c ($i, $data)
     }
     if ($player[$plr]->team == 255)
       $player[$plr]->team = 0;
+    else {
+      if ($player[$plr]->team >= 0 && $player[$plr]->team <= 3) {
+        teamchange($time, $plr, $player[$plr]->team);
+        if ($player[$plr]->team + 1 > $match->numteams)
+          $match->numteams = $player[$plr]->team + 1;
+      }
+    }
   }
   else if ($i > 5) {
     $player[$plr]->key = substr($data[3], 0, 32);

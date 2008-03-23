@@ -482,6 +482,23 @@ function tag_p ($i, $data)
       if ($tm >= 0 && $tm <= 3)
         $player[$plr]->teamkills[$tm]++;
       break;
+    case "flagscore": // UT3
+      $tm = $player[$plr]->team;
+      if ($tm >= 0 && $tm <= 3) {
+        $player[$plr]->capcarry[$tm]++;
+        teamscore($time, $tm, 1, 2);
+      }
+      break;
+    case "killedcarrier": // UT3
+      $tm = $player[$plr]->team;
+      if ($tm >= 0 && $tm <= 3)
+        $player[$plr]->typekill[$tm]++;
+      break;
+    case "flagreturned": // UT3
+      $tm = $player[$plr]->team;
+      if ($tm >= 0 && $tm <= 3)
+        $player[$plr]->return[$tm]++;
+      break;
   }
 }
 

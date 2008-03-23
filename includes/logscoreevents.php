@@ -115,6 +115,8 @@ function tag_s ($i, $data)
     case "flag_ret_enemy":
     case "flag_cap_final":
     case "bottom_feeder_frag":
+    case "killedcarrier": // UT3
+    case "flagscore": // UT3
     default:
       $player[$plr]->tscore[$tm] += $score;
       break;

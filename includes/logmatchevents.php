@@ -53,6 +53,19 @@ function tag_ng ($i, $data)
   if ($config["ignorelogtype"] && substr($match->gname, 0, 7) == "xGame.x")
     $match->gname = substr($match->gname, 7);
 
+  // UT3 - remove "Game_Content"
+  if (substr($match->gname, -12) == "Game_Content")
+    $match->gname = substr($match->gname, 0, -12);
+  switch ($match->gname) {
+    case "UTDeathmatch": $match->gname = "Deathmatch";       break;
+    case "UTCTF":        $match->gname = "Capture the Flag"; break;
+    case "UTOnslaught":  $match->gname = "Warfare";          break;
+    case "UTVehicleCTF": $match->gname = "Vehicle CTF";      break;
+    case "UTTeamGame":   $match->gname = "Team Deathmatch";  break;
+    case "UTDuelGame":   $match->gname = "Duel";             break;
+    case "UTBRGame":     $match->gname = "Bombing Run";      break;
+  }
+
   // Look up game type
   $result = sql_queryn($link, "SELECT tp_num,tp_type,tp_team FROM {$dbpre}type WHERE tp_desc='{$match->gname}' LIMIT 1");
   if (!$result) {

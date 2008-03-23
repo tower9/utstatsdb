@@ -474,6 +474,7 @@ function teamchange($time, $plr, $team)
   $tchange[$plr] = $time;
 }
 
+// Reason: 1 = Team Frag / 2 = Flag Capture / 3 = Ball Carried / 4 = Ball Tossed / 5 = DOM Score / 6 = Core Destroyed / 7 = Pair of Round Winner / 0 = Generic
 function teamscore($time, $tm, $score, $reason)
 {
   global $events, $match, $tkills;

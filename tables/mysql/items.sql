@@ -232,5 +232,7 @@ INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_BioRifle_Content','Bio
 INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Redeemer_Content','Redeemer');
 INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Translocator_Content','Translocator');
 INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Avril_Content','AVRiL');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTAmmo_AVRiL','AVRiL Ammo');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTDeployableShapedCharge','Shaped Charge');
 #
 #INSERT INTO %dbpre%items (it_type,it_desc) VALUES('','');
