@@ -1,8 +1,8 @@
 <?php
 
-// OLSendLog v1.31
+// OLSendLog v1.32
 //
-// OverloadUT's OLSendLog for OLStats 3.01 modified by Panther for UTStatsDB 3.00
+// OverloadUT's OLSendLog for OLStats 3.01 modified by Panther for UTStatsDB 3.03
 
 /*
   Possible return codes:
@@ -58,7 +58,7 @@ function loadconfig()
   }
 
   $conflogs = array(array());
-  $result = sql_querynb($link, "SELECT logpath,prefix FROM {$dbpre}configlogs ORDER BY num LIMIT 1");
+  $result = sql_querynb($link, "SELECT logpath,prefix FROM {$dbpre}configlogs ORDER BY num");
   if ($result && sql_num_rows($result)) {
     $num = 0;
     while ($row = sql_fetch_row($result)) {

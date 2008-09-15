@@ -26,7 +26,7 @@ $magic = get_magic_quotes_gpc();
 $magicrt = get_magic_quotes_runtime();
 $adminver = new AdminVer;
 $adminver->major = 3;
-$adminver->minor = 02;
+$adminver->minor = 03;
 $adminver->extra = "";
 $updatereq = 0;
 
@@ -489,6 +489,19 @@ function updatedb() {
     echo "Updating database to version 3.02....<br /><br />\n";
     include_once("includes/adminupdate.php");
     update302();
+  }
+
+  $ver = currentver();
+  if ($ver == -1) {
+    $versioncheck = "Version check error!<br />\n";
+    menu_bottom();
+    exit;
+  }
+  list($vermajor, $verminor, $verextra) = $ver;
+  if ($vermajor == 3 && $verminor == 2) {
+    echo "Updating database to version 3.03....<br /><br />\n";
+    include_once("includes/adminupdate.php");
+    update303();
   }
 
   menu_bottom();

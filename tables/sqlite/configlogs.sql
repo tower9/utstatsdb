@@ -3,6 +3,7 @@ CREATE TABLE %dbpre%configlogs (
   logpath varchar(200) NOT NULL default '',
   backuppath varchar(200) NOT NULL default '',
   prefix varchar(60) NOT NULL default '',
+  chatprefix varchar(60) NOT NULL default ''
   noport tinyint(1) NOT NULL default 0,
   ftpserver varchar(100) NOT NULL default '',
   ftppath varchar(200) NOT NULL default '',
@@ -13,7 +14,7 @@ CREATE TABLE %dbpre%configlogs (
   deftype tinyint(1) NOT NULL default 0,
   defteam tinyint(1) NOT NULL default 0,
   demoftppath varchar(200) NOT NULL default '',
-  multicheck tinyint(1) NOT NULL default 0
+  multicheck tinyint(1) NOT NULL default 0,
 );
 
 INSERT INTO %dbpre%configlogs (logpath,prefix) VALUES('./Logs/','Stats_');

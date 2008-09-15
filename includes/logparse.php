@@ -33,7 +33,7 @@ require("logkillevents.php");
 require("logscoreevents.php");
 require("logutevents.php");
 
-function parselog($file)
+function parselog($file,$chatfile)
 {
   global $link, $dbtype, $dbpre, $mysqlverh, $mysqlverl, $config, $server, $player, $match;
   global $events, $pickups, $gkills, $gscores, $tkills, $chatlog, $safemode;
@@ -64,13 +64,24 @@ function parselog($file)
   if (strtolower($dbtype) == "mysql" && ($mysqlverh > 3 || ($mysqlverh == 3 && $mysqlverl >= 23)))
     $uselimit = 1;
 
-  if (!($fp = fopen($file, "r"))) {
-    echo "Error opening log!{$break}\n";
-    return -1;
+  $numlogfiles = $chatfile != "" ? 2 : 1;
+  for ($logfiles = 0; $logfiles < $numlogfiles; $logfiles++) {
+
+  if ($logfiles == 0) {
+    if (!($fp = fopen($file, "r"))) {
+      echo "Error opening log!{$break}\n";
+      return -1;
+    }
+  }
+  else {
+    if (!($fp = fopen($chatfile, "r"))) {
+      echo "Error opening chat log!{$break}\n";
+      $fp = null;
+    }
   }
 
   $line_num = $stf = $utf16 = $utfcheck = 0;
-  while (!feof($fp) && $line = fgets($fp, 1536)) {
+  while ($fp != null && !feof($fp) && $line = fgets($fp, 1536)) {
     if (!$safemode)
       set_time_limit($config["php_timelimit"]); // Reset script timeout counter
 
@@ -293,6 +304,12 @@ function parselog($file)
           break;
         case "ARENA_WON":
           break;
+        case "SAY":
+          tagut_say($i, $data);
+          break;
+        case "TEAMSAY":
+          tagut_teamsay($i, $data);
+          break;
       }
     }
   }
@@ -379,6 +396,8 @@ function parselog($file)
     }
     if (!$okscore)
       $match->ended = 9;
+  }
+
   }
 
   // 1 = Ended Normally / 2 = Mapswitch, etc. / 3 = No 'NG' or 'SG' found / 4 = Existing Game / 9 = Scoreless

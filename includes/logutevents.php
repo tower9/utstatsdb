@@ -1343,4 +1343,44 @@ function tagut_weapdamage($i, $data) // 921.55	weap_damagegiven	Minigun	0	921
   pwa_add($plr, $weaponnum, -1, -1, $damage);
 }
 
+function tagut_say ($i, $data)
+{
+  global $player, $match, $chatlog;
+
+  if ($i < 4)
+    return;
+
+  $time = ctime($data[0]);
+  if (substr($data[2], 0, 5) == "spec_")
+    $plr = -1;
+  else {
+    $plr = check_player($data[2]);
+    if (!isset($player[$plr]) || $player[$plr]->name == "")
+      $plr = -1;
+  }
+
+  $chatlog[$match->numchat][0] = $plr;
+  $chatlog[$match->numchat][1] = 0;
+  $chatlog[$match->numchat][2] = $time;
+  $chatlog[$match->numchat++][3] = $data[3];
+}
+
+function tagut_teamsay ($i, $data)
+{
+  global $player, $match, $chatlog;
+
+  if ($i < 4)
+    return;
+
+  $time = ctime($data[0]);
+  $plr = check_player($data[2]);
+  if (!isset($player[$plr]) || $player[$plr]->name == "")
+    $plr = -1;
+
+  $chatlog[$match->numchat][0] = $plr;
+  $chatlog[$match->numchat][1] = $player[$plr]->team + 1;
+  $chatlog[$match->numchat][2] = $time;
+  $chatlog[$match->numchat++][3] = $data[3];
+}
+
 ?>

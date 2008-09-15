@@ -70,7 +70,7 @@ function loadconfig()
   }
 
   $conflogs = array(array());
-  $result = sql_querynb($link, "SELECT logpath,backuppath,prefix,noport,ftpserver,ftppath,passive,alllogs,ftpuser,ftppass,deftype,defteam,demoftppath,multicheck FROM {$dbpre}configlogs ORDER BY num");
+  $result = sql_querynb($link, "SELECT logpath,backuppath,prefix,chatprefix,noport,ftpserver,ftppath,passive,alllogs,ftpuser,ftppass,deftype,defteam,demoftppath,multicheck FROM {$dbpre}configlogs ORDER BY num");
   if ($result && sql_num_rows($result)) {
     $num = 0;
     while ($row = sql_fetch_row($result)) {
@@ -78,17 +78,18 @@ function loadconfig()
       $conflogs["logpath"][$num] = $magicrt ? stripslashes($row[0]) : $row[0];
       $conflogs["backuppath"][$num] = $magicrt ? stripslashes($row[1]) : $row[1];
       $conflogs["logprefix"][$num] = $magicrt ? stripslashes($row[2]) : $row[2];
-      $conflogs["noport"][$num] = intval($row[3]);
-      $conflogs["ftpserver"][$num] = $magicrt ? stripslashes($row[4]) : $row[4];
-      $conflogs["ftppath"][$num] = $magicrt ? stripslashes($row[5]) : $row[5];
-      $conflogs["ftppassive"][$num] = intval($row[6]);
-      $conflogs["alllogs"][$num] = intval($row[7]);
-      $conflogs["ftpuser"][$num] = $magicrt ? stripslashes($row[8]) : $row[8];
-      $conflogs["ftppass"][$num] = $magicrt ? stripslashes($row[9]) : $row[9];
-      $conflogs["deftype"][$num] = intval($row[10]);
-      $conflogs["defteam"][$num] = intval($row[11]);
-      $conflogs["demoftppath"][$num] = $magicrt ? stripslashes($row[12]) : $row[12];
-      $conflogs["multicheck"][$num] = intval($row[13]);
+      $conflogs["chatprefix"][$num] = $magicrt ? stripslashes($row[3]) : $row[3];
+      $conflogs["noport"][$num] = intval($row[4]);
+      $conflogs["ftpserver"][$num] = $magicrt ? stripslashes($row[5]) : $row[5];
+      $conflogs["ftppath"][$num] = $magicrt ? stripslashes($row[6]) : $row[6];
+      $conflogs["ftppassive"][$num] = intval($row[7]);
+      $conflogs["alllogs"][$num] = intval($row[8]);
+      $conflogs["ftpuser"][$num] = $magicrt ? stripslashes($row[9]) : $row[9];
+      $conflogs["ftppass"][$num] = $magicrt ? stripslashes($row[10]) : $row[10];
+      $conflogs["deftype"][$num] = intval($row[11]);
+      $conflogs["defteam"][$num] = intval($row[12]);
+      $conflogs["demoftppath"][$num] = $magicrt ? stripslashes($row[13]) : $row[13];
+      $conflogs["multicheck"][$num] = intval($row[14]);
     }
     sql_free_result($result);
   }
@@ -105,6 +106,7 @@ function checkfile($pre, $noport, $file, &$fdate)
   global $files;
 
   $stattype = 0;
+  $prelen = strlen($pre);
   if (strstr($file, $pre) && (substr($file, -4) == ".log" || substr($file, -4) == ".txt")) {
     $i = strpos($file, $pre);
     $file = substr($file, $i + strlen($pre));
@@ -120,7 +122,7 @@ function checkfile($pre, $noport, $file, &$fdate)
         $fdate = sprintf("%04u-%02u-%02u %02u:%02u:%02u", $fd_year, $fd_month, $fd_day, $fd_hour, $fd_min, $fd_sec);
         $stattype = 3;
 	}
-    else if (strstr($pre, "ngLog.")) { // UT '99 Log
+    else if (strstr($pre, "ngLog.") || (substr($file, 4, 1) == "." && substr($file, 7, 1) == "." && substr($file, 10, 1) == "." && substr($file, 13, 1) == "." && substr($file, 16, 1) == "." && substr($file, 19, 1) == ".")) { // UT '99 Log
       $tok = strtok($file, "."); // <year>
       $fd_year = (int) $tok;
       if ($tok != "") {
@@ -205,12 +207,17 @@ function release_lock()
     sql_queryn($link, "DO RELEASE_LOCK('$lockname')");
 }
 
-function dellog($file)
+function dellog($file,$chatfile)
 {
   global $config, $matchdate, $mapfile;
 
   unlink($file);
-  // Remove associated demo logs
+
+  // Remove chat log file
+  if ($chatfile != "" && file_exists($chatfile))
+    unlink($chatfile);
+
+  // Remove associated demo log file
   $demodir = $config["demodir"];
   $demoext = $config["demoext"];
   if (isset($matchdate) && isset($mapfile) && $demodir != "" && $demoext != "" && $matchdate && $mapfile) {
@@ -356,6 +363,7 @@ while (isset($conflogs["ftpserver"][$ftpnum])) {
     $ftppassive = $conflogs["ftppassive"][$ftpnum];
     $logpath = $conflogs["logpath"][$ftpnum];
     $logprefix = $conflogs["logprefix"][$ftpnum];
+    $chatprefix = $conflogs["chatprefix"][$ftpnum];
     $noport = $conflogs["noport"][$ftpnum];
     $alllogs = $conflogs["alllogs"][$ftpnum];
     $demoftppath = $conflogs["demoftppath"][$ftpnum];
@@ -428,6 +436,8 @@ while (isset($conflogs["ftpserver"][$ftpnum])) {
 
           if (!$safemode)
             set_time_limit($config["php_timelimit"]); // Reset script timeout counter
+
+          // Retrieve log files
           $loglist = array();
           $listerr = 0;
           if (!($loglist = ftp_nlist($conn_id, "{$logprefix}*"))) {
@@ -489,6 +499,63 @@ while (isset($conflogs["ftpserver"][$ftpnum])) {
               echo "failed!{$break}\n";
           }
 
+          // Retrieve chat logs
+          if ($chatprefix != "") {
+            ftp_set_option($conn_id, FTP_TIMEOUT_SEC, 30);
+
+            if (!$safemode)
+              set_time_limit($config["php_timelimit"]); // Reset script timeout counter
+
+            $chatlist = array();
+            $chatlisterr = 0;
+            if (!($chatlist = ftp_nlist($conn_id, "{$chatprefix}*"))) {
+              if (!($chatlist = ftp_nlist($conn_id, ""))) {
+                echo "Error listing ftp directory '{$ftppath}{$chatprefix}*'.{$break}\n";
+                $chatlisterr = 1;
+              }
+            }
+            if ($test)
+              echo "[debug] listing '{$chatprefix}*' - records: ".count($chatlist)."{$break}\n";
+
+            $i = $chatfiles = 0;
+            $chatlogs = array();
+            $chatlogdate = array();
+            while(isset($chatlist[$i])) {
+              if ($test)
+                echo "[debug] Chatlist[$i] = '{$chatlist[$i]}'{$break}\n";
+              $file = $chatlist[$i++];
+              if (strstr($file, $chatprefix) && (substr($file, -4) == ".log" || substr($file, -4) == ".txt")) {
+                $fdate = "";
+                $stattype = checkfile($chatprefix, $noport, $file, $fdate);
+                if ($stattype) {
+                  $chatlogs[$chatfiles] = $file;
+                  $chatlogdate[$chatfiles++] = $fdate;
+                }
+              }
+            }
+            if (!$chatlisterr && !$chatfiles)
+              echo "No new chat logs to download.{$break}\n";
+
+            for ($i = 0; $i < $chatfiles - $ftplimit; $i++) {
+              if (!$safemode)
+                set_time_limit($config["php_timelimit"]); // Reset script timeout counter
+              $file = $chatlogs[$i];
+              echo "Downloading chat log '$file'....";
+              if (ftp_get($conn_id, "{$logpath}$file", "$file", FTP_BINARY)) {
+                echo "successful";
+                if (!$save) {
+                  if (ftp_delete($conn_id, $file))
+                    echo " - deleted.{$break}\n";
+                  else
+                    echo " - deletion failed!{$break}\n";
+                } else
+                  echo ".{$break}\n";
+              }
+              else
+                echo "failed!{$break}\n";
+            }
+          }
+
           // Retrieve demorecs
           if ($demoftppath != "") {
             if ((@ftp_chdir($conn_id, $demoftppath)) == TRUE)
@@ -546,6 +613,7 @@ while (isset($conflogs["ftpserver"][$ftpnum])) {
             }
           }
 
+          // Close connection
           ftp_close($conn_id);
           echo "{$break}\n";
         }
@@ -564,6 +632,7 @@ $lognum = 1;
 while (isset($conflogs["logpath"][$lognum])) {
   $files = $logs_saved = 0;
   $logs = array();
+  $chatlogs = array();
   $logtype = array();
   $logdate = array();
   $logpath = $conflogs["logpath"][$lognum];
@@ -580,6 +649,7 @@ while (isset($conflogs["logpath"][$lognum])) {
   }
 
   $logprefix = $conflogs["logprefix"][$lognum];
+  $chatprefix = $conflogs["chatprefix"][$lognum];
 
   if (isset($conflogs["noport"][$lognum]))
     $noport = $conflogs["noport"][$lognum];
@@ -600,6 +670,13 @@ while (isset($conflogs["logpath"][$lognum])) {
       if ($stattype = checkfile($logprefix, $noport, $file, $fdate)) {
         $logs[$files] = $file;
         $logtype[$files] = $stattype;
+        $chatlogs[$files] = "";
+        if ($chatprefix != "")
+        {
+          $chatfile = $chatprefix.substr($file, strlen($logprefix));
+          if (file_exists($logpath.$chatfile))
+            $chatlogs[$files] = $chatfile;
+        }
         $logdate[$files++] = $fdate;
       }
       if ($test)
@@ -608,7 +685,7 @@ while (isset($conflogs["logpath"][$lognum])) {
   }
   closedir($handle); 
   if ($files > 1)
-    array_multisort($logdate, $logs, $logtype, SORT_NUMERIC, SORT_ASC);
+    array_multisort($logdate, $logs, $chatlogs, $logtype, SORT_NUMERIC, SORT_ASC);
 
   $numinc = 0;
   $incomplete = array();
@@ -617,9 +694,14 @@ while (isset($conflogs["logpath"][$lognum])) {
       set_time_limit($config["php_timelimit"]); // Reset script timeout counter
     echo "Processing log '$logs[$i]'...";
     $file = $logpath.$logs[$i];
+    if ($chatlogs[$i] != "")
+      $chatfile = $logpath.$chatlogs[$i];
+    else
+      $chatfile = "";
     $logname = $logs[$i];
     $stattype = $logtype[$i];
-    $match->ended = parselog($file);
+
+    $match->ended = parselog($file,$chatfile);
 
     // Check for ended on map switch or server quit - set new ended type
     if ($config["allowincomplete"] && $match->ended == 6) // Map Change
@@ -653,50 +735,53 @@ while (isset($conflogs["logpath"][$lognum])) {
           else
             echo "not processed.{$break}\n";
         }
-        if (isset($backuppath) && $backuppath)
+        if (isset($backuppath) && $backuppath) {
           copy($file, "{$backuppath}{$logs[$i]}");
+          if ($chatfile != "" && file_exists($chatfile))
+            copy($chatfile, "{$backuppath}{$chatlogs[$i]}");
+        }
         if (!$save)
-          dellog($file);
+          dellog($file,$chatfile);
         break;
       case 2:
         echo "unknown endgame reason.{$break}\n";
         if (!$save)
-          dellog($file);
+          dellog($file,$chatfile);
         break;
       case 3:
         echo "invalid.{$break}\n";
         if (!$save)
-          dellog($file);
+          dellog($file,$chatfile);
         break;
       case 4:
         echo "already in database.{$break}\n";
         if (!$save)
-          dellog($file);
+          dellog($file,$chatfile);
         break;
       case 5:
         echo "insufficient players.{$break}\n";
         if (!$save)
-          dellog($file);
+          dellog($file,$chatfile);
         break;
       case 6:
         echo "mapchange.{$break}\n";
         if (!$save)
-          dellog($file);
+          dellog($file,$chatfile);
         break;
       case 7:
         echo "serverquit.{$break}\n";
         if (!$save)
-          dellog($file);
+          dellog($file,$chatfile);
         break;
       case 8:
         echo "insufficient human players.{$break}\n";
         if (!$save)
-          dellog($file);
+          dellog($file,$chatfile);
         break;
       case 9:
         echo "scoreless match.{$break}\n";
         if (!$save)
-          dellog($file);
+          dellog($file,$chatfile);
         break;
       case 10:
         echo "bad parse in database.{$break}\n";
@@ -704,13 +789,13 @@ while (isset($conflogs["logpath"][$lognum])) {
       case 11:
         echo "warm-up match.{$break}\n";
         if (!$save)
-          dellog($file);
+          dellog($file,$chatfile);
         break;
       default:
         if (!$config["skipinsession"]) {
           echo "incomplete.{$break}\n";
           if (!$save)
-          dellog($file);
+          dellog($file,$chatfile);
         }
         else {
           echo "incomplete (in session?).{$break}\n";

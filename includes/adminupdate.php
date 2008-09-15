@@ -19,6 +19,33 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+function update303()
+{
+  global $dbtype, $dbpre, $break;
+
+  $link = sql_connect();
+
+  echo "Updating {$dbpre}configlogs...<br />\n";
+  if (strtolower($dbtype) == "sqlite")
+    $result = sql_queryn($link, "ALTER TABLE {$dbpre}configlogs ADD COLUMN chatprefix varchar(60) NOT NULL default ''");
+  else
+    $result = sql_queryn($link, "ALTER TABLE {$dbpre}configlogs ADD chatprefix varchar(60) NOT NULL default '' AFTER prefix");
+  if (!$result) {
+    echo "<br />Error updating configlogs table.{$break}\n";
+    exit;
+  }
+
+  echo "Updating version....<br />\n";
+  $result = sql_queryn($link, "UPDATE {$dbpre}config SET value='3.03' WHERE conf='Version'");
+  if (!$result) {
+    echo "<br />Error updating version.{$break}\n";
+    exit;
+  }
+
+  sql_close($link);
+  echo "<br />Database updates complete.<br />\n";
+}
+
 function update302()
 {
   global $dbtype, $dbpre, $break;

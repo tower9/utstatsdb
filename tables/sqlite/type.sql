@@ -49,3 +49,5 @@ INSERT INTO %dbpre%type (tp_desc,tp_type,tp_team) VALUES('Neotokyo Engagement',7
 INSERT INTO %dbpre%type (tp_desc,tp_type,tp_team) VALUES('DeathBall',18,1);
 INSERT INTO %dbpre%type (tp_desc,tp_type,tp_team) VALUES('Team ArenaMaster',19,1);
 INSERT INTO %dbpre%type (tp_desc,tp_type,tp_team) VALUES('JailBreak',20,1);
+INSERT INTO %dbpre%type (tp_desc,tp_type,tp_team) VALUES('Warfare',6,1);
+INSERT INTO %dbpre%type (tp_desc,tp_type) VALUES('Duel',1);

@@ -3,6 +3,7 @@ CREATE TABLE %dbpre%configlogs (
   logpath varchar(200) NOT NULL default '',
   backuppath varchar(200) NOT NULL default '',
   prefix varchar(60) NOT NULL default '',
+  chatprefix varchar(60) NOT NULL default '',
   noport tinyint(1) NOT NULL default 0,
   ftpserver varchar(100) NOT NULL default '',
   ftppath varchar(200) NOT NULL default '',
