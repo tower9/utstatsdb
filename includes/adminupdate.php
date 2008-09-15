@@ -27,9 +27,9 @@ function update303()
 
   echo "Updating {$dbpre}configlogs...<br />\n";
   if (strtolower($dbtype) == "sqlite")
-    $result = sql_queryn($link, "ALTER TABLE {$dbpre}configlogs ADD COLUMN chatprefix varchar(60) NOT NULL default ''");
+    $result = sql_queryn($link, "ALTER TABLE {$dbpre}configlogs ADD COLUMN chatprefix varchar(60) NOT NULL default '', ADD COLUMN chatrequire tinyint(1) NOT NULL default 0");
   else
-    $result = sql_queryn($link, "ALTER TABLE {$dbpre}configlogs ADD chatprefix varchar(60) NOT NULL default '' AFTER prefix");
+    $result = sql_queryn($link, "ALTER TABLE {$dbpre}configlogs ADD chatprefix varchar(60) NOT NULL default '' AFTER prefix, ADD COLUMN chatrequire tinyint(1) NOT NULL default 0 AFTER chatprefix");
   if (!$result) {
     echo "<br />Error updating configlogs table.{$break}\n";
     exit;

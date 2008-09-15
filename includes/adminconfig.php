@@ -186,7 +186,7 @@ function logsconfig() {
 
 EOF;
 
-  $result = sql_query("SELECT num,logpath,backuppath,prefix,chatprefix,noport,ftpserver,ftppath,passive,alllogs,ftpuser,ftppass,deftype,defteam,demoftppath,multicheck FROM {$dbpre}configlogs ORDER BY num");
+  $result = sql_query("SELECT num,logpath,backuppath,prefix,chatprefix,chatrequire,noport,ftpserver,ftppath,passive,alllogs,ftpuser,ftppass,deftype,defteam,demoftppath,multicheck FROM {$dbpre}configlogs ORDER BY num");
   if (!$result) {
   	echo "Config database error!<br />\n";
     exit;
@@ -200,18 +200,21 @@ EOF;
     $backuppath = $magicrt ? stripslashes($row[2]) : $row[2];
     $prefix = $magicrt ? stripslashes($row[3]) : $row[3];
     $chatprefix = $magicrt ? stripslashes($row[4]) : $row[4];
-    $noport = intval($row[5]);
-    $ftpserver = $magicrt ? stripslashes($row[6]) : $row[6];
-    $ftppath = $magicrt ? stripslashes($row[7]) : $row[7];
-    $passive = intval($row[8]);
-    $alllogs = intval($row[9]);
-    $ftpuser = $magicrt ? stripslashes($row[10]) : $row[10];
-    $ftppass = $magicrt ? stripslashes($row[11]) : $row[11];
-    $deftype = intval($row[12]);
-    $defteam = intval($row[13]);
-    $demoftppath = $magicrt ? stripslashes($row[14]) : $row[14];
-    $multicheck = intval($row[15]);
+	$chatreq = intval($row[5]);
+    $noport = intval($row[6]);
+    $ftpserver = $magicrt ? stripslashes($row[7]) : $row[7];
+    $ftppath = $magicrt ? stripslashes($row[8]) : $row[8];
+    $passive = intval($row[9]);
+    $alllogs = intval($row[10]);
+    $ftpuser = $magicrt ? stripslashes($row[11]) : $row[11];
+    $ftppass = $magicrt ? stripslashes($row[12]) : $row[12];
+    $deftype = intval($row[13]);
+    $defteam = intval($row[14]);
+    $demoftppath = $magicrt ? stripslashes($row[15]) : $row[15];
+    $multicheck = intval($row[16]);
 
+    $chatreqx0 = $chatreq ? "" : "checked=\"checked\"";
+    $chatreqx1 = $chatreq ? "checked=\"checked\"" : "";
     $noportx0 = $noport ? "" : "checked=\"checked\"";
     $noportx1 = $noport ? "checked=\"checked\"" : "";
     $passivex0 = $passive ? "" : "checked=\"checked\"";
@@ -246,8 +249,13 @@ EOF;
     </tr>
     <tr>
       <td align="right" class="forms" title="Prefix of log files, before the timestamp or port number."><b>Log Prefix:</b></td>
-      <td align="left" colspan="3" class="forms">
-        <input type="text" name="prefix{$num}" value="$prefix" size="120" maxlength="60" class="forms" />
+      <td align="left" class="forms">
+        <input type="text" name="prefix{$num}" value="$prefix" size="80" maxlength="60" class="forms" />
+      </td>
+      <td align="right" class="forms" title="Set true if the log filenames do not contain the server port number."><b>No Port:</b></td>
+      <td align="left" class="forms">
+        <input type="radio" name="noport{$num}" value="0" $noportx0 />False
+        <input type="radio" name="noport{$num}" value="1" $noportx1 />True
       </td>
     </tr>
     <tr>
@@ -255,10 +263,10 @@ EOF;
       <td align="left" class="forms">
         <input type="text" name="chatprefix{$num}" value="$chatprefix" size="80" maxlength="60" class="forms" />
       </td>
-      <td align="right" class="forms" title="Set true if the log filenames do not contain the server port number."><b>No Port:</b></td>
+      <td align="right" class="forms" title="Set true if only logs with matching chat logs should be processed."><b>Require Chat:</b></td>
       <td align="left" class="forms">
-        <input type="radio" name="noport{$num}" value="0" $noportx0 />False
-        <input type="radio" name="noport{$num}" value="1" $noportx1 />True
+        <input type="radio" name="chatreq{$num}" value="0" $chatreqx0 />False
+        <input type="radio" name="chatreq{$num}" value="1" $chatreqx1 />True
       </td>
     </tr>
     <tr>
@@ -639,7 +647,7 @@ function saveconfig() {
     }
     case "Logs":
     {
-      $resultb = sql_querynb($link, "SELECT num,logpath,backuppath,prefix,chatprefix,noport,ftpserver,ftppath,passive,alllogs,ftpuser,ftppass,deftype,defteam,demoftppath,multicheck FROM {$dbpre}configlogs ORDER BY num");
+      $resultb = sql_querynb($link, "SELECT num,logpath,backuppath,prefix,chatprefix,chatrequire,noport,ftpserver,ftppath,passive,alllogs,ftpuser,ftppass,deftype,defteam,demoftppath,multicheck FROM {$dbpre}configlogs ORDER BY num");
       if (!$resultb) {
   	    echo "Config database error!<br />\n";
   	    sql_close($link);
@@ -652,29 +660,31 @@ function saveconfig() {
         $backuppath = $magicrt ? stripslashes($row[2]) : $row[2];
         $prefix = $magicrt ? stripslashes($row[3]) : $row[3];
         $chatprefix = $magicrt ? stripslashes($row[4]) : $row[4];
-        $noport = intval($row[5]);
-        $ftpserver = $magicrt ? stripslashes($row[6]) : $row[6];
-        $ftppath = $magicrt ? stripslashes($row[7]) : $row[7];
-        $passive = intval($row[8]);
-        $alllogs = intval($row[9]);
-        $ftpuser = $magicrt ? stripslashes($row[10]) : $row[10];
-        $ftppass = $magicrt ? stripslashes($row[11]) : $row[11];
-        $deftype = intval($row[12]);
-        $defteam = intval($row[13]);
-        $demoftppath = $magicrt ? stripslashes($row[14]) : $row[14];
-        $multicheck = intval($row[15]);
+        $chatreq = intval($row[5]);
+        $noport = intval($row[6]);
+        $ftpserver = $magicrt ? stripslashes($row[7]) : $row[7];
+        $ftppath = $magicrt ? stripslashes($row[8]) : $row[8];
+        $passive = intval($row[9]);
+        $alllogs = intval($row[10]);
+        $ftpuser = $magicrt ? stripslashes($row[11]) : $row[11];
+        $ftppass = $magicrt ? stripslashes($row[12]) : $row[12];
+        $deftype = intval($row[13]);
+        $defteam = intval($row[14]);
+        $demoftppath = $magicrt ? stripslashes($row[15]) : $row[15];
+        $multicheck = intval($row[16]);
 
         if (isset($_POST["logpath{$num}"]) && isset($_POST["backuppath{$num}"]) && isset($_POST["prefix{$num}"]) &&
-            isset($_POST["chatprefix{$num}"]) && isset($_POST["noport{$num}"]) && isset($_POST["ftpserver{$num}"]) &&
-            isset($_POST["ftppath{$num}"]) && isset($_POST["ftppath{$num}"]) && isset($_POST["passive{$num}"]) &&
-            isset($_POST["alllogs{$num}"]) && isset($_POST["ftpuser{$num}"]) && isset($_POST["ftppass{$num}"]) &&
-            isset($_POST["deftype{$num}"]) && isset($_POST["defteam{$num}"]) && isset($_POST["demoftppath{$num}"]) &&
-            isset($_POST["multicheck{$num}"]))
+            isset($_POST["chatprefix{$num}"]) && isset($_POST["chatreq{$num}"]) && isset($_POST["noport{$num}"]) &&
+            isset($_POST["ftpserver{$num}"]) && isset($_POST["ftppath{$num}"]) && isset($_POST["ftppath{$num}"]) &&
+            isset($_POST["passive{$num}"]) && isset($_POST["alllogs{$num}"]) && isset($_POST["ftpuser{$num}"]) &&
+            isset($_POST["ftppass{$num}"]) && isset($_POST["deftype{$num}"]) && isset($_POST["defteam{$num}"]) &&
+            isset($_POST["demoftppath{$num}"]) && isset($_POST["multicheck{$num}"]))
         {
           $newlogpath = $magic ? stripslashes($_POST["logpath{$num}"]) : $_POST["logpath{$num}"];
           $newbackuppath = $magic ? stripslashes($_POST["backuppath{$num}"]) : $_POST["backuppath{$num}"];
           $newprefix = $magic ? stripslashes($_POST["prefix{$num}"]) : $_POST["prefix{$num}"];
           $newchatprefix = $magic ? stripslashes($_POST["chatprefix{$num}"]) : $_POST["chatprefix{$num}"];
+          $newchatreq = intval($_POST["chatreq{$num}"]);
           $newnoport = intval($_POST["noport{$num}"]);
           $newftpserver = $magic ? stripslashes($_POST["ftpserver{$num}"]) : $_POST["ftpserver{$num}"];
           $newftppath = $magic ? stripslashes($_POST["ftppath{$num}"]) : $_POST["ftppath{$num}"];
@@ -688,9 +698,9 @@ function saveconfig() {
           $newmulticheck = intval($_POST["multicheck{$num}"]);
 
           if ($logpath != $newlogpath || $backuppath != $newbackuppath || $prefix != $newprefix || $chatprefix != $newchatprefix ||
-              $noport != $newnoport || $ftpserver != $newftpserver || $ftppath != $newftppath || $passive != $newpassive ||
-              $alllogs != $newalllogs || $ftpuser != $newftpuser || $ftppass != $newftppass || $deftype != $newdeftype ||
-              $defteam != $newdefteam || $demoftppath != $newdemoftppath || $multicheck != $newmulticheck)
+              $chatreq != $newchatreq || $noport != $newnoport || $ftpserver != $newftpserver || $ftppath != $newftppath ||
+              $passive != $newpassive || $alllogs != $newalllogs || $ftpuser != $newftpuser || $ftppass != $newftppass ||
+              $deftype != $newdeftype || $defteam != $newdefteam || $demoftppath != $newdemoftppath || $multicheck != $newmulticheck)
           {
             $newlogpath = addslashes($newlogpath);
             $newbackuppath = addslashes($newbackuppath);
@@ -704,7 +714,7 @@ function saveconfig() {
             if ($newlogpath == "")
               sql_queryn($link, "DELETE FROM {$dbpre}configlogs WHERE num=$num");
             else
-              sql_queryn($link, "UPDATE {$dbpre}configlogs SET logpath='$newlogpath',backuppath='$newbackuppath',prefix='$newprefix',chatprefix='$newchatprefix',noport=$newnoport,ftpserver='$newftpserver',ftppath='$newftppath',passive=$newpassive,alllogs=$newalllogs,ftpuser='$newftpuser',ftppass='$newftppass',deftype=$newdeftype,defteam=$newdefteam,demoftppath='$newdemoftppath',multicheck=$newmulticheck WHERE num=$num");
+              sql_queryn($link, "UPDATE {$dbpre}configlogs SET logpath='$newlogpath',backuppath='$newbackuppath',prefix='$newprefix',chatprefix='$newchatprefix',chatrequire=$newchatreq,noport=$newnoport,ftpserver='$newftpserver',ftppath='$newftppath',passive=$newpassive,alllogs=$newalllogs,ftpuser='$newftpuser',ftppass='$newftppass',deftype=$newdeftype,defteam=$newdefteam,demoftppath='$newdemoftppath',multicheck=$newmulticheck WHERE num=$num");
           }
         }
       }

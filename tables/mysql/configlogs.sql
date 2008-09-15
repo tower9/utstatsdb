@@ -4,6 +4,7 @@ CREATE TABLE %dbpre%configlogs (
   backuppath varchar(200) NOT NULL default '',
   prefix varchar(60) NOT NULL default '',
   chatprefix varchar(60) NOT NULL default '',
+  chatrequire tinyint(1) NOT NULL default 0,
   noport tinyint(1) NOT NULL default 0,
   ftpserver varchar(100) NOT NULL default '',
   ftppath varchar(200) NOT NULL default '',
