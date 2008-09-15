@@ -70,7 +70,7 @@ function loadconfig()
   }
 
   $conflogs = array(array());
-  $result = sql_querynb($link, "SELECT logpath,backuppath,prefix,chatprefix,noport,ftpserver,ftppath,passive,alllogs,ftpuser,ftppass,deftype,defteam,demoftppath,multicheck FROM {$dbpre}configlogs ORDER BY num");
+  $result = sql_querynb($link, "SELECT logpath,backuppath,prefix,chatprefix,chatrequire,noport,ftpserver,ftppath,passive,alllogs,ftpuser,ftppass,deftype,defteam,demoftppath,multicheck FROM {$dbpre}configlogs ORDER BY num");
   if ($result && sql_num_rows($result)) {
     $num = 0;
     while ($row = sql_fetch_row($result)) {
@@ -79,17 +79,18 @@ function loadconfig()
       $conflogs["backuppath"][$num] = $magicrt ? stripslashes($row[1]) : $row[1];
       $conflogs["logprefix"][$num] = $magicrt ? stripslashes($row[2]) : $row[2];
       $conflogs["chatprefix"][$num] = $magicrt ? stripslashes($row[3]) : $row[3];
-      $conflogs["noport"][$num] = intval($row[4]);
-      $conflogs["ftpserver"][$num] = $magicrt ? stripslashes($row[5]) : $row[5];
-      $conflogs["ftppath"][$num] = $magicrt ? stripslashes($row[6]) : $row[6];
-      $conflogs["ftppassive"][$num] = intval($row[7]);
-      $conflogs["alllogs"][$num] = intval($row[8]);
-      $conflogs["ftpuser"][$num] = $magicrt ? stripslashes($row[9]) : $row[9];
-      $conflogs["ftppass"][$num] = $magicrt ? stripslashes($row[10]) : $row[10];
-      $conflogs["deftype"][$num] = intval($row[11]);
-      $conflogs["defteam"][$num] = intval($row[12]);
-      $conflogs["demoftppath"][$num] = $magicrt ? stripslashes($row[13]) : $row[13];
-      $conflogs["multicheck"][$num] = intval($row[14]);
+      $conflogs["chatreq"][$num] = intval($row[4]);
+      $conflogs["noport"][$num] = intval($row[5]);
+      $conflogs["ftpserver"][$num] = $magicrt ? stripslashes($row[6]) : $row[6];
+      $conflogs["ftppath"][$num] = $magicrt ? stripslashes($row[7]) : $row[7];
+      $conflogs["ftppassive"][$num] = intval($row[8]);
+      $conflogs["alllogs"][$num] = intval($row[9]);
+      $conflogs["ftpuser"][$num] = $magicrt ? stripslashes($row[10]) : $row[10];
+      $conflogs["ftppass"][$num] = $magicrt ? stripslashes($row[11]) : $row[11];
+      $conflogs["deftype"][$num] = intval($row[12]);
+      $conflogs["defteam"][$num] = intval($row[13]);
+      $conflogs["demoftppath"][$num] = $magicrt ? stripslashes($row[14]) : $row[14];
+      $conflogs["multicheck"][$num] = intval($row[15]);
     }
     sql_free_result($result);
   }
@@ -364,6 +365,7 @@ while (isset($conflogs["ftpserver"][$ftpnum])) {
     $logpath = $conflogs["logpath"][$ftpnum];
     $logprefix = $conflogs["logprefix"][$ftpnum];
     $chatprefix = $conflogs["chatprefix"][$ftpnum];
+    $chatreq = $conflogs["chatreq"][$ftpnum];
     $noport = $conflogs["noport"][$ftpnum];
     $alllogs = $conflogs["alllogs"][$ftpnum];
     $demoftppath = $conflogs["demoftppath"][$ftpnum];
@@ -650,6 +652,7 @@ while (isset($conflogs["logpath"][$lognum])) {
 
   $logprefix = $conflogs["logprefix"][$lognum];
   $chatprefix = $conflogs["chatprefix"][$lognum];
+  $chatreq = $conflogs["chatreq"][$lognum];
 
   if (isset($conflogs["noport"][$lognum]))
     $noport = $conflogs["noport"][$lognum];
@@ -701,7 +704,10 @@ while (isset($conflogs["logpath"][$lognum])) {
     $logname = $logs[$i];
     $stattype = $logtype[$i];
 
-    $match->ended = parselog($file,$chatfile);
+    if ($chatfile == "" && $chatreq)
+      $match->ended = 18;
+    else
+      $match->ended = parselog($file,$chatfile);
 
     // Check for ended on map switch or server quit - set new ended type
     if ($config["allowincomplete"] && $match->ended == 6) // Map Change
@@ -790,6 +796,9 @@ while (isset($conflogs["logpath"][$lognum])) {
         echo "warm-up match.{$break}\n";
         if (!$save)
           dellog($file,$chatfile);
+        break;
+      case 18:
+        echo "no chat log.{$break}\n";
         break;
       default:
         if (!$config["skipinsession"]) {
