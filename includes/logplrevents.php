@@ -282,7 +282,10 @@ function tag_tv ($i, $data)
     $plr = -1;
 
   $chatlog[$match->numchat][0] = $plr;
-  $chatlog[$match->numchat][1] = $player[$plr]->team + 1;
+  if ($plr >= 0)
+    $chatlog[$match->numchat][1] = $player[$plr]->team + 1;
+  else
+    $chatlog[$match->numchat][1] = 0;
   $chatlog[$match->numchat][2] = $time;
   $chatlog[$match->numchat++][3] = $data[3];
 }
