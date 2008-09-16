@@ -1,6 +1,6 @@
 Release Notes:
 
-Unreleased
+Version 3.03
   Converted text to use language files, created English language file.
   Added server activity graph to main page.
   Added query support for UT3 servers.
