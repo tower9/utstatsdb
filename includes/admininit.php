@@ -186,7 +186,8 @@ EOF;
         while(!$done && $row = each($sqldata)) {
           $qstring.=$row[1];
           if (strstr($qstring, ";")) {
-            $qstring = rtrim($qstring, "\t\n\r\0;");
+            $qstring = trim($qstring, "\t\n\r\0;");
+            $qstring = str_replace("\n", "", $qstring);
             $done = 1;
           }
         }
@@ -205,7 +206,8 @@ EOF;
         while($row = each($sqldata)) {
           $qstring = $row[1];
           if (strlen($qstring) > 10 && substr($qstring, 0, 1) != "#") {
-            $qstring = rtrim($qstring, "\t\n\r\0;");
+            $qstring = trim($qstring, "\t\n\r\0;");
+            $qstring = str_replace("\n", "", $qstring);
 
             // Replace all occurances of %dbpre% with $dbpre
             $qstring = str_replace("%dbpre%", "$dbpre", $qstring);

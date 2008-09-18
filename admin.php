@@ -451,7 +451,7 @@ function menu_bottom() {
   </div>
 
   <div id="footer">
-    Visit the <a href="http://ut2003stats.sourceforge.net">UTStatsDB</a> SourceForge Project
+    Visit the <a href="http://www.utstatsdb.com">UTStatsDB</a> website.
   </div>
 </body>
 </html>
