@@ -633,5 +633,3 @@ $LANG_CHATMESSAGES = "chat messages";
 // mapstats.php
 
 // serverstats.php
-
-// includes/help.php ?

@@ -1,7 +1,14 @@
 Release Notes:
 
 Version 3.03
-  Converted text to use language files, created English language file.
+  Created German language files.
+  Adjusted time offset for UT '99.
+  Added time offset value for games operating at different real-time speed.
+  Added language switch - can be changed from admin main config menu.
+  Various SQLite fixes.
+  Converted text to use language files, created English language files.
+  Fixed team chat issue where player connection data is not yet received.
+  Added option to bypass logs that lack a matching chat log (for UT '99 chat logs close after the main log).
   Added server activity graph to main page.
   Added query support for UT3 servers.
   Cleaned up HTML and CSS code.
