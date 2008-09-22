@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -230,7 +230,7 @@ switch ($rank) {
 }
 
 if ($playersearch == 1 || ($playersearch == 2 && $numpages > 1) || !$showbots)
-  echo "<div class=\"opnote\">*Select headings to change sort order (default=score).</div>\n";
+  echo "<div class=\"opnote\">*{$LANG_SELECTHEADINGS}</div>\n";
 
 echo <<<EOF
 <table cellpadding="1" cellspacing="2" border="0" width="700" class="box">

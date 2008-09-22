@@ -34,7 +34,7 @@ $LANG_MATCHDATABASEERROR = "Fehler in Match Datenbank";
 
 // index.php
 $LANG_UTSTATSDATABASE = "Unreal Tournament Stats Database";
-$LANG_TOTALSCORE = "Score gesamt";
+$LANG_TOTALSCORE = "Score Gesamt";
 $LANG_TOTALFRAGS = "Frags Gesamt";
 $LANG_TEAMKILLS = "Team Kills";
 $LANG_TOTALHEADSHOTS = "Headshots Gesamt";
@@ -161,7 +161,7 @@ $LANG_KILLS = "Kills";
 $LANG_HUMANS = "Menschen";
 $LANG_BOTS = "Bots";
 $LANG_ALL = "Alle";
-$LANG_SELECTHEADINGS = "Tabellenkopf anklicken um Sortierung zu ändern (Vorgabewert=score)";
+$LANG_SELECTHEADINGS = "Tabellenkopf anklicken um Sortierung zu ändern (Vorgabewert=score).";
 $LANG_SORT = "Sortierung";
 $LANG_FPH = "FPH";
 $LANG_SPH = "SPH";
@@ -633,3 +633,15 @@ $LANG_CHATMESSAGES = "Chat Nachrichten";
 // mapstats.php
 
 // serverstats.php
+
+// main.inc.php
+$LANG_INC_MAIN = "Startseite";
+$LANG_INC_MATCHES = "Matches";
+$LANG_INC_PLAYERS = "Spieler";
+$LANG_INC_RANKINGS = "Rangliste";
+$LANG_INC_MAPS = "Karten";
+$LANG_INC_SERVERS = "Server";
+$LANG_INC_TOTALS = "Gesamtergebnisse";
+$LANG_INC_CAREERHIGHS = "Career&nbsp;Highs";
+$LANG_INC_MATCHHIGHS = "Match&nbsp;Highs";
+$LANG_INC_HELP = "Hilfe";

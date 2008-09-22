@@ -633,3 +633,15 @@ $LANG_CHATMESSAGES = "chat messages";
 // mapstats.php
 
 // serverstats.php
+
+// main.inc.php
+$LANG_INC_MAIN = "Main";
+$LANG_INC_MATCHES = "Matches";
+$LANG_INC_PLAYERS = "Players";
+$LANG_INC_RANKINGS = "Rankings";
+$LANG_INC_MAPS = "Maps";
+$LANG_INC_SERVERS = "Servers";
+$LANG_INC_TOTALS = "Totals";
+$LANG_INC_CAREERHIGHS = "Career&nbsp;Highs";
+$LANG_INC_MATCHHIGHS = "Match&nbsp;Highs";
+$LANG_INC_HELP = "Help";
