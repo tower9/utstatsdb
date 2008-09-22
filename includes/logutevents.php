@@ -24,6 +24,8 @@ if (preg_match("/logutevents.php/i", $_SERVER["PHP_SELF"])) {
   die();
 }
 
+define("TIME_OFFSET", 118.25); // This seems to be fairly accurate for UT '99
+
 // Server Info
 function tagut_info($i, $data)
 {
@@ -57,7 +59,7 @@ function tagut_info($i, $data)
 
       $match->timezone = substr($mdt, $p);
       $match->matchdate = strtotime(substr($mdt, 0, $r));
-
+      $match->timeoffset = TIME_OFFSET;
   	  break;
   	case "Server_ServerName":
       $match->servername = substr($data[3], 0, 45);
@@ -504,7 +506,7 @@ function tagut_game_start($i, $data)
 
   $match->starttime = ctime($data[0]);
   $match->started = 1;
-  $match->startdate = $match->matchdate + intval($match->starttime / 110);
+  $match->startdate = $match->matchdate + intval($match->starttime / TIME_OFFSET);
 
   for ($n = 0; $n <= $match->maxplayer; $n++)
     if (isset($player[$n]))

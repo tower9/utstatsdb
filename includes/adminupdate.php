@@ -101,6 +101,29 @@ function update303()
     exit;
   }
 
+  echo "Updating {$dbpre}matches...<br />\n";
+  if (strtolower($dbtype) == "sqlite")
+    $result = sql_queryn($link, "ALTER TABLE {$dbpre}matches ADD COLUMN gm_timeoffset float NOT NULL default 100");
+  else
+    $result = sql_queryn($link, "ALTER TABLE {$dbpre}matches ADD gm_timeoffset float unsigned NOT NULL default 100 AFTER gm_logname");
+  if (!$result) {
+    echo "<br />Error updating matches table.{$break}\n";
+    exit;
+  }
+
+  $result = sql_queryn($link, "UPDATE {$dbpre}matches SET gm_timeoffset=110");
+  if (!$result) {
+    echo "<br />Error updating matches table.{$break}\n";
+    exit;
+  }
+
+  // Try to detect UT '99 matches based on server version
+  $result = sql_queryn($link, "UPDATE {$dbpre}matches SET gm_timeoffset=118.25 WHERE gm_serverversion=436 OR gm_serverversion=451");
+  if (!$result) {
+    echo "<br />Error updating matches table.{$break}\n";
+    exit;
+  }
+
   echo "Updating version....<br />\n";
   $result = sql_queryn($link, "UPDATE {$dbpre}config SET value='3.03' WHERE conf='Version'");
   if (!$result) {
@@ -130,9 +153,9 @@ function update302()
 
   echo "Updating match start dates....<br />\n";
   if (strtolower($dbtype) == "sqlite")
-    $result = sql_queryn($link, "UPDATE {$dbpre}matches SET gm_init=gm_start,gm_start=gm_init+(gm_starttime DIV 110)");
+    $result = sql_queryn($link, "UPDATE {$dbpre}matches SET gm_init=gm_start,gm_start=gm_init+(gm_starttime DIV 110)"); // 118.25 for UT '99
   else
-    $result = sql_queryn($link, "UPDATE {$dbpre}matches SET gm_init=gm_start,gm_start=ADDTIME(gm_init, SEC_TO_TIME(gm_starttime DIV 110))");
+    $result = sql_queryn($link, "UPDATE {$dbpre}matches SET gm_init=gm_start,gm_start=ADDTIME(gm_init, SEC_TO_TIME(gm_starttime DIV 110))"); // 118.25 for UT '99
   if (!$result) {
     echo "<br />Error updating matches table.{$break}\n";
     exit;

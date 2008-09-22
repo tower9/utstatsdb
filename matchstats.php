@@ -2946,7 +2946,7 @@ while ($row = sql_fetch_assoc($result)) {
     $bot = 0;
   }
 
-  $time = sprintf("%0.1f", ($row["ge_time"] - ($delay * 110)) / 6000);
+  $time = sprintf("%0.1f", ($row["ge_time"] - ($delay * $gm_timeoffset)) / 6000);
   $quant = $row["ge_quant"];
   $reas = $row["ge_reason"];
 

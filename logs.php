@@ -706,21 +706,22 @@ while (isset($conflogs["logpath"][$lognum])) {
 
     if ($chatfile == "" && $chatreq)
       $match->ended = 18;
-    else
+    else {
       $match->ended = parselog($file,$chatfile);
 
-    // Check for ended on map switch or server quit - set new ended type
-    if ($config["allowincomplete"] && $match->ended == 6) // Map Change
-      $match->ended = 16;
-    else if  ($config["allowincomplete"] >= 2 && $match->ended == 2) // Other Endgame
-      $match->ended = 12;
-    else if  ($config["allowincomplete"] >= 3 && $match->ended == 7) // Server Quit
-      $match->ended = 17;
+      // Check for ended on map switch or server quit - set new ended type
+      if ($config["allowincomplete"] && $match->ended == 6) // Map Change
+        $match->ended = 16;
+      else if  ($config["allowincomplete"] >= 2 && $match->ended == 2) // Other Endgame
+        $match->ended = 12;
+      else if  ($config["allowincomplete"] >= 3 && $match->ended == 7) // Server Quit
+        $match->ended = 17;
 
-    if ($match->numhumans < 2 && !$config["savesingle"] && ($match->ended == 1 || $match->ended == 12 || $match->ended == 16 || $match->ended == 17))
-      $match->ended = 8;
-    else if ($match->numplayers < 2 && $config["savesingle"] == 1 && ($match->ended == 1 || $match->ended == 12 || $match->ended == 16 || $match->ended == 17))
-      $match->ended = 5;
+      if ($match->numhumans < 2 && !$config["savesingle"] && ($match->ended == 1 || $match->ended == 12 || $match->ended == 16 || $match->ended == 17))
+        $match->ended = 8;
+      else if ($match->numplayers < 2 && $config["savesingle"] == 1 && ($match->ended == 1 || $match->ended == 12 || $match->ended == 16 || $match->ended == 17))
+        $match->ended = 5;
+    }
 
     switch ($match->ended) {
       case -1:

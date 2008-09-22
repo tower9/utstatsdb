@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -139,7 +139,7 @@ if (!$result) {
   exit;
 }
 while ($row = sql_fetch_assoc($result)) {
-  $time = $row["ge_time"] - ($delay * 110);
+  $time = $row["ge_time"] - ($delay * $gm_timeoffset);
   $event = $row["ge_event"];
   $plr = $row["ge_plr"];
   $reas = $row["ge_reason"];
@@ -511,7 +511,7 @@ while ($row = sql_fetch_assoc($result)) {
           $chatlog[4][$numchat] = "$ktype $victim with a $weapon";
       }
     }
-    $chatlog[0][$numchat] = $row["gk_time"] - ($delay * 110);
+    $chatlog[0][$numchat] = $row["gk_time"] - ($delay * $gm_timeoffset);
     $chatlog[2][$numchat] = 0;
     $chatlog[3][$numchat] = "chatkill";
     $chatlog[5][$numchat++] = 2;
@@ -526,7 +526,7 @@ if (!$result) {
   exit;
 }
 while ($row = sql_fetch_assoc($result)) {
-  $chatlog[0][$numchat] = $row["gc_time"] - ($delay * 110);
+  $chatlog[0][$numchat] = $row["gc_time"] - ($delay * $gm_timeoffset);
   $chatlog[1][$numchat] = $row["gc_plr"];
   $chatlog[2][$numchat] = $row["gc_team"];
   $text = $row["gc_text"];

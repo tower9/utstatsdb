@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -72,6 +72,7 @@ class Match {
   var $firstblood = -1;
   var $lastball = -1;
   var $serverversion = 0;
+  var $timeoffset = 100;
   var $friendlyfirescale = 0;
   var $difficulty = -1;
   var $logger = 0;

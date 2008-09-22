@@ -9,6 +9,7 @@ CREATE TABLE %dbpre%matches (
   gm_start datetime NOT NULL default '0000-00-00 00:00:00',
   gm_logger tinyint(3) unsigned NOT NULL default 0,
   gm_logname varchar(45) NOT NULL default '',
+  gm_timeoffset float unsigned NOT NULL default 100,
   gm_rpg tinyint(1) unsigned NOT NULL default 0,
   gm_maxwave smallint(5) unsigned NOT NULL default 0,
   gm_difficulty tinyint(1) NOT NULL default 0,

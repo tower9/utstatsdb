@@ -34,6 +34,7 @@ function tag_ng ($i, $data)
 
   $match->ngfound = 1;
   $match->matchdate = strtotime($data[2]); // Date/Time (2002-10-26 21:55:20)
+  $match->timeoffset = 110;
   $match->timezone = $data[3]; // Time zone
   $match->mapfile = sql_addslashes(substr($data[4], 0, 32)); // Map filename
   $match->map = sql_addslashes(substr($data[5], 0, 32)); // Map title
