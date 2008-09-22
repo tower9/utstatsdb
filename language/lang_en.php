@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -220,7 +220,6 @@ $LANG_TOTALS = "Totals";
 // matchhighs.php
 $LANG_DATABASEERROR = "Database error.";
 $LANG_NOTOTALSDATA = "No data in stat totals database.";
-$LANG_TOTALS = "Totals";
 
 // totals.php
 // careerhighs.php
