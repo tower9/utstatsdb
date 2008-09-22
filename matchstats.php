@@ -225,7 +225,7 @@ switch ($gm_difficulty) {
   case 4: $difficulty = "{$LANG_ADEPT}"; break;
   case 5: $difficulty = "{$LANG_MASTERFUL}"; break;
   case 6: $difficulty = "{$LANG_INHUMAN}"; break;
-  case 7: $difficulty = "{$LANG_GODLIKE}"; break;
+  case 7: $difficulty = "{$LANG_BOTGODLIKE}"; break;
   default: $difficulty = "";
 }
 
