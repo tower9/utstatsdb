@@ -19,11 +19,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-require("language/lang_en.php");
 require("statsdb.inc.php"); // Set to the location of your account settings file
 require("logsql.php");
 $magicrt = get_magic_quotes_runtime();
 load_config();
+require("language/lang_{$lang}.php");
 
 function check_get(&$store, $val)
 {
@@ -101,6 +101,8 @@ function load_config()
     }
   }
   sql_free_result($result);
+
+  $lang = strtolower($lang);
 }
 
 function formatdate($dt, $tm)

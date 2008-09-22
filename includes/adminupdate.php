@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,6 +24,72 @@ function update303()
   global $dbtype, $dbpre, $break;
 
   $link = sql_connect();
+
+  echo "Updating {$dbpre}config....<br />\n";
+  $result = sql_queryn($link, "SELECT num FROM {$dbpre}config WHERE conf='php_timelimit'");
+  if (!$result) {
+  	echo "<br />Config database error!<br />\n";
+    exit;
+  }
+  $row = sql_fetch_row($result);
+  if (!$row) {
+  	echo "<br />Config database error!<br />\n";
+    exit;
+  }
+  $num = $row[0];
+  sql_free_result($result);
+
+  if (strtolower($dbtype) == "sqlite") {
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='ut99weapons'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='criticalfix'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='bothighs'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='invasiontotals'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='serverlist'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='allowswitches'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='fullvehiclestats'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='plistall'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='showbots'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='mapsearch'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='playersearch'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='usestatsname'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='ignorelogtype'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='skipinsession'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='discardscoreless'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='allowincomplete'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='savesingle'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='rankbots'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='ranksystem'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='useshortname'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='minranktime'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='minrankmatches'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='minchtime'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='minchmatches'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='dateformat'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='layout'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='navbar'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='matchespage'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='mapspage'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='serverspage'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='playerspage'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='demoext'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='demodir'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='rpgini'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='lockname'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='maxmatches'");
+    sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE conf='php_timelimit'");
+  }
+  else
+    $result = sql_queryn($link, "UPDATE {$dbpre}config SET num=num+1 WHERE num>=$num ORDER BY num DESC");
+  if (!$result) {
+    echo "<br />Error updating config table.{$break}\n";
+    exit;
+  }
+
+  $result = sql_queryn($link, "INSERT INTO {$dbpre}config (num,conf,type,value,name,descr) VALUES($num,'lang','s2','EN','Language','Language (current translations available: EN, DE)')");
+  if (!$result) {
+    echo "<br />Error updating config table.{$break}\n";
+    exit;
+  }
 
   echo "Updating {$dbpre}configlogs...<br />\n";
   if (strtolower($dbtype) == "sqlite")

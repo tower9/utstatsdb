@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -130,8 +130,7 @@ function sql_connect() {
         echo "Database access error.\n";
         die($sqlite_err);
       }
-      if (strtolower($dbtype) == "sqlite")
-        @sqlite_create_function($link, 'FROM_UNIXTIME', 'from_unixtime', 1);
+      @sqlite_create_function($link, 'FROM_UNIXTIME', 'from_unixtime', 1);
       @sqlite_unbuffered_query($link, "BEGIN");
       break;
     case "mssql":

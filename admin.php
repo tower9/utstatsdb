@@ -102,18 +102,22 @@ if (!isset($dbtype) || $dbtype == "") {
   echo "<b>Error: You must set the &amp;dbtype variable in your statsdb.inc.php file to your SQL database type (MySQL/SQLite).</b><br />\n";
   $error++;
 }
-if (!isset($SQLhost) || $SQLhost == "") {
-  echo "<b>Error: You must set the &amp;SQLhost variable in statsdb.inc.php to your SQL database server, usually 'localhost'.</b><br />\n";
-  $error++;
+
+if (strtolower($dbtype) != "sqlite") {
+  if (!isset($SQLhost) || $SQLhost == "") {
+    echo "<b>Error: You must set the &amp;SQLhost variable in statsdb.inc.php to your SQL database server, usually 'localhost'.</b><br />\n";
+    $error++;
+  }
+  if (!isset($SQLus) || $SQLus == "") {
+    echo "<b>Error: You must set the &amp;SQLus variable in statsdb.inc.php to your SQL database username.</b><br />\n";
+    $error++;
+  }
+  if (!isset($SQLpw) || $SQLpw == "") {
+    echo "<b>Error: You must set the &amp;SQLpw variable in statsdb.inc.php to your SQL database password.</b><br />\n";
+    $error++;
+  }
 }
-if (!isset($SQLus) || $SQLus == "") {
-  echo "<b>Error: You must set the &amp;SQLus variable in statsdb.inc.php to your SQL database username.</b><br />\n";
-  $error++;
-}
-if (!isset($SQLpw) || $SQLpw == "") {
-  echo "<b>Error: You must set the &amp;SQLpw variable in statsdb.inc.php to your SQL database password.</b><br />\n";
-  $error++;
-}
+
 if (!isset($SQLdb) || $SQLdb == "") {
   echo "<b>Error: You must set the &amp;SQLdb variable in statsdb.inc.php to your SQL database name.</b><br />\n";
   $error++;

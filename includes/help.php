@@ -24,6 +24,6 @@ if (preg_match("/help.php/i", $_SERVER["PHP_SELF"])) {
   die();
 }
 
-echo file_get_contents("language/help_en.php");
+echo file_get_contents("language/help_{$lang}.php");
 
 ?>

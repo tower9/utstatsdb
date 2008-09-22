@@ -11,6 +11,7 @@ INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('Version','h0','3.
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('AdminPass','p30','admin','Admin Pass','Administrative password.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('UpdatePass','p30','pass','Update Pass','Password used for running log parser.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('title','s50','UTStatsDB Server Stats','Title Bar','Title displayed on browser window.');
+INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('lang','s2','EN','Language','Language (current translations available: EN, DE)');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('php_timelimit','i8','90','PHP Time Limit','Time limit for PHP to time out while processing logs.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('maxmatches','i8','0','Max. Matches','Maximum matches to keep (0 = keep all).');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('lockname','s30','UTStatsDB','Lock Name','Set to unique name if running multiple stats systems on one server. Blank to disable.');
