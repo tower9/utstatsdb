@@ -1426,13 +1426,16 @@ if (!$totpickups) {
 EOF;
 }
 else {
-  while ($col < 3) {
-    echo <<<EOF
-  <td class="dark" align="center">&nbsp;</td>
-  <td class="grey" align="center">&nbsp;</td>
+  if ($col < 3) {
+    while ($col < 3) {
+      echo <<<EOF
+    <td class="dark" align="center">&nbsp;</td>
+    <td class="grey" align="center">&nbsp;</td>
 
 EOF;
-    $col++;
+      $col++;
+    }
+    echo "  </tr>\n";
   }
 }
 echo "</table>\n";
