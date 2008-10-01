@@ -1736,37 +1736,38 @@ EOF;
     }
   }
 
-  // Sort by change, new rank, start rank, rank order
-  array_multisort($rankpoints[2], SORT_DESC, SORT_NUMERIC,
-                  $rankpoints[3], SORT_DESC, SORT_NUMERIC,
-                  $rankpoints[1], SORT_DESC, SORT_NUMERIC,
-                  $rankpoints[0], SORT_ASC, SORT_NUMERIC);
+  if ( $n > 0 ) {
+    // Sort by change, new rank, start rank, rank order
+    array_multisort($rankpoints[2], SORT_DESC, SORT_NUMERIC,
+                    $rankpoints[3], SORT_DESC, SORT_NUMERIC,
+                    $rankpoints[1], SORT_DESC, SORT_NUMERIC,
+                    $rankpoints[0], SORT_ASC, SORT_NUMERIC);
 
-  for ($i = 0; $i < $n; $i++) {
-    $num = $rankpoints[0][$i];
-    if ($rankbots || !$gplayer[$num]["gp_bot"]) {
-      $name = $gplayer[$num]["gp_name"];
-      $change = $rankpoints[2][$i];
-      $nrank = sprintf("%0.2f", $rankpoints[3][$i]);
-      $srank = sprintf("%0.2f", $rankpoints[1][$i]);
-      if ($change == 0) {
-        $change = "0.00";
-        $ud = "";
-      }
-      else if ($change > 0) {
-        $change = sprintf("+%0.2f", $change);
-        $ud = "<img src=\"resource/rank_up.gif\" alt=\"{$LANG_RANKUP}\" />";
-      }
-      else {
-        $change = sprintf("%0.2f", $change);
-        $ud = "<img src=\"resource/rank_down.gif\" alt=\"{$LANG_RANKDOWN}\" />";
-      }
-      if ($gplayer[$num]["gp_bot"])
-        $nameclass = "darkbot";
-      else
-        $nameclass = "darkhuman";
+    for ($i = 0; $i < $n; $i++) {
+      $num = $rankpoints[0][$i];
+      if ($rankbots || !$gplayer[$num]["gp_bot"]) {
+        $name = $gplayer[$num]["gp_name"];
+        $change = $rankpoints[2][$i];
+        $nrank = sprintf("%0.2f", $rankpoints[3][$i]);
+        $srank = sprintf("%0.2f", $rankpoints[1][$i]);
+        if ($change == 0) {
+          $change = "0.00";
+          $ud = "";
+        }
+        else if ($change > 0) {
+          $change = sprintf("+%0.2f", $change);
+          $ud = "<img src=\"resource/rank_up.gif\" alt=\"{$LANG_RANKUP}\" />";
+        }
+        else {
+          $change = sprintf("%0.2f", $change);
+          $ud = "<img src=\"resource/rank_down.gif\" alt=\"{$LANG_RANKDOWN}\" />";
+        }
+        if ($gplayer[$num]["gp_bot"])
+          $nameclass = "darkbot";
+        else
+          $nameclass = "darkhuman";
 
-      echo <<<EOF
+        echo <<<EOF
   <tr>
     <td class="$nameclass" align="center"><a class="$nameclass" href="matchplayer.php?match=$matchnum&amp;player=$num">$name</a></td>
     <td class="grey" align="center">$srank</td>
@@ -1776,6 +1777,7 @@ EOF;
   </tr>
 
 EOF;
+      }
     }
   }
 

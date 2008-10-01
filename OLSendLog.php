@@ -127,7 +127,11 @@ if ($logpath == "") {
   exit;
 }
 
-$filename = $logpath.$filename.".log";
+$ext = strtolower(substr($filename, -4));
+if ($ext == ".log" || $ext == ".txt")
+  $filename = $logpath.$filename;
+else
+  $filename = $logpath.$filename.".log";
 
 if (($f = @fopen($filename, "w")) === FALSE)
 {

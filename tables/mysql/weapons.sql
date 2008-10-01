@@ -522,6 +522,7 @@ INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_SniperPrimary','S
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_secondary) VALUES('UTDmgType_SniperHeadShot','Sniper Rifle',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTWeap_Redeemer','Redeemer');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_Redeemer','Redeemer');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTWeap_Redeemer_Content','Redeemer');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_Telefrag','Telefrag');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTWeap_Translocator','Translocator');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_FailedTranslocation','Translocator');
@@ -541,11 +542,14 @@ INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_Slime','Slimed');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_Lava','Fell Into Lava');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('DmgType_Fell','Fell');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_Fire','Fire');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('DmgType_Crushed','Crushed');
 #--------------------------------------------------------------------------------------------------
+INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_ScorpionTurret','Scorpion',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_ScorpionBlade','Scorpion',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_ScorpionGlob','Scorpion',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_ScorpionGlobRed','Scorpion',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_ScorpionSelfDestruct','Scorpion',1);
+INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_MantaGun','Manta',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_MantaBolt','Manta',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_HellBenderPrimary','Hell Bender',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_GoliathTurret','Goliath',1);
@@ -564,13 +568,16 @@ INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_Palad
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_RaptorGun','Raptor',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_RaptorBolt','Raptor',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_RaptorRocket','Raptor',1);
+INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_CicadaMissileLauncher','Cicada',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_CicadaLaser','Cicada',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_CicadaRocket','Cicada',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_FuryBeam','Fury',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_FuryBolt','Fury',1);
+INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_ScavengerGun','Scavenger',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_ScavengerBolt','Scavenger',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_ScavengerStabbed','Scavenger',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_ScavengerBallCollision','Scavenger',1);
+INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_DarkWalkerPassGun','Dark Walker',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_DarkWalkerBolt','Dark Walker',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_DarkWalkerTurretBeam','Dark Walker',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_DarkWalkerTurret','Dark Walker',1);
@@ -584,6 +591,7 @@ INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_SPMAS
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype,wp_secondary) VALUES('UTDmgType_SPMAShockChain','SPMA',1,1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_SPMASmallShell','SPMA',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype,wp_secondary) VALUES('UTDmgType_SPMACameraCrush','SPMA',1,1);
+INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_ViperGun','Viper',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_ViperBolt','Viper',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype,wp_secondary) VALUES('UTDmgType_ViperSelfDestruct','Viper',1,1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype,wp_secondary) VALUES('UTDmgType_Pancake','Pancaked',1,4);
@@ -593,10 +601,13 @@ INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_Vehic
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_VehicleShockBall','Vehicle Shock Turret',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_VehicleShockBeam','Vehicle Shock Turret',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype,wp_secondary) VALUES('UTDmgType_VehicleShockChain','Vehicle Shock Turret',1,1);
+INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_TurretPrimary','Laser Turret',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_TurretPrimary','Laser Turret',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_RocketTurret','Rocket Turret',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_TurretRocket','Rocket Turret',1);
+INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_TurretStinger','Machine Gun Turret',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_TurretShard','Machine Gun Turret',1);
+INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_TurretShock','Shock Turret',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_TurretShockBall','Shock Turret',1);
 #--------------------------------------------------------------------------------------------------
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_NodeDestruction','Node Destruction');
@@ -604,5 +615,11 @@ INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_EMP','EMP');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_Encroached','Encroached');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_OrbReturn','Orb Return');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_SpaceDeath','Space Death');
+#--------------------------------------------------------------------------------------------------
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTWeap_RipperLite','Ripper');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_RipperLite','Ripper');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_RipperLiteHeadshot','Ripper');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_secondary) VALUES('UTDmgType_RipperLiteAlt','Ripper',1);
+#INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('KillZDamageType','Hole In Space');
 #
 #INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('','');

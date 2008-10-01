@@ -665,6 +665,16 @@ while (isset($conflogs["logpath"][$lognum])) {
   if (strlen($backuppath) && substr($backuppath, -1) != "/" && substr($backuppath, -1) != "\\")
     $backuppath.="/";
 
+  if (($uid = @getmyuid()) != FALSE)
+	  $gid = @getmygid();
+  if ( $uid != FALSE && $gid != FALSE ) {
+    echo "{$bold}Setting permissions in directory '$logpath' for '{$logprefix}*':{$ebold}{$break}\n";
+    $lp = $logpath."{$logprefix}*";
+    @chown($lp, $uid);
+  	@chgrp($lp, $gid);
+  	@chmod($lp, 0664);
+  }
+
   echo "{$bold}Processing directory '$logpath' for '{$logprefix}*':{$ebold}{$break}\n";
   $handle = opendir($logpath);
   while (($file = readdir($handle)) != false) {
