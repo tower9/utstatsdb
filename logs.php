@@ -27,6 +27,30 @@ if (preg_match("/admin.php/i", $_SERVER["PHP_SELF"])) {
   global $spree, $multi, $tchange, $uselimit, $assist, $relog, $pwastats;
   global $stattype, $flagstatus, $killmatch, $mutantstat, $logname, $matchnum;
 }
+else if (preg_match("/OLSendLog.php/i", $_SERVER["PHP_SELF"])) {
+  $AdminMenu = 1;
+  global $dbtype, $SQLhost, $SQLdb, $SQLus, $SQLpw, $config, $conflogs, $nohtml, $break;
+  global $link, $dbtype, $dbpre, $mysqlverh, $mysqlverl, $server, $player, $match;
+  global $events, $pickups, $gkills, $gscores, $tkills, $chatlog;
+  global $spree, $multi, $tchange, $uselimit, $assist, $relog, $pwastats;
+  global $stattype, $flagstatus, $killmatch, $mutantstat, $logname, $matchnum;
+
+  function check_get($val)
+  {
+    global $magic;
+
+    if (isset($_GET["$val"])) {
+      if ($magic)
+        $store = stripslashes($_GET["$val"]);
+      else
+        $store = $_GET["$val"];
+      if ($store)
+        return $store;
+      return 1;
+    }
+    return 0;
+  }
+}
 else {
   $AdminMenu = 0;
 

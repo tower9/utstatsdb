@@ -40,7 +40,7 @@ function check_post($val)
   return 0;
 }
 
-function loadconfig()
+function loadstatconfig()
 {
   global $dbpre, $UpdatePass, $conflogs;
 
@@ -98,8 +98,24 @@ function send_result($rc)
   echo "$rc\nBuffer\nBuffer\nBuffer";
 }
 
-loadconfig();
+function logparse() {
+  global $dbpre;
 
+  $result = sql_query("SELECT value FROM {$dbpre}config WHERE conf='UpdatePass' LIMIT 1");
+  if ($result) {
+    $row = sql_fetch_row($result);
+    sql_free_result($result);
+    $UpdatePass = $row[0];
+  }
+  else
+    return;
+
+  require("logs.php");
+}
+
+loadstatconfig();
+
+$okay = false;
 $password = check_post("pass");
 $filename = check_post("filename");
 $data = check_post("data");
@@ -141,9 +157,14 @@ if (($f = @fopen($filename, "w")) === FALSE)
 
 if ((fwrite($f, $data, strlen($data))) === FALSE)
   send_result("6");
-else
+else {
   send_result("1");
+  $okay = true;
+}
 
 fclose($f);
+
+if ($okay && $AutoParse)
+  logparse();
 
 ?>
