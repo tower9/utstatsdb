@@ -599,23 +599,23 @@ function GetStatus($ip, $port)
             $mut = "";
             $ival = intval($val);
             if ($ival & 0x0001)
-              $mut .= "Big Head, "; // UTGame.UTMutator_BigHead = 1
+              $mut .= "Kills Slow Time, "; // UTGame.UTMutator_???? = 1
             if ($ival & 0x0002)
-              $mut .= "Friendly Fire, "; // UTGame.UTMutator_FriendlyFire = 2
-            if ($ival & 0x0004)
-              $mut .= "Handicap, "; // UTGame.UTMutator_Handicap = 4
+              $mut .= "Big Head, "; // UTGame.UTMutator_BigHead = 2
             if ($ival & 0x0008)
-              $mut .= "Instagib, "; // UTGame.UTMutator_Instagib = 8
+              $mut .= "Friendly Fire, "; // UTGame.UTMutator_FriendlyFire = 8
             if ($ival & 0x0010)
-              $mut .= "Low Gravity, "; // UTGame.UTMutator_LowGrav = 16
+              $mut .= "Handicap, "; // UTGame.UTMutator_Handicap = 16
             if ($ival & 0x0020)
               $mut .= "Instagib, "; // UTGame.UTMutator_Instagib = 32
             if ($ival & 0x0040)
-              $mut .= "No Powerups, "; // UTGame.UTMutator_NoPowerups = 64
+              $mut .= "Low Gravity, "; // UTGame.UTMutator_LowGrav = 64
             if ($ival & 0x0080)
-              $mut .= "No Translocator, "; // UTGame.UTMutator_NoTranslocator = 128
+              $mut .= "No Super Pickups, "; // UTGame.UTMutator_NoPowerups = 128
             if ($ival & 0x0100)
-              $mut .= "Slomo, "; // UTGame.UTMutator_Slomo = 256
+              $mut .= "No Translocator, "; // UTGame.UTMutator_NoTranslocator = 256
+            if ($ival & 0x0200)
+              $mut .= "Slo Mo, "; // UTGame.UTMutator_Slomo = 512
             if ($ival & 0x0400)
               $mut .= "Speed Freak, "; // UTGame.UTMutator_SpeedFreak = 1024
             if ($ival & 0x0800)
