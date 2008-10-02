@@ -608,6 +608,8 @@ function GetStatus($ip, $port)
               $mut .= "Instagib, "; // UTGame.UTMutator_Instagib = 8
             if ($ival & 0x0010)
               $mut .= "Low Gravity, "; // UTGame.UTMutator_LowGrav = 16
+            if ($ival & 0x0020)
+              $mut .= "Instagib, "; // UTGame.UTMutator_Instagib = 32
             if ($ival & 0x0040)
               $mut .= "No Powerups, "; // UTGame.UTMutator_NoPowerups = 64
             if ($ival & 0x0080)
@@ -618,9 +620,9 @@ function GetStatus($ip, $port)
               $mut .= "Speed Freak, "; // UTGame.UTMutator_SpeedFreak = 1024
             if ($ival & 0x0800)
               $mut .= "Super Berserk, "; // UTGame.UTMutator_SuperBerserk = 2048
-            if ($ival & 0x2000)
+            if ($ival & 0x1000)
               $mut .= "Weapon Replacement, "; // UTGame.UTMutator_WeaponReplacement = 8192
-            if ($ival & 0x4000)
+            if ($ival & 0x2000)
               $mut .= "Weapons Respawn, "; // UTGame.UTMutator_WeaponsRespawn = 16384
             if ($mut == "")
               $sq_server["mutator"] = "";
