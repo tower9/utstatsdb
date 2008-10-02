@@ -623,14 +623,14 @@ function GetStatus($ip, $port)
             if ($ival & 0x4000)
               $mut .= "Weapons Respawn, "; // UTGame.UTMutator_WeaponsRespawn = 16384
             if ($mut == "")
-              $sq_server["mutator"] = "None";
+              $sq_server["mutator"] = "";
             else
               $sq_server["mutator"] = substr($mut, 0, -2);
             break;
           }
           case "p1073741828":
           {
-            $xmut = ", ";
+            $xmut = "";
           	for ($i = 0; $i < strlen($val); $i++)
           	{
           	  if (ord($val[$i]) == 28)
@@ -645,7 +645,14 @@ function GetStatus($ip, $port)
         }
       }
     }
-    $sq_server["mutator"] .= $xmut;
+
+    if ($sq_server["mutator"] == "" && $xmut == "")
+      $sq_server["mutator"] = "None";
+    else if ($sq_server["mutator"] != "" && $xmut != "")
+      $sq_server["mutator"] .= ", ";
+    if ($xmut != "")
+      $sq_server["mutator"] .= $xmut;
+
     $i = strpos($sq_server["mapname"], '-');
     if (strlen($sq_server["mapname"]) > $i + 2)
       $sq_server["mapname"] = substr($sq_server["mapname"], 0, $i + 2).strtolower(substr($sq_server["mapname"], $i + 2));
