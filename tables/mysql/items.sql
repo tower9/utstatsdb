@@ -234,5 +234,9 @@ INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Translocator_Content',
 INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_Avril_Content','AVRiL');
 INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTAmmo_AVRiL','AVRiL Ammo');
 INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTDeployableShapedCharge','Shaped Charge');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTWeap_RipperLite','Ripper');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTArmorPickup_Helmet','Helmet');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTBerserk','Berzerk');
+INSERT INTO %dbpre%items (it_type,it_desc) VALUES('UTInvisibility','Invisibility');
 #
 #INSERT INTO %dbpre%items (it_type,it_desc) VALUES('','');

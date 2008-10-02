@@ -620,6 +620,6 @@ INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTWeap_RipperLite','Ripper'
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_RipperLite','Ripper');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_RipperLiteHeadshot','Ripper');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_secondary) VALUES('UTDmgType_RipperLiteAlt','Ripper',1);
-#INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('KillZDamageType','Hole In Space');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('KillZDamageType','Fell');
 #
 #INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('','');
