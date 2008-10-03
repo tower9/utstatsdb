@@ -1,6 +1,6 @@
 <?php
 
-// OLSendLog v1.32
+// OLSendLog v1.33
 //
 // OverloadUT's OLSendLog for OLStats 3.01 modified by Panther for UTStatsDB 3.03
 
