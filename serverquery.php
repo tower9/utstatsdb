@@ -1025,33 +1025,40 @@ function DisplayPlayers($teamnum)
     for ($i = 0; $i < $numplr; $i++) {
       if (!$header) {
     echo <<<EOF
-      <table class="status" cellspacing="0" cellpadding="1" width="100%">
-        <tr>
-          <td class="statustitle" align="center" colspan="3">
-            <b>Players</b>
-          </td>
-        </tr>
-        <tr>
-          <td width="200"><b>Name</b></td>
-          <td width="50"><b>Score</b></td>
-          <td width="50"><b>Ping</b></td>
-        </tr>
+      <tr>
+        <td>
+          <table class="status" cellspacing="0" cellpadding="1" width="100%">
+            <tr>
+              <td class="statustitle" align="center" colspan="3">
+                <b>Players</b>
+              </td>
+            </tr>
+            <tr>
+              <td width="200"><b>Name</b></td>
+              <td width="50"><b>Score</b></td>
+              <td width="50"><b>Ping</b></td>
+            </tr>
 EOF;
           $header = 1;
       }
 
       if (isset($name[$i]) && (!$teamnum || (isset($team[$i]) && $team[$i] == $teamnum - 1))) {
         echo <<<EOF
-        <tr>
-          <td>{$name[$i]}</td>
-          <td>{$score[$i]}</td>
-          <td>{$ping[$i]}</td>
-        </tr>
+            <tr>
+              <td>{$name[$i]}</td>
+              <td>{$score[$i]}</td>
+              <td>{$ping[$i]}</td>
+            </tr>
 EOF;
       }
     }
     if ($header)
-      echo "      </table>\n";
+      echo <<<EOF
+          </table>
+        </td>
+      </tr>
+
+EOF;
   }
   else {
     if ($teamnum)
