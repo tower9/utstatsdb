@@ -523,11 +523,16 @@ function GetStatus($ip, $port)
       return false;
     }
     $data = substr($data, 16, -6);
-    $sdata = explode("\x00", $data);
+
+	$tempdata = explode("\x01", $data);
+    $sdata = explode("\x00", $tempdata[0]);
+    $tempdata = explode("\x02", $tempdata[1]);
+    $pdata = explode("\x00\x00", $tempdata[0]);
+    $tdata = explode("\x00\x00", $tempdata[1]);
 
     $sd = 0;
     $xmut = "";
-    while (isset($sdata[$sd])) {
+    while (isset($sdata[$sd]) && isset($sdata[$sd + 1])) {
       $ok = 1;
       $param = $sdata[$sd++];
       $val = $sdata[$sd++];
@@ -658,6 +663,78 @@ function GetStatus($ip, $port)
     $i = strpos($sq_server["mapname"], '-');
     if (strlen($sq_server["mapname"]) > $i + 2)
       $sq_server["mapname"] = substr($sq_server["mapname"], 0, $i + 2).strtolower(substr($sq_server["mapname"], $i + 2));
+
+    // Players
+    $sd = 0;
+    while (isset($pdata[$sd]) && isset($pdata[$sd + 1])) {
+      $param = $pdata[$sd++];
+      $val = $pdata[$sd++];
+      if (strlen($val) > 0 && ord($val) != 0x00) {
+        switch ($param) {
+          case "player_":
+            $tempdata = explode("\x00", $val);
+            $i = 0;
+            foreach ($tempdata as $tempd)
+              $sq_player[$i++]["player"] = $tempd;
+            break;
+          case "score_":
+            $tempdata = explode("\x00", $val);
+            $i = 0;
+            foreach ($tempdata as $tempd)
+              $sq_player[$i++]["score"] = $tempd;
+            break;
+          case "ping_":
+            $tempdata = explode("\x00", $val);
+            $i = 0;
+            foreach ($tempdata as $tempd)
+              $sq_player[$i++]["ping"] = $tempd;
+            break;
+          case "team_": // This doesn't appear to tell who is on what team.
+            $tempdata = explode("\x00", $val);
+            $i = 0;
+            foreach ($tempdata as $tempd)
+              $sq_player[$i++]["team"] = 0; // Lacking proper info in UT3
+            break;
+          case "deaths_":
+            $tempdata = explode("\x00", $val);
+            $i = 0;
+            foreach ($tempdata as $tempd)
+              $sq_player[$i++]["deaths"] = $tempd;
+            break;
+          case "pid_":
+            break;
+        }
+      }
+    }
+
+    // Teams
+    $sd = 0;
+    while (isset($tdata[$sd]) && isset($tdata[$sd + 1])) {
+      $param = $tdata[$sd++];
+      $val = $tdata[$sd++];
+      if (strlen($val) > 0 && ord($val) != 0x00) {
+        switch ($param) {
+          case "team_t":
+            break;
+          case "score_t":
+            $tempdata = explode("\x00", $val);
+            $i = 0;
+            foreach ($tempdata as $tempd) {
+              switch($i) {
+                case 0: $sq_team[$i]["team"] = "Red"; break;
+                case 1: $sq_team[$i]["team"] = "Blue"; break;
+                case 2: $sq_team[$i]["team"] = "Color3"; break;
+                case 3: $sq_team[$i]["team"] = "Color4"; break;
+                default: $sq_team[$i]["team"] = "TeamX";
+              }
+              $sq_team[$i]["size"] = 0; // Team info incomplete in UT3 query
+              $sq_team[$i++]["score"] = $tempd;
+              $teams = -1; // Team info incomplete in UT3 query
+            }
+            break;
+        }
+      }
+    }
   }
 
   fclose($fs);
@@ -777,12 +854,10 @@ EOF;
   echo <<<EOF
     </td>
   </tr>
-  <tr>
-    <td>
 
 EOF;
 
-  if (isset($sq_team[1])) {
+  if (isset($sq_team[1]) && $teams >= 0) {
     if (isset($sq_server["minplayers"]))
       $ncol = 5;
     else
@@ -797,11 +872,15 @@ EOF;
             <b>{$sq_team[0]['team']} Team: &nbsp;&nbsp;Players: {$sq_team[0]['size']} &nbsp;&nbsp;Score: {$sq_team[0]['score']}</b>
           </td>
         </tr>
+        <tr>
+          <td>
 
 EOF;
 
     DisplayPlayers(1);
     echo <<<EOF
+          </td>
+        </tr>
       </table>
     </td>
   </tr>
@@ -813,13 +892,15 @@ EOF;
             <b>{$sq_team[1]['team']} Team: &nbsp;&nbsp;Players: {$sq_team[1]['size']} &nbsp;&nbsp;Score: {$sq_team[1]['score']}</b>
           </td>
         </tr>
+        <tr>
+          <td>
 
 EOF;
     DisplayPlayers(2);
     echo <<<EOF
+          </td>
+        </tr>
       </table>
-    </td>
-  </tr>
 
 EOF;
   }
@@ -858,6 +939,26 @@ EOF;
   </tr>
 
 EOF;
+  }
+  else if ($teams < 0) {
+    echo <<<EOF
+  <tr>
+    <td colspan="5">
+      <table class="status" cellspacing="0" cellpadding="1" width="100%">
+        <tr>
+          <td class="redteambar" align="center" width="50%">
+            <b>Red Team Score: {$sq_team[0]['score']}</b>
+          </td>
+          <td style="font-size: 1pt">&nbsp;</td>
+          <td class="blueteambar" align="center" width="50%">
+            <b>Blue Team Score: {$sq_team[1]['score']}</b>
+          </td>
+        </tr>
+      </table>
+
+EOF;
+
+    DisplayPlayers(0);
   }
   else
     DisplayPlayers(0);
@@ -909,6 +1010,8 @@ function DisplayPlayers($teamnum)
       	  $name[] = $plr["player"];
           $score[] = $plr["score"];
           $ping[] = $plr["ping"];
+          if (isset($plr["team"]))
+            $team[] = $plr["team"];
           if ($score[$numplr] == 0xffff)
             $score[$numplr] = 0;
           $numplr++;
@@ -937,13 +1040,15 @@ EOF;
           $header = 1;
       }
 
-      echo <<<EOF
+      if (isset($name[$i]) && (!$teamnum || (isset($team[$i]) && $team[$i] == $teamnum - 1))) {
+        echo <<<EOF
         <tr>
-          <td>$name[$i]</td>
-          <td>$score[$i]</td>
-          <td>$ping[$i]</td>
+          <td>{$name[$i]}</td>
+          <td>{$score[$i]}</td>
+          <td>{$ping[$i]}</td>
         </tr>
 EOF;
+      }
     }
     if ($header)
       echo "      </table>\n";
