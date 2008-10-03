@@ -36,7 +36,7 @@ echo <<<EOF
                 <td class="statusnbw" align="right" width="95">Address:</td>
                 <td class="statusnbw" align="left" width="120">&nbsp;<a href="$query_link" class="status">$displaylink</a></td>
                 <td rowspan="$rows" align="center" valign="middle" width="268">
-                  <img src="mapimages/$mapimage" width="256" height="192" border="1" alt="Map Image" />
+                  <img src="mapimages/$mapimage" width="256" height="192" border="1" alt="Map Image" title="{$sq_server['mapname']}" />
                 </td>
               </tr>
               <tr>

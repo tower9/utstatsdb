@@ -14,7 +14,7 @@ echo <<<EOF
                 <td class="statusnbw" align="right" width="95">Address:</td>
                 <td class="statusnbw" align="left" width="225"><a href="$query_link" class="status">$displaylink</a></td>
                 <td class="mapimage" align="right" valign="middle" width="260" rowspan="14">
-                  <img src="mapimages/$mapimage" width="256" height="192" border="1" alt="Map Image" title="This is a test\nof the tooltips.\nEnd of test!" />
+                  <img src="mapimages/$mapimage" width="256" height="192" border="1" alt="Map Image" title="{$sq_server['mapname']}" />
                 </td>
               </tr>
               <tr>
