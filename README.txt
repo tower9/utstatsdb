@@ -14,6 +14,10 @@ descriptions and examples of the admin configuration screens.
 ===============================================================================
 ========== Enabling Local Stats Logging =======================================
 ===============================================================================
+To enable local stats logging on UT3, download UT3Stats from 
+http://www.utstatsdb.com and follow the included instructions.
+
+
 To enable local stats logging on UT2004, add the following to your UT2004.ini file:
 
 [Engine.GameStats]
@@ -82,6 +86,7 @@ $SQLdb = "utstatsdb";   // The MySQL database.
 $SQLus = "utstats";     // A MySQL user with SELECT,INSERT,UPDATE,DELETE,CREATE,INDEX grants.
 $SQLpw = "statspass";   // The password for the above MySQL user.
 $InitPass = "initpass"; // Required for initializing the database tables.
+$AutoParse = false;     // Enable to have OLSendLog automatically parse after receiving a new log.
 
 For added security you can optionally copy the 'statsdb.inc.php' file to a 
 location outside of your public path.  If so, create a new statsdb.inc.php with 
