@@ -7,6 +7,7 @@ $SQLdb = "utstatsdb";   // The MySQL database name or full path to SQLite databa
 $SQLus = "utstats";     // A MySQL user with SELECT,INSERT,UPDATE,DELETE,CREATE,INDEX,CREATE TEMPORARY TABLES grants.
 $SQLpw = "statspass";   // The password for the above MySQL user.
 $InitPass = "initpass"; // Required for initializing the database tables.
+$AutoParse = false;     // Enable to have OLSendLog automatically parse after receiving a new log.
 
 // Optionally you can include the following line modified with the path to a file 
 // outside of your web path with the above information in it:

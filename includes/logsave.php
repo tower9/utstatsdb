@@ -152,7 +152,7 @@ function storedata()
   $match->numplayers = 0;
   $playerc = current($player);
   while ($playerc !== FALSE) {
-    if (isset($playerc->name) && $playerc->name != "")
+    if (isset($playerc->name) && $playerc->name != "" && $relog[$playerc->plr] < 0)
       $match->numplayers++;
     $playerc = next($player);
   }

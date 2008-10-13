@@ -44,19 +44,6 @@ function tag_c ($i, $data)
   else if ($i == 5 || $i == 7) {
     $player[$plr]->team = intval($data[3]);
     set_name($plr, substr($data[4], 0, 30));
-    // Check for existing player name
-    $relogged = 0;
-    if (!$player[$plr]->is_bot()) {
-      for ($i2 = 0; $i2 <= $match->maxplayer && $relog[$plr] < 0; $i2++) {
-        if (isset($player[$i2]) && $plr != $i2 && !strcmp($player[$plr]->name, $player[$i2]->name) && !$player[$i2]->connected && !$player[$i2]->user && !$player[$i2]->id) {
-          $relog[$plr] = $i2;
-          $player[$plr]->name = "";
-          $player[$i2]->connected = 1;
-          $player[$i2]->starttime = $time;
-          connections($i2, $time, 0);
-        }
-      }
-    }
     if ($i == 5)
       $player[$plr]->bot = true;
     if ($i == 7) {
@@ -207,7 +194,7 @@ function tag_pa ($i, $data)
   if ($plr < 0)
     return;
 
-  $weapon = substr($data[3], 0, 35);
+  $weapon = substr($data[3], 0, 60);
   $fired = intval($data[4]);
   $hit = intval($data[5]);
   $damage = intval($data[6]);
@@ -241,7 +228,7 @@ function tag_bi ($i, $data)
   $bot_reaction = 0;
   $bot_jumpiness = floatval($data[11]);
 
-  list($bot_favorite,$weapontype,$weaponsec) = get_weapon(substr($data[12], 0, 35), 0);
+  list($bot_favorite,$weapontype,$weaponsec) = get_weapon(substr($data[12], 0, 60), 0);
   bot_add($plr,$bot_skill,$bot_alertness,$bot_accuracy,$bot_aggressive,$bot_strafing,$bot_style,$bot_tactics,$bot_transloc,$bot_reaction,$bot_jumpiness,$bot_favorite);
 }
 

@@ -102,7 +102,12 @@ function load_config()
   }
   sql_free_result($result);
 
-  $lang = strtolower($lang);
+  if (!isset($lang) || strlen($lang) != 2) {
+    global $lang;
+    $lang = "en";
+  }
+  else
+    $lang = strtolower($lang);
 }
 
 function formatdate($dt, $tm)

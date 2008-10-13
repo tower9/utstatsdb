@@ -586,9 +586,9 @@ function tagut_kill($killtype, $i, $data)
 
   $time = ctime($data[0]);
   $killer = check_player($data[2]);
-  $killweapon = substr($data[3], 0, 35);
+  $killweapon = substr($data[3], 0, 60);
   $victim = check_player($data[4]);
-  $victweapon = substr($data[5], 0, 35);
+  $victweapon = substr($data[5], 0, 60);
   $damagetype = $data[6];
 
   if ($killer >= 0)
@@ -818,7 +818,7 @@ function tagut_suicide($i, $data)
 
   $time = ctime($data[0]);
   $plr = check_player($data[2]);
-  $weapon = substr($data[3], 0, 35);
+  $weapon = substr($data[3], 0, 60);
   $damagetype = $data[4];
 
   $tm = intval($player[$plr]->team);
@@ -1306,7 +1306,7 @@ function tagut_weapshots($i, $data) // 921.55	weap_shotcount	Minigun	0	439
 
   $time = ctime($data[0]);
   $plr = check_player($data[3]);
-  $weapon = substr($data[2], 0, 35);
+  $weapon = substr($data[2], 0, 60);
   $fired = intval($data[4]);
 
   list($weaponnum,$weapontype,$weaponsec) = get_weapon($weapon, 0);
@@ -1322,7 +1322,7 @@ function tagut_weaphits($i, $data) // 921.55	weap_hitcount	Minigun	0	60
 
   $time = ctime($data[0]);
   $plr = check_player($data[3]);
-  $weapon = substr($data[2], 0, 35);
+  $weapon = substr($data[2], 0, 60);
   $hit = intval($data[4]);
 
   list($weaponnum,$weapontype,$weaponsec) = get_weapon($weapon, 0);
@@ -1338,7 +1338,7 @@ function tagut_weapdamage($i, $data) // 921.55	weap_damagegiven	Minigun	0	921
 
   $time = ctime($data[0]);
   $plr = check_player($data[3]);
-  $weapon = substr($data[2], 0, 35);
+  $weapon = substr($data[2], 0, 60);
   $damage = intval($data[4]);
 
   list($weaponnum,$weapontype,$weaponsec) = get_weapon($weapon, 0);

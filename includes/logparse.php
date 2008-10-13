@@ -318,7 +318,7 @@ function parselog($file,$chatfile)
   reset($player);
   $playerc = current($player);
   while ($playerc !== FALSE) {
-    if (isset($playerc->name) && $playerc->name != "") {
+    if (isset($playerc->name) && $playerc->name != "" && $relog[$playerc->plr] < 0) {
       $match->numplayers++;
       if (!$playerc->is_bot())
         $match->numhumans++;

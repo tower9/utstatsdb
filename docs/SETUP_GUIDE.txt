@@ -149,9 +149,9 @@ Extract the latest UTStatsDB program to your web server's document directory.
 The default for Apache 2.0 would be "c:\Program Files\Apache Group\Apache2\htdocs".
 
 You should now have a directory such as:
-"c:\Program Files\Apache Group\Apache2\htdocs\utstatsdb-3.00".
+"c:\Program Files\Apache Group\Apache2\htdocs\utstatsdb-3.04".
 
-Rename "utstatsdb-3.00" to "utstats".
+Rename "utstatsdb-3.04" to "utstats".
 
 Edit the file "includes/statsdb.inc.php" in your utstats directory.
 Change the $SQLpw variable from "statspass" to whatever you set for the new user 

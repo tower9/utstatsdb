@@ -269,7 +269,7 @@ function tag_g ($i, $data)
       if ($i >= 4 && $plr >= 0) {
         $player[$plr]->carjack++;
         if ($i >= 5) {
-          $vehicle = substr($data[4], 0, 35);
+          $vehicle = substr($data[4], 0, 60);
           list($vehiclenum,$vehicletype,$vehiclesec) = get_weapon($vehicle, 0);
           weaponspecial($time, $plr, 3, $vehiclenum);
         }
@@ -407,7 +407,7 @@ function tag_p ($i, $data)
       if ($i >= 4 && $plr >= 0) {
         $player[$plr]->carjack++;
         if ($i >= 5) {
-          $vehicle = substr($data[4], 0, 35);
+          $vehicle = substr($data[4], 0, 60);
           list($vehiclenum,$vehicletype,$vehiclesec) = get_weapon($vehicle, 0);
           weaponspecial($time, $plr, 3, $vehiclenum);
         }

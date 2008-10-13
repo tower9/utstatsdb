@@ -33,9 +33,9 @@ function tag_k ($i, $data)
 
   $killtime = ctime($data[0]);
   $killer = check_player($data[2]);
-  $killweapon = substr($data[3], 0, 35);
+  $killweapon = substr($data[3], 0, 60);
   $victim = check_player($data[4]);
-  $victweapon = substr($data[5], 0, 35);
+  $victweapon = substr($data[5], 0, 60);
 
   if ($killer >= 0)
   {
@@ -210,9 +210,9 @@ function tag_tk ($i, $data)
 
   $killtime = ctime($data[0]);
   $killer = check_player($data[2]);
-  $killweapon = substr($data[3], 0, 35);
+  $killweapon = substr($data[3], 0, 60);
   $victim = check_player($data[4]);
-  $victweapon = substr($data[5], 0, 35);
+  $victweapon = substr($data[5], 0, 60);
 
   if ($killer >= 0)
   {
@@ -285,8 +285,8 @@ function tag_mk ($i, $data)
   $victim = check_player($data[2]);
   if ($victim < 0)
     return;
-  $monster = substr($data[3], 0, 35);
-  $victweapon = substr($data[4], 0, 35);
+  $monster = substr($data[3], 0, 60);
+  $victweapon = substr($data[4], 0, 60);
 
   if ($victim >= 0)
   {
@@ -333,8 +333,8 @@ function tag_md ($i, $data)
   $killer = check_player($data[2]);
   if ($killer < 0)
     return;
-  $weapon = substr($data[3], 0, 35);
-  $monster = substr($data[4], 0, 35);
+  $weapon = substr($data[3], 0, 60);
+  $monster = substr($data[4], 0, 60);
 
   if ($killer >= 0)
   {

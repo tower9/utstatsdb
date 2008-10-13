@@ -1,7 +1,7 @@
 CREATE TABLE %dbpre%weapons (
   wp_num INTEGER PRIMARY KEY,
-  wp_type varchar(35) NOT NULL default '',
-  wp_desc varchar(35) NOT NULL default '',
+  wp_type varchar(60) NOT NULL default '',
+  wp_desc varchar(40) NOT NULL default '',
   wp_weaptype tinyint(3) NOT NULL default 0,
   wp_secondary tinyint(3) NOT NULL default 0,
   wp_frags int(11) NOT NULL default 0,
@@ -555,6 +555,7 @@ INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_HellB
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_GoliathTurret','Goliath',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_TankShell','Goliath',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_GoliathMachineGun','Goliath Machine Gun',1);
+INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTVWeap_GoliathMachineGun','Goliath Machine Gun',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_LeviathanBeam','Leviathan',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype) VALUES('UTDmgType_LeviathanBolt','Leviathan',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_weaptype,wp_secondary) VALUES('UTDmgType_LeviathanCollision','Leviathan',1,1);
@@ -621,5 +622,19 @@ INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_RipperLite','Ripp
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('UTDmgType_RipperLiteHeadshot','Ripper');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc,wp_secondary) VALUES('UTDmgType_RipperLiteAlt','Ripper',1);
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('KillZDamageType','Fell');
+#--------------------------------------------------------------------------------------------------
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('BattleWeapon_ImpactHammer','Impact Hammer');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('BattleWeapon_Enforcer','Enforcer');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('BattleWeapon_BioRifle','Bio Rifle');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('BattleWeapon_ShockRifle','Shock Rifle');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('BattleWeapon_LinkGun','Link Gun');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('BattleWeapon_Stinger','Stinger Minigun');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('BattleWeapon_FlakCannon','Flak Cannon');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('BattleWeapon_RocketLauncher','Rocket Launcher');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('BattleWeapon_SniperRifle','Sniper Rifle');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('BattleDamageType_LateEntry','Late Entry');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('BattleDamageType_ReverseFriendlyFire','Reverse Fire');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('BattleDamageType_RoundOvertime','Round Overtime');
+INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('BattleDamageType_Camping','Camping');
 #
 #INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('','');

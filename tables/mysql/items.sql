@@ -4,7 +4,7 @@ CREATE TABLE %dbpre%items (
   it_desc varchar(40) NOT NULL default '',
   it_pickups mediumint(8) unsigned NOT NULL default 0,
   UNIQUE KEY it_num (it_num),
-  KEY it_typ (it_type)
+  UNIQUE KEY it_typ (it_type)
 ) Type=MyISAM;
 
 INSERT INTO %dbpre%items (it_type,it_desc) VALUES('ShieldGunPickup','Shield Gun');

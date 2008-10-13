@@ -1,5 +1,10 @@
 Release Notes:
 
+Version 3.04
+  Various updates for support of Unreal Tournament 3.
+  Fixed problem with properly determining player relogs.
+  Cleaned up some team display issues in server query.
+
 Version 3.03
   Created German language files.
   Adjusted time offset for UT '99.
