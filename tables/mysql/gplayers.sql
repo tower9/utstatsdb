@@ -6,6 +6,7 @@ CREATE TABLE %dbpre%gplayers (
   gp_ip varchar(21) NOT NULL default '',
   gp_netspeed mediumint(8) unsigned NOT NULL default 0,
   gp_ping smallint(5) unsigned NOT NULL default 0,
+  gp_packetloss int(10) unsigned NOT NULL default 0,
   gp_tscore0 smallint(6) NOT NULL default 0,
   gp_tscore1 smallint(6) NOT NULL default 0,
   gp_tscore2 smallint(6) NOT NULL default 0,

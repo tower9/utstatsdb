@@ -19,6 +19,33 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+function update305()
+{
+  global $dbtype, $dbpre, $break;
+
+  $link = sql_connect();
+
+  echo "Updating {$dbpre}gplayers...<br />\n";
+  if (strtolower($dbtype) == "sqlite")
+    $result = sql_queryn($link, "ALTER TABLE {$dbpre}gplayers ADD COLUMN gp_packetloss int(10) NOT NULL default 0");
+  else
+    $result = sql_queryn($link, "ALTER TABLE {$dbpre}gplayers ADD gp_packetloss int(10) unsigned NOT NULL default 0 AFTER gp_ping");
+  if (!$result) {
+    echo "<br />Error updating gplayers table.{$break}\n";
+    exit;
+  }
+
+  echo "Updating version....<br />\n";
+  $result = sql_queryn($link, "UPDATE {$dbpre}config SET value='3.05' WHERE conf='Version'");
+  if (!$result) {
+    echo "<br />Error updating version.{$break}\n";
+    exit;
+  }
+
+  sql_close($link);
+  echo "<br />Database updates complete.<br />\n";
+}
+
 function update304()
 {
   global $dbtype, $dbpre, $break;

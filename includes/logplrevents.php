@@ -172,12 +172,25 @@ function tag_pp ($i, $data)
   $time = ctime($data[0]);
   $plr = check_player($data[2]);
   $ping = intval($data[3]);
+  if ($i > 4)
+    $packetloss = intval($data[4]);
+  if ($i > 5)
+    $netspeed = intval($data[5]);
 
   if ($plr < 0)
     return;
 
   $player[$plr]->ping += $ping;
   $player[$plr]->pingcount++;
+  if ($i > 4)
+  {
+    if ($player[$plr]->netspeedcount == 0)
+      $player[$plr]->netspeed = 0;
+    $player[$plr]->netspeed += $netspeed;
+    $player[$plr]->netspeedcount++;
+  }
+  if ($i > 5)
+    $player[$plr]->packetloss += $packetloss;
 }
 
 // Player Accuracy

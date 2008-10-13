@@ -138,8 +138,10 @@ class Player {
   var $hash = "";
   var $ip = "";
   var $netspeed = 0;
+  var $netspeedcount = 0;
   var $ping = 0;
   var $pingcount = 0;
+  var $packetloss = 0;
   var $tscore = array(0.0, 0.0, 0.0, 0.0);
   var $teamkills = array(0, 0, 0, 0);
   var $teamdeaths = array(0, 0, 0, 0);

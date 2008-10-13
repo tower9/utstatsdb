@@ -7,7 +7,7 @@ CREATE TABLE %dbpre%config (
   descr varchar(100) NOT NULL default ''
 );
 
-INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('Version','h0','3.04','Version','UTStatsDB version.');
+INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('Version','h0','3.05','Version','UTStatsDB version.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('AdminPass','p30','admin','Admin Pass','Administrative password.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('UpdatePass','p30','pass','Update Pass','Password used for running log parser.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('title','s50','UTStatsDB Server Stats','Title Bar','Title displayed on browser window.');

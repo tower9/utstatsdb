@@ -417,10 +417,14 @@ function storedata()
       }
 
       // Calculate player average ping time
-      if ($player[$i]->pingcount)
+      if ($player[$i]->pingcount > 0)
         $player[$i]->avgping = intval(round(floatval($player[$i]->ping) / floatval($player[$i]->pingcount)));
       else
         $player[$i]->avgping = 0;
+
+      // Calculate player average netspeed
+      if ($player[$i]->netspeedcount > 0)
+        $player[$i]->netspeed = intval(round(floatval($player[$i]->netspeed) / floatval($player[$i]->netspeedcount)));
 
       // Check for name change
       if ($plr_name != $player[$i]->name)
@@ -505,7 +509,7 @@ function storedata()
         $i,
         {$player[$i]->bot},
         $pnum,
-        '{$player[$i]->ip}',{$player[$i]->netspeed},{$player[$i]->avgping},
+        '{$player[$i]->ip}',{$player[$i]->netspeed},{$player[$i]->avgping},{$player[$i]->packetloss},
         {$player[$i]->tscore[0]},{$player[$i]->tscore[1]},{$player[$i]->tscore[2]},{$player[$i]->tscore[3]},
         {$player[$i]->kills[0]},{$player[$i]->kills[1]},{$player[$i]->kills[2]},{$player[$i]->kills[3]},
         {$player[$i]->deaths[0]},{$player[$i]->deaths[1]},{$player[$i]->deaths[2]},{$player[$i]->deaths[3]},
@@ -1270,7 +1274,7 @@ function storedata()
             echo "Error updating pwkills table entry [2a].{$break}\n";
             exit;
           }
-          if ($gkkwtype == 3 && $match->logger == 1) {
+          if ($gkkwtype == 3 && $match->logger > 0) {
             $mwk = findmwk($match->mapnum, $gkkweapon);
             $result = sql_queryn($link, "UPDATE {$dbpre}mwkills SET mwk_kills=mwk_kills+1 WHERE mwk_num=$mwk LIMIT 1");
             if (!$result) {
