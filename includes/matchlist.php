@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -93,7 +93,7 @@ sql_free_result($result);
 // Load Game Stats
 $matches = 0;
 $start = ($page * $matchespage) - $matchespage;
-$result = sql_queryn($link, "SELECT gm_num,gm_server,gm_map,gm_type,gm_start,gm_length,gm_numplayers,mp_name,sv_name FROM {$dbpre}matches LEFT JOIN {$dbpre}maps ON mp_num=gm_map LEFT JOIN {$dbpre}servers ON sv_num=gm_server ORDER BY gm_start DESC LIMIT $start,$matchespage");
+$result = sql_queryn($link, "SELECT gm_num,gm_server,gm_map,gm_type,gm_start,gm_length,gm_numplayers,mp_name,sv_name,sv_shortname FROM {$dbpre}matches LEFT JOIN {$dbpre}maps ON mp_num=gm_map LEFT JOIN {$dbpre}servers ON sv_num=gm_server ORDER BY gm_start DESC LIMIT $start,$matchespage");
 if (!$result) {
   echo "{$LANG_GAMEDATABASEERROR}<br>\n";
   exit;
@@ -111,7 +111,10 @@ while($row = sql_fetch_assoc($result)) {
   $matchdate = formatdate($start, 1);
   $length = sprintf("%0.1f", $gm_length / 6000.0);
   $map = stripspecialchars($mp_name);
-  $server = stripspecialchars($sv_name);
+  if ($useshortname)
+    $server = stripspecialchars($sv_shortname);
+  else
+    $server = stripspecialchars($sv_name);
   if (strlen($server) > 30)
     $server = substr($server, 0, 28)."...";
   $matches++;

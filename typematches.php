@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2005  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -67,14 +67,17 @@ if ($plr > 0) {
   $pagetype = "player=$plr";
 }
 else if ($servernum > 0) {
-  $result = sql_queryn($link, "SELECT sv_name FROM {$dbpre}servers WHERE sv_num=$servernum LIMIT 1");
+  $result = sql_queryn($link, "SELECT sv_name,sv_shortname FROM {$dbpre}servers WHERE sv_num=$servernum LIMIT 1");
   if (!$result) {
     echo "Server Database Error.<br>\n";
     exit;
   }
-  list($sv_name) = sql_fetch_row($result);
+  list($sv_name,$sv_shortname) = sql_fetch_row($result);
   sql_free_result($result);
-  $servername = stripspecialchars($sv_name);
+  if ($useshortname)
+    $servername = stripspecialchars($sv_shortname);
+  else
+    $servername = stripspecialchars($sv_name);
   $heading = "$servername";
   $pagetype = "server=$servernum";
 }

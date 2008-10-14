@@ -25,6 +25,18 @@ function update305()
 
   $link = sql_connect();
 
+  echo "Updating {$dbpre}config...<br />\n";
+  $result = sql_queryn($link, "INSERT INTO {$dbpre}config (conf,type,value,name,descr) VALUES('AutoParse','b2|Disabled|Enabled','0','Auto-parse','Set to true to have OLSendLog automatically parse after receiving a new log.')");
+  if (!$result) {
+    echo "<br />Error updating config table.{$break}\n";
+    exit;
+  }
+  $result = sql_queryn($link, "UPDATE {$dbpre}config SET descr='Use Short Name','Use server short name instead of full name.' WHERE conf='useshortname'");
+  if (!$result) {
+    echo "<br />Error updating config table.{$break}\n";
+    exit;
+  }
+
   echo "Updating {$dbpre}gplayers...<br />\n";
   if (strtolower($dbtype) == "sqlite")
     $result = sql_queryn($link, "ALTER TABLE {$dbpre}gplayers ADD COLUMN gp_packetloss int(10) NOT NULL default 0");

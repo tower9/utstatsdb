@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -47,7 +47,10 @@ if (!$row) {
 }
 while (list ($key, $val) = each ($row))
   ${$key} = $val;
-$servername = stripspecialchars($sv_name);
+if ($useshortname)
+  $servername = stripspecialchars($sv_shortname);
+else
+  $servername = stripspecialchars($sv_name);
 if ($sv_addr)
   $svn = "<a href=\"$sv_addr\" class=\"grey\">$servername</a>";
 else

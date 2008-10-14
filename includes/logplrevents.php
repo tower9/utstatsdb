@@ -183,14 +183,14 @@ function tag_pp ($i, $data)
   $player[$plr]->ping += $ping;
   $player[$plr]->pingcount++;
   if ($i > 4)
+    $player[$plr]->packetloss += $packetloss;
+  if ($i > 5)
   {
     if ($player[$plr]->netspeedcount == 0)
       $player[$plr]->netspeed = 0;
     $player[$plr]->netspeed += $netspeed;
     $player[$plr]->netspeedcount++;
   }
-  if ($i > 5)
-    $player[$plr]->packetloss += $packetloss;
 }
 
 // Player Accuracy

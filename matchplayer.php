@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -102,14 +102,17 @@ else {
 sql_free_result($result);
 
 // Load Server Data
-$result = sql_queryn($link, "SELECT sv_name,sv_admin,sv_email FROM {$dbpre}servers WHERE sv_num=$gm_server LIMIT 1");
+$result = sql_queryn($link, "SELECT sv_name,sv_shortname,sv_admin,sv_email FROM {$dbpre}servers WHERE sv_num=$gm_server LIMIT 1");
 if (!$result) {
   echo "Server database error.<br />\n";
   exit;
 }
-list($sv_name,$sv_admin,$sv_email) = sql_fetch_row($result);
+list($sv_name,$sv_shortname,$sv_admin,$sv_email) = sql_fetch_row($result);
 sql_free_result($result);
-$servername = stripspecialchars($sv_name);
+if ($useshortname)
+  $servername = stripspecialchars($sv_shortname);
+else
+  $servername = stripspecialchars($sv_name);
 $serveradmin = stripspecialchars($sv_admin);
 $serveremail = stripspecialchars($sv_email);
 

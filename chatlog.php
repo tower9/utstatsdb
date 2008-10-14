@@ -97,14 +97,17 @@ $delay = $start - strtotime($gm_init);
 $matchdate = formatdate($start, 1);
 
 // Get Server Name
-$result = sql_queryn($link, "SELECT sv_name FROM {$dbpre}servers WHERE sv_num=$gm_server LIMIT 1");
+$result = sql_queryn($link, "SELECT sv_name,sv_shortname FROM {$dbpre}servers WHERE sv_num=$gm_server LIMIT 1");
 if (!$result) {
   echo "Server database error.<br />\n";
   exit;
 }
-list($server) = sql_fetch_row($result);
+list($sv_name,$sv_shortname) = sql_fetch_row($result);
 sql_free_result($result);
-$server = stripspecialchars($server);
+if ($useshortname)
+  $server = stripspecialchars($sv_shortname);
+else
+  $server = stripspecialchars($sv_name);
 
 // Get Map Name
 $result = sql_queryn($link, "SELECT mp_name FROM {$dbpre}maps WHERE mp_num=$gm_map LIMIT 1");

@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ EOF;
 
 // Load Server Stats
 $start = ($page * $serverspage) - $serverspage;
-$result = sql_queryn($link, "SELECT sv_num,sv_name,sv_matches,sv_frags,sv_score,sv_time,sv_lastmatch FROM {$dbpre}servers ORDER BY sv_matches DESC LIMIT $start,$serverspage");
+$result = sql_queryn($link, "SELECT sv_num,sv_name,sv_shortname,sv_matches,sv_frags,sv_score,sv_time,sv_lastmatch FROM {$dbpre}servers ORDER BY sv_matches DESC LIMIT $start,$serverspage");
 if (!$result) {
   echo "{$LANG_SERVERDATABASEERROR}<br>\n";
   exit;
@@ -84,7 +84,10 @@ while($row = sql_fetch_assoc($result)) {
   while (list ($key, $val) = each ($row))
     ${$key} = $val;
 
-  $servername = stripspecialchars($sv_name);
+  if ($useshortname)
+    $servername = stripspecialchars($sv_shortname);
+  else
+    $servername = stripspecialchars($sv_name);
   $start = strtotime($sv_lastmatch);
   $matchdate = formatdate($start, 1);
   $tottime = sprintf("%0.1f", $sv_time / 360000.0);

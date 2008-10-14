@@ -154,7 +154,8 @@ function tag_si($i, $data)
 
   while (parseserverdata($siline, $param, $val)) {
     $info = strtolower(trim($param));
-    $status = strtolower(trim($val));
+    $status = trim($val);
+    $statusl = strtolower($status);
     switch($info) {
       case "servermode": // dedicated
         break;
@@ -167,25 +168,25 @@ function tag_si($i, $data)
         break;
       case "password":
       case "gamepassword":
-        if ($status == "true")
+        if ($statusl == "true" || intval($statusl) == 1)
           $match->password = 1;
         else
           $match->password = 0;
         break;
       case "gamestats":
-        if ($status == "true")
+        if ($statusl == "true" || intval($statusl) == 1)
           $match->gamestats = 1;
         else
           $match->gamestats = 0;
         break;
       case "mapvoting":
-        if ($status == "true")
+        if ($statusl == "true" || intval($statusl) == 1)
           $match->mapvoting = 1;
         else
           $match->mapvoting = 0;
         break;
       case "kickvoting":
-        if ($status == "true")
+        if ($statusl == "true" || intval($statusl) == 1)
           $match->kickvoting = 1;
         else
           $match->kickvoting = 0;
@@ -207,28 +208,28 @@ function tag_si($i, $data)
         $match->overtime = intval($status);
         break;
       case "translocator":
-        if ($status == "true")
+        if ($statusl == "true" || intval($statusl) == 1)
           $match->translocator = 1;
         else
           $match->translocator = 0;
         break;
       case "bbalanceteams":
       case "balanceteams":
-        if ($status == "true")
+        if ($statusl == "true" || intval($statusl) == 1)
           $match->balanceteams = 1;
         else
           $match->balanceteams = 0;
         break;
       case "bplayersbalanceteams":
       case "playersbalanceteams":
-        if ($status == "true")
+        if ($statusl == "true" || intval($statusl) == 1)
           $match->playersbalanceteams = 1;
         else
           $match->playersbalanceteams = 0;
         break;
       case "friendlyfirescale": // percentage
       case "friendlyfire":
-        $match->friendlyfirescale = sql_addslashes(substr($status, 0, 9));
+        $match->friendlyfirescale = sql_addslashes(substr($statusl, 0, 9));
         break;
       case "linksetup":
         $match->linksetup = sql_addslashes(substr($status, 0, 25));
@@ -243,37 +244,37 @@ function tag_si($i, $data)
         // $camperrewarninterval = 10;
         break;
       case "healthforkills":
-        if ($status == "true")
+        if ($statusl == "true" || intval($statusl) == 1)
           $match->healthforkills = 1;
         else
           $match->healthforkills = 0;
         break;
       case "allowsuperweapons":
-        if ($status == "true")
+        if ($statusl == "true" || intval($statusl) == 1)
           $match->allowsuperweapons = 1;
         else
           $match->allowsuperweapons = 0;
         break;
       case "camperalarm":
-        if ($status == "true")
+        if ($statusl == "true" || intval($statusl) == 1)
           $match->camperalarm = 1;
         else
           $match->camperalarm = 0;
         break;
       case "allowpickups":
-        if ($status == "true")
+        if ($statusl == "true" || intval($statusl) == 1)
           $match->allowpickups = 1;
         else
           $match->allowpickups = 0;
         break;
       case "allowadrenaline":
-        if ($status == "true")
+        if ($statusl == "true" || intval($statusl) == 1)
           $match->allowadrenaline = 1;
         else
           $match->allowadrenaline = 0;
         break;
       case "fullammo":
-        if ($status == "true")
+        if ($statusl == "true" || intval($statusl) == 1)
           $match->fullammo = 1;
         else
           $match->fullammo = 0;

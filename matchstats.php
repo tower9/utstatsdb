@@ -76,17 +76,20 @@ if (!(list($gametype,$gametval,$teams) = sql_fetch_row($result))) {
 sql_free_result($result);
 
 // Load Server Data
-$result = sql_queryn($link, "SELECT sv_name,sv_admin,sv_email FROM {$dbpre}servers WHERE sv_num=$gm_server LIMIT 1");
+$result = sql_queryn($link, "SELECT sv_name,sv_shortname,sv_admin,sv_email FROM {$dbpre}servers WHERE sv_num=$gm_server LIMIT 1");
 if (!$result) {
   echo "{$LANG_SERVERDATABASEERROR}<br />\n";
   exit;
 }
-if (!list($sv_name,$sv_admin,$sv_email) = sql_fetch_row($result)) {
+if (!list($sv_name,$sv_shortname,$sv_admin,$sv_email) = sql_fetch_row($result)) {
   echo "{$LANG_SERVERNOTFOUND}<br />\n";
   exit;
 }
 sql_free_result($result);
-$servername = stripspecialchars($sv_name);
+if ($useshortname)
+  $servername = stripspecialchars($sv_shortname);
+else
+  $servername = stripspecialchars($sv_name);
 $serveradmin = stripspecialchars($sv_admin);
 $serveremail = stripspecialchars($sv_email);
 
@@ -2875,7 +2878,7 @@ EOF;
 //=============================================================================
 //========== Player Info ======================================================
 //=============================================================================
-if ($gm_logger == 1 || $gm_logger == 2) {
+if ($gm_logger == 1) {
   echo <<<EOF
 <br />
 <table cellpadding="1" cellspacing="2" border="0" width="350">
@@ -2904,6 +2907,43 @@ EOF;
     <td class="darkhuman" align="center">$name</td>
     <td class="grey" align="center">$netspeed</td>
     <td class="grey" align="center">$ping</td>
+  </tr>
+
+EOF;
+  }
+  echo "</table>\n";
+} else if ($gm_logger == 2) {
+  echo <<<EOF
+<br />
+<table cellpadding="1" cellspacing="2" border="0" width="350">
+  <tr>
+    <td class="heading" colspan="4" align="center">{$LANG_PLAYERNETSPEEDANDPINGTIME}</td>
+  </tr>
+  <tr>
+    <td class="smheading" align="center">{$LANG_PLAYER}</td>
+    <td class="smheading" align="center" width="70">{$LANG_NETSPEED}</td>
+    <td class="smheading" align="center" width="70">{$LANG_AVGPING}</td>
+    <td class="smheading" align="center" width="70">{$LANG_PACKETLOSS}</td>
+  </tr>
+
+EOF;
+
+  for ($r = 1; $r <= $gm_numplayers; $r++) {
+    $i = $ranks[$r];
+    $bot = $gplayer[$i]["gp_bot"];
+    if ($bot) // Do not list bots here
+      continue;
+    $name = "<a class=\"darkhuman\" href=\"matchplayer.php?match=$matchnum&amp;player=$i\">{$gplayer[$i]['gp_name']}</a>";
+    $netspeed = $gplayer[$i]["gp_netspeed"];
+    $ping = $gplayer[$i]["gp_ping"];
+    $packetloss = $gplayer[$i]["gp_packetloss"];
+
+    echo <<<EOF
+  <tr>
+    <td class="darkhuman" align="center">$name</td>
+    <td class="grey" align="center">$netspeed</td>
+    <td class="grey" align="center">$ping</td>
+    <td class="grey" align="center">$packetloss</td>
   </tr>
 
 EOF;

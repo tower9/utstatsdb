@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2005  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -62,8 +62,8 @@ function server_merge($src, $dst)
   echo <<<EOF
 <b>Merging servers:</b><br />
 <br />
-<b>Source:</b> [$src] $src_sv_name<br />
-<b>Destination:</b> [$dst] $dst_sv_name<br />
+<b>Source:</b> [$src] $src_sv_name ($src_sv_shortname)<br />
+<b>Destination:</b> [$dst] $dst_sv_name ($dst_sv_shortname)<br />
 <br />
 
 EOF;

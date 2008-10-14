@@ -600,6 +600,7 @@ $LANG_THEREWERENOITEMPICKUPSLOGGED = "Es wurden keine aufgehobenen Gegenstände g
 $LANG_PLAYERNETSPEEDANDPINGTIME = "Spieler Netspeed und Ping Time";
 $LANG_NETSPEED = "Netspeed";
 $LANG_AVGPING = "Avg. Ping";
+$LANG_PACKETLOSS = "Packet Loss";
 $LANG_CONNECTIONLOG = "Connection Log";
 $LANG_STATUS = "Status";
 $LANG_ERRORLOADINGCONNECTIONEVENTS = "Fehler beim Laden der Verbindungsereignisse.";

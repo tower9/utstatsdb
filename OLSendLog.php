@@ -46,10 +46,11 @@ function loadstatconfig()
 
   $magicrt = get_magic_quotes_runtime();
   $link = sql_connect();
-  $result = sql_querynb($link, "SELECT value FROM {$dbpre}config WHERE conf='UpdatePass' LIMIT 1");
-  if ($result && sql_num_rows($result)) {
-    $row = sql_fetch_row($result);
-    $UpdatePass = $magicrt ? stripslashes($row[0]) : $row[0];
+  $result = sql_querynb($link, "SELECT conf,value FROM {$dbpre}config WHERE conf='UpdatePass' OR conf='AutoParse'");
+  if ($result && sql_num_rows($result) >= 2) {
+  	while ($row = sql_fetch_row($result)) {
+      ${$row[0]} = $magicrt ? stripslashes($row[1]) : $row[1];
+    }
     sql_free_result($result);
   }
   else {
@@ -164,7 +165,7 @@ else {
 
 fclose($f);
 
-if ($okay && $AutoParse)
+if ($okay && $autoparse)
   logparse();
 
 ?>

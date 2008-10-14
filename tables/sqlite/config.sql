@@ -29,7 +29,7 @@ INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('minchmatches','i5
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('minchtime','i8','10','Min. CH Time','Minimum time in minutes for player to appear on career highs.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('minrankmatches','i5','0','Min. Rank Matches','Minimum matches for player to be ranked.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('minranktime','i8','0','Min. Rank Time','Minimum time in minutes for player to be ranked.');
-INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('useshortname','b2|Disabled|Enabled','0','Use Short Name','Use short player names from logs (special logging required).');
+INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('useshortname','b2|Disabled|Enabled','0','Use Short Name','Use server short name instead of full name.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('ranksystem','b2|Disabled|Enabled','1','Rank System','Enable ranking system.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('rankbots','b2|Disabled|Enabled','0','Rank Bots','Include bots in ranking system.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('savesingle','b3|Two Humans|Two Humans/Bots|One','2','Minimum Players','Save matches with single players.');
@@ -49,3 +49,4 @@ INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('invasiontotals','
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('bothighs','b2|Disabled|Enabled','0','Bot Highs','Enable to include bots in totals, match highs, and career highs.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('criticalfix','b2|Disabled|Enabled','1','Critical Fix','Fix for UT2004 bug with critical frags not granting enough points.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('ut99weapons','b2|Disabled|Enabled','0','UT99 Weap Prefix','Add prefix to UT99 weapons to separate from non-UT99 weapons.');
+INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('AutoParse','b2|Disabled|Enabled','0','Auto-parse','Set to true to have OLSendLog automatically parse after receiving a new log.');
