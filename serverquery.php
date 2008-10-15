@@ -1089,7 +1089,7 @@ function DisplayDown($svr)
   </tr>
 
   <tr>
-    <td align="center">Server is <span class="offline">Offline</span></td>
+    <td align="center">Server is <span class="offline">Offline or Not Responding</span></td>
   </tr>
 </table>
 

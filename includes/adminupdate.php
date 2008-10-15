@@ -31,7 +31,7 @@ function update305()
     echo "<br />Error updating config table.{$break}\n";
     exit;
   }
-  $result = sql_queryn($link, "UPDATE {$dbpre}config SET descr='Use Short Name','Use server short name instead of full name.' WHERE conf='useshortname'");
+  $result = sql_queryn($link, "UPDATE {$dbpre}config SET descr='Use server short name instead of full name.' WHERE conf='useshortname'");
   if (!$result) {
     echo "<br />Error updating config table.{$break}\n";
     exit;
