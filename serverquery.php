@@ -30,7 +30,11 @@ function InitQuery($ip, $port)
     socket_set_blocking($fs, TRUE);
   else
     set_socket_blocking($fs, TRUE);
-  socket_set_timeout($fs, 1, 0);
+
+  if (function_exists('stream_set_timeout'))
+    stream_set_timeout($fs, 3, 0);
+  else
+    socket_set_timeout($fs, 3, 0);
 
   return $fs;
 }
@@ -122,9 +126,17 @@ function SendQuery3($fs, $query)
     return $data;
   }
 
-  for ($i = 0; $i < 4; $i++) {
+  // Packets may not be received in correct order
+  for ($i = 0, $lastpacket = -1; $i < 4; $i++) {
     $data[] = @fread($fs, 2048);
-    if (strlen($data[$i]) < 19 || substr($data[$i], -3) == "\x00\x00\x00")
+
+    if (strlen($data[$i]) < 19)
+      break;
+
+    if (substr($data[$i], -3) == "\x00\x00\x00")
+      $lastpacket = ord(substr($data[$i], 15, 1));
+
+    if ($lastpacket >= 0 && $i == $lastpacket)
       break;
   }
 
@@ -539,7 +551,15 @@ function GetStatus($ip, $port)
 
     $qstring = sprintf("\xFE\xFD\x00\x11\x22\x33\x44%c%c%c%c\xFF\xFF\xFF\x01", $challenge >> 24, $challenge >> 16, $challenge >> 8, $challenge );
 
-    $data = SendQuery3($fs, $qstring);
+    $datax = SendQuery3($fs, $qstring);
+
+    // Reorder packets
+    $data = array();
+    for ($i = 0; isset($datax[$i]); $i++) {
+      $x = ord(substr($datax[$i], 15, 1));
+      $data[$x] = $datax[$i];
+    }
+
     if (strlen($data[0]) < 30)
     {
       fclose($fs);
@@ -583,17 +603,23 @@ function GetStatus($ip, $port)
 
     $temp = explode("\x00\x00\x01", $data[0]);
     $data_main = explode("\x00\x00", $temp[0]);
-    $temp = explode("\x00\x00\x02", $temp[1]);
+    if (isset($temp[1])) {
+      $temp = explode("\x00\x00\x02", $temp[1]);
 
-    if (isset($temp[0]))
-      $data_plr = explode("\x00\x00", $temp[0]);
-    else
+      if (isset($temp[0]))
+        $data_plr = explode("\x00\x00", $temp[0]);
+      else
+        $data_plr = "";
+
+      if (isset($temp[1]))
+        $data_team = explode("\x00\x00", $temp[1]);
+      else
+        $data_team = "";
+    }
+    else {
       $data_plr = "";
-
-    if (isset($temp[1]))
-      $data_team = explode("\x00\x00", $temp[1]);
-    else
       $data_team = "";
+    }
 
     if (count($data_main) < 2) {
       fclose($fs);
@@ -1075,7 +1101,69 @@ function DisplayPlayers($teamnum)
     return;
 
   $link = -1;
-  if ($query_type) {
+  if ($query_type == 3) {
+    // Sort by score
+    $numplr = 0;
+    foreach($sq_player as $plr) {
+      if (isset($plr["player"])) {
+      	if (isset($plr["player"])) {
+      	  $name[] = $plr["player"];
+          $score[] = $plr["score"];
+          $deaths[] = $plr["deaths"];
+          $ping[] = $plr["ping"];
+          if (isset($plr["team"]))
+            $team[] = $plr["team"];
+          if ($score[$numplr] == 0xffff)
+            $score[$numplr] = 0;
+          $numplr++;
+        }
+      }
+    }
+    if ($numplr)
+      array_multisort($score, SORT_NUMERIC, SORT_DESC, $ping);
+
+    $header = 0;
+    for ($i = 0; $i < $numplr; $i++) {
+      if (!$header) {
+    echo <<<EOF
+      <tr>
+        <td>
+          <table class="status" cellspacing="0" cellpadding="1" width="100%">
+            <tr>
+              <td class="statustitle" align="center" colspan="4">
+                <b>Players</b>
+              </td>
+            </tr>
+            <tr>
+              <td width="200"><b>Name</b></td>
+              <td width="50"><b>Score</b></td>
+              <td width="50"><b>Deaths</b></td>
+              <td width="50"><b>Ping</b></td>
+            </tr>
+EOF;
+          $header = 1;
+      }
+
+      if (isset($name[$i]) && (!$teamnum || (isset($team[$i]) && $team[$i] == $teamnum - 1))) {
+        echo <<<EOF
+            <tr>
+              <td>{$name[$i]}</td>
+              <td>{$score[$i]}</td>
+              <td>{$deaths[$i]}</td>
+              <td>{$ping[$i]}</td>
+            </tr>
+EOF;
+      }
+    }
+    if ($header)
+      echo <<<EOF
+          </table>
+        </td>
+      </tr>
+
+EOF;
+  }
+  else if ($query_type) {
     // Sort by score
     $numplr = 0;
     foreach($sq_player as $plr) {
