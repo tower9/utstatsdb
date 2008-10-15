@@ -584,23 +584,27 @@ function GetStatus($ip, $port)
       $ar = substr($data[$i], 0, $p);
       $ap = ord(substr($data[$i], $p + 1, 1));
       $or = strpos($data[0], $ar);
-      if ($or == FALSE)
-        break;
-
-      for ($x = 0, $op = $or; $x < $ap + 2; $x++) {
-        $op = strpos($data[0], "\x00", $op + 1);
-        if ($op == FALSE)
-          break;
+      if ($or == FALSE) {
+        // Find last 00 00 and insert after there.
+        $op = strrpos($data[0], "\x00\x00"); // PHP 5!
+        $data[0] = substr($data[0], 0, $op + 2);
+        $data[0] .= $data[$i];
       }
-
-      if ($op != FALSE) {
-        $data[0] = substr($data[0], 0, $op + 1);
-        $data[0] .= substr($data[$i], $p + 2);
+      else {
+        for ($x = 0, $op = $or; $x < $ap + 2; $x++) {
+          $op = strpos($data[0], "\x00", $op + 1);
+          if ($op == FALSE)
+            break;
+        }
+  
+        if ($op != FALSE) {
+          $data[0] = substr($data[0], 0, $op + 1);
+          $data[0] .= substr($data[$i], $p + 2);
+        }
       }
     }
 
     $data[0] = substr($data[0], 0, -1); // Remove null from end
-
     $temp = explode("\x00\x00\x01", $data[0]);
     $data_main = explode("\x00\x00", $temp[0]);
     if (isset($temp[1])) {
