@@ -1053,7 +1053,6 @@ EOF;
           <td class="redteambar" align="center" width="50%">
             <b>Red Team Score: {$sq_team[0]['score']}</b>
           </td>
-          <td style="font-size: 1pt">&nbsp;</td>
           <td class="blueteambar" align="center" width="50%">
             <b>Blue Team Score: {$sq_team[1]['score']}</b>
           </td>
