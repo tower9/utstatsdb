@@ -39,7 +39,7 @@ function update305()
 
   echo "Updating {$dbpre}gplayers...<br />\n";
   if (strtolower($dbtype) == "sqlite")
-    $result = sql_queryn($link, "ALTER TABLE {$dbpre}gplayers ADD COLUMN gp_packetloss int(10) NOT NULL default 0");
+    $result = sqlite_alter_table($link, "{$dbpre}gplayers", "ADD gp_packetloss int(10) NOT NULL default 0");
   else
     $result = sql_queryn($link, "ALTER TABLE {$dbpre}gplayers ADD gp_packetloss int(10) unsigned NOT NULL default 0 AFTER gp_ping");
   if (!$result) {

@@ -498,4 +498,187 @@ function sql_show_tables($query) {
   return $result;
 }
 
+// Modified from code by Jon Jensen
+function sqlite_alter_table($link, $table, $alterdefs)
+{
+  $result = sqlite_query($link, "SELECT sql,name,type FROM sqlite_master WHERE tbl_name = '".$table."' ORDER BY type DESC");
+
+  if (sqlite_num_rows($result) > 0) {
+    $row = sqlite_fetch_array($result);
+    $tmpname = 't'.time();
+    $origsql = trim(preg_replace("/[\s]+/"," ",str_replace(",",", ",preg_replace("/[\(]/","( ",$row['sql'],1))));
+    $createtemptableSQL = 'CREATE TEMPORARY '.substr(trim(preg_replace("'".$table."'",$tmpname,$origsql,1)),6);
+    $createindexsql = array();
+    $i = 0;
+    $defs = preg_split("/[,]+/",$alterdefs,-1,PREG_SPLIT_NO_EMPTY);
+    $prevword = $table;
+
+    // $oldcols = preg_split("/[,]+/",substr(trim($createtemptableSQL),strpos(trim($createtemptableSQL),'(')+1),-1,PREG_SPLIT_NO_EMPTY);
+    $oldcols = array();
+    $tmpcols = trim($origsql);
+    $p = strpos($tmpcols, "(");
+    $tmpcols = substr($tmpcols, $p + 1);
+    $tmpcols = trim($tmpcols);
+    $p = strpos($tmpcols, ",");
+
+    while ($p != FALSE) {
+      $n = 0;
+      if (substr($tmpcols, $p - 2, 1) != "(" && substr($tmpcols, $p - 3, 1) != "(") {
+        $oldcols[] = substr($tmpcols, 0, $p);
+        $tmpcols = substr($tmpcols, $p + 1);
+      }
+      else
+        $n = $p + 1;
+      $p = strpos($tmpcols, ",", $n);
+    }
+
+    $newcols = array();
+
+    for ($i=0;$i<sizeof($oldcols);$i++) {
+      $colparts = preg_split("/[\s]+/",$oldcols[$i],-1,PREG_SPLIT_NO_EMPTY);
+      $oldcols[$i] = $colparts[0];
+      $newcols[$colparts[0]] = $colparts[0];
+    }
+
+    $newcolumns = '';
+    $oldcolumns = '';
+    reset($newcols);
+
+    while (list($key,$val) = each($newcols)) {
+      $newcolumns .= ($newcolumns?', ':'').$val;
+      $oldcolumns .= ($oldcolumns?', ':'').$key;
+    }
+
+    $copytotempsql = 'INSERT INTO '.$tmpname.'('.$newcolumns.') SELECT '.$oldcolumns.' FROM '.$table;
+    $dropoldsql = 'DROP TABLE '.$table;
+    $createtesttableSQL = $createtemptableSQL;
+
+    foreach ($defs as $def) {
+      $defparts = preg_split("/[\s]+/", $def, -1, PREG_SPLIT_NO_EMPTY);
+      $action = strtolower($defparts[0]);
+      switch($action) {
+      case 'add':
+        if (sizeof($defparts) <= 2) {
+          trigger_error('near "'.$defparts[0].($defparts[1]?' '.$defparts[1]:'').'": syntax error',E_USER_WARNING);
+          return false;
+        }
+        $createtesttableSQL = substr($createtesttableSQL,0,strlen($createtesttableSQL)-1).',';
+        for ($i = 1; $i < sizeof($defparts); $i++)
+          $createtesttableSQL.=' '.$defparts[$i];
+        $createtesttableSQL.=')';
+        break;
+      case 'change':
+        if (sizeof($defparts) <= 3) {
+          trigger_error('near "'.$defparts[0].($defparts[1]?' '.$defparts[1]:'').($defparts[2]?' '.$defparts[2]:'').'": syntax error',E_USER_WARNING);
+          return false;
+        }
+        if ($severpos = strpos($createtesttableSQL,' '.$defparts[1].' ')) {
+          if ($newcols[$defparts[1]] != $defparts[1]) {
+            trigger_error('unknown column "'.$defparts[1].'" in "'.$table.'"',E_USER_WARNING);
+            return false;
+          }
+          $newcols[$defparts[1]] = $defparts[2];
+          $nextcommapos = strpos($createtesttableSQL,',',$severpos);
+          $insertval = '';
+          for ($i=2;$i<sizeof($defparts);$i++)
+            $insertval.=' '.$defparts[$i];
+          if ($nextcommapos)
+            $createtesttableSQL = substr($createtesttableSQL,0,$severpos).$insertval.substr($createtesttableSQL,$nextcommapos);
+          else
+            $createtesttableSQL = substr($createtesttableSQL,0,$severpos-(strpos($createtesttableSQL,',')?0:1)).$insertval.')';
+        }
+        else {
+          trigger_error('unknown column "'.$defparts[1].'" in "'.$table.'"',E_USER_WARNING);
+          return false;
+        }
+        break;
+      case 'drop':
+        if (sizeof($defparts) < 2) {
+          trigger_error('near "'.$defparts[0].($defparts[1]?' '.$defparts[1]:'').'": syntax error',E_USER_WARNING);
+          return false;
+        }
+        if ($severpos = strpos($createtesttableSQL,' '.$defparts[1].' ')) {
+          $nextcommapos = strpos($createtesttableSQL,',',$severpos);
+          if ($nextcommapos)
+            $createtesttableSQL = substr($createtesttableSQL,0,$severpos).substr($createtesttableSQL,$nextcommapos + 1);
+          else
+            $createtesttableSQL = substr($createtesttableSQL,0,$severpos-(strpos($createtesttableSQL,',')?0:1) - 1).')';
+          unset($newcols[$defparts[1]]);
+        }
+        else {
+          trigger_error('unknown column "'.$defparts[1].'" in "'.$table.'"',E_USER_WARNING);
+          return false;
+        }
+        break;
+      default:
+        trigger_error('near "'.$prevword.'": syntax error',E_USER_WARNING);
+        return false;
+      }
+      $prevword = $defparts[sizeof($defparts)-1];
+    }
+
+    // Generates a test table simply to verify that the columns specifed are valid in an sql statement
+    $result = sqlite_query($link, $createtesttableSQL);
+    if (!$result) {
+      print("SQLite Error creating test table.<br>\n");
+      return false;
+    }
+    $droptempsql = 'DROP TABLE '.$tmpname;
+    $result = sqlite_query($link, $droptempsql);
+    if (!$result) {
+      print("SQLite Error dropping test table.<br>\n");
+      return false;
+    }
+
+    $createnewtableSQL = 'CREATE '.substr(trim(preg_replace("'".$tmpname."'",$table,$createtesttableSQL,1)),17);
+    $newcolumns = '';
+    $oldcolumns = '';
+    reset($newcols);
+
+    while (list($key,$val) = each($newcols)) {
+      $newcolumns .= ($newcolumns?', ':'').$val;
+      $oldcolumns .= ($oldcolumns?', ':'').$key;
+    }
+    $copytonewsql = 'INSERT INTO '.$table.'('.$newcolumns.') SELECT '.$oldcolumns.' FROM '.$tmpname;
+
+    $result = sqlite_query($link, $createtemptableSQL); // Create temp table
+    if (!$result) {
+      print("SQLite Error creating temp table.<br>\n");
+      return false;
+    }
+    $result = sqlite_query($link, $copytotempsql); // Copy to table
+    if (!$result) {
+      print("SQLite Error copying to temp table.<br>\n");
+      return false;
+    }
+    $result = sqlite_query($link, $dropoldsql); // Drop old table
+    if (!$result) {
+      print("SQLite Error dropping old table.<br>\n");
+      return false;
+    }
+
+    $result = sqlite_query($link, $createnewtableSQL); // Recreate original table
+    if (!$result) {
+      print("SQLite Error creating original table.<br>\n");
+      return false;
+    }
+    $result = sqlite_query($link, $copytonewsql); // Copy back to original table
+    if (!$result) {
+      print("SQLite Error copying to original table.<br>\n");
+      return false;
+    }
+    $result = sqlite_query($link, $droptempsql); // Drop temp table
+    if (!$result) {
+      print("SQLite Error dropping temp table.<br>\n");
+      return false;
+    }
+  }
+  else {
+    trigger_error('no such table: '.$table,E_USER_WARNING);
+    return false;
+  }
+
+  return true;
+}
+
 ?>
