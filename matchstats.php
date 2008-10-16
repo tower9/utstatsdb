@@ -2801,18 +2801,15 @@ if ($gametval != 18) {
 
 EOF;
 
+  // Load Item Descriptions
   $result = sql_queryn($link, "SELECT it_num,it_desc FROM {$dbpre}items");
   if (!$result) {
     echo "{$LANG_ERRORLOADINGITEMPICKUPDESC}<br />\n";
     exit;
   }
-  $numitems = 0;
-  while ($row = sql_fetch_row($result)) {
-    $num = intval($row[0]);
-    $pickups[0][$num] = $row[1];
-    $pickups[1][$num] = 0;
-    $numitems++;
-  }
+  $items = array();
+  while ($row = sql_fetch_row($result))
+    $items[$row[0]] = $row[1];
   sql_free_result($result);
 
   $result = sql_queryn($link, "SELECT gi_item,gi_pickups FROM {$dbpre}gitems WHERE gi_match=$matchnum");
@@ -2820,18 +2817,29 @@ EOF;
     echo "{$LANG_ERRORLOADINGITEMPICKUPS}<br />\n";
     exit;
   }
+
+  $pickups = array(array());
+  $totpickups = 0;
   while ($row = sql_fetch_row($result)) {
-    $num = intval($row[0]);
-    $pickups[1][$num] += $row[1];
+    for ($i = 0, $item = -1; $i < $totpickups && $item < 0; $i++) {
+      if (!strcmp($pickups[0][$i], $items[$row[0]]))
+        $item = $i;
+    }
+    if ($item < 0) {
+      $pickups[0][$totpickups] = $items[$row[0]];
+      $pickups[1][$totpickups++] = $row[1];
+    }
+    else
+      $pickups[1][$item] += $row[1];
   }
   sql_free_result($result);
 
-  if ($numitems > 0)
+  if ($totpickups > 0)
     array_multisort($pickups[1], SORT_DESC, SORT_NUMERIC,
                     $pickups[0], SORT_ASC, SORT_STRING);
 
-  $col = $totpickups = 0;
-  for ($i = 0; $i < $numitems; $i++) {
+  $col = 0;
+  for ($i = 0; $i < $totpickups; $i++) {
     $item = $pickups[0][$i];
     $num = $pickups[1][$i];
     if ($num) {
@@ -2847,7 +2855,6 @@ EOF;
       if ($col == 2)
         echo "  </tr>\n";
       $col++;
-      $totpickups++;
     }
   }
 

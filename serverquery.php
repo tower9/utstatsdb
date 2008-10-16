@@ -120,8 +120,7 @@ function SendQuery3($fs, $query)
   global $bytes_read;
 
   $data = array();
-
-  if (fwrite($fs, $query) < 0) {
+  if ( !fwrite($fs, $query) ) {
     fclose($fs);
     return $data;
   }
@@ -535,22 +534,20 @@ function GetStatus($ip, $port)
     }
   }
   else if ($query_type == 3) { // UT3
-    $data = SendQuery($fs, "\xFE\xFD\x09\x11\x22\x33\x44\xFF\xFF\xFF\x01");
-    if ($bytes_read < 6)
+    if ( !fwrite($fs, "\xFE\xFD\x09\x10\x20\x30\x40\xFF\xFF\xFF\x01") ) {
+      fclose($fs);
+      return false;
+    }
+
+    if ( !($data = fread($fs, 1400)) )
     {
       fclose($fs);
       return false;
     }
-    
-    $challenge = substr($data, 5);
 
-    while (strlen($challenge) > 1 && $challenge[strlen($challenge) - 1] == 0)
-      $challenge = substr($challenge, 0, strlen($challenge) - 1);
-    if ($challenge < 0)
-      $challenge = 4294967296 + $challenge;
-
-    $qstring = sprintf("\xFE\xFD\x00\x11\x22\x33\x44%c%c%c%c\xFF\xFF\xFF\x01", $challenge >> 24, $challenge >> 16, $challenge >> 8, $challenge );
-
+    $challenge = substr( preg_replace( "/[^0-9\-]/si", "", $data ), 1 );
+    $qstring = sprintf("\xFE\xFD\x00\x10\x20\x30\x40%c%c%c%c\xFF\xFF\xFF\x01",
+                       $challenge >> 24, $challenge >> 16, $challenge >> 8, $challenge );
     $datax = SendQuery3($fs, $qstring);
 
     // Reorder packets
@@ -560,7 +557,7 @@ function GetStatus($ip, $port)
       $data[$x] = $datax[$i];
     }
 
-    if (strlen($data[0]) < 30)
+    if ( !isset($data[0]) || strlen($data[0]) < 30)
     {
       fclose($fs);
       return false;
@@ -772,6 +769,8 @@ function GetStatus($ip, $port)
     for ($i = 0; isset($data_plr[$i]) && isset($data_plr[$i + 1]); $i += 2) {
       $param = $data_plr[$i];
       $val = $data_plr[$i + 1];
+      if (substr($param, 0, 1) == chr(0x00))
+        $param = substr($param, 1);
 
       if (strlen($val) > 0 && ord($val) != 0x00) {
         switch ($param) {

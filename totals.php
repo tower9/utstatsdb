@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -827,27 +827,47 @@ if (!$result) {
   echo "{$LANG_ERRORLOADINGITEMPICKUPDESC}<br />\n";
   exit;
 }
-$col = $totpickups = 0;
+
+$items = array(array());
+$totpickups = 0;
 while ($row = sql_fetch_row($result)) {
-  $item = $row[0];
-  $num = $row[1];
-  if ($num) {
-    if ($col > 2)
-      $col = 0;
-    if ($col == 0)
-      echo "  <tr>\n";
-    echo <<<EOF
+  for ($i = 0, $item = -1; $i < $totpickups && $item < 0; $i++) {
+    if (!strcmp($items[0][$i], $row[0]))
+      $item = $i;
+  }
+  if ($item < 0) {
+    $items[0][$totpickups] = $row[0];
+    $items[1][$totpickups++] = $row[1];
+  }
+  else
+    $items[1][$item] += $row[1];
+}
+sql_free_result($result);
+
+if ($totpickups) {
+  array_multisort($items[1], SORT_DESC, SORT_NUMERIC,
+                  $items[0], SORT_ASC, SORT_STRING);
+
+  $col = 0;
+  for ($i = 0; $i < $totpickups; $i++) {
+    $item = $items[0][$i];
+    $num = $items[1][$i];
+    if ($num) {
+      if ($col > 2)
+        $col = 0;
+      if ($col == 0)
+        echo "  <tr>\n";
+      echo <<<EOF
     <td class="dark" align="center">$item</td>
     <td class="grey" align="center">$num</td>
 
 EOF;
-    if ($col == 2)
-      echo "  </tr>\n";
-    $col++;
-    $totpickups++;
+      if ($col == 2)
+        echo "  </tr>\n";
+      $col++;
+    }
   }
 }
-sql_free_result($result);
 
 if (!$totpickups) {
   echo <<<EOF

@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -983,6 +983,7 @@ if (!$result) {
   echo "Error loading item descriptions.<br />\n";
   exit;
 }
+$items = array();
 while ($row = sql_fetch_row($result))
   $items[$row[0]] = $row[1];
 sql_free_result($result);
@@ -1010,11 +1011,21 @@ if (!$result) {
   exit;
 }
 
+$pickups = array(array());
 $totpickups = 0;
-while($row = sql_fetch_row($result)) {
-  $pickups[0][$totpickups] = $items[$row[0]];
-  $pickups[1][$totpickups++] = $row[1];
+while ($row = sql_fetch_row($result)) {
+  for ($i = 0, $item = -1; $i < $totpickups && $item < 0; $i++) {
+    if (!strcmp($pickups[0][$i], $items[$row[0]]))
+      $item = $i;
+  }
+  if ($item < 0) {
+    $pickups[0][$totpickups] = $items[$row[0]];
+    $pickups[1][$totpickups++] = $row[1];
+  }
+  else
+    $pickups[1][$item] += $row[1];
 }
+sql_free_result($result);
 
 if ($totpickups > 0)
   array_multisort($pickups[1], SORT_DESC, SORT_NUMERIC,
@@ -1037,7 +1048,6 @@ EOF;
     echo "  </tr>\n";
   $col++;
 }
-sql_free_result($result);
 
 if (!$totpickups) {
   echo <<<EOF
