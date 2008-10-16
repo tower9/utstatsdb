@@ -1,5 +1,12 @@
 Release Notes:
 
+Version 3.05
+  Added consolidation and sorting to item totals.
+  Fixes for SQLite updates.
+  Rewrote UT3 server query - vastly improved.
+  Moved AutoParse to main config in database.
+  Added netspeed and packetloss support in match stats.
+
 Version 3.04
   Various updates for support of Unreal Tournament 3.
   Fixed problem with properly determining player relogs.

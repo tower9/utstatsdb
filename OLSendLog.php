@@ -1,6 +1,6 @@
 <?php
 
-// OLSendLog v1.33
+// OLSendLog v1.34
 //
 // OverloadUT's OLSendLog for OLStats 3.01 modified by Panther for UTStatsDB 3.03
 
@@ -42,7 +42,7 @@ function check_post($val)
 
 function loadstatconfig()
 {
-  global $dbpre, $UpdatePass, $conflogs;
+  global $dbpre, $UpdatePass, $conflogs, $AutoParse;
 
   $magicrt = get_magic_quotes_runtime();
   $link = sql_connect();
@@ -165,7 +165,7 @@ else {
 
 fclose($f);
 
-if ($okay && $autoparse)
+if ($okay && $AutoParse)
   logparse();
 
 ?>
