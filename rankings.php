@@ -21,27 +21,29 @@
 
 require("includes/main.inc.php");
 
-check_get($rtype, "type");
-
 $link = sql_connect();
 
-if ($rtype != "") {
+$type = 0;
+check_get($type, "type");
+$type = intval($type);
+if ($type < 0)
+  $type = 0;
+
+if ($type > 0) {
   //=============================================================================
   //========== Gametype Rankings ================================================
   //=============================================================================
   $col = 0;
   $page = 1;
-  $type = "";
-  $rank = "";
   $searchid = 0;
   check_get($page, "page");
-  check_get($type, "type");
-  check_get($rank, "rank");
   check_get($searchid, "SearchID");
-  if (!is_numeric($searchid))
-    $searchid = 0;
-  if (!is_numeric($page))
+  $page = intval($page);
+  if ($page < 0)
     $page = 1;
+  $searchid = intval($searchid);
+  if ($searchid < 0)
+    $searchid = 0;
 
   $searchstring = "";
   if ($searchid) {
@@ -51,7 +53,7 @@ if ($rtype != "") {
   else
     $searchidvalue = "";
 
-  $result = sql_queryn($link, "SELECT tp_desc FROM {$dbpre}type WHERE tp_num=$rtype LIMIT 1");
+  $result = sql_queryn($link, "SELECT tp_desc FROM {$dbpre}type WHERE tp_num=$type LIMIT 1");
   if (!$result) {
     echo "{$LANG_DBERRORGAMETYPES}<br>\n";
     exit;
@@ -61,7 +63,7 @@ if ($rtype != "") {
   sql_free_result($result);
 
   // Calculate Number of Pages
-  $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}playersgt WHERE gt_tnum=$rtype AND gt_rank>0");
+  $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}playersgt WHERE gt_tnum=$type AND gt_rank>0");
   if (!$result) {
     echo "{$LANG_PLAYERDATABASEERROR}<br />\n";
     exit;
@@ -72,7 +74,7 @@ if ($rtype != "") {
 
   // Set page number if searching by ID
   if ($searchid) {
-    $result = sql_querynb($link, "SELECT gt_rank FROM {$dbpre}playersgt WHERE gt_pnum=$searchid AND gt_tnum=$rtype AND gt_rank>0 LIMIT 1");
+    $result = sql_querynb($link, "SELECT gt_rank FROM {$dbpre}playersgt WHERE gt_pnum=$searchid AND gt_tnum=$type AND gt_rank>0 LIMIT 1");
     if (!$result) {
       echo "{$LANG_PLAYERDATABASEERROR}<br />\n";
       exit;
@@ -84,7 +86,7 @@ if ($rtype != "") {
     sql_free_result($result);
 
     if ($prank) {
-      $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}playersgt WHERE gt_tnum=$rtype AND gt_rank>$prank");
+      $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}playersgt WHERE gt_tnum=$type AND gt_rank>$prank");
       if (!$result) {
         echo "{$LANG_PLAYERDATABASEERROR}<br />\n";
         exit;
@@ -105,7 +107,7 @@ if ($rtype != "") {
     echo <<<EOF
 <font size="1px"><br /></font>
 <form name="playersearch" method="post" action="rankings.php">
-  <input type="hidden" name="type" value="$rtype" />
+  <input type="hidden" name="type" value="$type" />
   <table class="searchform">
     <tr>
       <td align="right">{$LANG_ID}:</td>
@@ -121,11 +123,11 @@ EOF;
     $prev = $page - 1;
     $next = $page + 1;
     if ($page != 1)
-      echo "<a class=\"pages\" href=\"rankings.php?type=1&amp;page=1\">[{$LANG_FIRST}]</a> / <a class=\"pages\" href=\"rankings.php?type=1&amp;page={$prev}\">[{$LANG_PREVIOUS}]</a> / ";
+      echo "<a class=\"pages\" href=\"rankings.php?type={$type}&amp;page=1\">[{$LANG_FIRST}]</a> / <a class=\"pages\" href=\"rankings.php?type={$type}&amp;page={$prev}\">[{$LANG_PREVIOUS}]</a> / ";
     else
       echo "[{$LANG_FIRST}] / [{$LANG_PREVIOUS}] / ";
     if ($page < $numpages)
-      echo "<a class=\"pages\" href=\"rankings.php?type=1&amp;page={$next}\">[{$LANG_NEXT}]</a> / <a class=\"pages\" href=\"rankings.php?type=1&amp;page={$numpages}\">[{$LANG_LAST}]</a>";
+      echo "<a class=\"pages\" href=\"rankings.php?type={$type}&amp;page={$next}\">[{$LANG_NEXT}]</a> / <a class=\"pages\" href=\"rankings.php?type={$type}&amp;page={$numpages}\">[{$LANG_LAST}]</a>";
     else
       echo "[{$LANG_NEXT}] / [{$LANG_LAST}]";
     echo "</b></div>\n";
@@ -155,7 +157,7 @@ EOF;
   $start = ($page * $playerspage) - $playerspage;
   $limit = "$start,$playerspage";
 
-  $result = sql_queryn($link, "SELECT pnum,plr_name,plr_bot,gt_rank FROM {$dbpre}players LEFT JOIN {$dbpre}playersgt ON pnum=gt_pnum WHERE gt_tnum=$rtype AND gt_rank>0 ORDER BY gt_rank DESC LIMIT $limit");
+  $result = sql_queryn($link, "SELECT pnum,plr_name,plr_bot,gt_rank FROM {$dbpre}players LEFT JOIN {$dbpre}playersgt ON pnum=gt_pnum WHERE gt_tnum=$type AND gt_rank>0 ORDER BY gt_rank DESC LIMIT $limit");
   if (!$result) {
     echo "{$LANG_PLAYERDATABASEERROR}<br />\n";
     exit;

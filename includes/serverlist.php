@@ -24,12 +24,13 @@ if (preg_match("/serverlist.php/i", $_SERVER["PHP_SELF"])) {
   die();
 }
 
+$link = sql_connect();
+
 $page = 1;
 check_get($page, "page");
-if (!is_numeric($page))
+$page = intval($page);
+if ($page < 0)
   $page = 1;
-
-$link = sql_connect();
 
 // Calculate Number of Pages
 $result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}servers");

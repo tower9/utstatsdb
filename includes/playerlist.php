@@ -24,6 +24,8 @@ if (preg_match("/playerlist.php/i", $_SERVER["PHP_SELF"])) {
   die();
 }
 
+$link = sql_connect();
+
 $page = 1;
 $type = "";
 $rank = "";
@@ -36,10 +38,12 @@ check_get($rank, "rank");
 check_get($searchid, "SearchID");
 check_get($searchname, "SearchName");
 check_get($clear, "Clear");
-if (!is_numeric($searchid))
-  $searchid = 0;
-if (!is_numeric($page))
+$page = intval($page);
+if ($page < 0)
   $page = 1;
+$searchid = intval($searchid);
+if ($searchid < 0)
+  $searchid = 0;
 
 if ($clear == "Clear") {
   $searchid = 0;
@@ -75,8 +79,6 @@ if (!$showbots) {
   $type = "humans";
   $typelink = "";
 }
-
-$link = sql_connect();
 
 // Calculate Number of Pages
 if ($searchid > 0)

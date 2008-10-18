@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,13 +24,16 @@ if (preg_match("/maplist.php/i", $_SERVER["PHP_SELF"])) {
   die();
 }
 
+$link = sql_connect();
+
 $page = 1;
 $searchname = "";
 $clear = "";
 check_get($page, "page");
 check_get($searchname, "SearchName");
 check_get($clear, "Clear");
-if (!is_numeric($page))
+$page = intval($page);
+if ($page < 0)
   $page = 1;
 
 if ($clear == "Clear")
@@ -39,8 +42,6 @@ if ($clear == "Clear")
 $searchstring = "";
 if ($searchname)
   $searchstring = "&amp;SearchName=$searchname";
-
-$link = sql_connect();
 
 // Calculate Number of Pages
 if ($searchname != "") {
