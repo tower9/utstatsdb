@@ -86,7 +86,7 @@ if (!list($sv_name,$sv_shortname,$sv_admin,$sv_email) = sql_fetch_row($result)) 
   exit;
 }
 sql_free_result($result);
-if ($useshortname)
+if ($useshortname && $sv_shortname != "")
   $servername = stripspecialchars($sv_shortname);
 else
   $servername = stripspecialchars($sv_name);

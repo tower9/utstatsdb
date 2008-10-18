@@ -85,7 +85,7 @@ while($row = sql_fetch_assoc($result)) {
   while (list ($key, $val) = each ($row))
     ${$key} = $val;
 
-  if ($useshortname)
+  if ($useshortname && $sv_shortname != "")
     $servername = stripspecialchars($sv_shortname);
   else
     $servername = stripspecialchars($sv_name);

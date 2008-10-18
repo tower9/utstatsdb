@@ -506,7 +506,7 @@ while ($row = sql_fetch_assoc($result)) {
     $start = strtotime($gm_start);
     $matchdate = formatdate($start, 1);
     $length = sprintf("%0.1f", $gm_length / 6000.0);
-    if ($useshortname)
+    if ($useshortname && $sv_shortname != "")
       $servername = stripspecialchars($sv_shortname);
     else
       $servername = stripspecialchars($sv_name);

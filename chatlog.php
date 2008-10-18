@@ -104,7 +104,7 @@ if (!$result) {
 }
 list($sv_name,$sv_shortname) = sql_fetch_row($result);
 sql_free_result($result);
-if ($useshortname)
+if ($useshortname && $sv_shortname != "")
   $server = stripspecialchars($sv_shortname);
 else
   $server = stripspecialchars($sv_name);

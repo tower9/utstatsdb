@@ -74,7 +74,7 @@ else if ($servernum > 0) {
   }
   list($sv_name,$sv_shortname) = sql_fetch_row($result);
   sql_free_result($result);
-  if ($useshortname)
+  if ($useshortname && $sv_shortname != "")
     $servername = stripspecialchars($sv_shortname);
   else
     $servername = stripspecialchars($sv_name);

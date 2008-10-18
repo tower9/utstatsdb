@@ -112,7 +112,7 @@ while($row = sql_fetch_assoc($result)) {
   $matchdate = formatdate($start, 1);
   $length = sprintf("%0.1f", $gm_length / 6000.0);
   $map = stripspecialchars($mp_name);
-  if ($useshortname)
+  if ($useshortname && $sv_shortname != "")
     $server = stripspecialchars($sv_shortname);
   else
     $server = stripspecialchars($sv_name);
