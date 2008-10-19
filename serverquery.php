@@ -44,73 +44,56 @@ function SendQuery($fs, $query)
   global $bytes_read;
 
   $data = "";
-  $bytes_read = 0;
-
-  if (fwrite($fs, $query) < 0) {
+  if ( !fwrite($fs, $query) ) {
     fclose($fs);
     return $data;
   }
 
-  $packets = array();
-  $done = $final = 0;
-  $qstart = time() + 5;
-  while (!$done) {
-    $received = 0;
-    do {
-      $data .= fgetc($fs);
-      $received++;
-      if (function_exists('stream_get_meta_data'))
-        $status = stream_get_meta_data($fs);
-      else
-        $status = socket_get_status($fs);
-    } while($status["unread_bytes"]);
-    if ($received == 1)
-      $received = 0;
+  // Packets may not be received in correct order
+  $datax = array();
+  for ($i = 0, $lastpacket = -1; $i < 4; $i++) {
+    $datain = @fread($fs, 2048);
 
-    if (substr($query, 0, 1) != "\\") {
-    	$bytes_read = $received;
-      $done = 1;
-    }
+    if (strlen($datain) < 34)
+      break;
+
+    // Locate QueryID
+    $qp = strpos($datain, "\\queryid\\");
+    if ($qp === FALSE)
+      break;
+    $qid = substr($datain, $qp + 9);
+
+    $qd = strpos($qid, ".");
+    if ($qd === FALSE)
+      break;
+
+    $qp = strpos($qid, "\\");
+    if ($qp == FALSE)
+      $qid = substr($qid, $qd + 1);
     else {
-      if ($received) {
-        $bytes_read += $received;
-        if (substr($data, -7) == "\\final\\") {
-          if (substr($data, -9, 1) == ".")
-            $packet_id = intval(substr($data, -8, 1));
-          else
-            $packet_id = intval(substr($data, -9, 2));
-          $packets[$packet_id] = 2;
-          $final = $packet_id;
-          if ($packet_id == 1)
-            $done = 1;
-        }
-        else {
-          if (substr($data, -2, 1) == ".")
-            $packet_id = intval(substr($data, -1, 1));
-          else
-            $packet_id = intval(substr($data, -2, 2));
-          $packets[$packet_id] = 1;
-        }
-        if (!$done) {
-          if (!$packet_id) // Error in packet
-            $done = 1;
-          else if ($final) {
-            // Check to make sure all packets have been received
-            $ok = 1;
-            for ($i = 1; $i < $final; $i++)
-              if (!isset($packets[$i]) || !$packets[$i])
-                $ok = 0;
-            if ($ok)
-              $done = 1;
-          }
-        }
-      }
-      else
-        $done = 1;
-      if (!$done && time() > $qstart) // Timeout
-        $done = 1;
+      if ($qp <= $qd)
+        break;
+      $qid = substr($qid, $qd + 1, ($qp - $qd) -1);
+    }
+    $datax[$qid] = $datain;
+
+    // Set last packet number
+    if (strpos($datain, "\\final\\") !== FALSE)
+      $lastpacket = $qid;
+
+    // Check to see if we've received all packets
+    if ($lastpacket >= 0) {
+      for ($x = 1, $done = true; $x <= $lastpacket && $done; $x++)
+        if (!isset($datax[$x]))
+          $done = false;
+      if ($done)
+        break;
     }
   }
+
+  // Order packets
+  for ($i = 1; $i <= $lastpacket; $i++)
+    $data .= $datax[$i];
 
   return $data;
 }
@@ -119,25 +102,89 @@ function SendQuery3($fs, $query)
 {
   global $bytes_read;
 
-  $data = array();
+  $data = "";
   if ( !fwrite($fs, $query) ) {
     fclose($fs);
     return $data;
   }
 
   // Packets may not be received in correct order
+  $datax = array();
   for ($i = 0, $lastpacket = -1; $i < 4; $i++) {
-    $data[] = @fread($fs, 2048);
+    $datain = @fread($fs, 2048);
 
-    if (strlen($data[$i]) < 19)
+    if (strlen($datain) < 19)
       break;
 
-    if (substr($data[$i], -3) == "\x00\x00\x00")
-      $lastpacket = ord(substr($data[$i], 15, 1));
+    $qid = ord(substr($datain, 15, 1));
+    $datax[$qid] = $datain;
 
-    if ($lastpacket >= 0 && $i == $lastpacket)
-      break;
+    // Set last packet number
+    if (substr($datain, -3) == "\x00\x00\x00")
+      $lastpacket = $qid;
+
+    // Check to see if we've received all packets
+    if ($lastpacket >= 0) {
+      for ($x = 0, $done = true; $x < $lastpacket && $done; $x++)
+        if (!isset($datax[$x]))
+          $done = false;
+      if ($done)
+        break;
+    }
   }
+
+  // Reorder packets
+  $datay = array();
+  for ($i = 0; isset($datax[$i]); $i++) {
+    $x = ord(substr($datax[$i], 15, 1));
+    $datay[$x] = $datax[$i];
+  }
+
+  if ( !isset($datay[0]) || strlen($datay[0]) < 30)
+  {
+    fclose($fs);
+    return $data;
+  }
+
+  if (substr($datay[0], -3) == "\x00\x00\x00")
+    $datay[0] = substr($datay[0], 16, -2);
+  else
+    $datay[0] = substr($datay[0], 16);
+
+  for ($i = 1; isset($datay[$i]) && strlen($datay[$i]) > 16; $i++) {
+    if (substr($datay[$i], -3) == "\x00\x00\x00")
+      $datay[$i] = substr($datay[$i], 16, -2);
+    else
+      $datay[$i] = substr($datay[$i], 16);
+
+    $p = strpos($datay[$i], "\x00");
+      if ($p < 3)
+        break;
+
+    $ar = substr($datay[$i], 0, $p);
+    $ap = ord(substr($datay[$i], $p + 1, 1));
+    $or = strpos($datay[0], $ar);
+    if ($or == FALSE) {
+      // Find last 00 00 and insert after there.
+      $op = strrpos($datay[0], "\x00\x00"); // PHP 5!
+      $datay[0] = substr($datay[0], 0, $op + 2);
+      $datay[0] .= $datay[$i];
+    }
+    else {
+      for ($x = 0, $op = $or; $x < $ap + 2; $x++) {
+        $op = strpos($datay[0], "\x00", $op + 1);
+        if ($op == FALSE)
+          break;
+      }
+  
+      if ($op != FALSE) {
+        $datay[0] = substr($datay[0], 0, $op + 1);
+        $datay[0] .= substr($datay[$i], $p + 2);
+      }
+    }
+  }
+
+  $data = substr($datay[0], 0, -1); // Remove null from end
 
   return $data;
 }
@@ -480,7 +527,7 @@ function GetStatus($ip, $port)
     $query_string .= "\\echo\\nothing";
 
 	$lastparam = "";
-    $data = SendQuery($fs, $query_string);
+     $data = SendQuery($fs, $query_string);
     while (strlen($data)) {
       if (ParseQuery($data, $param, $val, $num)) {
         if ($num >= 0) {
@@ -524,7 +571,7 @@ function GetStatus($ip, $port)
     }
 
 	$lastparam = "";
-    $data = SendQuery($fs, "\\teams\\");
+    $data = SendQuery($fs, "\\teams\\\\echo\\nothing");
     while (strlen($data)) {
       if (ParseQuery($data, $param, $val, $num)) {
         if ($num >= 0) {
@@ -550,61 +597,9 @@ function GetStatus($ip, $port)
     $challenge = substr( preg_replace( "/[^0-9\-]/si", "", $data ), 1 );
     $qstring = sprintf("\xFE\xFD\x00\x10\x20\x30\x40%c%c%c%c\xFF\xFF\xFF\x01",
                        $challenge >> 24, $challenge >> 16, $challenge >> 8, $challenge );
-    $datax = SendQuery3($fs, $qstring);
+    $data = SendQuery3($fs, $qstring);
 
-    // Reorder packets
-    $data = array();
-    for ($i = 0; isset($datax[$i]); $i++) {
-      $x = ord(substr($datax[$i], 15, 1));
-      $data[$x] = $datax[$i];
-    }
-
-    if ( !isset($data[0]) || strlen($data[0]) < 30)
-    {
-      fclose($fs);
-      return false;
-    }
-
-    if (substr($data[0], -3) == "\x00\x00\x00")
-      $data[0] = substr($data[0], 16, -2);
-    else
-      $data[0] = substr($data[0], 16);
-
-    for ($i = 1; isset($data[$i]) && strlen($data[$i]) > 16; $i++) {
-      if (substr($data[$i], -3) == "\x00\x00\x00")
-        $data[$i] = substr($data[$i], 16, -2);
-      else
-        $data[$i] = substr($data[$i], 16);
-
-      $p = strpos($data[$i], "\x00");
-      if ($p < 3)
-        break;
-
-      $ar = substr($data[$i], 0, $p);
-      $ap = ord(substr($data[$i], $p + 1, 1));
-      $or = strpos($data[0], $ar);
-      if ($or == FALSE) {
-        // Find last 00 00 and insert after there.
-        $op = strrpos($data[0], "\x00\x00"); // PHP 5!
-        $data[0] = substr($data[0], 0, $op + 2);
-        $data[0] .= $data[$i];
-      }
-      else {
-        for ($x = 0, $op = $or; $x < $ap + 2; $x++) {
-          $op = strpos($data[0], "\x00", $op + 1);
-          if ($op == FALSE)
-            break;
-        }
-  
-        if ($op != FALSE) {
-          $data[0] = substr($data[0], 0, $op + 1);
-          $data[0] .= substr($data[$i], $p + 2);
-        }
-      }
-    }
-
-    $data[0] = substr($data[0], 0, -1); // Remove null from end
-    $temp = explode("\x00\x00\x01", $data[0]);
+    $temp = explode("\x00\x00\x01", $data);
     $data_main = explode("\x00\x00", $temp[0]);
     if (isset($temp[1])) {
       $temp = explode("\x00\x00\x02", $temp[1]);
@@ -977,15 +972,11 @@ EOF;
             <b>{$sq_team[0]['team']} Team: &nbsp;&nbsp;Players: {$sq_team[0]['size']} &nbsp;&nbsp;Score: {$sq_team[0]['score']}</b>
           </td>
         </tr>
-        <tr>
-          <td>
 
 EOF;
 
     DisplayPlayers(1);
     echo <<<EOF
-          </td>
-        </tr>
       </table>
     </td>
   </tr>
@@ -997,15 +988,13 @@ EOF;
             <b>{$sq_team[1]['team']} Team: &nbsp;&nbsp;Players: {$sq_team[1]['size']} &nbsp;&nbsp;Score: {$sq_team[1]['score']}</b>
           </td>
         </tr>
-        <tr>
-          <td>
 
 EOF;
     DisplayPlayers(2);
     echo <<<EOF
-          </td>
-        </tr>
       </table>
+    </td>
+  </tr>
 
 EOF;
   }
@@ -1064,7 +1053,7 @@ EOF;
 
 EOF;
 
-    DisplayPlayers(0);
+    DisplayPlayers(-1);
   }
   else
     DisplayPlayers(0);
@@ -1110,8 +1099,14 @@ function DisplayPlayers($teamnum)
       	if (isset($plr["player"])) {
       	  $name[] = $plr["player"];
           $score[] = $plr["score"];
-          $deaths[] = $plr["deaths"];
-          $ping[] = $plr["ping"];
+          if (isset($plr["deaths"]))
+            $deaths[] = $plr["deaths"];
+          else
+            $deaths[] = 0;
+          if (isset($plr["ping"]))
+            $ping[] = $plr["ping"];
+          else
+            $ping[] = 0;
           if (isset($plr["team"]))
             $team[] = $plr["team"];
           if ($score[$numplr] == 0xffff)
@@ -1120,21 +1115,35 @@ function DisplayPlayers($teamnum)
         }
       }
     }
-    if ($numplr)
-      array_multisort($score, SORT_NUMERIC, SORT_DESC, $name, $deaths, $ping, $team);
+    if ($numplr) {
+      if (isset($team))
+        array_multisort($score, SORT_NUMERIC, SORT_DESC, $name, $deaths, $ping, $team);
+      else
+        array_multisort($score, SORT_NUMERIC, SORT_DESC, $name, $deaths, $ping);
+    }
 
     $header = 0;
     for ($i = 0; $i < $numplr; $i++) {
       if (!$header) {
-    echo <<<EOF
+        echo <<<EOF
       <tr>
         <td>
           <table class="status" cellspacing="0" cellpadding="1" width="100%">
+
+EOF;
+
+        if ($teamnum == 0) {
+          echo <<<EOF
             <tr>
               <td class="statustitle" align="center" colspan="4">
                 <b>Players</b>
               </td>
             </tr>
+
+EOF;
+        }
+
+        echo <<<EOF
             <tr>
               <td width="200"><b>Name</b></td>
               <td width="50"><b>Score</b></td>
@@ -1142,10 +1151,10 @@ function DisplayPlayers($teamnum)
               <td width="50"><b>Ping</b></td>
             </tr>
 EOF;
-          $header = 1;
+        $header = 1;
       }
 
-      if (isset($name[$i]) && (!$teamnum || (isset($team[$i]) && $team[$i] == $teamnum - 1))) {
+      if (isset($name[$i]) && ($teamnum <= 0 || (isset($team[$i]) && $team[$i] == $teamnum - 1))) {
         echo <<<EOF
             <tr>
               <td>{$name[$i]}</td>
@@ -1189,18 +1198,28 @@ EOF;
       <tr>
         <td>
           <table class="status" cellspacing="0" cellpadding="1" width="100%">
+
+EOF;
+
+        if (!$teamnum) {
+          echo <<<EOF
             <tr>
               <td class="statustitle" align="center" colspan="3">
                 <b>Players</b>
               </td>
             </tr>
+
+EOF;
+        }
+
+        echo <<<EOF
             <tr>
               <td width="200"><b>Name</b></td>
               <td width="50"><b>Frags</b></td>
               <td width="50"><b>Ping</b></td>
             </tr>
 EOF;
-          $header = 1;
+        $header = 1;
       }
 
       if (isset($name[$i]) && (!$teamnum || (isset($team[$i]) && $team[$i] == $teamnum - 1))) {
@@ -1244,22 +1263,32 @@ EOF;
     $header = 0;
     for ($i = 0; $i < $numplr; $i++) {
       if (!$header) {
-    echo <<<EOF
+        echo <<<EOF
       <tr>
         <td>
           <table class="status" cellspacing="0" cellpadding="1" width="100%">
+
+EOF;
+
+        if (!$teamnum) {
+          echo <<<EOF
             <tr>
               <td class="statustitle" align="center" colspan="3">
                 <b>Players</b>
               </td>
             </tr>
+
+EOF;
+        }
+
+        echo <<<EOF
             <tr>
               <td width="200"><b>Name</b></td>
               <td width="50"><b>Score</b></td>
               <td width="50"><b>Ping</b></td>
             </tr>
 EOF;
-          $header = 1;
+        $header = 1;
       }
 
       if (isset($name[$i]) && (!$teamnum || (isset($team[$i]) && $team[$i] == $teamnum - 1))) {
@@ -1306,11 +1335,14 @@ EOF;
     foreach ($sq_player as $plr) {
       if (isset($plr["player"]) && (!$teamnum || (isset($plr["team"]) && $plr["team"] == $teamnum - 1))) {
         if (!$header) {
-          if (!$teamnum) {
-            echo <<<EOF
+          echo <<<EOF
       <tr>
         <td>
           <table class="status" cellspacing="0" cellpadding="1" width="100%">
+
+EOF;
+          if (!$teamnum) {
+            echo <<<EOF
             <tr>
               <td class="statustitle" align="center" colspan="$ncol">
                 <b>Players</b>
@@ -1319,19 +1351,24 @@ EOF;
 
 EOF;
           }
+
           echo <<<EOF
             <tr>
               <td width="200"><b>Name</b></td>
               <td width="50"><b>$type</b></td>
 
 EOF;
+
           if (isset($sq_server["minplayers"])) {
             echo "              <td width=\"50\"><b>Deaths</b></td>\n";
             if ($teamnum)
               echo "              <td width=\"50\"><b>Scored</b></td>\n";
           }
-          echo "              <td width=\"50\"><b>Ping</b></td>\n";
-          echo "            </tr>\n";
+          echo <<<EOF
+              <td width="50"><b>Ping</b></td>
+            </tr>
+
+EOF;
           $header = 1;
         }
 
@@ -1432,7 +1469,7 @@ EOF;
       }
     }
 
-    if ($header && !$teamnum)
+    if ($header)
       echo <<<EOF
           </table>
         </td>
