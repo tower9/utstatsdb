@@ -23,7 +23,7 @@ echo <<<EOF
               </tr>
               <tr>
                 <td colspan="2" style="height:5"></td>
-              <tr>
+              </tr>
               <tr>
                 <td class="statusnbw" align="right">Game Type:</td>
                 <td class="statusnbw" align="left">&nbsp;{$sq_server['gametype']}</td>
@@ -37,21 +37,21 @@ echo <<<EOF
               </tr>
               <tr>
                 <td colspan="2" style="height:5"></td>
+              </tr>
               <tr>
-                </tr>
                 <td class="statusnbw" align="right">Current Players:</td>
                 <td class="statusnbw" align="left">&nbsp;{$sq_server["numplayers"]}</td>
               </tr>
               <tr>
                 <td colspan="2" style="height:5"></td>
-              <tr>
+              </tr>
               <tr>
                 <td class="statusnbw" align="right">Max Players:</td>
                 <td class="statusnbw" align="left">&nbsp;{$sq_server['maxplayers']}</td>
               </tr>
               <tr>
                 <td colspan="2" style="height:5"></td>
-              <tr>
+              </tr>
               <tr>
                 <td class="statusnbw" align="right">Password:</td>
                 <td class="statusnbw" align="left">&nbsp;$password</td>

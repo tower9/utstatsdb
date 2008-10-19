@@ -455,6 +455,10 @@ function GetStatus($ip, $port)
           case "hostport":
             $val = intval($val);
             break;
+          case "maxteams":
+            $val = intval($val);
+            $teams = $val;
+            break;
           case "gamever":
           case "serverversion":
             $param = "version";
@@ -488,9 +492,8 @@ function GetStatus($ip, $port)
                 $val = stripspecialchars($val);
               $sq_player[$num][$param] = $val;
               if ($param == "team") {
-              	$teamcount[$val]++;
-              	if ($val > $teams)
-                  $teams = $val;
+              	if ($val >= 0 && $val < $teams)
+                  $teamcount[$val]++;
               }
               break;
             case "spectator":
@@ -503,9 +506,8 @@ function GetStatus($ip, $port)
                 $val = stripspecialchars($val);
               $sq_bot[$num][$param] = $val;
               if ($param == "team") {
-              	$teamcount[$val]++;
-              	if ($val > $teams)
-                  $teams = $val;
+              	if ($val >= 0 && $val < $teams)
+                  $teamcount[$val]++;
               }
               break;
             case "psidname":
@@ -1057,6 +1059,8 @@ EOF;
           </td>
         </tr>
       </table>
+    </td>
+  </tr>
 
 EOF;
 
@@ -1068,12 +1072,7 @@ EOF;
   if ($query_spectators)
     DisplaySpectators();
 
-  echo <<<EOF
-    </td>
-  </tr>
-</table>
-
-EOF;
+  echo "</table>\n";
 }
 
 function DisplayDown($svr)
@@ -1103,7 +1102,7 @@ function DisplayPlayers($teamnum)
     return;
 
   $link = -1;
-  if ($query_type == 3) {
+  if ($query_type == 3) { // UT3
     // Sort by score
     $numplr = 0;
     foreach($sq_player as $plr) {
@@ -1122,7 +1121,7 @@ function DisplayPlayers($teamnum)
       }
     }
     if ($numplr)
-      array_multisort($score, SORT_NUMERIC, SORT_DESC, $ping);
+      array_multisort($score, SORT_NUMERIC, SORT_DESC, $name, $deaths, $ping, $team);
 
     $header = 0;
     for ($i = 0; $i < $numplr; $i++) {
@@ -1165,6 +1164,63 @@ EOF;
 
 EOF;
   }
+  else if ($query_type == 2) { // UT99
+    // Sort by name
+    $numplr = 0;
+    foreach($sq_player as $plr) {
+      if (isset($plr["player"])) {
+      	if (isset($plr["player"])) {
+          $name[] = $plr["player"];
+          $frags[] = $plr["frags"];
+          $ping[] = $plr["ping"];
+          if (isset($plr["team"]))
+            $team[] = $plr["team"];
+          $numplr++;
+        }
+      }
+    }
+    if ($numplr)
+      array_multisort($frags, SORT_NUMERIC, SORT_DESC, $name, $ping, $team);
+
+    $header = 0;
+    for ($i = 0; $i < $numplr; $i++) {
+      if (!$header) {
+    echo <<<EOF
+      <tr>
+        <td>
+          <table class="status" cellspacing="0" cellpadding="1" width="100%">
+            <tr>
+              <td class="statustitle" align="center" colspan="3">
+                <b>Players</b>
+              </td>
+            </tr>
+            <tr>
+              <td width="200"><b>Name</b></td>
+              <td width="50"><b>Frags</b></td>
+              <td width="50"><b>Ping</b></td>
+            </tr>
+EOF;
+          $header = 1;
+      }
+
+      if (isset($name[$i]) && (!$teamnum || (isset($team[$i]) && $team[$i] == $teamnum - 1))) {
+        echo <<<EOF
+            <tr>
+              <td>{$name[$i]}</td>
+              <td>{$frags[$i]}</td>
+              <td>{$ping[$i]}</td>
+            </tr>
+EOF;
+      }
+    }
+    if ($header)
+      echo <<<EOF
+          </table>
+        </td>
+      </tr>
+
+EOF;
+  }
   else if ($query_type) {
     // Sort by score
     $numplr = 0;
@@ -1183,7 +1239,7 @@ EOF;
       }
     }
     if ($numplr)
-      array_multisort($score, SORT_NUMERIC, SORT_DESC, $ping);
+      array_multisort($score, SORT_NUMERIC, SORT_DESC, $name, $ping, $team);
 
     $header = 0;
     for ($i = 0; $i < $numplr; $i++) {
@@ -1244,7 +1300,7 @@ EOF;
       }
     }
     if ($numplr)
-      array_multisort($tempsort, SORT_ASC, $sq_player);
+      array_multisort($tempsort, SORT_NUMERIC, SORT_DESC, $sq_player);
 
     $header = 0;
     foreach ($sq_player as $plr) {
@@ -1252,28 +1308,30 @@ EOF;
         if (!$header) {
           if (!$teamnum) {
             echo <<<EOF
-      <table class="status" cellspacing="0" cellpadding="1" width="100%">
-        <tr>
-          <td class="statustitle" align="center" colspan="$ncol">
-            <b>Players</b>
-          </td>
-        </tr>
+      <tr>
+        <td>
+          <table class="status" cellspacing="0" cellpadding="1" width="100%">
+            <tr>
+              <td class="statustitle" align="center" colspan="$ncol">
+                <b>Players</b>
+              </td>
+            </tr>
 
 EOF;
           }
           echo <<<EOF
-        <tr>
-          <td width="200"><b>Name</b></td>
-          <td width="50"><b>$type</b></td>
+            <tr>
+              <td width="200"><b>Name</b></td>
+              <td width="50"><b>$type</b></td>
 
 EOF;
           if (isset($sq_server["minplayers"])) {
-            echo "          <td width=\"50\"><b>Deaths</b></td>\n";
+            echo "              <td width=\"50\"><b>Deaths</b></td>\n";
             if ($teamnum)
-              echo "          <td width=\"50\"><b>Scored</b></td>\n";
+              echo "              <td width=\"50\"><b>Scored</b></td>\n";
           }
-          echo "          <td width=\"50\"><b>Ping</b></td>
-        </tr>\n";
+          echo "              <td width=\"50\"><b>Ping</b></td>\n";
+          echo "            </tr>\n";
           $header = 1;
         }
 
@@ -1293,18 +1351,18 @@ EOF;
         }
 
         echo <<<EOF
-        <tr>
-          <td>$player</td>
-          <td>{$plr['frags']}</td>
+            <tr>
+              <td>$player</td>
+              <td>{$plr['frags']}</td>
 
 EOF;
         if (isset($sq_server["minplayers"])) {
-          echo "          <td>{$plr['deaths']}</td>\n";
+          echo "              <td>{$plr['deaths']}</td>\n";
           if ($teamnum)
-            echo "          <td>{$plr['scored']}</td>\n";
+            echo "              <td>{$plr['scored']}</td>\n";
         }
-        echo "          <td>{$plr['ping']}</td>
-        </tr>\n";
+        echo "              <td>{$plr['ping']}</td>
+            </tr>\n";
       }
     }
     if ($link >= 0)
@@ -1329,44 +1387,46 @@ EOF;
           if (!$header) {
             if (!$teamnum) {
               echo <<<EOF
-      <table class="status" cellspacing="0" cellpadding="1" width="100%">
-        <tr>
-          <td class="statustitle" align="center" colspan="$ncol">
-            <b>Players</b>
-          </td>
-        </tr>
+      <tr>
+        <td>
+          <table class="status" cellspacing="0" cellpadding="1" width="100%">
+            <tr>
+              <td class="statustitle" align="center" colspan="$ncol">
+                <b>Players</b>
+              </td>
+            </tr>
 
 EOF;
             }
             echo <<<EOF
-        <tr>
-          <td width="200"><b>Name</b></td>
-          <td width="50"><b>$type</b></td>
+            <tr>
+              <td width="200"><b>Name</b></td>
+              <td width="50"><b>$type</b></td>
 
 EOF;
             if (isset($sq_server["minplayers"])) {
-              echo "          <td width=\"50\"><b>Deaths</b></td>\n";
+              echo "              <td width=\"50\"><b>Deaths</b></td>\n";
               if ($teamnum)
-                echo "          <td width=\"50\"><b>Scored</b></td>\n";
+                echo "              <td width=\"50\"><b>Scored</b></td>\n";
             }
-            echo "          <td width=\"50\"><b>Ping</b></td>
-        </tr>\n";
+            echo "              <td width=\"50\"><b>Ping</b></td>
+            </tr>\n";
             $header = 1;
           }
 
           echo <<<EOF
-        <tr>
-          <td>{$bot['bot']}</td>
-          <td>{$bot['frags']}</td>
+            <tr>
+              <td>{$bot['bot']}</td>
+              <td>{$bot['frags']}</td>
 
 EOF;
           if (isset($sq_server["minplayers"])) {
-            echo "          <td>{$bot['deaths']}</td>\n";
+            echo "              <td>{$bot['deaths']}</td>\n";
             if ($teamnum)
-              echo "          <td>{$bot['scored']}</td>\n";
+              echo "              <td>{$bot['scored']}</td>\n";
           }
-          echo "          <td>[bot]</td>
-        </tr>\n";
+          echo "              <td>[bot]</td>
+            </tr>\n";
 
         }
       }
@@ -1374,7 +1434,9 @@ EOF;
 
     if ($header && !$teamnum)
       echo <<<EOF
-      </table>
+          </table>
+        </td>
+      </tr>
 
 EOF;
   }
