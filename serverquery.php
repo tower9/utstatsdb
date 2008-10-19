@@ -1489,33 +1489,37 @@ function DisplaySpectators()
       if (isset($spc["spectator"])) {
         if (!$header) {
           echo <<<EOF
-      <table class="status" cellspacing="0" cellpadding="1" width="100%">
-        <tr>
-          <td class="spectitle" align="center" colspan="2">
-            <b>Spectators</b>
-          </td>
-        </tr>
-        <tr>
-          <td><b>Name</b></td>
-          <td><b>Ping</b></td>
-        </tr>
+      <tr>
+        <td>
+          <table class="status" cellspacing="0" cellpadding="1" width="100%">
+            <tr>
+              <td class="spectitle" align="center" colspan="2">
+                <b>Spectators</b>
+              </td>
+            </tr>
+            <tr>
+              <td><b>Name</b></td>
+              <td><b>Ping</b></td>
+            </tr>
 
 EOF;
           $header = 1;
         }
 
         echo <<<EOF
-        <tr>
-          <td>{$spc['spectator']}</td>
-          <td>{$spc['specping']}</td>
-        </tr>
+            <tr>
+              <td>{$spc['spectator']}</td>
+              <td>{$spc['specping']}</td>
+            </tr>
 
 EOF;
       }
     }
     if ($header) {
       echo <<<EOF
-      </table>
+          </table>
+        </td>
+      </tr>
 
 EOF;
     }
