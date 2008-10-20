@@ -108,7 +108,12 @@ function tagut_game($i, $data)
 {
   global $link, $dbpre, $config, $match, $break;
 
-  if ($i < 4)
+  if ($i == 3) {
+  	if (strtoupper($data[2]) == "GAME_START" || strtoupper($data[2]) == "REALSTART")
+  	  tagut_game_start($i, $data);
+  	return 0;
+  }
+  else if ($i < 4)
     return 0;
 
   $match->uttype = 1;
@@ -1252,6 +1257,7 @@ function tagut_game_end($i, $data)
     case "roundlimit":
     case "lastmanstanding":
     case "assault succeeded!":
+    case "terrorists exterminated!":
     case "assault failed!":
     {
       $match->ended = 1;
