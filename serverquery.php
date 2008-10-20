@@ -619,7 +619,7 @@ function GetStatus($ip, $port)
       $data_team = "";
     }
 
-    if (count($data_main) < 2) {
+    if (count($data_main) < 1) {
       fclose($fs);
       return $ok;
     }
