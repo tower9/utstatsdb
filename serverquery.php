@@ -98,6 +98,21 @@ function SendQuery($fs, $query)
   return $data;
 }
 
+function strrpos4( $haystack, $needle )
+{
+  $pos = FALSE;
+
+  for ($i = strlen($haystack) - strlen($needle); $i >= 0; $i --) {
+  	if (($p = strpos($haystack, $needle, $i)) !== FALSE)
+  	{
+      $pos = $p;
+  	  break;
+  	}
+  }
+
+  return $pos;
+}
+
 function SendQuery3($fs, $query)
 {
   global $bytes_read;
@@ -166,7 +181,10 @@ function SendQuery3($fs, $query)
     $or = strpos($datay[0], $ar);
     if ($or == FALSE) {
       // Find last 00 00 and insert after there.
-      $op = strrpos($datay[0], "\x00\x00"); // PHP 5!
+      if (version_compare(phpversion(), "5.0.0") >= 0)
+        $op = strrpos($datay[0], "\x00\x00"); // PHP 5!
+      else
+        $op = strrpos4($datay[0], "\x00\x00");
       $datay[0] = substr($datay[0], 0, $op + 2);
       $datay[0] .= $datay[$i];
     }
