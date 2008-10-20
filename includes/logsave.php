@@ -1599,37 +1599,39 @@ function storedata()
 
   // Save Events Data
   for ($i = 0; $i < $match->numevents; $i++) {
-    list($geplr, $gevent, $getime, $gelength, $gequant, $gereason, $geopponent, $geitem) = $events[$i];
-    $result = sql_queryn($link, "INSERT INTO {$dbpre}gevents VALUES (NULL,$matchnum,$geplr,$gevent,$getime,$gelength,$gequant,$gereason,$geopponent,$geitem)");
-    if (!$result) {
-      echo "Error saving events data.{$break}\n";
-      exit;
-    }
-
-    // Save Assault Objectives
-    if ($gevent == 7) {
-    	$result = sql_queryn($link, "SELECT obj_times,obj_besttime,obj_avgtime FROM {$dbpre}objectives WHERE obj_num=$gequant LIMIT 1");
-    	list($obj_times,$obj_besttime,$obj_avgtime) = sql_fetch_row($result);
-    	sql_free_result($result);
-    	if ($gelength < $obj_besttime || !$obj_besttime)
-    	  $obj_besttime = $gelength;
-    	$newtime = ((floatval($obj_avgtime) * floatval($obj_times)) + floatval($gelength)) / (floatval($obj_times) + 1.0);
-    	$obj_times++;
-      $result = sql_queryn($link, "UPDATE {$dbpre}objectives SET obj_times=$obj_times,obj_besttime=$obj_besttime,obj_avgtime=$newtime WHERE obj_num=$gequant LIMIT 1");
-    }
-
-    // Save Connection Data
-    if ($gevent == 2) {
-      $tstamp = $match->matchdate + ($getime / 100);
-      if (!$gereason) {
-        $result = sql_queryn($link, "SELECT cn_match FROM {$dbpre}connections WHERE cn_match=$matchnum AND cn_pnum=$geplr");
-        $row = sql_fetch_row($result);
-        sql_free_result($result);
-        if (!$row)
-          sql_queryn($link, "INSERT INTO {$dbpre}connections VALUES ($matchnum,$geplr,FROM_UNIXTIME($tstamp),0)");
+  	if ($events[$i][1] >= 0) {
+      list($geplr, $gevent, $getime, $gelength, $gequant, $gereason, $geopponent, $geitem) = $events[$i];
+      $result = sql_queryn($link, "INSERT INTO {$dbpre}gevents VALUES (NULL,$matchnum,$geplr,$gevent,$getime,$gelength,$gequant,$gereason,$geopponent,$geitem)");
+      if (!$result) {
+        echo "Error saving events data.{$break}\n";
+        exit;
       }
-      else
-        sql_queryn($link, "UPDATE {$dbpre}connections SET cn_ctime=cn_ctime,cn_dtime=FROM_UNIXTIME($tstamp) WHERE cn_match=$matchnum AND cn_pnum=$geplr");
+
+      // Save Assault Objectives
+      if ($gevent == 7) {
+        $result = sql_queryn($link, "SELECT obj_times,obj_besttime,obj_avgtime FROM {$dbpre}objectives WHERE obj_num=$gequant LIMIT 1");
+        list($obj_times,$obj_besttime,$obj_avgtime) = sql_fetch_row($result);
+        sql_free_result($result);
+        if ($gelength < $obj_besttime || !$obj_besttime)
+          $obj_besttime = $gelength;
+        $newtime = ((floatval($obj_avgtime) * floatval($obj_times)) + floatval($gelength)) / (floatval($obj_times) + 1.0);
+        $obj_times++;
+        $result = sql_queryn($link, "UPDATE {$dbpre}objectives SET obj_times=$obj_times,obj_besttime=$obj_besttime,obj_avgtime=$newtime WHERE obj_num=$gequant LIMIT 1");
+      }
+
+      // Save Connection Data
+      if ($gevent == 2) {
+        $tstamp = $match->matchdate + ($getime / 100);
+        if (!$gereason) {
+          $result = sql_queryn($link, "SELECT cn_match FROM {$dbpre}connections WHERE cn_match=$matchnum AND cn_pnum=$geplr");
+          $row = sql_fetch_row($result);
+          sql_free_result($result);
+          if (!$row)
+            sql_queryn($link, "INSERT INTO {$dbpre}connections VALUES ($matchnum,$geplr,FROM_UNIXTIME($tstamp),0)");
+        }
+        else
+          sql_queryn($link, "UPDATE {$dbpre}connections SET cn_ctime=cn_ctime,cn_dtime=FROM_UNIXTIME($tstamp) WHERE cn_match=$matchnum AND cn_pnum=$geplr");
+      }
     }
   }
 

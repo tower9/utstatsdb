@@ -346,7 +346,7 @@ function tag_si($i, $data)
 // Start Game
 function tag_sg($i, $data)
 {
-  global $match, $player;
+  global $match, $player, $events, $gkills, $tkills, $pickups, $spree, $multi, $assist, $flagstatus, $killmatch;
 
   if ($match->ended)
     return;
@@ -360,6 +360,46 @@ function tag_sg($i, $data)
       clear_player($match->starttime, $n);
 
   $match->team = array(0.0, 0.0, 0.0, 0.0);
+  $match->tot_kills = 0;
+  $match->tot_deaths = 0;
+  $match->tot_suicides = 0;
+  $match->headshots = 0;
+  $match->teamkills = 0;
+
+  for ($i = 0; $i < $match->numevents; $i++) {
+  	$ev = $events[$i][1];
+  	if ($ev != 2 && $ev != 3 && $ev != 4 && $ev != 10) // Connections, Game Events, Team Changes, Map Votes
+      $events[$i][1] = -1;
+  }
+
+  $gkills = array(array());
+  $match->gkcount = 0;
+
+  $tkills = array(array());
+  $match->tkcount = 0;
+
+  $pickups = array(array());
+  $match->maxpickups = 0;
+
+  $spree = array(array());
+  $multi = array(array());
+  $assist = array();
+  $flagstatus = array();
+  $killmatch = array(array());
+
+  foreach ($player as $plr) {
+  	$p = $plr->plr;
+    $spree[$p][0] = 0;
+    $spree[$p][1] = 0;
+    $multi[$p][0] = 0;
+    $multi[$p][1] = 0;
+    $multi[$p][2] = 0;
+    $tchange[$p] = 0;
+    $assist[$p] = 0;
+    $relog[$p] = -1;
+    $flagstatus[$p] = 0;
+  }
+
   gameevent($match->starttime, 0);
 }
 

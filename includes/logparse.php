@@ -118,7 +118,7 @@ function parselog($file,$chatfile)
           if (tag_si($i, $data))
             return $match->ended;
           break;
-        case "SG": // Start Game - (none)
+        case "SG": // Start Game
           tag_sg($i, $data);
           break;
         case "C": // Player connect - playernumber / playername | playernumber / cd-key hash / id name, id pass hash
