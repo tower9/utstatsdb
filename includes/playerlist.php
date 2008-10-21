@@ -57,8 +57,10 @@ if ($searchid) {
 }
 else
   $searchidvalue = "";
-if ($searchname && !$searchid)
-  $searchstring = "&amp;SearchName=$searchname";
+if ($searchname && !$searchid) {
+  $searchname = rawurldecode($searchname);
+  $searchstring = "&amp;SearchName=".rawurlencode($searchname);
+}
 
 $typelink = "";
 if ($type == "") {

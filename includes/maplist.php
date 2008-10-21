@@ -40,8 +40,10 @@ if ($clear == "Clear")
   $searchname = "";
 
 $searchstring = "";
-if ($searchname)
-  $searchstring = "&amp;SearchName=$searchname";
+if ($searchname) {
+  $searchname = rawurldecode($searchname);
+  $searchstring = "&amp;SearchName=".rawurlencode($searchname);
+}
 
 // Calculate Number of Pages
 if ($searchname != "") {
