@@ -41,8 +41,20 @@ function InitQuery($ip, $port)
 
 function SendQuery($fs, $query)
 {
-  global $bytes_read;
+  $data = "";
 
+  if ( !fwrite($fs, $query) ) {
+    fclose($fs);
+    return $data;
+  }
+
+  $data = @fread($fs, 2048);
+
+  return $data;
+}
+
+function SendQuery2($fs, $query)
+{
   $data = "";
   if ( !fwrite($fs, $query) ) {
     fclose($fs);
@@ -115,8 +127,6 @@ function strrpos4( $haystack, $needle )
 
 function SendQuery3($fs, $query)
 {
-  global $bytes_read;
-
   $data = "";
   if ( !fwrite($fs, $query) ) {
     fclose($fs);
@@ -245,7 +255,7 @@ function ParseQuery(&$data, &$param, &$val, &$num)
 
 function GetStatus($ip, $port)
 {
-  global $query_type, $query_password, $sq_server, $sq_player, $sq_team, $sq_spect, $sq_bot, $bytes_read;
+  global $query_type, $query_password, $sq_server, $sq_player, $sq_team, $sq_spect, $sq_bot;
   global $query_spectators, $query_bots, $teams, $teamcount;
 
   $ok = 0;
@@ -272,14 +282,16 @@ function GetStatus($ip, $port)
 
   if ($query_type == 1) {
     // Server Info
+    $mutators = array();
     $data = SendQuery($fs, "\x7f\x00\x00\x00\x00");
-    $len2 = 0;
-    if ($bytes_read < 32)
+
+    if (strlen($data) < 32)
     {
       fclose($fs);
       return false;
     }
 
+    $len2 = 0;
     $sq_server["hostport"] = ord($data[11]) * 256 + ord($data[10]);
     for ($i = 0; $i < 3; $i++) {
       $len = ord($data[$len2 + 18 + $i]);
@@ -345,13 +357,15 @@ function GetStatus($ip, $port)
         }
       }
     }
-    $sq_server["numplayers"] = ord($data[$len2 + 21]);
+    $numplayers = ord($data[$len2 + 21]);
+    $sq_server["numplayers"] = $numplayers;
     $sq_server["maxplayers"] = ord($data[$len2 + 25]);
 
     // Game Info
     $data = SendQuery($fs, "\x7f\x00\x00\x00\x01");
+    $datalen = strlen($data);
     $len2 = $i = 0;
-    while ($len2 < $bytes_read - 2 && $len2 + $i + 7 < strlen($data)) {
+    while ($len2 < $datalen - 2 && $len2 + $i + 7 < strlen($data)) {
       $ok = 1;
       $len = ord($data[$len2 + $i + 5]);
       if ($len) {
@@ -390,8 +404,7 @@ function GetStatus($ip, $port)
               $val = stripspecialchars($val);
               if (strtolower(substr($val, 0, 3)) == "mut")
                 $val = substr($val, 3);
-              if (isset($sq_server["mutator"]))
-                $val = $sq_server["mutator"].", ".$val;
+              $mutators[] = $val;
               break;
           }
           $sq_server[$param] = $val;
@@ -400,26 +413,38 @@ function GetStatus($ip, $port)
       $i += 2;
     }
 
-    if (!isset($sq_server["mutator"]))
+    if (count($mutators) > 0) {
+      $sq_server["mutator"] = "";
+      for ($i = 0; isset($mutators[$i]); $i++) {
+        if ($sq_server["mutator"] != "")
+          $sq_server["mutator"] .= ", ";
+        $sq_server["mutator"] .= $mutators[$i];
+      }
+    }
+    else
       $sq_server["mutator"] = "None";
 
     // Player Info
-    $data = SendQuery($fs, "\x7f\x00\x00\x00\x02");
-    $len2 = 0;
-    $num = 0;
-    while ($len2 < $bytes_read - 21) {
-      $num++;
-      $len = ord($data[$len2 + 9]);
-      if ($len > 0) {
-        $sq_player[$num]["player"] = stripspecialchars(substr($data, $len2 + 10, $len - 1));
-        $sq_player[$num]["ping"] = ord($data[$len2 + $len + 11]) * 256 + ord($data[$len2 + $len + 10]);
-        $sq_player[$num]["score"] = ord($data[$len2 + $len + 15]) * 256 + ord($data[$len2 + $len + 14]);
+    if ($numplayers > 0) {
+      $data = SendQuery($fs, "\x7f\x00\x00\x00\x02");
+      $datalen = strlen($data);
+      $len2 = 0;
+      $num = 0;
+      while ($len2 < $datalen - 21) {
+        $num++;
+        $len = ord($data[$len2 + 9]);
+        if ($len > 0) {
+          $sq_player[$num]["player"] = stripspecialchars(substr($data, $len2 + 10, $len - 1));
+          $sq_player[$num]["ping"] = ord($data[$len2 + $len + 11]) * 256 + ord($data[$len2 + $len + 10]);
+          $sq_player[$num]["score"] = ord($data[$len2 + $len + 15]) * 256 + ord($data[$len2 + $len + 14]);
+        }
+        $len2 += $len + 17;
       }
-      $len2 += $len + 17;
     }
   }
   else if ($query_type == 0 || $query_type == 2) {
-    $data = SendQuery($fs, "\\basic\\\\info\\\\rules\\\\gamestatus\\\\echo\\nothing");
+    $mutators = array();
+    $data = SendQuery2($fs, "\\basic\\\\info\\\\rules\\\\gamestatus\\\\echo\\nothing");
     while (strlen($data)) {
       $ok = 1;
       if (ParseQuery($data, $param, $val, $num)) {
@@ -511,11 +536,10 @@ function GetStatus($ip, $port)
             $val = sprintf("%0.1f", $val / 60.0);
             break;
           case "mutator":
+          case "mutators":
             if (strtolower(substr($val, 0, 3)) == "mut")
               $val = substr($val, 3);
-            $val = stripspecialchars($val);
-            if (isset($sq_server["mutator"]))
-              $val = $sq_server["mutator"].", ".$val;
+            $mutators[] = stripspecialchars($val);
             break;
           case "hostport":
             $val = intval($val);
@@ -534,7 +558,15 @@ function GetStatus($ip, $port)
       }
     }
 
-    if (!isset($sq_server["mutator"]))
+    if (count($mutators) > 0) {
+      $sq_server["mutator"] = "";
+      for ($i = 0; isset($mutators[$i]); $i++) {
+        if ($sq_server["mutator"] != "")
+          $sq_server["mutator"] .= ", ";
+        $sq_server["mutator"] .= $mutators[$i];
+      }
+    }
+    else
       $sq_server["mutator"] = "None";
 
     $query_string = "\\players\\\\olstatsids\\\\playerhashes_$query_password\\";
@@ -545,7 +577,7 @@ function GetStatus($ip, $port)
     $query_string .= "\\echo\\nothing";
 
 	$lastparam = "";
-     $data = SendQuery($fs, $query_string);
+     $data = SendQuery2($fs, $query_string);
     while (strlen($data)) {
       if (ParseQuery($data, $param, $val, $num)) {
         if ($num >= 0) {
@@ -589,7 +621,7 @@ function GetStatus($ip, $port)
     }
 
 	$lastparam = "";
-    $data = SendQuery($fs, "\\teams\\\\echo\\nothing");
+    $data = SendQuery2($fs, "\\teams\\\\echo\\nothing");
     while (strlen($data)) {
       if (ParseQuery($data, $param, $val, $num)) {
         if ($num >= 0) {
@@ -642,7 +674,7 @@ function GetStatus($ip, $port)
       return $ok;
     }
 
-    $xmut = "";
+    $mutators = array();
     for ($i = 0; isset($data_main[$i]); $i++) {
       $data = explode("\x00", $data_main[$i]);
 
@@ -716,51 +748,41 @@ function GetStatus($ip, $port)
             case "p1073741827": $sq_server["description"] = $val; break;
             case "p268435717":
             {
-              $mut = "";
               $ival = intval($val);
               if ($ival & 0x0001)
-                $mut .= "Kills Slow Time, "; // UTGame.UTMutator_???? = 1
+                $mutators[] = "Kills Slow Time"; // UTGame.UTMutator_???? = 1
               if ($ival & 0x0002)
-                $mut .= "Big Head, "; // UTGame.UTMutator_BigHead = 2
+                $mutators[] = "Big Head"; // UTGame.UTMutator_BigHead = 2
               if ($ival & 0x0008)
-                $mut .= "Friendly Fire, "; // UTGame.UTMutator_FriendlyFire = 8
+                $mutators[] = "Friendly Fire"; // UTGame.UTMutator_FriendlyFire = 8
               if ($ival & 0x0010)
-                $mut .= "Handicap, "; // UTGame.UTMutator_Handicap = 16
+                $mutators[] = "Handicap"; // UTGame.UTMutator_Handicap = 16
               if ($ival & 0x0020)
-                $mut .= "Instagib, "; // UTGame.UTMutator_Instagib = 32
+                $mutators[] = "Instagib"; // UTGame.UTMutator_Instagib = 32
               if ($ival & 0x0040)
-                $mut .= "Low Gravity, "; // UTGame.UTMutator_LowGrav = 64
+                $mutators[] = "Low Gravity"; // UTGame.UTMutator_LowGrav = 64
               if ($ival & 0x0080)
-                $mut .= "No Super Pickups, "; // UTGame.UTMutator_NoPowerups = 128
+                $mutators[] = "No Super Pickups"; // UTGame.UTMutator_NoPowerups = 128
               if ($ival & 0x0100)
-                $mut .= "No Translocator, "; // UTGame.UTMutator_NoTranslocator = 256
+                $mutators[] = "No Translocator"; // UTGame.UTMutator_NoTranslocator = 256
               if ($ival & 0x0200)
-                $mut .= "Slo Mo, "; // UTGame.UTMutator_Slomo = 512
+                $mutators[] = "Slo Mo"; // UTGame.UTMutator_Slomo = 512
               if ($ival & 0x0400)
-                $mut .= "Speed Freak, "; // UTGame.UTMutator_SpeedFreak = 1024
+                $mutators[] = "Speed Freak"; // UTGame.UTMutator_SpeedFreak = 1024
               if ($ival & 0x0800)
-                $mut .= "Super Berserk, "; // UTGame.UTMutator_SuperBerserk = 2048
+                $mutators[] = "Super Berserk"; // UTGame.UTMutator_SuperBerserk = 2048
               if ($ival & 0x1000)
-                $mut .= "Weapon Replacement, "; // UTGame.UTMutator_WeaponReplacement = 8192
+                $mutators[] = "Weapon Replacement"; // UTGame.UTMutator_WeaponReplacement = 8192
               if ($ival & 0x2000)
-                $mut .= "Weapons Respawn, "; // UTGame.UTMutator_WeaponsRespawn = 16384
-              if ($mut == "")
-                $sq_server["mutator"] = "";
-              else
-                $sq_server["mutator"] = substr($mut, 0, -2);
+                $mutators[] = "Weapons Respawn"; // UTGame.UTMutator_WeaponsRespawn = 16384
               break;
             }
             case "p1073741828":
             {
-              $xmut = "";
-            	for ($y = 0; $y < strlen($val); $y++)
-            	{
-            	  if (ord($val[$y]) == 28)
-            	    $xmut .= ", ";
-            	  else
-            	    $xmut .= $val[$y];
-            	}
-            	break;
+              $mut = explode("\x1C", $val);
+              for ($y = 0; isset($mut[$y]); $y++)
+                $mutators[] = $mut[$y];
+              break;
             }
             case "NumPrivateConnections": $sq_server["maxspectators"] = $val; break;
             case "NumOpenPrivateConnections": $sq_server["spectateslots"] = $val; break;
@@ -769,12 +791,16 @@ function GetStatus($ip, $port)
       }
     }
 
-    if ($sq_server["mutator"] == "" && $xmut == "")
+    if (count($mutators) > 0) {
+      $sq_server["mutator"] = "";
+      for ($i = 0; isset($mutators[$i]); $i++) {
+        if ($sq_server["mutator"] != "")
+          $sq_server["mutator"] .= ", ";
+        $sq_server["mutator"] .= $mutators[$i];
+      }
+    }
+    else
       $sq_server["mutator"] = "None";
-    else if ($sq_server["mutator"] != "" && $xmut != "")
-      $sq_server["mutator"] .= ", ";
-    if ($xmut != "")
-      $sq_server["mutator"] .= $xmut;
 
     $y = strpos($sq_server["mapname"], '-');
     if (strlen($sq_server["mapname"]) > $y + 2)
@@ -950,17 +976,17 @@ EOF;
     else
       include("templates/serverquery-ut3.php");
   }
-  else if ($query_type) {
-  	if ($display_map)
-      include("templates/serverquery-gamespymap.php");
-    else
-      include("templates/serverquery-gamespy.php");
-  }
   else if (isset($sq_server["minplayers"])) {
   	if ($display_map)
       include("templates/serverquery-extendedmap.php");
     else
       include("templates/serverquery-extended.php");
+  }
+  else if ($query_type) {
+  	if ($display_map)
+      include("templates/serverquery-gamespymap.php");
+    else
+      include("templates/serverquery-gamespy.php");
   }
   else {
   	if ($display_map)
