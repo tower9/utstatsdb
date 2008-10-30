@@ -161,6 +161,10 @@ function tagut_game($i, $data)
         $match->gametnum = $row[0];
         $match->gametype = $row[1];
         $match->teamgame = $row[2];
+
+        // Set teams for Tactical Ops
+        if ($match->gametype == 21)
+          $match->numteams = 2;
       }
       else { // Add new game type
         $result = sql_queryn($link, "INSERT INTO {$dbpre}type (tp_desc) VALUES('{$match->gtype}')");
@@ -823,6 +827,10 @@ function tagut_suicide($i, $data)
 
   $time = ctime($data[0]);
   $plr = check_player($data[2]);
+
+  if ($plr < 0)
+    return;
+
   $weapon = substr($data[3], 0, 60);
   $damagetype = $data[4];
 
@@ -1257,7 +1265,6 @@ function tagut_game_end($i, $data)
     case "roundlimit":
     case "lastmanstanding":
     case "assault succeeded!":
-    case "terrorists exterminated!":
     case "assault failed!":
     {
       $match->ended = 1;
@@ -1275,6 +1282,48 @@ function tagut_game_end($i, $data)
       $match->ended = 7;
       break;
     }
+
+    // Tactical Ops
+    case "terrorists exterminated!":
+      tacopsevent($time, 0, 10);
+      $match->ended = 1;
+      break;
+    case "hostages rescued !":
+      tacopsevent($time, 0, 11);
+      $match->ended = 1;
+      break;
+    case "bomb defused":
+      tacopsevent($time, 0, 12);
+      $match->ended = 1;
+      break;
+    case "blue control panel hacked. sf team wins!":
+      tacopsevent($time, 0, 13);
+      $match->ended = 1;
+      break;
+    case "special forces exterminated!":
+      tacopsevent($time, 0, 20);
+      $match->ended = 1;
+      break;
+    case "terrorists win the round":
+      tacopsevent($time, 0, 21);
+      $match->ended = 1;
+      break;
+    case "most of the terrorists have escaped !":
+      tacopsevent($time, 0, 22);
+      $match->ended = 1;
+      break;
+    case "red control panel hacked. terrorist team wins!":
+      tacopsevent($time, 0, 23);
+      $match->ended = 1;
+      break;
+    case "tomahawk missile launched, the special forces have failed.":
+      tacopsevent($time, 0, 24);
+      $match->ended = 1;
+      break;
+    case "draw game":
+      tacopsevent($time, 0, 30);
+      $match->ended = 1;
+      break;
 
     default:
       $match->ended = 2;
@@ -1389,6 +1438,67 @@ function tagut_teamsay ($i, $data)
   $chatlog[$match->numchat][1] = $player[$plr]->team + 1;
   $chatlog[$match->numchat][2] = $time;
   $chatlog[$match->numchat++][3] = $data[3];
+}
+
+function tagut_tacops($se, $i, $data)
+{
+  global $match, $player, $relog;
+
+  if ($match->ended || $i < 3)
+    return;
+
+  $time = ctime($data[0]);
+
+  if ($se == 0) {
+    $round = intval($data[2]);
+    tacopsevent($time, $round, 0);
+  }
+  else if ($se == 1) {
+    $event = strtolower($data[3]);
+    switch($event) {
+      case "terrorists exterminated!":
+        tacopsevent($time, 0, 10);
+        teamscore($time, 0, 1, 0);
+        break;
+      case "hostages rescued !":
+        tacopsevent($time, 0, 11);
+        teamscore($time, 0, 1, 0);
+        break;
+      case "bomb defused":
+        tacopsevent($time, 0, 12);
+        teamscore($time, 0, 1, 0);
+        break;
+      case "blue control panel hacked. sf team wins!":
+        tacopsevent($time, 0, 13);
+        teamscore($time, 0, 1, 0);
+        break;
+
+      case "special forces exterminated!":
+        tacopsevent($time, 0, 20);
+        teamscore($time, 1, 1, 0);
+        break;
+      case "terrorists win the round":
+        tacopsevent($time, 0, 21);
+        teamscore($time, 1, 1, 0);
+        break;
+      case "most of the terrorists have escaped !":
+        tacopsevent($time, 0, 22);
+        teamscore($time, 1, 1, 0);
+        break;
+      case "red control panel hacked. terrorist team wins!":
+        tacopsevent($time, 0, 23);
+        teamscore($time, 1, 1, 0);
+        break;
+      case "tomahawk missile launched, the special forces have failed.":
+        tacopsevent($time, 0, 24);
+        teamscore($time, 1, 1, 0);
+        break;
+
+      case "draw game":
+        tacopsevent($time, 0, 30);
+        break;
+    }
+  }
 }
 
 ?>

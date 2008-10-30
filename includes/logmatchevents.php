@@ -144,7 +144,8 @@ function tag_si($i, $data)
   if ($i != 8 || $match->ended)
     return 0;
 
-  $match->servername = substr($data[2], 0, 45); // Server name
+  $name = preg_replace("(\x1B...)", "", $data[2]); // Strip color codes
+  $match->servername = substr($name, 0, 45); // Server name
   $match->shortname = "";
   $match->timezone = $data[3]; // Time zone
   $match->admin = substr($data[4], 0, 35); // Admin name

@@ -83,7 +83,7 @@ a.pages:hover {font-family: Verdana, Arial, Helvetica; font-size: 9pt; color: #f
 a.lglheading {font-family: Verdana, Arial, Helvetica; font-size: 12pt; color: #ffffff; background: #0e0067; font-weight: bold}
 a.lglheading:hover {font-family: Verdana, Arial, Helvetica; font-size: 12pt; color: #ff0000; background: #0e0067; font-weight: bold}
 
-.status {font-family: Verdana,Helvetica; font-size: 9pt; color: #000000; background: #cccccc; border: 1px #000000 solid}
+.status {font-family: Verdana,Helvetica; font-size: 9pt; color: #000000; background: #cccccc; border: 1px #000000 solid; text-align: left}
 a.status {font-family: Verdana,Helvetica; font-size: 9pt; color: #7B6613; text-decoration: none; border: none}
 a.status:hover {font-family: Verdana,Helvetica; font-size: 9pt; color: #bd0000; text-decoration: none; border: none}
 .statusnb {font-family: Verdana,Helvetica; font-size: 9pt; color: #000000; background: #cccccc; padding-left: 4px}

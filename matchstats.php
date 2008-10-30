@@ -1265,7 +1265,7 @@ if ($teams && $gametval != 9 && $gametval != 5 && function_exists('ImageTypes'))
 <br />
 <table>
   <tr>
-    <td class="medheading" colspan="10" align="center">Team Scores</td>
+    <td class="medheading" colspan="10" align="center">$LANG_TEAMSCORES</td>
   </tr>
   <tr>
     <td><img src="graphs.php?type=2&amp;match=$matchnum" width="550" height="180" alt="{$LANG_TEAMSCORINGGRAPH}" /></td>
@@ -3116,6 +3116,7 @@ while ($row = sql_fetch_assoc($result)) {
         default:
           $reason = "";
       }
+      break;
   }
 
   if ($reason != "") {

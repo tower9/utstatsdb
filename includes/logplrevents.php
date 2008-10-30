@@ -39,11 +39,14 @@ function tag_c ($i, $data)
   if (!isset($player[$plr]))
     add_player($time, $plr);
 
-  if ($i == 4)
-    $player[$plr]->name = substr($data[3], 0, 30);
+  if ($i == 4) {
+  	$name = preg_replace("(\x1B...)", "", $data[3]); // Strip color codes
+    $player[$plr]->name = substr($name, 0, 30);
+  }
   else if ($i == 5 || $i == 7) {
     $player[$plr]->team = intval($data[3]);
-    set_name($plr, substr($data[4], 0, 30));
+  	$name = preg_replace("(\x1B...)", "", $data[4]); // Strip color codes
+    set_name($plr, substr($name, 0, 30));
     if ($i == 5)
       $player[$plr]->bot = true;
     if ($i == 7) {

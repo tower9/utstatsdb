@@ -136,7 +136,7 @@ EOF;
 //========== System Events ====================================================
 $numchat = 0;
 $chatlog = array();
-$result = sql_querynb($link, "SELECT * FROM {$dbpre}gevents WHERE ge_match=$matchnum AND ge_event BETWEEN 2 AND 14 ORDER BY ge_num");
+$result = sql_querynb($link, "SELECT * FROM {$dbpre}gevents WHERE ge_match=$matchnum AND ge_event BETWEEN 2 AND 15 ORDER BY ge_num");
 if (!$result) {
   echo "Error loading events log.<br />\n";
   exit;
@@ -419,6 +419,24 @@ while ($row = sql_fetch_assoc($result)) {
         $plr = -1;
         $prior = 2;
       }
+      break;
+    case 15:
+      switch ($reas) {
+        case 0: $reason = "New Round"; break;
+        case 10: $reason = "Terrorists exterminated!"; break;
+        case 11: $reason = "Hostages rescued!"; break;
+        case 12: $reason = "Bomb defused"; break;
+        case 13: $reason = "Blue control panel hacked. SF team wins!"; break;
+        case 20: $reason = "Special Forces exterminated!"; break;
+        case 21: $reason = "Terrorists win the round"; break;
+        case 22: $reason = "Most of the Terrorists have escaped!"; break;
+        case 23: $reason = "Red control panel hacked. Terrorist team wins!"; break;
+        case 24: $reason = "Tomahawk missile launched, the Special Forces have failed."; break;
+        case 30: $reason = "Draw game"; break;
+      }
+      $sysclass = "chatsys";
+      $plr = -1;
+      $prior = 3;
       break;
   }
   if ($reason != "") {

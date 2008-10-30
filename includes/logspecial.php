@@ -667,4 +667,18 @@ function teamevent($time, $reason, $team, $opp)
   $events[$match->numevents++][7] = 0;             // Item
 }
 
+function tacopsevent($time, $round, $reason)
+{
+  global $events, $match;
+
+  $events[$match->numevents][0] = intval($round);   // Round
+  $events[$match->numevents][1] = 15;              // Event
+  $events[$match->numevents][2] = intval($time);   // Time
+  $events[$match->numevents][3] = 0;
+  $events[$match->numevents][4] = 0;
+  $events[$match->numevents][5] = intval($reason); // Reason
+  $events[$match->numevents][6] = 0;
+  $events[$match->numevents++][7] = 0;
+}
+
 ?>

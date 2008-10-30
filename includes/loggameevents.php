@@ -41,7 +41,8 @@ function tag_g ($i, $data)
       if ($match->ended)
         break;
       if ($i > 4 && $data[4] && $plr >= 0) {
-      	set_name($plr, substr($data[4], 0, 30));
+      	$name = preg_replace("(\x1B...)", "", $data[4]); // Strip color codes
+      	set_name($plr, substr($name, 0, 30));
 
         // Check for existing player name
         $relogged = 0;

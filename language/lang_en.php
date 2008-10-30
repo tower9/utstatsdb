@@ -499,6 +499,7 @@ $LANG_BALLTIME = "Ball Time";
 $LANG_JAILBREAKEVENTSUMMARY = "JailBreak Event Summary";
 $LANG_TEAMCAPTURED = "Team Captured";
 $LANG_TEAMRELEASED = "Team Released";
+$LANG_TEAMSCORES = "Team Scores";
 $LANG_TEAMSCORINGGRAPH = "Team Scoring Graph";
 $LANG_TEAMSUMMARY = "Team Summary";
 $LANG_COLORBAR = "Color Bar";

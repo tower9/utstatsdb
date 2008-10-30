@@ -310,6 +310,12 @@ function parselog($file,$chatfile)
         case "TEAMSAY":
           tagut_teamsay($i, $data);
           break;
+        case "ROUND_START":
+          tagut_tacops(0, $i, $data);
+          break;
+        case "ROUND_END":
+          tagut_tacops(1, $i, $data);
+          break;
       }
     }
   }
