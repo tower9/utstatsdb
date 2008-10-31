@@ -34,9 +34,9 @@ function tagut_info($i, $data)
   if ($i < 4)
     return;
 
-  switch ($data[2])
+  switch (strtolower($data[2]))
   {
-  	case "Absolute_Time": // 2004.03.12.08.08.36.205.-8.0
+  	case "absolute_time": // 2004.03.12.08.08.36.205.-8.0
   	  if ($i < 4)
   	    break;
 
@@ -61,19 +61,19 @@ function tagut_info($i, $data)
       $match->matchdate = strtotime(substr($mdt, 0, $r));
       $match->timeoffset = TIME_OFFSET;
   	  break;
-  	case "Server_ServerName":
+  	case "server_servername":
       $match->servername = substr($data[3], 0, 45);
       $match->shortname = "";
   	  break;
-  	case "Server_AdminName":
+  	case "server_adminname":
       $match->admin = substr($data[3], 0, 35);
   	  break;
-  	case "Server_AdminEmail":
+  	case "server_adminemail":
       $match->email = substr($data[3], 0, 45);
   	  break;
-  	case "Server_IP": // 0.0.0.0
+  	case "server_ip": // 0.0.0.0
   	  break;
-  	case "Server_Port": // 7777
+  	case "server_port": // 7777
   	  break;
   }
 }
@@ -86,18 +86,18 @@ function tagut_map($i, $data)
   if ($i < 4)
     return;
 
-  switch ($data[2])
+  switch (strtolower($data[2]))
   {
-  	case "Name": // DM-Q317][.unr
+  	case "name": // DM-Q317][.unr
   	  $mpfn = $data[3];
   	  if (!strcasecmp(substr($mpfn, -4), ".unr"))
         $mpfn = substr($mpfn, 0, -4);
       $match->mapfile = sql_addslashes(substr($mpfn, 0, 32));
   	  break;
-  	case "Title": // Quake III Arena: The Longest Yard, UT-style!
+  	case "title": // Quake III Arena: The Longest Yard, UT-style!
   	  $match->map = sql_addslashes(substr($data[3], 0, 32));
   	  break;
-  	case "Author": // DAVID M.+ {LoD}QuazBotch, Ultron & Dr. Doom
+  	case "author": // DAVID M.+ {LoD}QuazBotch, Ultron & Dr. Doom
   	  $match->author = sql_addslashes(substr($data[3], 0, 32));
   	  break;
   }
@@ -117,9 +117,9 @@ function tagut_game($i, $data)
     return 0;
 
   $match->uttype = 1;
-  switch ($data[2])
+  switch (strtolower($data[2]))
   {
-  	case "GameMutator": // Class Botpack.DMMutator
+  	case "gamemutator": // Class Botpack.DMMutator
   	{
   	  if ($match->mutators != "")
   	    $match->mutators.=", ";
@@ -145,7 +145,7 @@ function tagut_game($i, $data)
   	  break;
   	}
 
-  	case "GameName": // Tournament DeathMatch / Capture the Flag
+  	case "gamename": // Tournament DeathMatch / Capture the Flag
   	{
       $match->gtype = sql_addslashes(substr($data[3], 0, 32));
 
@@ -161,10 +161,6 @@ function tagut_game($i, $data)
         $match->gametnum = $row[0];
         $match->gametype = $row[1];
         $match->teamgame = $row[2];
-
-        // Set teams for Tactical Ops
-        if ($match->gametype == 21)
-          $match->numteams = 2;
       }
       else { // Add new game type
         $result = sql_queryn($link, "INSERT INTO {$dbpre}type (tp_desc) VALUES('{$match->gtype}')");
@@ -248,7 +244,7 @@ function tagut_game($i, $data)
   	  $match->ngfound = 1;
   	}
 
-  	case "GameClass": // Botpack.DeathMatchPlus
+  	case "gameclass": // Botpack.DeathMatchPlus
   	{
       $match->gname = $data[3];
 
@@ -259,25 +255,25 @@ function tagut_game($i, $data)
   	  break;
   	}
 
-  	case "GameVersion": // 436
+  	case "gameversion": // 436
   	{
       $match->serverversion = sql_addslashes(substr($data[3], 0, 9));
   	  break;
   	}
 
-    case "FragLimit": // 10
+    case "fraglimit": // 10
     {
       $match->fraglimit = intval($data[3]);
       break;
     }
 
-    case "TimeLimit": // 0
+    case "timelimit": // 0
     {
       $match->timelimit = intval($data[3]);
       break;
     }
 
-    case "UseTranslocator": // False
+    case "usetranslocator": // False
     {
       if (strtolower($data[3]) == "true")
         $match->translocator = 1;
@@ -286,41 +282,47 @@ function tagut_game($i, $data)
       break;
     }
 
-  	case "NoMonsters": // True
+  	case "nomonsters": // True
   	  break;
-    case "MuteSpectators": // False
+    case "mutespectators": // False
       break;
-    case "HumansOnly": // False
+    case "humansonly": // False
       break;
-    case "WeaponsStay": // True
+    case "weaponsstay": // True
       break;
-    case "ClassicDeathmessages": // False
+    case "classicdeathmessages": // False
       break;
-    case "LowGore": // False
+    case "lowgore": // False
       break;
-    case "VeryLowGore": // False
+    case "verylowgore": // False
       break;
-    case "TeamGame": // False
+    case "teamgame": // True / False
+      if (strtolower($data[3]) == "true" && !$match->teamgame && $match->gametnum > 36) {
+        $match->teamgame = 1;
+        $result = sql_queryn($link, "UPDATE {$dbpre}type SET tp_team=1 WHERE tp_num={$match->gametnum}");
+        if (!$result)
+          echo "Error setting team in game type..{$break}\n";
+      }
       break;
-    case "GameSpeed": // 100
+    case "gamespeed": // 100
       break;
-    case "MaxSpectators": // 2
+    case "maxspectators": // 2
       break;
-    case "MaxPlayers": // 16
+    case "maxplayers": // 16
       break;
-    case "MultiPlayerBots": // True
+    case "multiplayerbots": // True
       break;
-    case "HardCore": // True
+    case "hardcore": // True
       break;
-    case "MegaSpeed": // False
+    case "megaspeed": // False
       break;
-    case "AirControl": // 0.350000
+    case "aircontrol": // 0.350000
       break;
-    case "JumpMatch": // False
+    case "jumpmatch": // False
       break;
-    case "TournamentMode": // False
+    case "tournamentmode": // False
       break;
-    case "NetMode": // ListenServer
+    case "netmode": // ListenServer
       break;
   }
 
@@ -337,9 +339,9 @@ function tagut_player($i, $data)
 
   $time = ctime($data[0]);
 
-  switch ($data[2])
+  switch (strtolower($data[2]))
   {
-  	case "Rename": // Shadow	0
+  	case "rename": // Shadow	0
   	{
       if ($i < 5)
         break;
@@ -347,15 +349,36 @@ function tagut_player($i, $data)
   	  break;
   	}
 
-  	case "Teamchange": // 0	255
+  	case "teamchange": // 0	255
   	{
-      if ($i < 5)
+      if ($match->ended || $i < 5)
         break;
+
+      $plr = check_player($data[3]);
+      if ($plr < 0)
+        break;
+
+      $tm = intval($data[4]);
+      if ($tm >= 0 && $tm <= 3) {
+        // Add time for time spent on old team
+        if ($match->started && $time - $player[$plr]->starttime > 1) {
+          $oldteam = $player[$plr]->team;
+          if ($oldteam >= 0 && $oldteam <= 3) {
+            $player[$plr]->totaltime[$oldteam] += $time - $player[$plr]->starttime;
+            $player[$plr]->starttime = $time;
+          }
+        }
+        flag_check($plr, $time, 0);
+        $player[$plr]->team = $tm;
+        teamchange($time, $plr, $tm);
+        if ($tm + 1 > $match->numteams)
+          $match->numteams = $tm + 1;
+      }
 
   	  break;
   	}
 
-  	case "Connect": // Shadow	0	False
+  	case "connect": // Shadow	0	False
   	{
       if ($i < 6)
         break;
@@ -386,7 +409,7 @@ function tagut_player($i, $data)
   	  break;
   	}
 
-    case "Disconnect":
+    case "disconnect":
     {
       $time = ctime($data[0]);
       $plr = check_player($data[3]);
@@ -412,7 +435,7 @@ function tagut_player($i, $data)
       break;
     }
 
-  	case "TeamName": // 0	Red
+  	case "teamname": // 0	Red
   	{
       if ($i < 5)
         break;
@@ -420,7 +443,7 @@ function tagut_player($i, $data)
   	  break;
   	}
 
-  	case "Team": // 0	255
+  	case "team": // 0	255
   	{
       if ($i < 5 || !$match->teamgame)
         break;
@@ -439,7 +462,7 @@ function tagut_player($i, $data)
   	  break;
   	}
 
-  	case "TeamID": // 0	0
+  	case "teamid": // 0	0
   	{
       if ($i < 5)
         break;
@@ -447,7 +470,7 @@ function tagut_player($i, $data)
   	  break;
   	}
 
-  	case "Ping": // 0	0
+  	case "ping": // 0	0
   	{
       if ($i < 5)
         break;
@@ -462,7 +485,7 @@ function tagut_player($i, $data)
   	  break;
   	}
 
-  	case "IsABot": // 0	False
+  	case "isabot": // 0	False
   	{
       if ($i < 5)
         break;
@@ -473,7 +496,7 @@ function tagut_player($i, $data)
   	  break;
   	}
 
-  	case "Skill": // 0	1.000000
+  	case "skill": // 0	1.000000
   	{
       if ($i < 5)
         break;
@@ -484,7 +507,7 @@ function tagut_player($i, $data)
   	  break;
   	}
 
-  	case "Novice": // 0	False
+  	case "novice": // 0	False
   	{
       if ($i < 5)
         break;
@@ -492,7 +515,7 @@ function tagut_player($i, $data)
   	  break;
   	}
 
-  	case "IP":
+  	case "ip":
   	{
       if ($i < 5)
         break;
