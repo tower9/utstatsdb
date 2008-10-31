@@ -1474,6 +1474,20 @@ function tagut_tacops($se, $i, $data)
 
   if ($se == 0) {
     $round = intval($data[2]);
+
+    if (!$match->started && !$match->ended) {
+      $match->starttime = $time;
+      $match->started = 1;
+      $match->startdate = $match->matchdate + intval($time / TIME_OFFSET);
+
+      for ($n = 0; $n <= $match->maxplayer; $n++)
+        if (isset($player[$n]))
+          clear_player($match->starttime, $n);
+
+      $match->team = array(0.0, 0.0, 0.0, 0.0);
+      gameevent($match->starttime, 0);
+    }
+
     tacopsevent($time, $round, 0);
   }
   else if ($se == 1) {
