@@ -417,8 +417,11 @@ function storedata()
       }
 
       // Calculate player average ping time
-      if ($player[$i]->pingcount > 0)
+      if ($player[$i]->pingcount > 0) {
         $player[$i]->avgping = intval(round(floatval($player[$i]->ping) / floatval($player[$i]->pingcount)));
+        if ($player[$i]->avgping < 0)
+          $player[$i]->avgping = 0;
+      }
       else
         $player[$i]->avgping = 0;
 

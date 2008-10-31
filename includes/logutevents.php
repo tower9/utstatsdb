@@ -478,7 +478,7 @@ function tagut_player($i, $data)
       $plr = check_player($data[3]);
       $ping = intval($data[4]);
 
-      if ($plr >= 0) {
+      if ($plr >= 0 && $ping >= 0) {
         $player[$plr]->ping += $ping;
         $player[$plr]->pingcount++;
       }
