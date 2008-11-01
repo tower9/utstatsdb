@@ -443,19 +443,19 @@ function connections($plr, $time, $reason)
   $events[$match->numevents++][7] = 0;             // Item
 }
 
-function gameevent($time, $reason)
+function gameevent($time, $stend, $reason = 0)
 {
   global $events, $match;
 
-  // Reason: 0 = Match Start / 1 = Match End
-  $events[$match->numevents][0] = 0;               // Player
-  $events[$match->numevents][1] = 3;               // Event
-  $events[$match->numevents][2] = intval($time);   // Time
-  $events[$match->numevents][3] = 0;               // Length
-  $events[$match->numevents][4] = 0;               // Quant
-  $events[$match->numevents][5] = intval($reason); // Reason
-  $events[$match->numevents][6] = 0;               // Opponent
-  $events[$match->numevents++][7] = 0;             // Item
+  // Stend: 0 = Match Start / 1 = Match End
+  $events[$match->numevents][0] = 0;
+  $events[$match->numevents][1] = 3;                 // Event
+  $events[$match->numevents][2] = intval($time);     // Time
+  $events[$match->numevents][3] = 0;
+  $events[$match->numevents][4] = 0;
+  $events[$match->numevents][5] = intval($stend);    // Start/End
+  $events[$match->numevents][6] = 0;
+  $events[$match->numevents++][7] = intval($reason); // Reason
 }
 
 function teamchange($time, $plr, $team)

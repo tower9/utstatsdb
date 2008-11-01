@@ -414,18 +414,39 @@ function tag_eg($i, $data)
 
   $event = strtolower($data[2]);
   $time = ctime($data[0]);
+  $reason = 0;
 
   switch($event) {
     case "fraglimit":
+      $reason = 1;
+      $match->ended = 1;
+      break;
     case "timelimit":
+      $reason = 2;
+      $match->ended = 1;
+      break;
     case "teamscorelimit":
+      $reason = 3;
+      $match->ended = 1;
+      break;
     case "goalscorelimit":
+      $reason = 4;
+      $match->ended = 1;
+      break;
     case "roundlimit":
+      $reason = 5;
+      $match->ended = 1;
+      break;
     case "draw":
+      $reason = 11;
+      $match->ended = 1;
+      break;
     case "artifacts":
+      $reason = 12;
       $match->ended = 1;
       break;
     case "lastman": // *tag*
+      $reason = 6;
       $match->ended = 1;
       if ($i > 3) { // Retrieve rank list
         // $rankset = 1;
@@ -444,12 +465,15 @@ function tag_eg($i, $data)
       }
       break;
     case "mapchange":
+      $reason = 9;
       $match->ended = 6;
       break;
     case "serverquit":
+      $reason = 10;
       $match->ended = 7;
       break;
     case "endwarmup":
+      $reason = 13;
       $match->ended = 11;
       break;
     default: // Other EndGame reasons
@@ -469,7 +493,7 @@ function tag_eg($i, $data)
       flag_check($n, $time, 0);
     }
   }
-  gameevent($time, 1);
+  gameevent($time, 1, $reason);
   $match->endtime = $time;
 }
 

@@ -1279,32 +1279,49 @@ function tagut_game_end($i, $data)
 
   $event = strtolower($data[2]);
   $time = ctime($data[0]);
+  $reason = 0;
 
   switch($event) {
     case "fraglimit":
-    case "timelimit":
-    case "teamscorelimit":
-    case "goalscorelimit":
-    case "roundlimit":
-    case "lastmanstanding":
-    case "assault succeeded!":
-    case "assault failed!":
-    {
+      $reason = 1;
       $match->ended = 1;
       break;
-    }
-
+    case "timelimit":
+      $reason = 2;
+      $match->ended = 1;
+      break;
+    case "teamscorelimit":
+      $reason = 3;
+      $match->ended = 1;
+      break;
+    case "goalscorelimit":
+      $reason = 4;
+      $match->ended = 1;
+      break;
+    case "roundlimit":
+      $reason = 5;
+      $match->ended = 1;
+      break;
+    case "lastmanstanding":
+      $reason = 6;
+      $match->ended = 1;
+      break;
+    case "assault succeeded!":
+      $reason = 7;
+      $match->ended = 1;
+      break;
+    case "assault failed!":
+      $reason = 8;
+      $match->ended = 1;
+      break;
     case "mapchange":
-    {
+      $reason = 9;
       $match->ended = 6;
       break;
-    }
-
     case "serverquit":
-    {
+      $reason = 10;
       $match->ended = 7;
       break;
-    }
 
     // Tactical Ops
     case "terrorists exterminated!":
@@ -1371,7 +1388,7 @@ function tagut_game_end($i, $data)
     }
   }
 
-  gameevent($time, 1);
+  gameevent($time, 1, $reason);
   $match->endtime = $time;
 }
 

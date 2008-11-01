@@ -25,6 +25,7 @@ a.grey:hover {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #b0
 .gselog {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #0f5465; background: #aeaeae; font-weight: normal}
 .tclog {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #4d2821; background: #aeaeae; font-weight: normal}
 .opnote {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #af3020; font-weight: normal}
+.gsedark {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #147588; background: #000000; font-weight: normal}
 
 .chatlink {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #ffffff; background: #303441; font-weight: bold}
 a.chatlink {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #ffff00; background: #303441; font-weight: bold}

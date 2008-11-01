@@ -156,13 +156,13 @@ while ($row = sql_fetch_assoc($result)) {
       switch ($reas) {
         case 0:
           if ($gametval < 2 || $gametval > 4)
-            $reason = "Connected";
+            $reason = "{$LANG_CONNECTED}";
           else
             $reason = "";
           $prior = 2;
           break;
         case 1:
-          $reason = "Disconnected";
+          $reason = "{$LANG_DISCONNECTED}";
           $prior = 4;
           break;
         default:
@@ -171,21 +171,36 @@ while ($row = sql_fetch_assoc($result)) {
       $sysclass = "chatsys";
       break;
     case 3: // Match Start/End
+      $plr = -1;
       switch ($reas) {
         case 0:
-          $reason = "Match Start";
+          $reason = "{$LANG_GAMESTART}";
           $prior = 1;
           $time = 0;
           break;
         case 1:
-          $reason = "Match Ended";
+          $reason = "{$LANG_GAMEENDED}";
           $prior = 5;
+          switch ($item) {
+            case 1: $reason .= " - Frag Limit"; break;
+            case 2: $reason .= " - Time Limit"; break;
+            case 3: $reason .= " - Team Score Limit"; break;
+            case 4: $reason .= " - Goal Score Limit"; break;
+            case 5: $reason .= " - Round Limit"; break;
+            case 6: $reason .= " - Last Man Standing"; break;
+            case 7: $reason .= " - Assault Succeeded"; break;
+            case 8: $reason .= " - Assault Failed"; break;
+            case 9: $reason .= " - Map Change"; break;
+            case 10: $reason .= " - Server Quit"; break;
+            case 11: $reason .= " - Draw"; break;
+            case 12: $reason .= " - Artifacts"; break;
+            case 13: $reason .= " - End Warmup"; break;
+          }
           break;
         default:
           $reason = "";
       }
       $sysclass = "chatsys";
-      $plr = -1;
       break;
     case 4: // Team Change
       $reason = "Team Change to {$teamcolor[$quant]} Team";
@@ -582,6 +597,7 @@ for ($i = 0; $i < $numchat; $i++) {
   $nodisplay = 0;
   $time = sprintf("%0.2f", $chatlog[0][$i] / 6000);
   $plr = $chatlog[1][$i];
+
   if ($plr >= 0) {
     if (isset($gplayer[$plr])) {
       $name = $gplayer[$plr]["gp_name"];

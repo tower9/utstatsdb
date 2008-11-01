@@ -2975,7 +2975,7 @@ echo <<<EOF
 
 EOF;
 
-$result = sql_querynb($link, "SELECT ge_plr,ge_event,ge_time,ge_quant,ge_reason FROM {$dbpre}gevents WHERE ge_match=$matchnum AND ((ge_event BETWEEN 2 AND 4) OR ge_event=10) ORDER BY ge_num");
+$result = sql_querynb($link, "SELECT ge_plr,ge_event,ge_time,ge_quant,ge_reason,ge_item FROM {$dbpre}gevents WHERE ge_match=$matchnum AND ((ge_event BETWEEN 2 AND 4) OR ge_event=10) ORDER BY ge_num");
 if (!$result) {
   echo "{$LANG_ERRORLOADINGCONNECTIONEVENTS}<br />\n";
   exit;
@@ -3001,7 +3001,7 @@ while ($row = sql_fetch_assoc($result)) {
 
   switch ($row["ge_event"]) {
     case 2: // Connect/Disconnect
-      switch ($row["ge_reason"]) {
+      switch ($reas) {
         case 0:
           if (($gametval < 2 || $gametval > 4) && $name != "")
             $reason = "{$LANG_CONNECTED}";
@@ -3022,19 +3022,36 @@ while ($row = sql_fetch_assoc($result)) {
       }
       $player = "<a class=\"$nameclass\" href=\"matchplayer.php?match=$matchnum&amp;player=$plr\">$name</a>";
       break;
-    case 3:
-      switch ($row["ge_reason"]) {
+    case 3: // Game Start/End
+      $player = "";
+      switch ($reas) {
         case 0:
           $reason = "{$LANG_GAMESTART}";
           $time = "0.0";
           break;
         case 1:
           $reason = "{$LANG_GAMEENDED}";
+          $item = $row["ge_item"];
+          $nameclass = "gsedark";
+          switch ($item) {
+            case 1: $player = "Frag Limit"; break;
+            case 2: $player = "Time Limit"; break;
+            case 3: $player = "Team Score Limit"; break;
+            case 4: $player = "Goal Score Limit"; break;
+            case 5: $player = "Round Limit"; break;
+            case 6: $player = "Last Man Standing"; break;
+            case 7: $player = "Assault Succeeded"; break;
+            case 8: $player = "Assault Failed"; break;
+            case 9: $player = "Map Change"; break;
+            case 10: $player = "Server Quit"; break;
+            case 11: $player = "Draw"; break;
+            case 12: $player = "Artifacts"; break;
+            case 13: $player = "End Warmup"; break;
+          }
           break;
         default:
           $reason = "{$LANG_UNKNOWN}";
       }
-      $player = "";
       $rclass = "gselog";
       break;
     case 4:
