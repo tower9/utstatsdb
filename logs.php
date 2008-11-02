@@ -136,14 +136,20 @@ function checkfile($pre, $noport, $file, &$fdate)
     $i = strpos($file, $pre);
     $file = substr($file, $i + strlen($pre));
 
-	if (strlen($file) == 19 && is_numeric(substr($file, 0, 8)) && substr($file, 8, 1) == "." && is_numeric(substr($file, 9, 6))) // UT3 Log
+    $npfile = $file;
+    if (!$noport) {
+      $i = strpos($file, "-");
+      if ($i)
+        $npfile = substr($file, $i + 1);
+    }
+	if (strlen($npfile) == 19 && is_numeric(substr($npfile, 0, 8)) && substr($npfile, 8, 1) == "." && is_numeric(substr($npfile, 9, 6))) // UT3 Log
 	{
-		$fd_year = (int) substr($file, 0, 4);
-		$fd_month = (int) substr($file, 4, 2);
-		$fd_day = (int) substr($file, 6, 2);
-		$fd_hour = (int) substr($file, 9, 2);
-		$fd_min = (int) substr($file, 11, 2);
-		$fd_sec = (int) substr($file, 13, 2);
+		$fd_year = (int) substr($npfile, 0, 4);
+		$fd_month = (int) substr($npfile, 4, 2);
+		$fd_day = (int) substr($npfile, 6, 2);
+		$fd_hour = (int) substr($npfile, 9, 2);
+		$fd_min = (int) substr($npfile, 11, 2);
+		$fd_sec = (int) substr($npfile, 13, 2);
         $fdate = sprintf("%04u-%02u-%02u %02u:%02u:%02u", $fd_year, $fd_month, $fd_day, $fd_hour, $fd_min, $fd_sec);
         $stattype = 3;
 	}
