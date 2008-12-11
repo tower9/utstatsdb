@@ -445,7 +445,7 @@ function tag_eg($i, $data)
       $reason = 12;
       $match->ended = 1;
       break;
-    case "lastman": // *tag*
+    case "lastman": // TODO: Fix Last Man Standing rank list checking
       $reason = 6;
       $match->ended = 1;
       if ($i > 3) { // Retrieve rank list
