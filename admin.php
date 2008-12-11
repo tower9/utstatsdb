@@ -26,7 +26,7 @@ $magic = get_magic_quotes_gpc();
 $magicrt = get_magic_quotes_runtime();
 $adminver = new AdminVer;
 $adminver->major = 3;
-$adminver->minor = 05;
+$adminver->minor = 06;
 $adminver->extra = "";
 $updatereq = 0;
 
