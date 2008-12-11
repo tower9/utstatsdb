@@ -19,6 +19,23 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+function update306()
+{
+  global $dbtype, $dbpre, $break;
+
+  $link = sql_connect();
+
+  echo "Updating version....<br />\n";
+  $result = sql_queryn($link, "UPDATE {$dbpre}config SET value='3.06' WHERE conf='Version'");
+  if (!$result) {
+    echo "<br />Error updating version.{$break}\n";
+    exit;
+  }
+
+  sql_close($link);
+  echo "<br />Database updates complete.<br />\n";
+}
+
 function update305()
 {
   global $dbtype, $dbpre, $break;

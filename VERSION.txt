@@ -1,1 +1,1 @@
-UTStatsDB version 3.05
+UTStatsDB version 3.06

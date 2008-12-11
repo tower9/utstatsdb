@@ -1,5 +1,22 @@
 Release Notes:
 
+Version 3.06
+  Added Tactical Ops support.
+  Short server name switch now checked for use in all locations where the server name is displayed.
+  Fixed language file not being used in some locations (chat log, match stats).
+  Fixed support for log files with or without port in file name.
+  Fixed multi-page display in rankings.
+  Numerous fixes and changes to server query.
+  Updated some server query templates.
+  Added .gsedark and .status to style sheets.
+  Color codes are now stripped from server and player names.
+  Data is now reset properly when match is reset or when practice round ends.
+  Fixed bad ping data causing anomalous average ping display.
+  Fixed issues with saving event data.
+  Removed case sensitivity in UT '99 logs.
+  Added team change checking for UT '99 (!).
+  Fixed search functions when input contains special characters.
+
 Version 3.05
   Added consolidation and sorting to item totals.
   Fixes for SQLite updates.

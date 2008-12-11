@@ -534,6 +534,19 @@ function updatedb() {
     update305();
   }
 
+  $ver = currentver();
+  if ($ver == -1) {
+    $versioncheck = "Version check error!<br />\n";
+    menu_bottom();
+    exit;
+  }
+  list($vermajor, $verminor, $verextra) = $ver;
+  if ($vermajor == 3 && $verminor == 5) {
+    echo "Updating database to version 3.06....<br /><br />\n";
+    include_once("includes/adminupdate.php");
+    update306();
+  }
+
   menu_bottom();
   exit;
 }
