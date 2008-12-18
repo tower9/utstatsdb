@@ -1,9 +1,13 @@
 Release Notes:
 
+Unreleased
+  Fixed not being able to select to display bots or all players in player list.
+
 Version 3.06
   Added Tactical Ops support.
   Short server name switch now checked for use in all locations where the server name is displayed.
   Fixed language file not being used in some locations (chat log, match stats).
+  Added match end reason in chat log.
   Fixed support for log files with or without port in file name.
   Fixed multi-page display in rankings.
   Numerous fixes and changes to server query.

@@ -168,11 +168,13 @@ echo <<<EOF
   <link rel="icon" href="resource/uicon.png" type="image/png" />
   <link rel="stylesheet" href="resource/{$stylefile}" type="text/css" />
   <script language="JavaScript" type="text/JavaScript">
+<!--
     function changePage(newLoc) {
-      nextPage = "index.php?stats=players&amp;type=" + newLoc.options[newLoc.selectedIndex].value
+      nextPage = "index.php?stats=players&type=" + newLoc.options[newLoc.selectedIndex].value
       if (nextPage != "")
         document.location.href = nextPage
     }
+-->
   </script>
 </head>
 
