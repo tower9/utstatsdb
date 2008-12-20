@@ -335,8 +335,7 @@ function sql_insert_id($link) {
       $num = @sqlite_last_insert_rowid($link);
       break;
     case "mssql":
-      $result = @mssql_query("SELECT @@IDENTITY"); // SCOPE_IDENTITY
-      // $result = mssql_query("SELECT IDENT_CURRENT()");
+      $result = @mssql_query("SELECT @@IDENTITY");
       if ($result) {
         $num = reset(mssql_fetch_row($result));
         if (!is_numeric($num))
@@ -400,12 +399,14 @@ function sql_addslashes($str) {
 
   switch (strtolower($dbtype)) {
     case "mysql":
-    case "mssql":
       $str = addslashes($str);
       break;
     case "sqlite":
       $str = sqlite_escape_string($str);
       break;
+    case "mssql":
+      $str = str_replace("'", "''", $str);
+      $str = str_replace("\"", "'\"", $str);
       break;
     default:
       echo "Database type error.\n";
@@ -706,11 +707,12 @@ function mssql_queryfix($query)
   if (!strcmp(substr($query, 0, 6), "SELECT")) {
     $daterows = array("cn_ctime", "cn_dtime", "mp_lastmatch", "gm_init", "gm_start", "sv_lastmatch", "tl_chfragssg_date", "tl_chkillssg_date", "tl_chdeathssg_date", "tl_chsuicidessg_date", "tl_chcarjacksg_date", "tl_chroadkillssg_date", "tl_chcpcapturesg_date", "tl_chflagcapturesg_date", "tl_chflagreturnsg_date", "tl_chflagkillsg_date", "tl_chbombcarriedsg_date", "tl_chbombtossedsg_date", "tl_chbombkillsg_date", "tl_chnodeconstructedsg_date", "tl_chnodeconstdestroyedsg_date", "tl_chnodedestroyedsg_date", "wp_chkillssg_dt", "wp_chdeathssg_dt", "wp_chdeathshldsg_dt", "wp_chsuicidessg_dt");
     foreach ($daterows as $daterow) {
-      if (($p = strpos($query, $daterow)) !== false)
+      if (($p = strpos($query, $daterow)) !== false && substr($query, $p + strlen($daterow), 1) != "=") {
         if (strstr($query, "MAX(") === false)
           $query = substr($query, 0, $p) . "CONVERT(char(19), " . substr($query, $p, strlen($daterow)) . ", 20) AS $daterow" . substr($query, $p + strlen($daterow));
         else
           $query = substr($query, 0, $p) . "CONVERT(char(19), " . substr($query, $p, strlen($daterow)) . ", 20)" . substr($query, $p + strlen($daterow));
+      }
     }
   }
 

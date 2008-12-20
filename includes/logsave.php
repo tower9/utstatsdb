@@ -206,6 +206,10 @@ function storedata()
         }
         $plrnum = sql_insert_id($link);
         $result = sql_queryn($link, "SELECT * FROM {$dbpre}players WHERE pnum=$plrnum LIMIT 1");
+        if (!$result) {
+          echo "Error reading new player in database.{$break}\n";
+          exit;
+        }
         $row = sql_fetch_assoc($result);
         sql_free_result($result);
         if (!$player[$i]->is_bot())
