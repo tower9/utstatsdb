@@ -45,7 +45,7 @@ function findpwk($player, $weapon) // Player, Weapon
   if ($row)
     $pwk = intval($row[0]);
   else {
-    $result = sql_queryn($link, "INSERT INTO {$dbpre}pwkills VALUES (NULL,$player,$weapon,0,0,0,0,0,0,0,0)");
+    $result = sql_queryn($link, "INSERT INTO {$dbpre}pwkills(pwk_player,pwk_weapon,pwk_frags,pwk_kills,pwk_deaths,pwk_held,pwk_suicides,pwk_fired,pwk_hits,pwk_damage) VALUES ($player,$weapon,0,0,0,0,0,0,0,0)");
     if (!$result) {
       echo "Error adding pwkills table entry.{$break}\n";
       exit;
@@ -74,7 +74,7 @@ function findmwk($map, $weapon) // Map, Weapon
   if ($row)
     $mwk = intval($row[0]);
   else {
-    $result = sql_queryn($link, "INSERT INTO {$dbpre}mwkills VALUES (NULL,$map,$weapon,0,0,0,0)");
+    $result = sql_queryn($link, "INSERT INTO {$dbpre}mwkills(mwk_map,mwk_weapon,mwk_kills,mwk_deaths,mwk_held,mwk_suicides) VALUES ($map,$weapon,0,0,0,0)");
     if (!$result) {
       echo "Error adding mwkills table entry.{$break}\n";
       exit;
@@ -103,7 +103,7 @@ function findgwa($match, $player, $weapon) // Match, Player, Weapon
   if ($row)
     $gwa = intval($row[0]);
   else {
-    $result = sql_queryn($link, "INSERT INTO {$dbpre}gwaccuracy VALUES (NULL,$match,$player,$weapon,0,0,0)");
+    $result = sql_queryn($link, "INSERT INTO {$dbpre}gwaccuracy(gwa_match,gwa_player,gwa_weapon,gwa_fired,gwa_hits,gwa_damage) VALUES ($match,$player,$weapon,0,0,0)");
     if (!$result) {
       echo "Error adding gwaccuracy table entry.{$break}\n";
       exit;
@@ -160,7 +160,7 @@ function storedata()
   // Save Match Data
   if (strlen($match->mutators) > 255)
     $match->mutators = substr($match->mutators, 0, 255);
-  $result = sql_queryn($link, "INSERT INTO {$dbpre}matches VALUES (NULL,{$match->servernum},'{$match->serverversion}',{$match->mapnum},{$match->gametnum},{$match->uttype},'$md','$sd',{$match->logger},'$logname',{$match->timeoffset},{$match->rpg},{$match->maxwave},{$match->difficulty},'{$match->mutators}',{$match->mapvoting},{$match->kickvoting},{$match->fraglimit},{$match->timelimit},{$match->overtime},{$match->minplayers},{$match->translocator},{$match->endtimedelay},{$match->balanceteams},{$match->playersbalanceteams},'{$match->friendlyfirescale}','{$match->linksetup}',{$match->gamespeed},{$match->healthforkills},{$match->allowsuperweapons},{$match->camperalarm},{$match->allowpickups},{$match->allowadrenaline},{$match->fullammo},{$match->starttime},{$match->length},{$match->numplayers},{$match->tot_kills},{$match->tot_deaths},{$match->tot_suicides},{$match->numteams},{$match->team[0]},{$match->team[1]},{$match->team[2]},{$match->team[3]},{$match->firstblood},{$match->headshots},0)");
+  $result = sql_queryn($link, "INSERT INTO {$dbpre}matches(gm_server,gm_serverversion,gm_map,gm_type,gm_uttype,gm_init,gm_start,gm_logger,gm_logname,gm_timeoffset,gm_rpg,gm_maxwave,gm_difficulty,gm_mutators,gm_mapvoting,gm_kickvoting,gm_fraglimit,gm_timelimit,gm_overtime,gm_minplayers,gm_translocator,gm_endtimedelay,gm_balanceteams,gm_playersbalanceteams,gm_friendlyfirescale,gm_linksetup,gm_gamespeed,gm_healthforkills,gm_allowsuperweapons,gm_camperalarm,gm_allowpickups,gm_allowadrenaline,gm_fullammo,gm_starttime,gm_length,gm_numplayers,gm_kills,gm_deaths,gm_suicides,gm_numteams,gm_tscore0,gm_tscore1,gm_tscore2,gm_tscore3,gm_firstblood,gm_headshots,gm_status) VALUES ({$match->servernum},'{$match->serverversion}',{$match->mapnum},{$match->gametnum},{$match->uttype},'$md','$sd',{$match->logger},'$logname',{$match->timeoffset},{$match->rpg},{$match->maxwave},{$match->difficulty},'{$match->mutators}',{$match->mapvoting},{$match->kickvoting},{$match->fraglimit},{$match->timelimit},{$match->overtime},{$match->minplayers},{$match->translocator},{$match->endtimedelay},{$match->balanceteams},{$match->playersbalanceteams},'{$match->friendlyfirescale}','{$match->linksetup}',{$match->gamespeed},{$match->healthforkills},{$match->allowsuperweapons},{$match->camperalarm},{$match->allowpickups},{$match->allowadrenaline},{$match->fullammo},{$match->starttime},{$match->length},{$match->numplayers},{$match->tot_kills},{$match->tot_deaths},{$match->tot_suicides},{$match->numteams},{$match->team[0]},{$match->team[1]},{$match->team[2]},{$match->team[3]},{$match->firstblood},{$match->headshots},0)");
   if (!$result) {
     echo "Error saving match data in database.{$break}\n";
     exit;
@@ -434,55 +434,106 @@ function storedata()
         $plr_name = $player[$i]->name;
 
       // Save player stats
-      $result = sql_queryn($link, "REPLACE INTO {$dbpre}players VALUES (
-        $pnum,
-        '$plr_name',
-        $plr_bot,
-        $plr_frags,$plr_score,$plr_kills,$plr_deaths,$plr_suicides,
-        $plr_headshots,$plr_firstblood,
-        $plr_transgib,$plr_headhunter,$plr_flakmonkey,$plr_combowhore,
-        $plr_roadrampage,$plr_carjack,$plr_roadkills,
-        '$plr_user',
-        '$plr_id',
-        '$plr_key',
-        '$plr_ip',
-        $plr_netspeed,
-        $plr_rpg,
-        $plr_matches,$plr_time,
-        $plr_fph,$plr_sph,$plr_eff,
-        $plr_wins,$plr_teamwins,$plr_losses,
-        $plr_multi1,$plr_multi2,$plr_multi3,$plr_multi4,$plr_multi5,$plr_multi6,$plr_multi7,
-        $plr_spree1,$plr_spreet1,$plr_spreek1,
-        $plr_spree2,$plr_spreet2,$plr_spreek2,
-        $plr_spree3,$plr_spreet3,$plr_spreek3,
-        $plr_spree4,$plr_spreet4,$plr_spreek4,
-        $plr_spree5,$plr_spreet5,$plr_spreek5,
-        $plr_spree6,$plr_spreet6,$plr_spreek6,
-        $plr_combo1,$plr_combo2,$plr_combo3,$plr_combo4,
-        $plr_flagcapture,$plr_flagreturn,$plr_flagkill,
-        $plr_cpcapture,
-        $plr_bombcarried,$plr_bombtossed,$plr_bombkill,
-        $plr_nodeconstructed,$plr_nodedestroyed,$plr_nodeconstdestroyed)");
+      if (strtolower($dbtype) == "mssql") { // @&$#^*! MsSQL
+        $result = sql_queryn($link, "UPDATE {$dbpre}players SET 
+plr_name='$plr_name',
+plr_bot=$plr_bot,
+plr_frags=$plr_frags,plr_score=$plr_score,plr_kills=$plr_kills,plr_deaths=$plr_deaths,plr_suicides=$plr_suicides,
+plr_headshots=$plr_headshots,plr_firstblood=$plr_firstblood,
+plr_transgib=$plr_transgib,plr_headhunter=$plr_headhunter,plr_flakmonkey=$plr_flakmonkey,plr_combowhore=$plr_combowhore,
+plr_roadrampage=$plr_roadrampage,plr_carjack=$plr_carjack,plr_roadkills=$plr_roadkills,
+plr_user='$plr_user',
+plr_id='$plr_id',
+plr_key='$plr_key',
+plr_ip='$plr_ip',
+plr_netspeed=$plr_netspeed,
+plr_rpg=$plr_rpg,
+plr_matches=$plr_matches,plr_time=$plr_time,
+plr_fph=$plr_fph,plr_sph=$plr_sph,plr_eff=$plr_eff,
+plr_wins=$plr_wins,plr_teamwins=$plr_teamwins,plr_losses=$plr_losses,
+plr_multi1=$plr_multi1,plr_multi2=$plr_multi2,plr_multi3=$plr_multi3,plr_multi4=$plr_multi4,plr_multi5=$plr_multi5,plr_multi6=$plr_multi6,plr_multi7=$plr_multi7,
+plr_spree1=$plr_spree1,plr_spreet1=$plr_spreet1,plr_spreek1=$plr_spreek1,
+plr_spree2=$plr_spree2,plr_spreet2=$plr_spreet2,plr_spreek2=$plr_spreek2,
+plr_spree3=$plr_spree3,plr_spreet3=$plr_spreet3,plr_spreek3=$plr_spreek3,
+plr_spree4=$plr_spree4,plr_spreet4=$plr_spreet4,plr_spreek4=$plr_spreek4,
+plr_spree5=$plr_spree5,plr_spreet5=$plr_spreet5,plr_spreek5=$plr_spreek5,
+plr_spree6=$plr_spree6,plr_spreet6=$plr_spreet6,plr_spreek6=$plr_spreek6,
+plr_combo1=$plr_combo1,plr_combo2=$plr_combo2,plr_combo3=$plr_combo3,plr_combo4=$plr_combo4,
+plr_flagcapture=$plr_flagcapture,plr_flagreturn=$plr_flagreturn,plr_flagkill=$plr_flagkill,
+plr_cpcapture=$plr_cpcapture,
+plr_bombcarried=$plr_bombcarried,plr_bombtossed=$plr_bombtossed,plr_bombkill=$plr_bombkill,
+plr_nodeconstructed=$plr_nodeconstructed,plr_nodedestroyed=$plr_nodedestroyed,plr_nodeconstdestroyed=$plr_nodeconstdestroyed 
+WHERE pnum=$pnum");
+      }
+      else {
+        $result = sql_queryn($link, "REPLACE INTO {$dbpre}players VALUES (
+$pnum,
+'$plr_name',
+$plr_bot,
+$plr_frags,$plr_score,$plr_kills,$plr_deaths,$plr_suicides,
+$plr_headshots,$plr_firstblood,
+$plr_transgib,$plr_headhunter,$plr_flakmonkey,$plr_combowhore,
+$plr_roadrampage,$plr_carjack,$plr_roadkills,
+'$plr_user',
+'$plr_id',
+'$plr_key',
+'$plr_ip',
+$plr_netspeed,
+$plr_rpg,
+$plr_matches,$plr_time,
+$plr_fph,$plr_sph,$plr_eff,
+$plr_wins,$plr_teamwins,$plr_losses,
+$plr_multi1,$plr_multi2,$plr_multi3,$plr_multi4,$plr_multi5,$plr_multi6,$plr_multi7,
+$plr_spree1,$plr_spreet1,$plr_spreek1,
+$plr_spree2,$plr_spreet2,$plr_spreek2,
+$plr_spree3,$plr_spreet3,$plr_spreek3,
+$plr_spree4,$plr_spreet4,$plr_spreek4,
+$plr_spree5,$plr_spreet5,$plr_spreek5,
+$plr_spree6,$plr_spreet6,$plr_spreek6,
+$plr_combo1,$plr_combo2,$plr_combo3,$plr_combo4,
+$plr_flagcapture,$plr_flagreturn,$plr_flagkill,
+$plr_cpcapture,
+$plr_bombcarried,$plr_bombtossed,$plr_bombkill,
+$plr_nodeconstructed,$plr_nodedestroyed,$plr_nodeconstdestroyed)");
+      }
       if (!$result) {
         echo "Error saving player data in database.{$break}\n";
         exit;
       }
 
       // Save player gametype data
-      $result = sql_queryn($link, "REPLACE INTO {$dbpre}playersgt VALUES (
-        $gt_num,
-        $gt_pnum,
-        $gt_tnum,
-        $gt_type,
-        $gt_score,$gt_frags,$gt_kills,$gt_deaths,$gt_suicides,
-        $gt_teamkills,$gt_teamdeaths,
-        $gt_sph,$gt_eff,
-        $gt_wins,$gt_losses,$gt_matches,
-        $gt_time,
-        $gt_rank,
-        $gt_capcarry,$gt_tossed,$gt_drop,$gt_pickup,$gt_return,$gt_taken,
-        $gt_typekill,$gt_assist,$gt_holdtime,
-        $gt_extraa,$gt_extrab,$gt_extrac)");
+      if (strtolower($dbtype) == "mssql") {
+        $result = sql_queryn($link, "UPDATE {$dbpre}playersgt SET 
+gt_pnum=$gt_pnum,
+gt_tnum=$gt_tnum,
+gt_type=$gt_type,
+gt_score=$gt_score,gt_frags=$gt_frags,gt_kills=$gt_kills,gt_deaths=$gt_deaths,gt_suicides=$gt_suicides,
+gt_teamkills=$gt_teamkills,gt_teamdeaths=$gt_teamdeaths,
+gt_sph=$gt_sph,gt_eff=$gt_eff,
+gt_wins=$gt_wins,gt_losses=$gt_losses,gt_matches=$gt_matches,
+gt_time=$gt_time,
+gt_rank=$gt_rank,
+gt_capcarry=$gt_capcarry,gt_tossed=$gt_tossed,gt_drop=$gt_drop,gt_pickup=$gt_pickup,gt_return=$gt_return,gt_taken=$gt_taken,
+gt_typekill=$gt_typekill,gt_assist=$gt_assist,gt_holdtime=$gt_holdtime,
+gt_extraa=$gt_extraa,gt_extrab=$gt_extrab,gt_extrac=$gt_extrac 
+WHERE gt_num=$gt_num");
+      }
+      else {
+        $result = sql_queryn($link, "REPLACE INTO {$dbpre}playersgt VALUES (
+$gt_num,
+$gt_pnum,
+$gt_tnum,
+$gt_type,
+$gt_score,$gt_frags,$gt_kills,$gt_deaths,$gt_suicides,
+$gt_teamkills,$gt_teamdeaths,
+$gt_sph,$gt_eff,
+$gt_wins,$gt_losses,$gt_matches,
+$gt_time,
+$gt_rank,
+$gt_capcarry,$gt_tossed,$gt_drop,$gt_pickup,$gt_return,$gt_taken,
+$gt_typekill,$gt_assist,$gt_holdtime,
+$gt_extraa,$gt_extrab,$gt_extrac)");
+      }
       if (!$result) {
         echo "Error saving player gametype data.{$break}\n";
         exit;
@@ -1065,82 +1116,162 @@ function storedata()
   $tl_matches++;
   $tl_gametime += $match->length;
 
-  $result = sql_queryn($link, "REPLACE INTO {$dbpre}totals VALUES (
-    'Totals',
-    $tl_score,$tl_kills,$tl_deaths,$tl_suicides,
-    $tl_teamkills,$tl_teamdeaths,
-    $tl_players,
-    $tl_matches,$tl_time,$tl_gametime,$tl_playertime,
-    $tl_cpcapture,
-    $tl_flagcapture,$tl_flagdrop,$tl_flagpickup,$tl_flagreturn,$tl_flagtaken,$tl_flagkill,$tl_flagassist,
-    $tl_bombcarried,$tl_bombtossed,$tl_bombdrop,$tl_bombpickup,$tl_bombtaken,$tl_bombkill,$tl_bombassist,
-    $tl_nodeconstructed,$tl_nodeconstdestroyed,$tl_nodedestroyed,$tl_coredestroyed,
-    $tl_spkills,$tl_spdeaths,$tl_spsuicides,$tl_spteamkills,$tl_spteamdeaths,$tl_spmatches,$tl_sptime,
-    $tl_headshots,
-    $tl_multi1,$tl_multi2,$tl_multi3,$tl_multi4,$tl_multi5,$tl_multi6,$tl_multi7,
-    $tl_spree1,$tl_spreet1,$tl_spreek1,
-    $tl_spree2,$tl_spreet2,$tl_spreek2,
-    $tl_spree3,$tl_spreet3,$tl_spreek3,
-    $tl_spree4,$tl_spreet4,$tl_spreek4,
-    $tl_spree5,$tl_spreet5,$tl_spreek5,
-    $tl_spree6,$tl_spreet6,$tl_spreek6,
-    $tl_combo1,$tl_combo2,$tl_combo3,$tl_combo4,
-    $tl_transgib,$tl_headhunter,$tl_flakmonkey,$tl_combowhore,
-    $tl_roadrampage,$tl_carjack,$tl_roadkills,
-    $tl_chfrags,$tl_chfrags_plr,$tl_chfrags_gms,$tl_chfrags_tm,
-    $tl_chkills,$tl_chkills_plr,$tl_chkills_gms,$tl_chkills_tm,
-    $tl_chdeaths,$tl_chdeaths_plr,$tl_chdeaths_gms,$tl_chdeaths_tm,
-    $tl_chsuicides,$tl_chsuicides_plr,$tl_chsuicides_gms,$tl_chsuicides_tm,
-    $tl_chfirstblood,$tl_chfirstblood_plr,$tl_chfirstblood_gms,$tl_chfirstblood_tm,
-    $tl_chheadshots,$tl_chheadshots_plr,$tl_chheadshots_gms,$tl_chheadshots_tm,
-    $tl_chcarjack,$tl_chcarjack_plr,$tl_chcarjack_gms,$tl_chcarjack_tm,
-    $tl_chroadkills,$tl_chroadkills_plr,$tl_chroadkills_gms,$tl_chroadkills_tm,
-    $tl_chmulti1,$tl_chmulti1_plr,$tl_chmulti1_gms,$tl_chmulti1_tm,
-    $tl_chmulti2,$tl_chmulti2_plr,$tl_chmulti2_gms,$tl_chmulti2_tm,
-    $tl_chmulti3,$tl_chmulti3_plr,$tl_chmulti3_gms,$tl_chmulti3_tm,
-    $tl_chmulti4,$tl_chmulti4_plr,$tl_chmulti4_gms,$tl_chmulti4_tm,
-    $tl_chmulti5,$tl_chmulti5_plr,$tl_chmulti5_gms,$tl_chmulti5_tm,
-    $tl_chmulti6,$tl_chmulti6_plr,$tl_chmulti6_gms,$tl_chmulti6_tm,
-    $tl_chmulti7,$tl_chmulti7_plr,$tl_chmulti7_gms,$tl_chmulti7_tm,
-    $tl_chspree1,$tl_chspree1_plr,$tl_chspree1_gms,$tl_chspree1_tm,
-    $tl_chspree2,$tl_chspree2_plr,$tl_chspree2_gms,$tl_chspree2_tm,
-    $tl_chspree3,$tl_chspree3_plr,$tl_chspree3_gms,$tl_chspree3_tm,
-    $tl_chspree4,$tl_chspree4_plr,$tl_chspree4_gms,$tl_chspree4_tm,
-    $tl_chspree5,$tl_chspree5_plr,$tl_chspree5_gms,$tl_chspree5_tm,
-    $tl_chspree6,$tl_chspree6_plr,$tl_chspree6_gms,$tl_chspree6_tm,
-    $tl_chfph,$tl_chfph_plr,$tl_chfph_gms,$tl_chfph_tm,
-    $tl_chcpcapture,$tl_chcpcapture_plr,$tl_chcpcapture_gms,$tl_chcpcapture_tm,
-    $tl_chflagcapture,$tl_chflagcapture_plr,$tl_chflagcapture_gms,$tl_chflagcapture_tm,
-    $tl_chflagreturn,$tl_chflagreturn_plr,$tl_chflagreturn_gms,$tl_chflagreturn_tm,
-    $tl_chflagkill,$tl_chflagkill_plr,$tl_chflagkill_gms,$tl_chflagkill_tm,
-    $tl_chbombcarried,$tl_chbombcarried_plr,$tl_chbombcarried_gms,$tl_chbombcarried_tm,
-    $tl_chbombtossed,$tl_chbombtossed_plr,$tl_chbombtossed_gms,$tl_chbombtossed_tm,
-    $tl_chbombkill,$tl_chbombkill_plr,$tl_chbombkill_gms,$tl_chbombkill_tm,
-    $tl_chnodeconstructed,$tl_chnodeconstructed_plr,$tl_chnodeconstructed_gms,$tl_chnodeconstructed_tm,
-    $tl_chnodedestroyed,$tl_chnodedestroyed_plr,$tl_chnodedestroyed_gms,$tl_chnodedestroyed_tm,
-    $tl_chnodeconstdestroyed,$tl_chnodeconstdestroyed_plr,$tl_chnodeconstdestroyed_gms,$tl_chnodeconstdestroyed_tm,
-    $tl_chheadhunter,$tl_chheadhunter_plr,$tl_chheadhunter_gms,$tl_chheadhunter_tm,
-    $tl_chflakmonkey,$tl_chflakmonkey_plr,$tl_chflakmonkey_gms,$tl_chflakmonkey_tm,
-    $tl_chcombowhore,$tl_chcombowhore_plr,$tl_chcombowhore_gms,$tl_chcombowhore_tm,
-    $tl_chroadrampage,$tl_chroadrampage_plr,$tl_chroadrampage_gms,$tl_chroadrampage_tm,
-    $tl_chwins,$tl_chwins_plr,$tl_chwins_gms,$tl_chwins_tm,
-    $tl_chteamwins,$tl_chteamwins_plr,$tl_chteamwins_gms,$tl_chteamwins_tm,
-    $tl_chfragssg,$tl_chfragssg_plr,$tl_chfragssg_tm,$tl_chfragssg_map,'$tl_chfragssg_date',
-    $tl_chkillssg,$tl_chkillssg_plr,$tl_chkillssg_tm,$tl_chkillssg_map,'$tl_chkillssg_date',
-    $tl_chdeathssg,$tl_chdeathssg_plr,$tl_chdeathssg_tm,$tl_chdeathssg_map,'$tl_chdeathssg_date',
-    $tl_chsuicidessg,$tl_chsuicidessg_plr,$tl_chsuicidessg_tm,$tl_chsuicidessg_map,'$tl_chsuicidessg_date',
-    $tl_chcarjacksg,$tl_chcarjacksg_plr,$tl_chcarjacksg_tm,$tl_chcarjacksg_map,'$tl_chcarjacksg_date',
-    $tl_chroadkillssg,$tl_chroadkillssg_plr,$tl_chroadkillssg_tm,$tl_chroadkillssg_map,'$tl_chroadkillssg_date',
-    $tl_chcpcapturesg,$tl_chcpcapturesg_plr,$tl_chcpcapturesg_tm,$tl_chcpcapturesg_map,'$tl_chcpcapturesg_date',
-    $tl_chflagcapturesg,$tl_chflagcapturesg_plr,$tl_chflagcapturesg_tm,$tl_chflagcapturesg_map,'$tl_chflagcapturesg_date',
-    $tl_chflagreturnsg,$tl_chflagreturnsg_plr,$tl_chflagreturnsg_tm,$tl_chflagreturnsg_map,'$tl_chflagreturnsg_date',
-    $tl_chflagkillsg,$tl_chflagkillsg_plr,$tl_chflagkillsg_tm,$tl_chflagkillsg_map,'$tl_chflagkillsg_date',
-    $tl_chbombcarriedsg,$tl_chbombcarriedsg_plr,$tl_chbombcarriedsg_tm,$tl_chbombcarriedsg_map,'$tl_chbombcarriedsg_date',
-    $tl_chbombtossedsg,$tl_chbombtossedsg_plr,$tl_chbombtossedsg_tm,$tl_chbombtossedsg_map,'$tl_chbombtossedsg_date',
-    $tl_chbombkillsg,$tl_chbombkillsg_plr,$tl_chbombkillsg_tm,$tl_chbombkillsg_map,'$tl_chbombkillsg_date',
-    $tl_chnodeconstructedsg,$tl_chnodeconstructedsg_plr,$tl_chnodeconstructedsg_tm,$tl_chnodeconstructedsg_map,'$tl_chnodeconstructedsg_date',
-    $tl_chnodeconstdestroyedsg,$tl_chnodeconstdestroyedsg_plr,$tl_chnodeconstdestroyedsg_tm,$tl_chnodeconstdestroyedsg_map,'$tl_chnodeconstdestroyedsg_date',
-    $tl_chnodedestroyedsg,$tl_chnodedestroyedsg_plr,$tl_chnodedestroyedsg_tm,$tl_chnodedestroyedsg_map,'$tl_chnodedestroyedsg_date')");
+  if (strtolower($dbtype) == "mssql") {
+    $result = sql_queryn($link, "UPDATE {$dbpre}totals SET 
+tl_score=$tl_score,tl_kills=$tl_kills,tl_deaths=$tl_deaths,tl_suicides=$tl_suicides,
+tl_teamkills=$tl_teamkills,tl_teamdeaths=$tl_teamdeaths,
+tl_players=$tl_players,
+tl_matches=$tl_matches,tl_time=$tl_time,tl_gametime=$tl_gametime,tl_playertime=$tl_playertime,
+tl_cpcapture=$tl_cpcapture,
+tl_flagcapture=$tl_flagcapture,tl_flagdrop=$tl_flagdrop,tl_flagpickup=$tl_flagpickup,tl_flagreturn=$tl_flagreturn,tl_flagtaken=$tl_flagtaken,tl_flagkill=$tl_flagkill,tl_flagassist=$tl_flagassist,
+tl_bombcarried=$tl_bombcarried,tl_bombtossed=$tl_bombtossed,tl_bombdrop=$tl_bombdrop,tl_bombpickup=$tl_bombpickup,tl_bombtaken=$tl_bombtaken,tl_bombkill=$tl_bombkill,tl_bombassist=$tl_bombassist,
+tl_nodeconstructed=$tl_nodeconstructed,tl_nodeconstdestroyed=$tl_nodeconstdestroyed,tl_nodedestroyed=$tl_nodedestroyed,tl_coredestroyed=$tl_coredestroyed,
+tl_spkills=$tl_spkills,tl_spdeaths=$tl_spdeaths,tl_spsuicides=$tl_spsuicides,tl_spteamkills=$tl_spteamkills,tl_spteamdeaths=$tl_spteamdeaths,tl_spmatches=$tl_spmatches,tl_sptime=$tl_sptime,
+tl_headshots=$tl_headshots,
+tl_multi1=$tl_multi1,tl_multi2=$tl_multi2,tl_multi3=$tl_multi3,tl_multi4=$tl_multi4,tl_multi5=$tl_multi5,tl_multi6=$tl_multi6,tl_multi7=$tl_multi7,
+tl_spree1=$tl_spree1,tl_spreet1=$tl_spreet1,tl_spreek1=$tl_spreek1,
+tl_spree2=$tl_spree2,tl_spreet2=$tl_spreet2,tl_spreek2=$tl_spreek2,
+tl_spree3=$tl_spree3,tl_spreet3=$tl_spreet3,tl_spreek3=$tl_spreek3,
+tl_spree4=$tl_spree4,tl_spreet4=$tl_spreet4,tl_spreek4=$tl_spreek4,
+tl_spree5=$tl_spree5,tl_spreet5=$tl_spreet5,tl_spreek5=$tl_spreek5,
+tl_spree6=$tl_spree6,tl_spreet6=$tl_spreet6,tl_spreek6=$tl_spreek6,
+tl_combo1=$tl_combo1,tl_combo2=$tl_combo2,tl_combo3=$tl_combo3,tl_combo4=$tl_combo4,
+tl_transgib=$tl_transgib,tl_headhunter=$tl_headhunter,tl_flakmonkey=$tl_flakmonkey,tl_combowhore=$tl_combowhore,
+tl_roadrampage=$tl_roadrampage,tl_carjack=$tl_carjack,tl_roadkills=$tl_roadkills,
+tl_chfrags=$tl_chfrags,tl_chfrags_plr=$tl_chfrags_plr,tl_chfrags_gms=$tl_chfrags_gms,tl_chfrags_tm=$tl_chfrags_tm,
+tl_chkills=$tl_chkills,tl_chkills_plr=$tl_chkills_plr,tl_chkills_gms=$tl_chkills_gms,tl_chkills_tm=$tl_chkills_tm,
+tl_chdeaths=$tl_chdeaths,tl_chdeaths_plr=$tl_chdeaths_plr,tl_chdeaths_gms=$tl_chdeaths_gms,tl_chdeaths_tm=$tl_chdeaths_tm,
+tl_chsuicides=$tl_chsuicides,tl_chsuicides_plr=$tl_chsuicides_plr,tl_chsuicides_gms=$tl_chsuicides_gms,tl_chsuicides_tm=$tl_chsuicides_tm,
+tl_chfirstblood=$tl_chfirstblood,tl_chfirstblood_plr=$tl_chfirstblood_plr,tl_chfirstblood_gms=$tl_chfirstblood_gms,tl_chfirstblood_tm=$tl_chfirstblood_tm,
+tl_chheadshots=$tl_chheadshots,tl_chheadshots_plr=$tl_chheadshots_plr,tl_chheadshots_gms=$tl_chheadshots_gms,tl_chheadshots_tm=$tl_chheadshots_tm,
+tl_chcarjack=$tl_chcarjack,tl_chcarjack_plr=$tl_chcarjack_plr,tl_chcarjack_gms=$tl_chcarjack_gms,tl_chcarjack_tm=$tl_chcarjack_tm,
+tl_chroadkills=$tl_chroadkills,tl_chroadkills_plr=$tl_chroadkills_plr,tl_chroadkills_gms=$tl_chroadkills_gms,tl_chroadkills_tm=$tl_chroadkills_tm,
+tl_chmulti1=$tl_chmulti1,tl_chmulti1_plr=$tl_chmulti1_plr,tl_chmulti1_gms=$tl_chmulti1_gms,tl_chmulti1_tm=$tl_chmulti1_tm,
+tl_chmulti2=$tl_chmulti2,tl_chmulti2_plr=$tl_chmulti2_plr,tl_chmulti2_gms=$tl_chmulti2_gms,tl_chmulti2_tm=$tl_chmulti2_tm,
+tl_chmulti3=$tl_chmulti3,tl_chmulti3_plr=$tl_chmulti3_plr,tl_chmulti3_gms=$tl_chmulti3_gms,tl_chmulti3_tm=$tl_chmulti3_tm,
+tl_chmulti4=$tl_chmulti4,tl_chmulti4_plr=$tl_chmulti4_plr,tl_chmulti4_gms=$tl_chmulti4_gms,tl_chmulti4_tm=$tl_chmulti4_tm,
+tl_chmulti5=$tl_chmulti5,tl_chmulti5_plr=$tl_chmulti5_plr,tl_chmulti5_gms=$tl_chmulti5_gms,tl_chmulti5_tm=$tl_chmulti5_tm,
+tl_chmulti6=$tl_chmulti6,tl_chmulti6_plr=$tl_chmulti6_plr,tl_chmulti6_gms=$tl_chmulti6_gms,tl_chmulti6_tm=$tl_chmulti6_tm,
+tl_chmulti7=$tl_chmulti7,tl_chmulti7_plr=$tl_chmulti7_plr,tl_chmulti7_gms=$tl_chmulti7_gms,tl_chmulti7_tm=$tl_chmulti7_tm,
+tl_chspree1=$tl_chspree1,tl_chspree1_plr=$tl_chspree1_plr,tl_chspree1_gms=$tl_chspree1_gms,tl_chspree1_tm=$tl_chspree1_tm,
+tl_chspree2=$tl_chspree2,tl_chspree2_plr=$tl_chspree2_plr,tl_chspree2_gms=$tl_chspree2_gms,tl_chspree2_tm=$tl_chspree2_tm,
+tl_chspree3=$tl_chspree3,tl_chspree3_plr=$tl_chspree3_plr,tl_chspree3_gms=$tl_chspree3_gms,tl_chspree3_tm=$tl_chspree3_tm,
+tl_chspree4=$tl_chspree4,tl_chspree4_plr=$tl_chspree4_plr,tl_chspree4_gms=$tl_chspree4_gms,tl_chspree4_tm=$tl_chspree4_tm,
+tl_chspree5=$tl_chspree5,tl_chspree5_plr=$tl_chspree5_plr,tl_chspree5_gms=$tl_chspree5_gms,tl_chspree5_tm=$tl_chspree5_tm,
+tl_chspree6=$tl_chspree6,tl_chspree6_plr=$tl_chspree6_plr,tl_chspree6_gms=$tl_chspree6_gms,tl_chspree6_tm=$tl_chspree6_tm,
+tl_chfph=$tl_chfph,tl_chfph_plr=$tl_chfph_plr,tl_chfph_gms=$tl_chfph_gms,tl_chfph_tm=$tl_chfph_tm,
+tl_chcpcapture=$tl_chcpcapture,tl_chcpcapture_plr=$tl_chcpcapture_plr,tl_chcpcapture_gms=$tl_chcpcapture_gms,tl_chcpcapture_tm=$tl_chcpcapture_tm,
+tl_chflagcapture=$tl_chflagcapture,tl_chflagcapture_plr=$tl_chflagcapture_plr,tl_chflagcapture_gms=$tl_chflagcapture_gms,tl_chflagcapture_tm=$tl_chflagcapture_tm,
+tl_chflagreturn=$tl_chflagreturn,tl_chflagreturn_plr=$tl_chflagreturn_plr,tl_chflagreturn_gms=$tl_chflagreturn_gms,tl_chflagreturn_tm=$tl_chflagreturn_tm,
+tl_chflagkill=$tl_chflagkill,tl_chflagkill_plr=$tl_chflagkill_plr,tl_chflagkill_gms=$tl_chflagkill_gms,tl_chflagkill_tm=$tl_chflagkill_tm,
+tl_chbombcarried=$tl_chbombcarried,tl_chbombcarried_plr=$tl_chbombcarried_plr,tl_chbombcarried_gms=$tl_chbombcarried_gms,tl_chbombcarried_tm=$tl_chbombcarried_tm,
+tl_chbombtossed=$tl_chbombtossed,tl_chbombtossed_plr=$tl_chbombtossed_plr,tl_chbombtossed_gms=$tl_chbombtossed_gms,tl_chbombtossed_tm=$tl_chbombtossed_tm,
+tl_chbombkill=$tl_chbombkill,tl_chbombkill_plr=$tl_chbombkill_plr,tl_chbombkill_gms=$tl_chbombkill_gms,tl_chbombkill_tm=$tl_chbombkill_tm,
+tl_chnodeconstructed=$tl_chnodeconstructed,tl_chnodeconstructed_plr=$tl_chnodeconstructed_plr,tl_chnodeconstructed_gms=$tl_chnodeconstructed_gms,tl_chnodeconstructed_tm=$tl_chnodeconstructed_tm,
+tl_chnodedestroyed=$tl_chnodedestroyed,tl_chnodedestroyed_plr=$tl_chnodedestroyed_plr,tl_chnodedestroyed_gms=$tl_chnodedestroyed_gms,tl_chnodedestroyed_tm=tl_chnodedestroyed_tm,
+tl_chnodeconstdestroyed=$tl_chnodeconstdestroyed,tl_chnodeconstdestroyed_plr=$tl_chnodeconstdestroyed_plr,tl_chnodeconstdestroyed_gms=$tl_chnodeconstdestroyed_gms,tl_chnodeconstdestroyed_tm=$tl_chnodeconstdestroyed_tm,
+tl_chheadhunter=$tl_chheadhunter,tl_chheadhunter_plr=$tl_chheadhunter_plr,tl_chheadhunter_gms=$tl_chheadhunter_gms,tl_chheadhunter_tm=$tl_chheadhunter_tm,
+tl_chflakmonkey=$tl_chflakmonkey,tl_chflakmonkey_plr=$tl_chflakmonkey_plr,tl_chflakmonkey_gms=$tl_chflakmonkey_gms,tl_chflakmonkey_tm=$tl_chflakmonkey_tm,
+tl_chcombowhore=$tl_chcombowhore,tl_chcombowhore_plr=$tl_chcombowhore_plr,tl_chcombowhore_gms=$tl_chcombowhore_gms,tl_chcombowhore_tm=$tl_chcombowhore_tm,
+tl_chroadrampage=$tl_chroadrampage,tl_chroadrampage_plr=$tl_chroadrampage_plr,tl_chroadrampage_gms=$tl_chroadrampage_gms,tl_chroadrampage_tm=$tl_chroadrampage_tm,
+tl_chwins=$tl_chwins,tl_chwins_plr=$tl_chwins_plr,tl_chwins_gms=$tl_chwins_gms,tl_chwins_tm=$tl_chwins_tm,
+tl_chteamwins=$tl_chteamwins,tl_chteamwins_plr=$tl_chteamwins_plr,tl_chteamwins_gms=$tl_chteamwins_gms,tl_chteamwins_tm=$tl_chteamwins_tm,
+tl_chfragssg=$tl_chfragssg,tl_chfragssg_plr=$tl_chfragssg_plr,tl_chfragssg_tm=$tl_chfragssg_tm,tl_chfragssg_map=$tl_chfragssg_map,tl_chfragssg_date='$tl_chfragssg_date',
+tl_chkillssg=$tl_chkillssg,tl_chkillssg_plr=$tl_chkillssg_plr,tl_chkillssg_tm=$tl_chkillssg_tm,tl_chkillssg_map=$tl_chkillssg_map,tl_chkillssg_date='$tl_chkillssg_date',
+tl_chdeathssg=$tl_chdeathssg,tl_chdeathssg_plr=$tl_chdeathssg_plr,tl_chdeathssg_tm=$tl_chdeathssg_tm,tl_chdeathssg_map=$tl_chdeathssg_map,tl_chdeathssg_date='$tl_chdeathssg_date',
+tl_chsuicidessg=$tl_chsuicidessg,tl_chsuicidessg_plr=$tl_chsuicidessg_plr,tl_chsuicidessg_tm=$tl_chsuicidessg_tm,tl_chsuicidessg_map=$tl_chsuicidessg_map,tl_chsuicidessg_date='$tl_chsuicidessg_date',
+tl_chcarjacksg=$tl_chcarjacksg,tl_chcarjacksg_plr=$tl_chcarjacksg_plr,tl_chcarjacksg_tm=$tl_chcarjacksg_tm,tl_chcarjacksg_map=$tl_chcarjacksg_map,tl_chcarjacksg_date='$tl_chcarjacksg_date',
+tl_chroadkillssg=$tl_chroadkillssg,tl_chroadkillssg_plr=$tl_chroadkillssg_plr,tl_chroadkillssg_tm=$tl_chroadkillssg_tm,tl_chroadkillssg_map=$tl_chroadkillssg_map,tl_chroadkillssg_date='$tl_chroadkillssg_date',
+tl_chcpcapturesg=$tl_chcpcapturesg,tl_chcpcapturesg_plr=$tl_chcpcapturesg_plr,tl_chcpcapturesg_tm=$tl_chcpcapturesg_tm,tl_chcpcapturesg_map=$tl_chcpcapturesg_map,tl_chcpcapturesg_date='$tl_chcpcapturesg_date',
+tl_chflagcapturesg=$tl_chflagcapturesg,tl_chflagcapturesg_plr=$tl_chflagcapturesg_plr,tl_chflagcapturesg_tm=$tl_chflagcapturesg_tm,tl_chflagcapturesg_map=$tl_chflagcapturesg_map,tl_chflagcapturesg_date='$tl_chflagcapturesg_date',
+tl_chflagreturnsg=$tl_chflagreturnsg,tl_chflagreturnsg_plr=$tl_chflagreturnsg_plr,tl_chflagreturnsg_tm=$tl_chflagreturnsg_tm,tl_chflagreturnsg_map=$tl_chflagreturnsg_map,tl_chflagreturnsg_date='$tl_chflagreturnsg_date',
+tl_chflagkillsg=$tl_chflagkillsg,tl_chflagkillsg_plr=$tl_chflagkillsg_plr,tl_chflagkillsg_tm=$tl_chflagkillsg_tm,tl_chflagkillsg_map=$tl_chflagkillsg_map,tl_chflagkillsg_date='$tl_chflagkillsg_date',
+tl_chbombcarriedsg=$tl_chbombcarriedsg,tl_chbombcarriedsg_plr=$tl_chbombcarriedsg_plr,tl_chbombcarriedsg_tm=$tl_chbombcarriedsg_tm,tl_chbombcarriedsg_map=$tl_chbombcarriedsg_map,tl_chbombcarriedsg_date='$tl_chbombcarriedsg_date',
+tl_chbombtossedsg=$tl_chbombtossedsg,tl_chbombtossedsg_plr=$tl_chbombtossedsg_plr,tl_chbombtossedsg_tm=$tl_chbombtossedsg_tm,tl_chbombtossedsg_map=$tl_chbombtossedsg_map,tl_chbombtossedsg_date='$tl_chbombtossedsg_date',
+tl_chbombkillsg=$tl_chbombkillsg,tl_chbombkillsg_plr=$tl_chbombkillsg_plr,tl_chbombkillsg_tm=$tl_chbombkillsg_tm,tl_chbombkillsg_map=$tl_chbombkillsg_map,tl_chbombkillsg_date='$tl_chbombkillsg_date',
+tl_chnodeconstructedsg=$tl_chnodeconstructedsg,tl_chnodeconstructedsg_plr=$tl_chnodeconstructedsg_plr,tl_chnodeconstructedsg_tm=$tl_chnodeconstructedsg_tm,tl_chnodeconstructedsg_map=$tl_chnodeconstructedsg_map,tl_chnodeconstructedsg_date='$tl_chnodeconstructedsg_date',
+tl_chnodeconstdestroyedsg=$tl_chnodeconstdestroyedsg,tl_chnodeconstdestroyedsg_plr=$tl_chnodeconstdestroyedsg_plr,tl_chnodeconstdestroyedsg_tm=$tl_chnodeconstdestroyedsg_tm,tl_chnodeconstdestroyedsg_map=$tl_chnodeconstdestroyedsg_map,tl_chnodeconstdestroyedsg_date='$tl_chnodeconstdestroyedsg_date',
+tl_chnodedestroyedsg=$tl_chnodedestroyedsg,tl_chnodedestroyedsg_plr=$tl_chnodedestroyedsg_plr,tl_chnodedestroyedsg_tm=$tl_chnodedestroyedsg_tm,tl_chnodedestroyedsg_map=$tl_chnodedestroyedsg_map,tl_chnodedestroyedsg_date='$tl_chnodedestroyedsg_date' 
+WHERE tl_totals='Totals'");
+  }
+  else {
+    $result = sql_queryn($link, "REPLACE INTO {$dbpre}totals VALUES (
+'Totals',
+$tl_score,$tl_kills,$tl_deaths,$tl_suicides,
+$tl_teamkills,$tl_teamdeaths,
+$tl_players,
+$tl_matches,$tl_time,$tl_gametime,$tl_playertime,
+$tl_cpcapture,
+$tl_flagcapture,$tl_flagdrop,$tl_flagpickup,$tl_flagreturn,$tl_flagtaken,$tl_flagkill,$tl_flagassist,
+$tl_bombcarried,$tl_bombtossed,$tl_bombdrop,$tl_bombpickup,$tl_bombtaken,$tl_bombkill,$tl_bombassist,
+$tl_nodeconstructed,$tl_nodeconstdestroyed,$tl_nodedestroyed,$tl_coredestroyed,
+$tl_spkills,$tl_spdeaths,$tl_spsuicides,$tl_spteamkills,$tl_spteamdeaths,$tl_spmatches,$tl_sptime,
+$tl_headshots,
+$tl_multi1,$tl_multi2,$tl_multi3,$tl_multi4,$tl_multi5,$tl_multi6,$tl_multi7,
+$tl_spree1,$tl_spreet1,$tl_spreek1,
+$tl_spree2,$tl_spreet2,$tl_spreek2,
+$tl_spree3,$tl_spreet3,$tl_spreek3,
+$tl_spree4,$tl_spreet4,$tl_spreek4,
+$tl_spree5,$tl_spreet5,$tl_spreek5,
+$tl_spree6,$tl_spreet6,$tl_spreek6,
+$tl_combo1,$tl_combo2,$tl_combo3,$tl_combo4,
+$tl_transgib,$tl_headhunter,$tl_flakmonkey,$tl_combowhore,
+$tl_roadrampage,$tl_carjack,$tl_roadkills,
+$tl_chfrags,$tl_chfrags_plr,$tl_chfrags_gms,$tl_chfrags_tm,
+$tl_chkills,$tl_chkills_plr,$tl_chkills_gms,$tl_chkills_tm,
+$tl_chdeaths,$tl_chdeaths_plr,$tl_chdeaths_gms,$tl_chdeaths_tm,
+$tl_chsuicides,$tl_chsuicides_plr,$tl_chsuicides_gms,$tl_chsuicides_tm,
+$tl_chfirstblood,$tl_chfirstblood_plr,$tl_chfirstblood_gms,$tl_chfirstblood_tm,
+$tl_chheadshots,$tl_chheadshots_plr,$tl_chheadshots_gms,$tl_chheadshots_tm,
+$tl_chcarjack,$tl_chcarjack_plr,$tl_chcarjack_gms,$tl_chcarjack_tm,
+$tl_chroadkills,$tl_chroadkills_plr,$tl_chroadkills_gms,$tl_chroadkills_tm,
+$tl_chmulti1,$tl_chmulti1_plr,$tl_chmulti1_gms,$tl_chmulti1_tm,
+$tl_chmulti2,$tl_chmulti2_plr,$tl_chmulti2_gms,$tl_chmulti2_tm,
+$tl_chmulti3,$tl_chmulti3_plr,$tl_chmulti3_gms,$tl_chmulti3_tm,
+$tl_chmulti4,$tl_chmulti4_plr,$tl_chmulti4_gms,$tl_chmulti4_tm,
+$tl_chmulti5,$tl_chmulti5_plr,$tl_chmulti5_gms,$tl_chmulti5_tm,
+$tl_chmulti6,$tl_chmulti6_plr,$tl_chmulti6_gms,$tl_chmulti6_tm,
+$tl_chmulti7,$tl_chmulti7_plr,$tl_chmulti7_gms,$tl_chmulti7_tm,
+$tl_chspree1,$tl_chspree1_plr,$tl_chspree1_gms,$tl_chspree1_tm,
+$tl_chspree2,$tl_chspree2_plr,$tl_chspree2_gms,$tl_chspree2_tm,
+$tl_chspree3,$tl_chspree3_plr,$tl_chspree3_gms,$tl_chspree3_tm,
+$tl_chspree4,$tl_chspree4_plr,$tl_chspree4_gms,$tl_chspree4_tm,
+$tl_chspree5,$tl_chspree5_plr,$tl_chspree5_gms,$tl_chspree5_tm,
+$tl_chspree6,$tl_chspree6_plr,$tl_chspree6_gms,$tl_chspree6_tm,
+$tl_chfph,$tl_chfph_plr,$tl_chfph_gms,$tl_chfph_tm,
+$tl_chcpcapture,$tl_chcpcapture_plr,$tl_chcpcapture_gms,$tl_chcpcapture_tm,
+$tl_chflagcapture,$tl_chflagcapture_plr,$tl_chflagcapture_gms,$tl_chflagcapture_tm,
+$tl_chflagreturn,$tl_chflagreturn_plr,$tl_chflagreturn_gms,$tl_chflagreturn_tm,
+$tl_chflagkill,$tl_chflagkill_plr,$tl_chflagkill_gms,$tl_chflagkill_tm,
+$tl_chbombcarried,$tl_chbombcarried_plr,$tl_chbombcarried_gms,$tl_chbombcarried_tm,
+$tl_chbombtossed,$tl_chbombtossed_plr,$tl_chbombtossed_gms,$tl_chbombtossed_tm,
+$tl_chbombkill,$tl_chbombkill_plr,$tl_chbombkill_gms,$tl_chbombkill_tm,
+$tl_chnodeconstructed,$tl_chnodeconstructed_plr,$tl_chnodeconstructed_gms,$tl_chnodeconstructed_tm,
+$tl_chnodedestroyed,$tl_chnodedestroyed_plr,$tl_chnodedestroyed_gms,$tl_chnodedestroyed_tm,
+$tl_chnodeconstdestroyed,$tl_chnodeconstdestroyed_plr,$tl_chnodeconstdestroyed_gms,$tl_chnodeconstdestroyed_tm,
+$tl_chheadhunter,$tl_chheadhunter_plr,$tl_chheadhunter_gms,$tl_chheadhunter_tm,
+$tl_chflakmonkey,$tl_chflakmonkey_plr,$tl_chflakmonkey_gms,$tl_chflakmonkey_tm,
+$tl_chcombowhore,$tl_chcombowhore_plr,$tl_chcombowhore_gms,$tl_chcombowhore_tm,
+$tl_chroadrampage,$tl_chroadrampage_plr,$tl_chroadrampage_gms,$tl_chroadrampage_tm,
+$tl_chwins,$tl_chwins_plr,$tl_chwins_gms,$tl_chwins_tm,
+$tl_chteamwins,$tl_chteamwins_plr,$tl_chteamwins_gms,$tl_chteamwins_tm,
+$tl_chfragssg,$tl_chfragssg_plr,$tl_chfragssg_tm,$tl_chfragssg_map,'$tl_chfragssg_date',
+$tl_chkillssg,$tl_chkillssg_plr,$tl_chkillssg_tm,$tl_chkillssg_map,'$tl_chkillssg_date',
+$tl_chdeathssg,$tl_chdeathssg_plr,$tl_chdeathssg_tm,$tl_chdeathssg_map,'$tl_chdeathssg_date',
+$tl_chsuicidessg,$tl_chsuicidessg_plr,$tl_chsuicidessg_tm,$tl_chsuicidessg_map,'$tl_chsuicidessg_date',
+$tl_chcarjacksg,$tl_chcarjacksg_plr,$tl_chcarjacksg_tm,$tl_chcarjacksg_map,'$tl_chcarjacksg_date',
+$tl_chroadkillssg,$tl_chroadkillssg_plr,$tl_chroadkillssg_tm,$tl_chroadkillssg_map,'$tl_chroadkillssg_date',
+$tl_chcpcapturesg,$tl_chcpcapturesg_plr,$tl_chcpcapturesg_tm,$tl_chcpcapturesg_map,'$tl_chcpcapturesg_date',
+$tl_chflagcapturesg,$tl_chflagcapturesg_plr,$tl_chflagcapturesg_tm,$tl_chflagcapturesg_map,'$tl_chflagcapturesg_date',
+$tl_chflagreturnsg,$tl_chflagreturnsg_plr,$tl_chflagreturnsg_tm,$tl_chflagreturnsg_map,'$tl_chflagreturnsg_date',
+$tl_chflagkillsg,$tl_chflagkillsg_plr,$tl_chflagkillsg_tm,$tl_chflagkillsg_map,'$tl_chflagkillsg_date',
+$tl_chbombcarriedsg,$tl_chbombcarriedsg_plr,$tl_chbombcarriedsg_tm,$tl_chbombcarriedsg_map,'$tl_chbombcarriedsg_date',
+$tl_chbombtossedsg,$tl_chbombtossedsg_plr,$tl_chbombtossedsg_tm,$tl_chbombtossedsg_map,'$tl_chbombtossedsg_date',
+$tl_chbombkillsg,$tl_chbombkillsg_plr,$tl_chbombkillsg_tm,$tl_chbombkillsg_map,'$tl_chbombkillsg_date',
+$tl_chnodeconstructedsg,$tl_chnodeconstructedsg_plr,$tl_chnodeconstructedsg_tm,$tl_chnodeconstructedsg_map,'$tl_chnodeconstructedsg_date',
+$tl_chnodeconstdestroyedsg,$tl_chnodeconstdestroyedsg_plr,$tl_chnodeconstdestroyedsg_tm,$tl_chnodeconstdestroyedsg_map,'$tl_chnodeconstdestroyedsg_date',
+$tl_chnodedestroyedsg,$tl_chnodedestroyedsg_plr,$tl_chnodedestroyedsg_tm,$tl_chnodedestroyedsg_map,'$tl_chnodedestroyedsg_date')");
+  }
 
   if (!$result) {
     echo "Error saving totals data.{$break}\n";
@@ -1186,6 +1317,14 @@ function storedata()
       exit;
     }
   }
+  else if (strtolower($dbtype) == "mssql") {
+    sql_queryn($link, "IF object_id('tempdb..#temp_wtkills') IS NOT NULL DROP TABLE #temp_wtkills");
+    $result = sql_queryn($link, "CREATE TABLE #temp_wtkills (wt_plr int NOT NULL, wt_desc varchar(35) NOT NULL default '', wt_num smallint NOT NULL default 0, wt_intnum smallint NOT NULL default 0, wt_kills int NOT NULL default 0, wt_deaths int NOT NULL default 0, wt_held int NOT NULL default 0, wt_suicides int NOT NULL default 0, CONSTRAINT wt_plrdesc primary key (wt_plr,wt_desc))");
+    if ($result == FALSE) {
+      echo "Error creating temp table for weapon specific per player totals.{$break}\n";
+      exit;
+    }
+  }
   else {
     sql_queryn($link, "DROP TABLE IF EXISTS temp_wtkills");
     $result = sql_queryn($link, "CREATE TEMPORARY TABLE temp_wtkills (wt_plr mediumint(8) unsigned NOT NULL, wt_desc varchar(35) NOT NULL default '', wt_num smallint(5) unsigned NOT NULL default 0, wt_intnum smallint(5) unsigned NOT NULL default 0, wt_kills int(10) unsigned NOT NULL default 0, wt_deaths int(10) unsigned NOT NULL default 0, wt_held int(10) unsigned NOT NULL default 0, wt_suicides int(10) unsigned NOT NULL default 0, UNIQUE KEY wt_plrdesc (wt_plr,wt_desc)) Type=HEAP");
@@ -1204,6 +1343,8 @@ function storedata()
           $sweap = sql_addslashes($weapsg[$wpn]['wp_desc']);
           if (strtolower($dbtype) == "sqlite")
             $result = sql_queryn($link, "INSERT INTO temp_wtkills (wt_plr,wt_desc,wt_num,wt_intnum) VALUES ($i,'$sweap',{$weapsg[$wpn]['wp_num']},$wpn)");
+          else if (strtolower($dbtype) == "mssql")
+            $result = sql_queryn($link, "IF NOT EXISTS (SELECT * FROM #temp_wtkills WHERE wt_plr=$i AND wt_desc='$sweap') INSERT INTO #temp_wtkills(wt_plr,wt_desc,wt_num,wt_intnum) VALUES ($i,'$sweap',{$weapsg[$wpn]['wp_num']},$wpn)");
           else
             $result = sql_queryn($link, "INSERT IGNORE INTO temp_wtkills (wt_plr,wt_desc,wt_num,wt_intnum) VALUES ($i,'$sweap',{$weapsg[$wpn]['wp_num']},$wpn)");
           if (!$result)
@@ -1217,7 +1358,7 @@ function storedata()
   for ($i = 0; $i < $match->gkcount; $i++) {
     list($gkkiller, $gkvictim, $gktime, $gkkweapon, $gkvweapon, $gkkteam, $gkvteam, $gkkwtype, $gkvwtype) = $gkills[$i];
     if (($gkkiller < 0 || $player[$gkkiller]->name != "") && ($gkvictim < 0 || $player[$gkvictim]->name != "")) {
-      $result = sql_queryn($link, "INSERT INTO {$dbpre}gkills VALUES ($matchnum,$gkkiller,$gkvictim,$gktime,$gkkweapon,$gkvweapon,$gkkteam,$gkvteam)");
+      $result = sql_queryn($link, "INSERT INTO {$dbpre}gkills(gk_match,gk_killer,gk_victim,gk_time,gk_kweapon,gk_vweapon,gk_kteam,gk_vteam) VALUES($matchnum,$gkkiller,$gkvictim,$gktime,$gkkweapon,$gkvweapon,$gkkteam,$gkvteam)");
       if (!$result) {
         echo "Error saving gkills data.{$break}\n";
         exit;
@@ -1256,6 +1397,8 @@ function storedata()
         // Weapon Specific for Game
         if (strtolower($dbtype) == "sqlite")
           $result = sql_queryn($link, "UPDATE temp_wtkills SET wt_suicides=wt_suicides+1 WHERE wt_plr=$gkkiller AND wt_desc='{$weapsg[$gkkweapon]['wp_desc']}'");
+        else if (strtolower($dbtype) == "mssql")
+          $result = sql_queryn($link, "UPDATE #temp_wtkills SET wt_suicides=wt_suicides+1 WHERE wt_plr=$gkkiller AND wt_desc='{$weapsg[$gkkweapon]['wp_desc']}'");
         else
           $result = sql_queryn($link, "UPDATE IGNORE temp_wtkills SET wt_suicides=wt_suicides+1 WHERE wt_plr=$gkkiller AND wt_desc='{$weapsg[$gkkweapon]['wp_desc']}'");
         if (!$result)
@@ -1327,6 +1470,8 @@ function storedata()
           // Weapon Specific for Game
           if (strtolower($dbtype) == "sqlite")
             $result = sql_queryn($link, "UPDATE temp_wtkills SET wt_suicides=wt_suicides+1 WHERE wt_plr=$gkvictim AND wt_desc='{$weapsg[$gkkweapon]['wp_desc']}'");
+          else if (strtolower($dbtype) == "mssql")
+            $result = sql_queryn($link, "UPDATE #temp_wtkills SET wt_suicides=wt_suicides+1 WHERE wt_plr=$gkvictim AND wt_desc='{$weapsg[$gkkweapon]['wp_desc']}'");
           else
             $result = sql_queryn($link, "UPDATE IGNORE temp_wtkills SET wt_suicides=wt_suicides+1 WHERE wt_plr=$gkvictim AND wt_desc='{$weapsg[$gkkweapon]['wp_desc']}'");
           if (!$result)
@@ -1404,6 +1549,8 @@ function storedata()
         // Weapon Specific for Game
         if (strtolower($dbtype) == "sqlite")
           $result = sql_queryn($link, "UPDATE temp_wtkills SET wt_kills=wt_kills+1 WHERE wt_plr=$gkkiller AND wt_desc='$sweapk'");
+        else if (strtolower($dbtype) == "mssql")
+          $result = sql_queryn($link, "UPDATE #temp_wtkills SET wt_kills=wt_kills+1 WHERE wt_plr=$gkkiller AND wt_desc='$sweapk'");
         else
           $result = sql_queryn($link, "UPDATE IGNORE temp_wtkills SET wt_kills=wt_kills+1 WHERE wt_plr=$gkkiller AND wt_desc='$sweapk'");
         if (!$result)
@@ -1411,12 +1558,16 @@ function storedata()
         if ($gkvictim >= 0) {
           if (strtolower($dbtype) == "sqlite")
             $result = sql_queryn($link, "UPDATE temp_wtkills SET wt_deaths=wt_deaths+1 WHERE wt_plr=$gkvictim AND wt_desc='$sweapk'");
+          else if (strtolower($dbtype) == "mssql")
+            $result = sql_queryn($link, "UPDATE #temp_wtkills SET wt_deaths=wt_deaths+1 WHERE wt_plr=$gkvictim AND wt_desc='$sweapk'");
           else
             $result = sql_queryn($link, "UPDATE IGNORE temp_wtkills SET wt_deaths=wt_deaths+1 WHERE wt_plr=$gkvictim AND wt_desc='$sweapk'");
           if (!$result)
             echo "Error inserting into temp table for weapon specific per player totals (deaths).{$break}\n";
           if (strtolower($dbtype) == "sqlite")
             $result = sql_queryn($link, "UPDATE temp_wtkills SET wt_held=wt_held+1 WHERE wt_plr=$gkvictim AND wt_desc='$sweapv'");
+          else if (strtolower($dbtype) == "mssql")
+            $result = sql_queryn($link, "UPDATE #temp_wtkills SET wt_held=wt_held+1 WHERE wt_plr=$gkvictim AND wt_desc='$sweapv'");
           else
             $result = sql_queryn($link, "UPDATE IGNORE temp_wtkills SET wt_held=wt_held+1 WHERE wt_plr=$gkvictim AND wt_desc='$sweapv'");
           if (!$result)
@@ -1447,7 +1598,10 @@ function storedata()
           $sweap = sql_addslashes($weapsg[$wpn]['wp_desc']);
 
           // Weapon Single Game Highs
-          $result = sql_queryn($link, "SELECT wt_num,wt_intnum,wt_kills,wt_deaths,wt_held,wt_suicides FROM temp_wtkills WHERE wt_plr=$i AND wt_desc='$sweap' LIMIT 1");
+          if (strtolower($dbtype) == "mssql")
+            $result = sql_queryn($link, "SELECT wt_num,wt_intnum,wt_kills,wt_deaths,wt_held,wt_suicides FROM #temp_wtkills WHERE wt_plr=$i AND wt_desc='$sweap' LIMIT 1");
+          else
+            $result = sql_queryn($link, "SELECT wt_num,wt_intnum,wt_kills,wt_deaths,wt_held,wt_suicides FROM temp_wtkills WHERE wt_plr=$i AND wt_desc='$sweap' LIMIT 1");
           if (!$result) {
             echo "Database error during weapon single game kill highs.{$break}\n";
             exit;
@@ -1545,6 +1699,8 @@ function storedata()
 
   if (strtolower($dbtype) == "sqlite")
     sql_queryn($link, "DROP TABLE temp_wtkills");
+  else if (strtolower($dbtype) == "mssql")
+    sql_queryn($link, "IF object_id('tempdb..#temp_wtkills') IS NOT NULL DROP TABLE #temp_wtkills");
   else
     sql_queryn($link, "DROP TABLE IF EXISTS temp_wtkills");
 
@@ -1604,7 +1760,7 @@ function storedata()
   for ($i = 0; $i < $match->numevents; $i++) {
   	if ($events[$i][1] >= 0) {
       list($geplr, $gevent, $getime, $gelength, $gequant, $gereason, $geopponent, $geitem) = $events[$i];
-      $result = sql_queryn($link, "INSERT INTO {$dbpre}gevents VALUES (NULL,$matchnum,$geplr,$gevent,$getime,$gelength,$gequant,$gereason,$geopponent,$geitem)");
+      $result = sql_queryn($link, "INSERT INTO {$dbpre}gevents(ge_match,ge_plr,ge_event,ge_time,ge_length,ge_quant,ge_reason,ge_opponent,ge_item) VALUES ($matchnum,$geplr,$gevent,$getime,$gelength,$gequant,$gereason,$geopponent,$geitem)");
       if (!$result) {
         echo "Error saving events data.{$break}\n";
         exit;
@@ -1665,7 +1821,7 @@ function storedata()
   for ($i = 0; $i < $match->numchat; $i++) {
     list($gcplr, $gcteam, $gctime, $gctext) = $chatlog[$i];
     $gctext = sql_addslashes($gctext);
-    $result = sql_queryn($link, "INSERT INTO {$dbpre}gchat VALUES (NULL,$matchnum,$gcplr,$gcteam,$gctime,'$gctext')");
+    $result = sql_queryn($link, "INSERT INTO {$dbpre}gchat(gc_match,gc_plr,gc_team,gc_time,gc_text) VALUES ($matchnum,$gcplr,$gcteam,$gctime,'$gctext')");
     if (!$result) {
       echo "Error saving chat data.{$break}\n";
       exit;

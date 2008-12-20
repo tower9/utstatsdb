@@ -3152,7 +3152,7 @@ echo "</table>\n";
 //=============================================================================
 //========== Chat Log Link ====================================================
 //=============================================================================
-$result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}gchat WHERE gc_match=$matchnum ORDER BY gc_time");
+$result = sql_queryn($link, "SELECT COUNT(*) FROM {$dbpre}gchat WHERE gc_match=$matchnum");
 if (!$result) {
   echo "{$LANG_ERRORACCESSINGCHATLOG}<br />\n";
   exit;

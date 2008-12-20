@@ -77,32 +77,20 @@ function sql_query($query) {
       	exit;
       }
 
-      // Convert from LIMIT to TOP in UPDATE queries
-      if (!strcmp(substr($query, 0, 6), "SELECT") && !strcmp(substr($query, -7), "LIMIT 1")) {
-        $msquery = "SELECT TOP 1 " . substr($query, 6, -7);
-        $query = $msquery;
-      }
-      /*
-        SELECT TOP <Length> * FROM [Table] WHERE [Primary_Key] NOT IN
-        (
-           SELECT TOP <Start> [Primary_Key]
-           FROM [Table]
-           ORDER BY [Sort_Field]
-        )
-        ORDER BY [Sort_Field]
-      */
+      $query = mssql_queryfix($query);
       $result = @mssql_query("$query");
       if ($result == FALSE) {
       	$err = "*Error in database query: '$query'";
       	error_log($err);
         // error_log(mssql_error());
       }
-      @mssql_close($link);
+      // @mssql_close($link); // This clears mssql results
       break;
     default:
       echo "Database type error.\n";
       exit;
   }
+
   return $result;
 }
 
@@ -149,6 +137,7 @@ function sql_connect() {
       echo "Database type error.\n";
       exit;
   }
+
   return $link;
 }
 
@@ -179,11 +168,11 @@ function sql_queryn($link, $query) {
       }
       break;
     case "mssql":
+      $query = mssql_queryfix($query);
       $result = @mssql_query("$query");
-      if (!$result) {
+      if ($result == FALSE) {
       	$err = "*Error in database query: '$query'";
       	error_log($err);
-        // error_log(mssql_error());
       }
       break;
     default:
@@ -221,11 +210,11 @@ function sql_querynb($link, $query) {
       }
       break;
     case "mssql":
+      $query = mssql_queryfix($query);
       $result = @mssql_query("$query");
       if (!$result) {
       	$err = "*Error in database query: '$query'";
       	error_log($err);
-        // error_log(mssql_error());
       }
       break;
     default:
@@ -247,8 +236,15 @@ function sql_fetch_row($result) {
       $row = @sqlite_fetch_array($result, SQLITE_NUM);
       break;
     case "mssql":
-      if ($result != TRUE && $result != FALSE)
+      if ($result != FALSE) {
         $row = @mssql_fetch_row($result);
+        $i = 0;
+        while (isset($row[$i])) {
+          if (is_string($row[$i]) && $row[$i] == " ")
+            $row[$i] = "";
+          $i++;
+        }
+      }
       else
         $row = NULL;
       break;
@@ -271,7 +267,7 @@ function sql_fetch_assoc($result) {
       $row = @sqlite_fetch_array($result, SQLITE_ASSOC);
       break;
     case "mssql":
-      if ($result != TRUE && $result != FALSE)
+      if ($result != FALSE)
         $row = @mssql_fetch_assoc($result);
       else
         $row = NULL;
@@ -295,7 +291,7 @@ function sql_fetch_array($result) {
       $row = @sqlite_fetch_array($result, SQLITE_BOTH);
       break;
     case "mssql":
-      if ($result != TRUE && $result != FALSE)
+      if ($result != FALSE)
         $row = @mssql_fetch_array($result);
       else
         $row = NULL;
@@ -318,7 +314,7 @@ function sql_free_result($result) {
     case "sqlite":
       break;
     case "mssql":
-      if ($result != TRUE && $result != FALSE)
+      if ($result != FALSE)
         @mssql_free_result($result);
       break;
     default:
@@ -679,6 +675,52 @@ function sqlite_alter_table($link, $table, $alterdefs)
   }
 
   return true;
+}
+
+function mssql_queryfix($query)
+{
+  // Convert from LIMIT to TOP in SELECT queries
+  if (!strcmp(substr($query, 0, 6), "SELECT") && strstr($query, " LIMIT ") !== false) {
+  	if (($pl = strpos($query, " LIMIT ")) !== false) {
+  	  $lim = substr($query, $pl + 7);
+  	  if (($pc = strpos(substr($query, $pl + 7), ",")) === false)
+        $query = "SELECT TOP $lim " . substr($query, 6, $pl - 6);
+      else {
+        $lim1 = intval(substr($lim, 0, $pc));
+        $lim2 = intval(substr($lim, $pc + 1));
+        $lim1 += $lim2;
+        $query = "SELECT TOP $lim2 * FROM (SELECT TOP $lim1 " . substr($query, 6, $pl - 6) . ") AS mslimit";
+      }
+    }
+  }
+
+  // Convert FROM_UNIXTIME
+  if (($ut = strpos($query, "FROM_UNIXTIME(")) !== false) {
+  	if (($eq = strpos(substr($query, $ut + 14), ")")) !== false) {
+  	  $dt = date('Y-m-d H:i:s', substr($query, $ut + 14, $eq));
+  	  $query = substr($query, 0, $ut)."'".$dt."'".substr($query, $ut + $eq + 15);
+    }
+  }
+
+  // Fix date queries
+  if (!strcmp(substr($query, 0, 6), "SELECT")) {
+    $daterows = array("cn_ctime", "cn_dtime", "mp_lastmatch", "gm_init", "gm_start", "sv_lastmatch", "tl_chfragssg_date", "tl_chkillssg_date", "tl_chdeathssg_date", "tl_chsuicidessg_date", "tl_chcarjacksg_date", "tl_chroadkillssg_date", "tl_chcpcapturesg_date", "tl_chflagcapturesg_date", "tl_chflagreturnsg_date", "tl_chflagkillsg_date", "tl_chbombcarriedsg_date", "tl_chbombtossedsg_date", "tl_chbombkillsg_date", "tl_chnodeconstructedsg_date", "tl_chnodeconstdestroyedsg_date", "tl_chnodedestroyedsg_date", "wp_chkillssg_dt", "wp_chdeathssg_dt", "wp_chdeathshldsg_dt", "wp_chsuicidessg_dt");
+    foreach ($daterows as $daterow) {
+      if (($p = strpos($query, $daterow)) !== false)
+        if (strstr($query, "MAX(") === false)
+          $query = substr($query, 0, $p) . "CONVERT(char(19), " . substr($query, $p, strlen($daterow)) . ", 20) AS $daterow" . substr($query, $p + strlen($daterow));
+        else
+          $query = substr($query, 0, $p) . "CONVERT(char(19), " . substr($query, $p, strlen($daterow)) . ", 20)" . substr($query, $p + strlen($daterow));
+    }
+  }
+
+  // Strip USE INDEX
+  if (($ui = strpos($query, "USE INDEX")) !== false) {
+    if (($ep = strpos(substr($query, $ui + 9), ")")) !== false)
+      $query = substr($query, 0, $ui) . substr($query, $ui + $ep + 10);
+  }
+
+  return $query;
 }
 
 ?>
