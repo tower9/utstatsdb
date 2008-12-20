@@ -144,7 +144,7 @@ function sql_connect() {
 function sql_queryn($link, $query) {
   global $uselimit, $dbtype;
 
-  if (!isset($uselimit) || !$uselimit) { // Remove LIMIT 1 from UPDATE queries
+  if (!isset($uselimit) || !$uselimit) { // Remove LIMIT 1 from UPDATE queries for unsupported versions
     if (!strcmp(substr($query, 0, 6), "UPDATE") && !strcmp(substr($query, -7), "LIMIT 1"))
       $query = substr($query, 0, -7);
   }
