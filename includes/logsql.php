@@ -406,7 +406,6 @@ function sql_addslashes($str) {
       break;
     case "mssql":
       $str = str_replace("'", "''", $str);
-      $str = str_replace("\"", "'\"", $str);
       break;
     default:
       echo "Database type error.\n";

@@ -113,7 +113,7 @@ CREATE TABLE %dbpre%gplayers
    gp_combowhore tinyint NOT NULL default 0,
    gp_roadrampage tinyint NOT NULL default 0,
    gp_rank tinyint NOT NULL default 0,
-   gp_team tinyint NOT NULL default 0
+   gp_team smallint NOT NULL default 0
 );
 
 CREATE INDEX gp_match ON %dbpre%gplayers (gp_match);

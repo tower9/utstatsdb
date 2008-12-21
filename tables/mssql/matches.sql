@@ -12,7 +12,7 @@ CREATE TABLE %dbpre%matches (
   gm_timeoffset float NOT NULL default 100,
   gm_rpg tinyint NOT NULL default 0,
   gm_maxwave smallint NOT NULL default 0,
-  gm_difficulty tinyint NOT NULL default 0,
+  gm_difficulty smallint NOT NULL default 0,
   gm_mutators varchar(255) default NULL,
   gm_mapvoting tinyint NOT NULL default 0,
   gm_kickvoting tinyint NOT NULL default 0,
