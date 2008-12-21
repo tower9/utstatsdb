@@ -4,7 +4,7 @@ Unreleased
   Fixed not being able to select to display bots or all players in player list.
   Added Microsoft SQL support.
   Added server activity by weekday.
-  Added .wgmainbox, .wgsubbox, .wgbarspace, .wgbar, and .wglabel to style sheets.
+  Added .wgmainbox, .wgsubbox, .wgbarspace, .wgbar, .wgprespace, and .wglabel to style sheets.
   Adjusted style information for server activity by hour.
   Added language strings "LANG_ACTIVITYBYWEEKDAY" and "LANG_WEEKDAYS".
 
