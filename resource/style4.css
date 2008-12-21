@@ -108,9 +108,10 @@ a.status:hover {font-family: Verdana,Helvetica; font-size: 9pt; color: #bd0000; 
 .tgblank    {font-size: 0pt; height: 0px; clear: both}
 .wgmainbox  {overflow: hidden; text-align: left; width: 180px; height: 150px}
 .wgsubbox   {font-size: 0pt; width: 180px; height: 130px; background-color: #d5d5d5; border-bottom: 1px solid #666666; float: right}
-.wgbarspace {width: 10px; float: left}
-.wgbar      {font-size: 0pt; width: 12px; background-color: #1b289b; border: 1px solid #000000; border-bottom-width: 0; float: left; position: relative}
-.wglabel    {font-size: 8pt; font-family: arial,sans-serif; color: #000000; font-weight: normal; font-style: normal; text-decoration: none; width: 12px; text-align: center; float: left; overflow: visible; position: relative; border: 1px solid transparent}
+.wgbarspace {width: 13px; float: left}
+.wgbar      {font-size: 0pt; width: 9px; background-color: #1b289b; border: 1px solid #000000; border-bottom-width: 0; float: left; position: relative}
+.wgprespace {width: 10px; float: left}
+.wglabel    {font-size: 8pt; font-family: arial,sans-serif; color: #000000; font-weight: normal; font-style: normal; text-decoration: none; width: 9px; text-align: center; float: left; overflow: visible; position: relative; border: 1px solid transparent}
 
 .help    {font-family: Arial, Helvetica, Sans-serif; color: #ffffff; font-size: 10pt; text-align: left}
 .helphdr {font-family: Verdana, Helvetica; font-size: 14pt; font-weight: bold}

@@ -159,14 +159,14 @@ EOF;
   $hactive = array_fill(0, 24, 0);
 
   if (strtolower($dbtype) == "sqlite")
-    $result = sql_query("SELECT strftime('%H', gm_start) AS weekday, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches,{$dbpre}playersgt WHERE gm_num=gt_num GROUP BY weekday");
+    $result = sql_query("SELECT strftime('%H', gm_start) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches,{$dbpre}playersgt WHERE gm_num=gt_num GROUP BY hour");
   else if (strtolower($dbtype) == "mssql")
     $result = sql_query("SELECT DATEPART(hour, CONVERT(char(19), gm_start, 20)) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches,{$dbpre}playersgt WHERE gm_num=gt_num GROUP BY DATEPART(hour, CONVERT(char(19), gm_start, 20))");
   else
     $result = sql_query("SELECT HOUR(gm_start) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches,{$dbpre}playersgt WHERE gm_num=gt_num GROUP BY hour");
 
   while ($row = sql_fetch_row($result))
-    $hactive[$row[0]] = $row[1];
+    $hactive[intval($row[0])] = intval($row[1]);
   sql_free_result($result);
   $hmax = max($hactive);
 
@@ -225,7 +225,7 @@ EOF;
     $result = sql_query("SELECT DAYOFWEEK(gm_start) AS weekday, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches,{$dbpre}playersgt WHERE gm_num=gt_num GROUP BY weekday");
 
   while ($row = sql_fetch_row($result))
-    $wactive[$row[0]] = $row[1];
+    $wactive[intval($row[0])] = intval($row[1]);
   sql_free_result($result);
   $hmax = max($wactive);
 
@@ -254,7 +254,8 @@ EOF;
     for ($i = 1; $i <= 7; $i++)
     {
       $wd = $LANG_WEEKDAYS[$i - 1];
-      echo "              <div class=\"wgbarspace\">&nbsp;</div><div class=\"wglabel\" style=\"bottom: 127px\">$wd</div>\n";
+      $space = $i == 1 ? "wgprespace" : "wgbarspace";
+      echo "              <div class=\"$space\">&nbsp;</div><div class=\"wglabel\" style=\"bottom: 127px\">$wd</div>\n";
     }
 
     echo <<<EOF
