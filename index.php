@@ -156,7 +156,12 @@ EOF;
 //========== Hourly Activity Graph ============================================
 //=============================================================================
   $hactive = array_fill(0, 24, 0);
-  $result = sql_query("SELECT HOUR(gm_start) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches, {$dbpre}playersgt WHERE gm_num=gt_num GROUP BY hour");
+
+  if (strtolower($dbtype) == "mssql")
+    $result = sql_query("SELECT DATEPART(hour, CONVERT(char(19), gm_start, 20)) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches,{$dbpre}playersgt WHERE gm_num=gt_num GROUP BY DATEPART(hour, CONVERT(char(19), gm_start, 20))");
+  else
+    $result = sql_query("SELECT HOUR(gm_start) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches,{$dbpre}playersgt WHERE gm_num=gt_num GROUP BY hour");
+
   while ($row = sql_fetch_row($result))
     $hactive[$row[0]] = $row[1];
   sql_free_result($result);

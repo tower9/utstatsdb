@@ -82,9 +82,7 @@ function sql_query($query) {
       if ($result == FALSE) {
       	$err = "*Error in database query: '$query'";
       	error_log($err);
-        // error_log(mssql_error());
       }
-      // @mssql_close($link); // This clears mssql results
       break;
     default:
       echo "Database type error.\n";
@@ -703,7 +701,7 @@ function mssql_queryfix($query)
   }
 
   // Fix date queries
-  if (!strcmp(substr($query, 0, 6), "SELECT")) {
+  if (!strcmp(substr($query, 0, 6), "SELECT") && strstr($query, "DATEPART") === FALSE) {
     $daterows = array("cn_ctime", "cn_dtime", "mp_lastmatch", "gm_init", "gm_start", "sv_lastmatch", "tl_chfragssg_date", "tl_chkillssg_date", "tl_chdeathssg_date", "tl_chsuicidessg_date", "tl_chcarjacksg_date", "tl_chroadkillssg_date", "tl_chcpcapturesg_date", "tl_chflagcapturesg_date", "tl_chflagreturnsg_date", "tl_chflagkillsg_date", "tl_chbombcarriedsg_date", "tl_chbombtossedsg_date", "tl_chbombkillsg_date", "tl_chnodeconstructedsg_date", "tl_chnodeconstdestroyedsg_date", "tl_chnodedestroyedsg_date", "wp_chkillssg_dt", "wp_chdeathssg_dt", "wp_chdeathshldsg_dt", "wp_chsuicidessg_dt");
     foreach ($daterows as $daterow) {
       if (($p = strpos($query, $daterow)) !== false && substr($query, $p + strlen($daterow), 1) != "=") {
