@@ -173,7 +173,7 @@ EOF;
   if ($hmax > 0) {
     echo <<<EOF
 <br />
-<table cellpadding="0" cellspacing="0" border="0" width="600">
+<table cellpadding="0" cellspacing="0" border="0" width="610">
   <tr>
     <td>
       <table cellpadding="1" cellspacing="0" border="0" width="400" class="box" align="center">
@@ -232,7 +232,7 @@ EOF;
   if ($hmax > 0) {
     echo <<<EOF
     <td>
-      <table cellpadding="1" cellspacing="0" border="0" width="190" class="box" align="center">
+      <table cellpadding="1" cellspacing="0" border="0" width="200" class="box" align="center">
         <tr>
           <td class="tglheading" align="center"><b>{$LANG_ACTIVITYBYWEEKDAY}</b></td>
         </tr>

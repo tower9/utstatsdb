@@ -45,8 +45,8 @@ $LANG_STATSDATABASEERROR = "Fehler in Stats Datenbank.";
 $LANG_MAPDATABASEERROR = "Fehler in Karten Datenbank";
 $LANG_LASTMATCHLOGGED = "Zuletzt Geloggtes Match";
 $LANG_SERVERACTIVITYBYHOUR = "Serveraktivität nach Stunden";
-$LANG_ACTIVITYBYWEEKDAY = "Activity by Weekday";
-$LANG_WEEKDAYS = array("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+$LANG_ACTIVITYBYWEEKDAY = "Aktivität nach Wochentag";
+$LANG_WEEKDAYS = array("So", "Mo", "Di", "Mi", "Do", "Fr", "Sa");
 
 // includes/matchlist.php
 // includes/playerlist.php
