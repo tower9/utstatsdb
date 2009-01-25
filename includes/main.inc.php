@@ -147,9 +147,12 @@ if (!isset($layout) || !$layout) {
   echo "Configuration error.<br />\n";
   exit;
 }
+
 $stylefile = "style{$layout}.css";
 $logofile = "utstatsdblogo.png";
-$utlogofile = "utlogo.png";
+$utlogofile = "utlogo{$layout}.png";
+if (!file_exists("resource/{$utlogofile}"))
+  $utlogofile = "utlogo.png";
 
 // Team colors
 $teamcolor = array("Red","Blue","Green","Gold");

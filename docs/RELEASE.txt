@@ -8,6 +8,7 @@ Unreleased
   Adjusted style information for server activity by hour.
   Added language strings "LANG_ACTIVITYBYWEEKDAY" and "LANG_WEEKDAYS".
   Fixed server activity for SQLite.
+  Allow use of utlogo(layout).png file for top left logo.  Fallback to utlogo.png if image doesn't exist.
 
 Version 3.06
   Added Tactical Ops support.
