@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,13 +42,22 @@ function InitQuery($ip, $port)
 function SendQuery($fs, $query)
 {
   $data = "";
-
   if ( !fwrite($fs, $query) ) {
     fclose($fs);
     return $data;
   }
 
-  $data = @fread($fs, 2048);
+  $data = "";
+  do {
+    $datain = @fread($fs, 2048);
+
+    if (strlen($datain) > 7) {
+      if (strlen($data))
+        $data .= substr($datain, 5);
+      else
+        $data .= $datain;
+    }
+  } while (strlen($datain) > 7);
 
   return $data;
 }
@@ -281,7 +290,7 @@ function GetStatus($ip, $port)
     return false;
 
   if ($query_type == 1) {
-    // Server Info
+    // GameSpy Protocol - Server Info
     $mutators = array();
     $data = SendQuery($fs, "\x7f\x00\x00\x00\x00");
 
@@ -294,7 +303,8 @@ function GetStatus($ip, $port)
     $len2 = 0;
     $sq_server["hostport"] = ord($data[11]) * 256 + ord($data[10]);
     for ($i = 0; $i < 3; $i++) {
-      $len = ord($data[$len2 + 18 + $i]);
+      // $len = ord($data[$len2 + 18 + $i]); // Buggy protocol - doesn't always return accurate length
+      $len = strpos(substr($data, $len2 + 18 + $i), "\x00"); // Check for null character instead
       if ($len) {
         $val = substr($data, $len2 + $i + 19, $len - 1);
         $len2 += $len;
@@ -431,18 +441,37 @@ function GetStatus($ip, $port)
       $len2 = 0;
       $num = 0;
       while ($len2 < $datalen - 21) {
-        $num++;
         $len = ord($data[$len2 + 9]);
         if ($len > 0) {
-          $sq_player[$num]["player"] = stripspecialchars(substr($data, $len2 + 10, $len - 1));
-          $sq_player[$num]["ping"] = ord($data[$len2 + $len + 11]) * 256 + ord($data[$len2 + $len + 10]);
-          $sq_player[$num]["score"] = ord($data[$len2 + $len + 15]) * 256 + ord($data[$len2 + $len + 14]);
+          $pplayer = stripspecialchars(substr($data, $len2 + 10, $len - 1));
+          $pping = ord($data[$len2 + $len + 11]) * 256 + ord($data[$len2 + $len + 10]);
+          $pscore = ord($data[$len2 + $len + 15]) * 256 + ord($data[$len2 + $len + 14]);
+
+          if ($pplayer == "Red Team Score") {
+            $sq_team[0]["team"] = "Red";
+            $sq_team[0]["score"] = $pscore;
+            $sq_team[0]["size"] = 0;
+            $teams = -1;
+          }
+          else if ($pplayer == "Blue Team Score") {
+            $sq_team[1]["team"] = "Blue";
+            $sq_team[1]["score"] = $pscore;
+            $sq_team[1]["size"] = 0;
+            $teams = -1;
+          }
+          else {
+            $num++;
+            $sq_player[$num]["player"] = $pplayer;
+            $sq_player[$num]["ping"] = $pping;
+            $sq_player[$num]["score"] = $pscore;
+          }
         }
         $len2 += $len + 17;
       }
     }
   }
   else if ($query_type == 0 || $query_type == 2) {
+  	// Unreal or UT '99 Protocol
     $mutators = array();
     $data = SendQuery2($fs, "\\basic\\\\info\\\\rules\\\\gamestatus\\\\echo\\nothing");
     while (strlen($data)) {
@@ -632,7 +661,8 @@ function GetStatus($ip, $port)
       }
     }
   }
-  else if ($query_type == 3) { // UT3
+  else if ($query_type == 3) {
+  	// UT3 Protocol
     if ( !fwrite($fs, "\xFE\xFD\x09\x10\x20\x30\x40\xFF\xFF\xFF\x01") ) {
       fclose($fs);
       return false;
@@ -1301,8 +1331,12 @@ EOF;
         }
       }
     }
-    if ($numplr)
-      array_multisort($score, SORT_NUMERIC, SORT_DESC, $name, $ping, $team);
+    if ($numplr) {
+      if (isset($team))
+        array_multisort($score, SORT_NUMERIC, SORT_DESC, $name, $ping, $team);
+      else
+        array_multisort($score, SORT_NUMERIC, SORT_DESC, $name, $ping);
+    }
 
     $header = 0;
     for ($i = 0; $i < $numplr; $i++) {
@@ -1314,7 +1348,7 @@ EOF;
 
 EOF;
 
-        if (!$teamnum) {
+        if ($teamnum <= 0) {
           echo <<<EOF
             <tr>
               <td class="statustitle" align="center" colspan="3">
@@ -1335,7 +1369,7 @@ EOF;
         $header = 1;
       }
 
-      if (isset($name[$i]) && (!$teamnum || (isset($team[$i]) && $team[$i] == $teamnum - 1))) {
+      if (isset($name[$i]) && ($teamnum <= 0 || (isset($team[$i]) && $team[$i] == $teamnum - 1))) {
         echo <<<EOF
             <tr>
               <td>{$name[$i]}</td>
