@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -397,6 +397,7 @@ function menu_top() {
 <head>
   <title>UTStatsDB Admin</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
   <link rel="stylesheet" type="text/css" media="screen" href="resource/admin.css" />
   <meta name="MSSmartTagsPreventParsing" content="TRUE" />
   <link rel="shortcut icon" href="resource/favicon.ico" />

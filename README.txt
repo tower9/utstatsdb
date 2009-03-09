@@ -264,7 +264,7 @@ extension=php_sockets.dll
 The Match Stats page of UTStatsDB will look for a file containing a matching 
 date/time string in the directory specified by the $demodir config variable 
 (with $demoext as the extension) and provide a link to the user if found.  The 
-link is generated with the prefix take from $demourl.  UTStatsDB can also be 
+link is generated with the prefix taken from $demourl.  UTStatsDB can also be 
 configured to automatically download demorec files via ftp (see the 
 config.inc.php notes).  If you've maxmatches set, older demorec files will be 
 deleted as the associated matches are removed.  In your DemoRecord.ini file you 
