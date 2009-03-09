@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -190,7 +190,7 @@ EOF;
     for ($i = 0; $i < 24; $i++) {
       $height = round(($hactive[$i] / $hmax) * 0.9 * 142);
       $bottom = $height + 2;
-      echo "              <div class=\"tgbarspace\">&nbsp;</div><div class=\"tgbar\" style=\"height: {$height}px; bottom: {$bottom}px \">&nbsp;</div>\n";
+      echo "              <div class=\"tgbarspace\">&nbsp;</div><div class=\"tgbar\" style=\"height: {$height}px; bottom: {$bottom}px\">&nbsp;</div>\n";
     }
 
     echo "              <div class=\"tgblank\">&nbsp;</div>\n";
@@ -246,7 +246,7 @@ EOF;
     for ($i = 1; $i <= 7; $i++) {
       $height = round(($wactive[$i] / $hmax) * 0.9 * 142);
       $bottom = $height + 2;
-      echo "              <div class=\"wgbarspace\">&nbsp;</div><div class=\"wgbar\" style=\"height: {$height}px; bottom: {$bottom}px \">&nbsp;</div>\n";
+      echo "              <div class=\"wgbarspace\">&nbsp;</div><div class=\"wgbar\" style=\"height: {$height}px; bottom: {$bottom}px\">&nbsp;</div>\n";
     }
 
     echo "              <div class=\"tgblank\">&nbsp;</div>\n";
