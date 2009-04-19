@@ -1,0 +1,234 @@
+UTStatsDB
+  Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+
+===============================================================================
+========== Important Changes to Version 3.0 ===================================
+===============================================================================
+UTStatsDB now uses an HTML admin menu for configuration.  Run admin.php from 
+your UTStatsDB path via a web browser.  The default admin password is "admin" 
+and the init password is specified in your utstatsdb.inc.php file (see below).
+
+The "CREATE TEMPORARY TABLES" privilege is required as of UTStatsDB 3.0.  Make 
+sure you've granted your UTStatsDB database user this privilege.
+
+UTStatsDB 3.00 is not compatible with earlier versions of the database.  You 
+must reinitialize your 1.x or 2.x database tables.  There is no update utility. 
+If you saved logs from earlier you can reparse them after rebuilding the tables.
+
+===============================================================================
+========== Web Server =========================================================
+===============================================================================
+Testing and development are done using Apache 2.x, however, UTStatsDB should run 
+on any web server with PHP enabled.  Web server configuration is beyond the 
+scope of this document.  You can refer to the SETUP_GUIDE.txt file for a step-
+by-step installation of UTStatsDB.
+
+===============================================================================
+========== PHP ================================================================
+===============================================================================
+PHP version 4.2 or newer is required for UTStatsDB.  PHP 5.0 or newer is 
+required if you wish to run without a MySQL database and use the built-in SQLite 
+database.
+
+A few changes are needed to PHP's default configuration for UTStatsDB to run 
+properly.  For Windows systems you need to have the GD2, a database, and sockets 
+extensions enabled.  To enable them uncomment (remove the semi-colon) the 
+following lines from your php.ini file:
+
+extension=php_gd2.dll
+extension=php_mysql.dll (required for MySQL)
+extension=php_sockets.dll
+extension=php_sqlite.dll (required for SQLite)
+
+It's also recommended to set your PHP memory limit to at least 32MB via:
+
+memory_limit = 32M
+
+PHP is available from http://www.php.net
+
+===============================================================================
+========== Database ===========================================================
+===============================================================================
+MySQL:
+
+For the most part this assumes familiarity with MySQL, however, here's a brief 
+step-by-step on setting up a MySQL database for use with UTStatsDB.
+
+If you already have a user and database you can use, or if you have no options 
+of such, such as when leasing space on a shared server, just enter your MySQL 
+username and database information into statsdb.inc.php.  Since the MySQL server 
+is usually running on the same computer as the web server, you can generally 
+leave the hostname ($SQLhost) as its default 'localhost'.  If the database is 
+running on a different server you will need to change this value.
+
+If you're running the server on your own system then you will probably want to 
+create a seperate user and database to use with UTStatsDB.  To create a new 
+database, login to MySQL with an account that has full privileges (such as root) 
+and enter:
+
+CREATE utstatsdb;
+
+This will create a new database called 'utstatsdb'.  Next create a new user for 
+the UTStatsDB program and give them the necessary rights:
+
+GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX,CREATE TEMPORARY TABLES
+ON utstatsdb.*
+TO utsuser@localhost
+IDENTIFIED BY 'password';
+
+Change 'password' to something more secure and change it to match in 
+statsdb.inc.php.
+
+MySQL is available at http://www.mysql.com
+
+
+SQLite:
+
+UTStatsDB now supports SQLite, a public domain database system that's built into 
+PHP 5.x.  Using SQLite with PHP 5 requires no special configuration - the entire 
+MySQL setup can be ignored.  Just set your $dbtype variable in statsdb.inc.php 
+to "SQLite" and $SQLdb to whatever filename you wish to use (absolute and 
+relative paths are supported) and that's it.  SQLite is much slower than MySQL, 
+so you will need to increase your max_execution_time in php.ini.
+
+
+Microsoft SQL:
+
+As of UTStatsDB version 3.07, Microsoft SQL is supported.
+
+===============================================================================
+========== UTStatsDB Installation =============================================
+===============================================================================
+Extract the contents of this archive to a directory within your web server's 
+public path.
+
+Edit the file includes/statsdb.inc.php:
+
+$dbtype = "MySQL";      // Database type - currently supported: MySQL SQLite MsSQL
+$dbpre = "ut_";         // Prefix to be prepended to all database table names.
+$SQLhost = "localhost"; // The MySQL database host.
+$SQLport = 3306;        // TCP port or Linux socket to use (/var/lib/mysql/mysql.sock)
+$SQLdb = "utstatsdb";   // The MySQL database name or full path to SQLite database file.
+$SQLus = "utstats";     // A MySQL user with SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX,CREATE TEMPORARY TABLES grants.
+$SQLpw = "statspass";   // The password for the above MySQL user.
+$InitPass = "initpass"; // Required for initializing the database tables.
+
+For added security you can optionally copy the 'statsdb.inc.php' file to a 
+location outside of your public path.  If so, create a new statsdb.inc.php with 
+the following:
+
+<?php require("<absolute-path-to-new-file.php>"); ?>
+
+If using MySQL or MsSQL and have not yet done so, configure a user and database 
+now - see the Database section above.
+
+Run admin.php from a web browser.  On your first run this will ask for the init 
+password ($InitPass) specified in statsdb.inc.php.  Make sure all your tables 
+are successfully created then continue to the main menu.  The default admin 
+password is "admin".
+
+While it's possible to run everything else default, you will need to set options 
+in the log configuration.  These settings specify where to find your log files 
+and what prefix to use.  They also allow you to specify an ftp server from which 
+to download log files.
+
+Also, be sure to change the admin and update passwords in the main configuration.
+
+For information about the configuration options, see CONFIG_GUIDE.txt.
+
+You will need to configure your game server to output log files.  See 
+LOGGING.txt for details.
+
+===============================================================================
+========== Running the Log Parser =============================================
+===============================================================================
+To parse the log files run:
+http://yourwebsite.com/utstats/logs.php?pass=updatepass
+(change "updatepass" to your UpdatePass specified in the Main Config menu)
+
+Optional Parameters:
+&savelogs - Doesn't delete the log files (if you run it again it
+            will attempt to parse the same files over again)
+&multi    - Calculates multi-kills - use only for logs generated by
+            older versions of LocalLog (pre 0.93)
+&nohtml   - Doesn't display html tags (for command line use).
+
+The logs.php file can be run from the command line.  You can run it using:
+php logs.php pass=test
+
+You can easily add this to your crontab or task scheduler to run periodically.
+
+When the log parser is run, it will delete all but the last two incomplete logs
+for each individual server name.  This is to prevent the system from deleting
+logs for games that are still in session.
+
+Only matches that have an EndGame (EG) tag line for a frag/score limit or time 
+limit reached will be added to the database.  By default, if the server is shut 
+down or the map changed mid-game it will not be logged (see the Main Config 
+section in CONFIG_GUIDE.txt).
+
+The main viewer page is accessed via index.php.  Set your web server to service 
+the index.php page in your utstats directory by default.
+
+The log parser can also be run from the admin menu.
+
+===============================================================================
+========== Server Query =======================================================
+===============================================================================
+UTStatsDB can query game servers and display current information on the main 
+page.  This requires that the game server have querying enabled and the 
+necessary UDP port open to the web server.
+
+To configure the query configuration in UTStatsDB you'll need to add a server to 
+the Query Config menu.
+
+Query Server:
+  This is the FQDN or IP address of the game server.  If the web server is 
+  running on the same server as the game server then this could be set to the 
+  127.0.0.1 localhost.
+
+Game Port:
+  For versions before Unreal Tournament 3, this should be set to the same port 
+  that players use to connect to the server.  As of UT3 however, the query port 
+  is no longer relative to the game port and is set to 6500 by default for the 
+  first server and incremented for each additional server.  Due to this method, 
+  you will need to specify the query port instead of the game port for UT3.  If 
+  you're running more than one game server you will need to configure UT3 by 
+  setting -queryport=xxxx in the startup command line.
+
+Server Link:
+  Set this to the address at which players will connect to your server.  This 
+  can include the FQDN or the IP address of your game server, preceded by the 
+  protocol.  Do not include the game port, as it will be appended automatically.
+        ut:// = Unreal Tournament
+    ut2003:// = UT2003
+    ut2004:// = UT2004
+       ut3:// = Unreal Tournament 3
+  Note that UT3 does not automatically register the protocol handler by default.
+
+Query Port:
+  UT 99 = Unreal Tournament
+  Unreal = UT2003 or UT2004 ("Game Spy" can optionally be used - not recommended)
+  UT3 = Unreal Tournament 3
+
+===============================================================================
+========== DemoRec Files ======================================================
+===============================================================================
+The Match Stats page of UTStatsDB will look for a file containing a matching 
+date/time string in the directory specified by the $demodir config variable 
+(with $demoext as the extension) and provide a link to the user if found.  The 
+link is generated with the prefix taken from $demourl.  UTStatsDB can also be 
+configured to automatically download demorec files via ftp (see the 
+config.inc.php notes).  If you've maxmatches set, older demorec files will be 
+deleted as the associated matches are removed.  In your DemoRecord.ini file you 
+must set 'bSetNums' to False and leave 'FileName' blank.
+
+===============================================================================
+========== Map Images =========================================================
+===============================================================================
+UTStatsDB 3.00 supports displaying map images when available.  Simply place 
+images in a directory called "images" within your UTStatsDB directory.  Images 
+must be either use .gif or .jpg extensions and the filename must be all 
+lowercase and match the filenames of the maps.  Images are displayed as 256 
+pixels wide by 192 pixels high.  There is a map collection pack available for 
+download on the UTStatsDB downloads page.
