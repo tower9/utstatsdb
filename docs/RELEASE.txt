@@ -14,6 +14,7 @@ Unreleased
   Allow use of utlogo(layout).png file for top left logo.  Fallback to utlogo.png if image doesn't exist.
   Fixed various issues in server query.
   Rewrote documentation.
+  Added compatibility with non-standard game speeds.
 
 Version 3.06
   Added Tactical Ops support.
