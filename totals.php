@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -97,9 +97,9 @@ while ($row = sql_fetch_assoc($result)) {
     if ($tp_gtime == 0)
       $fph = "0.0";
     else
-      $fph = sprintf("%0.1f", $frags * (3600 / $tp_gtime));
+      $fph = sprintf("%0.1f", $frags * (3600.0 / $tp_gtime));
     $ttl = sprintf("%0.1f", $tp_gtime / ($tp_deaths + $tp_suicides + 1));
-    $hours = sprintf("%0.1f", $tp_gtime / 3600);
+    $hours = sprintf("%0.1f", $tp_gtime / 3600.0);
     
     $tot_score += $tp_score;
     $tot_frags += $frags;

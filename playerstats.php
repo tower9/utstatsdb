@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -131,8 +131,8 @@ while ($row = sql_fetch_assoc($result)) {
   while (list ($key, $val) = each ($row))
     ${$key} = $val;
 
-  $time = floatval($gt_time / 100);
-  $hours = sprintf("%0.1f", $time / 3600);
+  $time = floatval($gt_time / 100.0);
+  $hours = sprintf("%0.1f", $time / 3600.0);
   if ($gt_kills + $gt_deaths + $gt_suicides == 0)
     $eff = "0.0";
   else
@@ -1099,10 +1099,10 @@ echo <<<EOF
 EOF;
 
 $matches = 0;
-$result = sql_querynb($link, "SELECT gm_num,gm_map,gm_type,gm_start,gm_length,gm_numplayers
-                       FROM {$dbpre}gplayers,{$dbpre}matches
-                       WHERE {$dbpre}gplayers.gp_pnum=$pnum AND {$dbpre}matches.gm_num={$dbpre}gplayers.gp_match
-                       ORDER BY {$dbpre}matches.gm_num DESC LIMIT 11");
+$result = sql_querynb($link, "SELECT gm_num,gm_map,gm_type,gm_start,gm_timeoffset,gm_length,gm_numplayers
+  FROM {$dbpre}gplayers,{$dbpre}matches
+  WHERE {$dbpre}gplayers.gp_pnum=$pnum AND {$dbpre}matches.gm_num={$dbpre}gplayers.gp_match
+  ORDER BY {$dbpre}matches.gm_num DESC LIMIT 11");
 if (!$result) {
   echo "Error accessing game and game player tables.<br />\n";
   exit;
@@ -1119,7 +1119,7 @@ while ($row = sql_fetch_assoc($result)) {
     }
     $start = strtotime($gm_start);
     $matchdate = formatdate($start, 1);
-    $length = sprintf("%0.1f", $gm_length / 6000.0);
+    $length = sprintf("%0.1f", $gm_length / (60.0 * $gm_timeoffset));
 
     // Load Map Name
     $result2 = sql_queryn($link, "SELECT mp_name FROM {$dbpre}maps WHERE mp_num=$gm_map LIMIT 1");

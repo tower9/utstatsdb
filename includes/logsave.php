@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -132,16 +132,17 @@ function storedata()
   $sd = date("Y-m-d H:i:s", $match->startdate);
   $tot_ptime = 0;
   $match->tot_score = intval(floor($match->tot_score));
+  $matchlength = $match->length / ($match->timeoffset / 100.0);
 
   // Update Map Data
-  $result = sql_queryn($link, "UPDATE {$dbpre}maps SET mp_matches=mp_matches+1,mp_score=mp_score+{$match->tot_score},mp_kills=mp_kills+{$match->tot_kills},mp_deaths=mp_deaths+{$match->tot_deaths},mp_suicides=mp_suicides+{$match->tot_suicides},mp_time=mp_time+{$match->length},mp_lastmatch='$sd' WHERE mp_num={$match->mapnum}");
+  $result = sql_queryn($link, "UPDATE {$dbpre}maps SET mp_matches=mp_matches+1,mp_score=mp_score+{$match->tot_score},mp_kills=mp_kills+{$match->tot_kills},mp_deaths=mp_deaths+{$match->tot_deaths},mp_suicides=mp_suicides+{$match->tot_suicides},mp_time=mp_time+{$matchlength},mp_lastmatch='$sd' WHERE mp_num={$match->mapnum}");
   if (!$result) {
     echo "Error updating map data in database.{$break}\n";
     exit;
   }
 
   // Update Server Data
-  $result = sql_queryn($link, "UPDATE {$dbpre}servers SET sv_matches=sv_matches+1,sv_frags=sv_frags+{$match->tot_kills}-{$match->tot_suicides},sv_score=sv_score+{$match->tot_score},sv_time=sv_time+{$match->length},sv_lastmatch='$sd' WHERE sv_num={$match->servernum} LIMIT 1");
+  $result = sql_queryn($link, "UPDATE {$dbpre}servers SET sv_matches=sv_matches+1,sv_frags=sv_frags+{$match->tot_kills}-{$match->tot_suicides},sv_score=sv_score+{$match->tot_score},sv_time=sv_time+{$matchlength},sv_lastmatch='$sd' WHERE sv_num={$match->servernum} LIMIT 1");
   if (!$result) {
     echo "Error updating server data in database.{$break}\n";
     exit;
@@ -260,22 +261,22 @@ function storedata()
         $plr_multi6 += $player[$i]->multi[5];
         $plr_multi7 += $player[$i]->multi[6];
         $plr_spree1 += $player[$i]->spree[0];
-        $plr_spreet1 += $player[$i]->spreet[0];
+        $plr_spreet1 += $player[$i]->spreet[0] / ($match->timeoffset / 100.0);
         $plr_spreek1 += $player[$i]->spreek[0];
         $plr_spree2 += $player[$i]->spree[1];
-        $plr_spreet2 += $player[$i]->spreet[1];
+        $plr_spreet2 += $player[$i]->spreet[1] / ($match->timeoffset / 100.0);
         $plr_spreek2 += $player[$i]->spreek[1];
         $plr_spree3 += $player[$i]->spree[2];
-        $plr_spreet3 += $player[$i]->spreet[2];
+        $plr_spreet3 += $player[$i]->spreet[2] / ($match->timeoffset / 100.0);
         $plr_spreek3 += $player[$i]->spreek[2];
         $plr_spree4 += $player[$i]->spree[3];
-        $plr_spreet4 += $player[$i]->spreet[3];
+        $plr_spreet4 += $player[$i]->spreet[3] / ($match->timeoffset / 100.0);
         $plr_spreek4 += $player[$i]->spreek[3];
         $plr_spree5 += $player[$i]->spree[4];
-        $plr_spreet5 += $player[$i]->spreet[4];
+        $plr_spreet5 += $player[$i]->spreet[4] / ($match->timeoffset / 100.0);
         $plr_spreek5 += $player[$i]->spreek[4];
         $plr_spree6 += $player[$i]->spree[5];
-        $plr_spreet6 += $player[$i]->spreet[5];
+        $plr_spreet6 += $player[$i]->spreet[5] / ($match->timeoffset / 100.0);
         $plr_spreek6 += $player[$i]->spreek[5];
         $plr_combo1 += $player[$i]->combo[0];
         $plr_combo2 += $player[$i]->combo[1];
@@ -283,6 +284,10 @@ function storedata()
         $plr_combo4 += $player[$i]->combo[3];
       }
       $plr_matches++;
+
+      for ($t = 0; $t < 4; $t++)
+      	$player[$i]->totaltime[$t] /= $match->timeoffset / 100.0;
+
       $plr_time += array_sum($player[$i]->totaltime);
 
       // Store player's total matches and game time
@@ -690,22 +695,22 @@ $gt_extraa,$gt_extrab,$gt_extrac)");
         $tl_multi6 += $player[$i]->multi[5];
         $tl_multi7 += $player[$i]->multi[6];
         $tl_spree1 += $player[$i]->spree[0];
-        $tl_spreet1 += $player[$i]->spreet[0];
+        $tl_spreet1 += $player[$i]->spreet[0] / ($match->timeoffset / 100.0);
         $tl_spreek1 += $player[$i]->spreek[0];
         $tl_spree2 += $player[$i]->spree[1];
-        $tl_spreet2 += $player[$i]->spreet[1];
+        $tl_spreet2 += $player[$i]->spreet[1] / ($match->timeoffset / 100.0);
         $tl_spreek2 += $player[$i]->spreek[1];
         $tl_spree3 += $player[$i]->spree[2];
-        $tl_spreet3 += $player[$i]->spreet[2];
+        $tl_spreet3 += $player[$i]->spreet[2] / ($match->timeoffset / 100.0);
         $tl_spreek3 += $player[$i]->spreek[2];
         $tl_spree4 += $player[$i]->spree[3];
-        $tl_spreet4 += $player[$i]->spreet[3];
+        $tl_spreet4 += $player[$i]->spreet[3] / ($match->timeoffset / 100.0);
         $tl_spreek4 += $player[$i]->spreek[3];
         $tl_spree5 += $player[$i]->spree[4];
-        $tl_spreet5 += $player[$i]->spreet[4];
+        $tl_spreet5 += $player[$i]->spreet[4] / ($match->timeoffset / 100.0);
         $tl_spreek5 += $player[$i]->spreek[4];
         $tl_spree6 += $player[$i]->spree[5];
-        $tl_spreet6 += $player[$i]->spreet[5];
+        $tl_spreet6 += $player[$i]->spreet[5] / ($match->timeoffset / 100.0);
         $tl_spreek6 += $player[$i]->spreek[5];
         $tl_combo1 += $player[$i]->combo[0];
         $tl_combo2 += $player[$i]->combo[1];
@@ -1118,7 +1123,7 @@ $gt_extraa,$gt_extrab,$gt_extrac)");
 
   // Save Totals
   $tl_matches++;
-  $tl_gametime += $match->length;
+  $tl_gametime += $match->length / ($match->timeoffset / 100.0);
 
   if (strtolower($dbtype) == "mssql") {
     $result = sql_queryn($link, "UPDATE {$dbpre}totals SET 
@@ -1593,6 +1598,8 @@ $tl_chnodedestroyedsg,$tl_chnodedestroyedsg_plr,$tl_chnodedestroyedsg_tm,$tl_chn
     }
   }
 
+  $matchlength = $match->length / ($match->timeoffset / 100.0);
+
   // Update Single Game and Career High Weapon Totals
   for ($wpn = 0; $wpn <= $maxweapon; $wpn++) {
   	if (isset($weapsg[$wpn])) {
@@ -1616,7 +1623,7 @@ $tl_chnodedestroyedsg,$tl_chnodedestroyedsg_plr,$tl_chnodedestroyedsg_tm,$tl_chn
             // Kills
             if ($wtkills > $weapsg[$wtintnum]["wp_chkillssg"]) {
               $weapsg[$wtintnum]["wp_chkillssg"] = $wtkills;
-              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chkillssg=$wtkills,wp_chkillssg_plr=$pnum,wp_chkillssg_tm={$match->length},wp_chkillssg_map={$match->mapnum},wp_chkillssg_dt='$sd' WHERE wp_num=$wtnum LIMIT 1");
+              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chkillssg=$wtkills,wp_chkillssg_plr=$pnum,wp_chkillssg_tm={$matchlength},wp_chkillssg_map={$match->mapnum},wp_chkillssg_dt='$sd' WHERE wp_num=$wtnum LIMIT 1");
               if (!$result) {
                 echo "Error saving weapon single game kill highs.{$break}\n";
                 exit;
@@ -1626,7 +1633,7 @@ $tl_chnodedestroyedsg,$tl_chnodedestroyedsg_plr,$tl_chnodedestroyedsg_tm,$tl_chn
             // Deaths
             if ($wtdeaths > $weapsg[$wtintnum]["wp_chdeathssg"]) {
               $weapsg[$wtintnum]["wp_chdeathssg"] = $wtdeaths;
-              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chdeathssg=$wtdeaths,wp_chdeathssg_plr=$pnum,wp_chdeathssg_tm={$match->length},wp_chdeathssg_map={$match->mapnum},wp_chdeathssg_dt='$sd' WHERE wp_num=$wtnum LIMIT 1");
+              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chdeathssg=$wtdeaths,wp_chdeathssg_plr=$pnum,wp_chdeathssg_tm={$matchlength},wp_chdeathssg_map={$match->mapnum},wp_chdeathssg_dt='$sd' WHERE wp_num=$wtnum LIMIT 1");
               if (!$result) {
                 echo "Error saving weapon single game death highs.{$break}\n";
                 exit;
@@ -1636,7 +1643,7 @@ $tl_chnodedestroyedsg,$tl_chnodedestroyedsg_plr,$tl_chnodedestroyedsg_tm,$tl_chn
             // Suicides
             if ($wtsuicides > $weapsg[$wtintnum]["wp_chsuicidessg"]) {
               $weapsg[$wtintnum]["wp_chsuicidessg"] = $wtsuicides;
-              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chsuicidessg=$wtsuicides,wp_chsuicidessg_plr=$pnum,wp_chsuicidessg_tm={$match->length},wp_chsuicidessg_map={$match->mapnum},wp_chsuicidessg_dt='$sd' WHERE wp_num=$wtnum LIMIT 1");
+              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chsuicidessg=$wtsuicides,wp_chsuicidessg_plr=$pnum,wp_chsuicidessg_tm={$matchlength},wp_chsuicidessg_map={$match->mapnum},wp_chsuicidessg_dt='$sd' WHERE wp_num=$wtnum LIMIT 1");
               if (!$result) {
                 echo "Error saving weapon single game suicide highs.{$break}\n";
                 exit;
@@ -1646,7 +1653,7 @@ $tl_chnodedestroyedsg,$tl_chnodedestroyedsg_plr,$tl_chnodedestroyedsg_tm,$tl_chn
             // Held
             if ($wtheld > $weapsg[$wtintnum]["wp_chdeathshldsg"]) {
               $weapsg[$wtintnum]["wp_chdeathshldsg"] = $wtheld;
-              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chdeathshldsg=$wtheld,wp_chdeathshldsg_plr=$pnum,wp_chdeathshldsg_tm={$match->length},wp_chdeathshldsg_map={$match->mapnum},wp_chdeathshldsg_dt='$sd' WHERE wp_num=$wtnum LIMIT 1");
+              $result = sql_queryn($link, "UPDATE {$dbpre}weapons SET wp_chdeathshldsg=$wtheld,wp_chdeathshldsg_plr=$pnum,wp_chdeathshldsg_tm={$matchlength},wp_chdeathshldsg_map={$match->mapnum},wp_chdeathshldsg_dt='$sd' WHERE wp_num=$wtnum LIMIT 1");
               if (!$result) {
                 echo "Error saving weapon single game held death highs.{$break}\n";
                 exit;
@@ -1778,6 +1785,7 @@ $tl_chnodedestroyedsg,$tl_chnodedestroyedsg_plr,$tl_chnodedestroyedsg_tm,$tl_chn
         if ($gelength < $obj_besttime || !$obj_besttime)
           $obj_besttime = $gelength;
         $newtime = ((floatval($obj_avgtime) * floatval($obj_times)) + floatval($gelength)) / (floatval($obj_times) + 1.0);
+        $newtime /= $match->timeoffset / 100.0;
         $obj_times++;
         $result = sql_queryn($link, "UPDATE {$dbpre}objectives SET obj_times=$obj_times,obj_besttime=$obj_besttime,obj_avgtime=$newtime WHERE obj_num=$gequant LIMIT 1");
       }
@@ -1815,7 +1823,7 @@ $tl_chnodedestroyedsg,$tl_chnodedestroyedsg_plr,$tl_chnodedestroyedsg_tm,$tl_chn
   }
 
   // Update Game Type Data
-  $result = sql_queryn($link, "UPDATE {$dbpre}type SET tp_played=tp_played+1,tp_gtime=tp_gtime+{$match->length},tp_ptime=tp_ptime+$tot_ptime,tp_score=tp_score+{$match->tot_score},tp_kills=tp_kills+{$match->tot_kills},tp_deaths=tp_deaths+{$match->tot_deaths},tp_suicides=tp_suicides+{$match->tot_suicides},tp_teamkills=tp_teamkills+{$match->teamkills} WHERE tp_num={$match->gametnum} LIMIT 1");
+  $result = sql_queryn($link, "UPDATE {$dbpre}type SET tp_played=tp_played+1,tp_gtime=tp_gtime+{$matchlength},tp_ptime=tp_ptime+$tot_ptime,tp_score=tp_score+{$match->tot_score},tp_kills=tp_kills+{$match->tot_kills},tp_deaths=tp_deaths+{$match->tot_deaths},tp_suicides=tp_suicides+{$match->tot_suicides},tp_teamkills=tp_teamkills+{$match->teamkills} WHERE tp_num={$match->gametnum} LIMIT 1");
   if (!$result) {
     echo "Error saving tkills data.{$break}\n";
     exit;

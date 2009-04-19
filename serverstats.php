@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -128,10 +128,10 @@ echo <<<EOF
 EOF;
 
 $matches = 0;
-$result = sql_queryn($link, "SELECT gm_num,gm_map,gm_type,gm_start,gm_length,gm_numplayers,mp_name
-                       FROM {$dbpre}matches USE INDEX (gm_svnum),{$dbpre}maps
-                       WHERE gm_server=$servernum AND mp_num=gm_map
-                       ORDER BY gm_num DESC LIMIT 21");
+$result = sql_queryn($link, "SELECT gm_num,gm_map,gm_type,gm_start,gm_timeoffset,gm_length,gm_numplayers,mp_name
+  FROM {$dbpre}matches USE INDEX (gm_svnum),{$dbpre}maps
+  WHERE gm_server=$servernum AND mp_num=gm_map
+  ORDER BY gm_num DESC LIMIT 21");
 if (!$result) {
   echo "Error accessing match database.<br />\n";
   exit;
@@ -148,7 +148,7 @@ while ($row = sql_fetch_assoc($result)) {
     }
     $start = strtotime($gm_start);
     $matchdate = formatdate($start, 1);
-    $length = sprintf("%0.1f", $gm_length / 6000.0);
+    $length = sprintf("%0.1f", $gm_length / (60.0 * $gm_timeoffset));
     $mapname = stripspecialchars($mp_name);
 
     echo <<<EOF

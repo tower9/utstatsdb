@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -237,6 +237,7 @@ function tag_si($i, $data)
         break;
       case "gamespeed":
         $match->gamespeed = floatval($status);
+        $match->timeoffset *= $match->gamespeed;
         break;
       case "campthreshold":
         // $campthreshold = 600.00;
@@ -354,7 +355,7 @@ function tag_sg($i, $data)
 
   $match->starttime = ctime($data[0]);
   $match->started = 1;
-  $match->startdate = $match->matchdate + intval($match->starttime / 110);
+  $match->startdate = $match->matchdate + intval($match->starttime / $match->timeoffset);
 
   for ($n = 0; $n <= $match->maxplayer; $n++)
     if (isset($player[$n]))

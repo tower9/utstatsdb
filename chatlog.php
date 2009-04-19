@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -595,7 +595,7 @@ if ($numchat) {
 
 for ($i = 0; $i < $numchat; $i++) {
   $nodisplay = 0;
-  $time = sprintf("%0.2f", $chatlog[0][$i] / 6000);
+  $time = sprintf("%0.2f", $chatlog[0][$i] / (60.0 * $gm_timeoffset));
   $plr = $chatlog[1][$i];
 
   if ($plr >= 0) {
