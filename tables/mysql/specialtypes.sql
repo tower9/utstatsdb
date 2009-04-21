@@ -1,8 +1,6 @@
 CREATE TABLE %dbpre%specialtypes (
-  st_num smallint(5) unsigned NOT NULL auto_increment,
-  st_type varchar(40) NOT NULL default '',
+  st_type varchar(40) NOT NULL,
   st_snum smallint(5) unsigned NOT NULL,
-  UNIQUE KEY st_num (st_num),
   KEY st_type (st_type)
 ) Type=MyISAM;
 

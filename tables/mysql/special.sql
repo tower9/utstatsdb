@@ -17,6 +17,7 @@ INSERT INTO %dbpre%special (se_title,se_desc) VALUES('Flak Master','15 kills wit
 INSERT INTO %dbpre%special (se_title,se_desc) VALUES('Rocket Scientist','15 kills with the Rocket Launcher');
 INSERT INTO %dbpre%special (se_title,se_desc) VALUES('Headhunter','15 Headshots');
 INSERT INTO %dbpre%special (se_title,se_desc) VALUES('Big Game Hunter','15 kills with the Longbow AVRiL');
+INSERT INTO %dbpre%special (se_title,se_desc) VALUES('Road Kill','Running someone over with a vehicle.');
 INSERT INTO %dbpre%special (se_title,se_desc) VALUES('Eagle Eye','Destroying a flying vehicle (Raptor, Cicada, Fury), a speeding Scorpion, or a Viper ready to self-destruct with the Goliath or Paladin.');
 INSERT INTO %dbpre%special (se_title,se_desc) VALUES('Bullseye','Killing an enemy with the kamikaze feature of the Scorpion or Viper.');
 INSERT INTO %dbpre%special (se_title,se_desc) VALUES('Top Gun','Destroying a flying vehicle using a Raptor\'s missiles.');

@@ -418,12 +418,21 @@ echo <<<EOF
 EOF;
 
 //=============================================================================
-//========== Career Summary - Single Player Tournament Games ==================
-//=============================================================================
-
-//=============================================================================
 //========== Special Events ===================================================
 //=============================================================================
+$result = sql_queryn($link, "SELECT se_title,se_desc,ps_total FROM {$dbpre}playerspecial LEFT JOIN {$dbpre}special ON se_num=ps_stype WHERE ps_pnum=$plr");
+if (!$result) {
+  echo "Player Database Error.<br />\n";
+  exit;
+}
+$numspec = 0;
+while ($row = sql_fetch_row($result)) {
+  $special[$numspec]["title"] = $row[0];
+  $special[$numspec]["desc"] = $row[1];
+  $special[$numspec++]["total"] = $row[2];
+}
+sql_free_result($result);
+
 echo <<<EOF
 <br />
 <table cellpadding="1" cellspacing="2" border="0">
@@ -441,48 +450,56 @@ echo <<<EOF
     <td class="smheading" align="center" width="45">Value</td>
   </tr>
   <tr>
-    <td class="dark" align="center">First Blood</td>
+    <td class="dark" align="center" style="white-space:nowrap">First Blood</td>
     <td class="grey" align="center">$plr_firstblood</td>
-    <td class="dark" align="center">Head Shots</td>
-    <td class="grey" align="center">$plr_headshots</td>
-    <td class="dark" align="center">Roadkills</td>
-    <td class="grey" align="center">$plr_roadkills</td>
-    <td class="dark" align="center">Carjackings</td>
-    <td class="grey" align="center">$plr_carjack</td>
-  </tr>
-  <tr>
-    <td class="dark" align="center">Double Kills</td>
+    <td class="dark" align="center" style="white-space:nowrap">Double Kills</td>
     <td class="grey" align="center">$plr_multi1</td>
-    <td class="dark" align="center">Multi Kills</td>
+    <td class="dark" align="center" style="white-space:nowrap">Multi Kills</td>
     <td class="grey" align="center">$plr_multi2</td>
-    <td class="dark" align="center">Mega Kills</td>
+    <td class="dark" align="center" style="white-space:nowrap">Mega Kills</td>
     <td class="grey" align="center">$plr_multi3</td>
-    <td class="dark" align="center">Ultra Kills</td>
+  </tr>
+  <tr>
+    <td class="dark" align="center" style="white-space:nowrap">Ultra Kills</td>
     <td class="grey" align="center">$plr_multi4</td>
-  </tr>
-  <tr>
-    <td class="dark" align="center">Monster Kills</td>
+    <td class="dark" align="center" style="white-space:nowrap">Monster Kills</td>
     <td class="grey" align="center">$plr_multi5</td>
-    <td class="dark" align="center">Ludicrous Kills</td>
+    <td class="dark" align="center" style="white-space:nowrap">Ludicrous Kills</td>
     <td class="grey" align="center">$plr_multi6</td>
-    <td class="dark" align="center">Holy Shit Kills</td>
+    <td class="dark" align="center" style="white-space:nowrap">Holy Shit Kills</td>
     <td class="grey" align="center">$plr_multi7</td>
-    <td class="dark" align="center">Failed Transloc</td>
-    <td class="grey" align="center">$plr_transgib</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Headhunter</td>
-    <td class="grey" align="center">$plr_headhunter</td>
-    <td class="dark" align="center">Flak Monkey</td>
-    <td class="grey" align="center">$plr_flakmonkey</td>
-    <td class="dark" align="center">Combo Whore</td>
-    <td class="grey" align="center">$plr_combowhore</td>
-    <td class="dark" align="center">Road Rampage</td>
-    <td class="grey" align="center">$plr_roadrampage</td>
-  </tr>
-</table>
+    <td class="dark" align="center" style="white-space:nowrap">Failed Transloc</td>
+    <td class="grey" align="center">$plr_transgib</td>
 
 EOF;
+
+$col = 1;
+for ($i = 0; $i < $numspec; $i++) {
+  echo <<<EOF
+    <td class="dark" align="center" style="white-space:nowrap" title="{$special[$i]['desc']}">{$special[$i]['title']}</td>
+    <td class="grey" align="center">{$special[$i]['total']}</td>
+
+EOF;
+
+  $col++;
+  if ($col == 4) {
+    echo "  </tr>\n  <tr>\n";
+    $col = 0;
+  }
+}
+
+if ($col > 0) {
+  while ($col < 4) {
+    echo "    <td class=\"dark\" align=\"center\">&nbsp;</td>\n    <td class=\"grey\" align=\"center\">&nbsp;</td>\n";
+    $col++;
+  }
+
+  echo "  </tr>\n";
+}
+
+echo "</table>\n";
 
 //=============================================================================
 //========== Combos ===========================================================

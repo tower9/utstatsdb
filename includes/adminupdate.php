@@ -33,14 +33,28 @@ function update307()
   }
 
   echo "Adding {$dbpre}specialtypes table....<br />\n";
-  $result = sql_queryn($link, "CREATE TABLE {$dbpre}specialtypes (st_num smallint(5) unsigned NOT NULL auto_increment, st_type varchar(40) NOT NULL default '', st_snum smallint(5) unsigned NOT NULL, UNIQUE KEY st_num (st_num), KEY st_type (st_type)) Type=MyISAM");
+  $result = sql_queryn($link, "CREATE TABLE {$dbpre}specialtypes (st_type varchar(40) NOT NULL, st_snum smallint(5) unsigned NOT NULL, KEY st_type (st_type)) Type=MyISAM");
   if (!$result) {
     echo "<br />Error adding {$dbpre}specialtypes table.{$break}\n";
     exit;
   }
 
+  echo "Adding {$dbpre}playerspecial table....<br />\n";
+  $result = sql_queryn($link, "CREATE TABLE {$dbpre}playerspecial (ps_pnum mediumint(8) unsigned NOT NULL, ps_stype smallint(5) unsigned NOT NULL, ps_total mediumint(8) unsigned NOT NULL default 0, KEY ps_ptype (ps_pnum,ps_stype)) Type=MyISAM");
+  if (!$result) {
+    echo "<br />Error adding {$dbpre}playerspecial table.{$break}\n";
+    exit;
+  }
+
+  echo "Adding {$dbpre}playersgts table....<br />\n";
+  $result = sql_queryn($link, "CREATE TABLE {$dbpre}playersgts (gs_pnum mediumint(8) unsigned NOT NULL, gs_stype smallint(5) unsigned NOT NULL, gs_tnum smallint(5) unsigned NOT NULL, gs_total mediumint(8) unsigned NOT NULL default 0, KEY gs_ptn (gs_pnum,gs_stype,gs_tnum)) Type=MyISAM");
+  if (!$result) {
+    echo "<br />Error adding {$dbpre}playersgts table.{$break}\n";
+    exit;
+  }
+
   echo "Updating {$dbpre}special data...<br />\n";
-  for ($num = 1; $num <= 22; $num++) {
+  for ($num = 1; $num <= 23; $num++) {
     switch ($num) {
     	case  1: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Jackhammer','15 kills with the Impact Hammer')"); break;
     	case  2: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Gunslinger','15 kills with the Enforcer')"); break;
@@ -52,18 +66,19 @@ function update307()
     	case  8: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Rocket Scientist','15 kills with the Rocket Launcher')"); break;
     	case  9: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Headhunter','15 Headshots')"); break;
     	case 10: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Big Game Hunter','15 kills with the Longbow AVRiL')"); break;
-    	case 11: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Eagle Eye','Destroying a flying vehicle (Raptor, Cicada, Fury), a speeding Scorpion, or a Viper ready to self-destruct with the Goliath or Paladin.')"); break;
-    	case 12: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Bullseye','Killing an enemy with the kamikaze feature of the Scorpion or Viper.')"); break;
-    	case 13: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Top Gun','Destroying a flying vehicle using a Raptor\'s missiles.')"); break;
-    	case 14: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Pancake','Using a vehicle to crush an enemy player.')"); break;
-    	case 15: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Road Rampage','Running over 15 people with a vehicle.')"); break;
-    	case 16: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Hijacked','Stealing an abandoned enemy vehicle.')"); break;
-    	case 17: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Juggernaut','Having two powerups at the same time: Berserk, Double Damage, and Invulnerability, or when you become a Titan or a Behemoth.')"); break;
-    	case 18: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Hat Trick','3 successful flag captures in a match. They do not need to be consecutive.')"); break;
-    	case 19: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Denied','Destroying an enemy redeemer in flight, killing an enemy orb runner within close range of a powernode, or killing an enemy flag carrier within close range of their flag.')"); break;
-    	case 20: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Assassin','Betray one of your teammates in Betrayal or kill a Titan.')"); break;
-    	case 21: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Payback','Kill a rogue who betrayed your team in Betrayal.')"); break;
-    	case 22: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Rejected','Kill an enemy skull carrier just before he captures skulls in Greed.')"); break;
+        case 11: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Road Kill','Running someone over with a vehicle.')"); break;
+    	case 12: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Eagle Eye','Destroying a flying vehicle (Raptor, Cicada, Fury), a speeding Scorpion, or a Viper ready to self-destruct with the Goliath or Paladin.')"); break;
+    	case 13: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Bullseye','Killing an enemy with the kamikaze feature of the Scorpion or Viper.')"); break;
+    	case 14: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Top Gun','Destroying a flying vehicle using a Raptor\'s missiles.')"); break;
+    	case 15: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Pancake','Using a vehicle to crush an enemy player.')"); break;
+    	case 16: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Road Rampage','Running over 15 people with a vehicle.')"); break;
+    	case 17: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Hijacked','Stealing an abandoned enemy vehicle.')"); break;
+    	case 18: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Juggernaut','Having two powerups at the same time: Berserk, Double Damage, and Invulnerability, or when you become a Titan or a Behemoth.')"); break;
+    	case 19: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Hat Trick','3 successful flag captures in a match. They do not need to be consecutive.')"); break;
+    	case 20: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Denied','Destroying an enemy redeemer in flight, killing an enemy orb runner within close range of a powernode, or killing an enemy flag carrier within close range of their flag.')"); break;
+    	case 21: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Assassin','Betray one of your teammates in Betrayal or kill a Titan.')"); break;
+    	case 22: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Payback','Kill a rogue who betrayed your team in Betrayal.')"); break;
+    	case 23: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Rejected','Kill an enemy skull carrier just before he captures skulls in Greed.')"); break;
     }
     if (!$result) {
       echo "<br />Error updating {$dbpre}special data.{$break}\n";
@@ -104,8 +119,31 @@ function update307()
     }
   }
 
-  update_weapons();
-  update_items();
+  echo "Transfering player special event data....<br />\n";
+  for ($num = 1; $num <= 6; $num++) {
+    switch ($num) {
+      case 1: $result = sql_queryn($link, "INSERT INTO ut_playerspecial (ps_pnum,ps_stype,ps_total) SELECT pnum,se_num,plr_headhunter FROM ut_players,ut_special WHERE se_title='Headhunter'"); break;
+      case 2: $result = sql_queryn($link, "INSERT INTO ut_playerspecial (ps_pnum,ps_stype,ps_total) SELECT pnum,se_num,plr_flakmonkey FROM ut_players,ut_special WHERE se_title='Flak Master'"); break;
+      case 3: $result = sql_queryn($link, "INSERT INTO ut_playerspecial (ps_pnum,ps_stype,ps_total) SELECT pnum,se_num,plr_combowhore FROM ut_players,ut_special WHERE se_title='Combo King'"); break;
+      case 4: $result = sql_queryn($link, "INSERT INTO ut_playerspecial (ps_pnum,ps_stype,ps_total) SELECT pnum,se_num,plr_roadrampage FROM ut_players,ut_special WHERE se_title='Road Rampage'"); break;
+      case 5: $result = sql_queryn($link, "INSERT INTO ut_playerspecial (ps_pnum,ps_stype,ps_total) SELECT pnum,se_num,plr_carjack FROM ut_players,ut_special WHERE se_title='Hijacked'"); break;
+      case 6: $result = sql_queryn($link, "INSERT INTO ut_playerspecial (ps_pnum,ps_stype,ps_total) SELECT pnum,se_num,plr_roadkills FROM ut_players,ut_special WHERE se_title='Road Kill'"); break;
+    }
+    if (!$result) {
+      echo "<br />Error updating player special event data - ".sql_error($link)."{$break}\n";
+      exit;
+    }
+  }
+
+  echo "Updating player table....<br />\n";
+  $result = sql_queryn($link, "ALTER TABLE {$dbpre}players DROP plr_headhunter, DROP plr_flakmonkey, DROP plr_combowhore, DROP plr_roadrampage, DROP plr_carjack, DROP plr_roadkills");
+  if (!$result) {
+    echo "<br />Error updating player table.{$break}\n";
+    exit;
+  }
+
+  update_weapons($link);
+  update_items($link);
 
   echo "Updating version....<br />\n";
 /*
@@ -474,8 +512,10 @@ function update301()
   echo "<br />Database updates complete.<br />\n";
 }
 
-function update_weapons()
+function update_weapons($link)
 {
+  global $dbtype, $dbpre, $break;
+
   echo "Updating weapon descriptions....<br />\n";
   $fname = "tables/".strtolower($dbtype)."/weapons.sql";
   if (file_exists($fname)) {
@@ -533,8 +573,10 @@ function update_weapons()
   }
 }
 
-function update_items()
+function update_items($link)
 {
+  global $dbtype, $dbpre, $break;
+
   echo "Updating item descriptions....<br />\n";
   $fname = "tables/".strtolower($dbtype)."/items.sql";
   if (file_exists($fname)) {
