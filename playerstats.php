@@ -420,16 +420,16 @@ EOF;
 //=============================================================================
 //========== Special Events ===================================================
 //=============================================================================
-$result = sql_queryn($link, "SELECT se_title,se_desc,ps_total FROM {$dbpre}playerspecial LEFT JOIN {$dbpre}special ON se_num=ps_stype WHERE ps_pnum=$plr");
+$result = sql_queryn($link, "SELECT se_num,se_title,se_desc,ps_total FROM {$dbpre}special LEFT JOIN {$dbpre}playerspecial ON ps_stype=se_num WHERE ps_pnum=$plr OR ps_pnum IS NULL ORDER BY se_num");
 if (!$result) {
-  echo "Player Database Error.<br />\n";
+  echo "Player database error.<br />\n";
   exit;
 }
 $numspec = 0;
 while ($row = sql_fetch_row($result)) {
-  $special[$numspec]["title"] = $row[0];
-  $special[$numspec]["desc"] = $row[1];
-  $special[$numspec++]["total"] = $row[2];
+  $special[$numspec]["title"] = $row[1];
+  $special[$numspec]["desc"] = $row[2];
+  $special[$numspec++]["total"] = $row[3] != NULL ? $row[3] : 0;
 }
 sql_free_result($result);
 
@@ -477,6 +477,9 @@ EOF;
 
 $col = 1;
 for ($i = 0; $i < $numspec; $i++) {
+  if ($col == 0)
+    echo "  <tr>\n";
+
   echo <<<EOF
     <td class="dark" align="center" style="white-space:nowrap" title="{$special[$i]['desc']}">{$special[$i]['title']}</td>
     <td class="grey" align="center">{$special[$i]['total']}</td>
@@ -485,7 +488,7 @@ EOF;
 
   $col++;
   if ($col == 4) {
-    echo "  </tr>\n  <tr>\n";
+    echo "  </tr>\n";
     $col = 0;
   }
 }
