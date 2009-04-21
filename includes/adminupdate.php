@@ -46,10 +46,10 @@ function update307()
     exit;
   }
 
-  echo "Adding {$dbpre}playersgts table....<br />\n";
-  $result = sql_queryn($link, "CREATE TABLE {$dbpre}playersgts (gs_pnum mediumint(8) unsigned NOT NULL, gs_stype smallint(5) unsigned NOT NULL, gs_tnum smallint(5) unsigned NOT NULL, gs_total mediumint(8) unsigned NOT NULL default 0, KEY gs_ptn (gs_pnum,gs_stype,gs_tnum)) Type=MyISAM");
+  echo "Adding {$dbpre}gspecials table....<br />\n";
+  $result = sql_queryn($link, "CREATE TABLE {$dbpre}gspecials (gs_match int(10) unsigned NOT NULL, gs_player smallint(5) unsigned NOT NULL, gs_stype smallint(5) unsigned NOT NULL, gs_total mediumint(8) unsigned NOT NULL default 0, KEY gs_mps (gs_match,gs_player,gs_stype)) Type=MyISAM");
   if (!$result) {
-    echo "<br />Error adding {$dbpre}playersgts table: ".sql_error($link)."{$break}\n";
+    echo "<br />Error adding {$dbpre}gspecials table: ".sql_error($link)."{$break}\n";
     exit;
   }
 
@@ -162,6 +162,29 @@ function update307()
   $result = sql_queryn($link, "ALTER TABLE {$dbpre}players DROP plr_headhunter, DROP plr_flakmonkey, DROP plr_combowhore, DROP plr_roadrampage, DROP plr_carjack, DROP plr_roadkills");
   if (!$result) {
     echo "<br />Error updating player table: ".sql_error($link)."{$break}\n";
+    exit;
+  }
+
+  echo "Transfering match player special event data....<br />\n";
+  for ($num = 1; $num <= 6; $num++) {
+    switch ($num) {
+      case 1: $result = sql_queryn($link, "INSERT INTO {$dbpre}gspecials (gs_match,gs_player,gs_stype,gs_total) SELECT gp_match,gp_num,se_num,gp_headhunter FROM {$dbpre}gplayers,{$dbpre}special WHERE se_title='Headhunter'"); break;
+      case 2: $result = sql_queryn($link, "INSERT INTO {$dbpre}gspecials (gs_match,gs_player,gs_stype,gs_total) SELECT gp_match,gp_num,se_num,gp_flakmonkey FROM {$dbpre}gplayers,{$dbpre}special WHERE se_title='Flak Master'"); break;
+      case 3: $result = sql_queryn($link, "INSERT INTO {$dbpre}gspecials (gs_match,gs_player,gs_stype,gs_total) SELECT gp_match,gp_num,se_num,gp_combowhore FROM {$dbpre}gplayers,{$dbpre}special WHERE se_title='Combo King'"); break;
+      case 4: $result = sql_queryn($link, "INSERT INTO {$dbpre}gspecials (gs_match,gs_player,gs_stype,gs_total) SELECT gp_match,gp_num,se_num,gp_roadrampage FROM {$dbpre}gplayers,{$dbpre}special WHERE se_title='Road Rampage'"); break;
+      case 5: $result = sql_queryn($link, "INSERT INTO {$dbpre}gspecials (gs_match,gs_player,gs_stype,gs_total) SELECT gp_match,gp_num,se_num,gp_carjack FROM {$dbpre}gplayers,{$dbpre}special WHERE se_title='Hijacked'"); break;
+      case 6: $result = sql_queryn($link, "INSERT INTO {$dbpre}gspecials (gs_match,gs_player,gs_stype,gs_total) SELECT gp_match,gp_num,se_num,gp_roadkills FROM {$dbpre}gplayers,{$dbpre}special WHERE se_title='Road Kill'"); break;
+    }
+    if (!$result) {
+      echo "<br />Error updating match player special event data: ".sql_error($link)."{$break}\n";
+      exit;
+    }
+  }
+
+  echo "Updating match player table....<br />\n";
+  $result = sql_queryn($link, "ALTER TABLE {$dbpre}gplayers DROP gp_carjack, DROP gp_roadkills, DROP gp_headhunter, DROP gp_flakmonkey, DROP gp_combowhore, DROP gp_roadrampage");
+  if (!$result) {
+    echo "<br />Error updating match player table: ".sql_error($link)."{$break}\n";
     exit;
   }
 

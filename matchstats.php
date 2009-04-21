@@ -1746,8 +1746,20 @@ EOF;
 //========== Special Events ===================================================
 //=============================================================================
 if ($gametval != 9 && $gametval != 18) {
-  $transgib = $carjack = $roadkills = $headhunter = $flakmonkey = $combowhore = $roadrampage = 0;
-  $multi1 = $multi2 = $multi3 = $multi4 = $multi5 = $multi6 = $multi7 = 0;
+  $transgib = $multi1 = $multi2 = $multi3 = $multi4 = $multi5 = $multi6 = $multi7 = 0;
+
+  $result = sql_queryn($link, "SELECT se_num,se_title,se_desc,sum(gs_total) AS total FROM {$dbpre}special LEFT JOIN {$dbpre}gspecials ON gs_stype=se_num WHERE gs_match=$matchnum GROUP BY se_num ORDER BY se_num;");
+  if (!$result) {
+    echo "Match player special database error.<br />\n";
+    exit;
+  }
+  $numspec = 0;
+  while ($row = sql_fetch_row($result)) {
+    $special[$numspec]["title"] = $row[1];
+    $special[$numspec]["desc"] = $row[2];
+    $special[$numspec++]["total"] = $row[3] != NULL ? $row[3] : 0;
+  }
+  sql_free_result($result);
 
   for ($i = 0; $i <= $maxplayer; $i++) {
     if (isset($gplayer[$i])) {
@@ -1759,16 +1771,6 @@ if ($gametval != 9 && $gametval != 18) {
       $multi5 += $gplayer[$i]["gp_multi5"];
       $multi6 += $gplayer[$i]["gp_multi6"];
       $multi7 += $gplayer[$i]["gp_multi7"];
-      $carjack += $gplayer[$i]["gp_carjack"];
-      $roadkills += $gplayer[$i]["gp_roadkills"];
-      if ($gplayer[$i]["gp_headhunter"])
-        $headhunter++;
-      if ($gplayer[$i]["gp_flakmonkey"])
-        $flakmonkey++;
-      if ($gplayer[$i]["gp_combowhore"])
-        $combowhore++;
-      if ($gplayer[$i]["gp_roadrampage"])
-        $roadrampage++;
     }
   }
 
@@ -1782,13 +1784,6 @@ if ($gametval != 9 && $gametval != 18) {
   }
   else
     $firstblood = "&nbsp;";
-
-  if ($gm_logger == 1)
-    $carjackt = "{$LANG_CARJACKINGS}";
-  else {
-    $carjack = "&nbsp;";
-    $carjackt = "&nbsp;";
-  }
 
   echo <<<EOF
 <br />
@@ -1807,48 +1802,59 @@ if ($gametval != 9 && $gametval != 18) {
     <td class="smheading" align="center" width="45">{$LANG_VALUE}</td>
   </tr>
   <tr>
-    <td class="dark" align="center">{$LANG_FIRSTBLOOD}</td>
+    <td class="dark" align="center" style="white-space:nowrap">{$LANG_FIRSTBLOOD}</td>
     <td class="grey" align="center">$firstblood</td>
-    <td class="dark" align="center">{$LANG_HEADSHOTS}</td>
-    <td class="grey" align="center">$gm_headshots</td>
-    <td class="dark" align="center">{$LANG_ROADKILLS}</td>
-    <td class="grey" align="center">$roadkills</td>
-    <td class="dark" align="center">$carjackt</td>
-    <td class="grey" align="center">$carjack</td>
-  </tr>
-  <tr>
-    <td class="dark" align="center">{$LANG_DOUBLEKILLS}</td>
+    <td class="dark" align="center" style="white-space:nowrap">{$LANG_DOUBLEKILLS}</td>
     <td class="grey" align="center">$multi1</td>
-    <td class="dark" align="center">{$LANG_MULTIKILLS}</td>
+    <td class="dark" align="center" style="white-space:nowrap">{$LANG_MULTIKILLS}</td>
     <td class="grey" align="center">$multi2</td>
-    <td class="dark" align="center">{$LANG_MEGAKILLS}</td>
+    <td class="dark" align="center" style="white-space:nowrap">{$LANG_MEGAKILLS}</td>
     <td class="grey" align="center">$multi3</td>
-    <td class="dark" align="center">{$LANG_ULTRAKILLS}</td>
+  </tr>
+  <tr>
+    <td class="dark" align="center" style="white-space:nowrap">{$LANG_ULTRAKILLS}</td>
     <td class="grey" align="center">$multi4</td>
-  </tr>
-  <tr>
-    <td class="dark" align="center">{$LANG_MONSTERKILLS}</td>
+    <td class="dark" align="center" style="white-space:nowrap">{$LANG_MONSTERKILLS}</td>
     <td class="grey" align="center">$multi5</td>
-    <td class="dark" align="center">{$LANG_LUDICROUSKILLS}</td>
+    <td class="dark" align="center" style="white-space:nowrap">{$LANG_LUDICROUSKILLS}</td>
     <td class="grey" align="center">$multi6</td>
-    <td class="dark" align="center">{$LANG_HOLYSHITKILLS}</td>
+    <td class="dark" align="center" style="white-space:nowrap">{$LANG_HOLYSHITKILLS}</td>
     <td class="grey" align="center">$multi7</td>
-    <td class="dark" align="center">{$LANG_FAILEDTRANSLOC}</td>
-    <td class="grey" align="center">$transgib</td>
   </tr>
   <tr>
-    <td class="dark" align="center">{$LANG_HEADHUNTER}</td>
-    <td class="grey" align="center">$headhunter</td>
-    <td class="dark" align="center">{$LANG_FLAKMONKEY}</td>
-    <td class="grey" align="center">$flakmonkey</td>
-    <td class="dark" align="center">{$LANG_COMBOWHORE}</td>
-    <td class="grey" align="center">$combowhore</td>
-    <td class="dark" align="center">{$LANG_ROADRAMPAGE}</td>
-    <td class="grey" align="center">$roadrampage</td>
-  </tr>
-</table>
+    <td class="dark" align="center" style="white-space:nowrap">{$LANG_FAILEDTRANSLOC}</td>
+    <td class="grey" align="center">$transgib</td>
 
 EOF;
+
+  $col = 1;
+  for ($i = 0; $i < $numspec; $i++) {
+    if ($col == 0)
+      echo "  <tr>\n";
+
+    echo <<<EOF
+    <td class="dark" align="center" style="white-space:nowrap" title="{$special[$i]['desc']}">{$special[$i]['title']}</td>
+    <td class="grey" align="center">{$special[$i]['total']}</td>
+
+EOF;
+
+    $col++;
+    if ($col == 4) {
+      echo "  </tr>\n";
+      $col = 0;
+    }
+  }
+
+  if ($col > 0) {
+    while ($col < 4) {
+      echo "    <td class=\"dark\" align=\"center\">&nbsp;</td>\n    <td class=\"grey\" align=\"center\">&nbsp;</td>\n";
+      $col++;
+    }
+
+    echo "  </tr>\n";
+  }
+
+  echo "</table>\n";
 }
 
 //=============================================================================

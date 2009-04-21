@@ -297,15 +297,6 @@ echo <<<EOF
 
 EOF;
 
-
-
-
-
-
-
-
-
-
 //=============================================================================
 //========== Bot Stats ========================================================
 //=============================================================================
@@ -489,35 +480,23 @@ EOF;
 //========== Special Events ===================================================
 //=============================================================================
 if ($gametval != 9) {
+  $result = sql_queryn($link, "SELECT se_num,se_title,se_desc,gs_total FROM {$dbpre}special LEFT JOIN {$dbpre}gspecials ON gs_stype=se_num WHERE gs_match=$matchnum AND gs_player=$plr ORDER BY se_num");
+  if (!$result) {
+    echo "Player database error.<br />\n";
+    exit;
+  }
+  $numspec = 0;
+  while ($row = sql_fetch_row($result)) {
+    $special[$numspec]["title"] = $row[1];
+    $special[$numspec]["desc"] = $row[2];
+    $special[$numspec++]["total"] = $row[3] != NULL ? $row[3] : 0;
+  }
+  sql_free_result($result);
+
   if ($gm_firstblood == $gp_num)
     $fb = "Yes";
   else
     $fb = "No";
-  if ($gp_headhunter)
-    $headhunter = "Yes";
-  else
-    $headhunter = "No";
-  if ($gp_flakmonkey)
-    $flakmonkey = "Yes";
-  else
-    $flakmonkey = "No";
-  if ($gp_combowhore)
-    $combowhore = "Yes";
-  else
-    $combowhore = "No";
-  if ($gp_roadrampage)
-    $roadrampage = "Yes";
-  else
-    $roadrampage = "No";
-
-  if ($gm_logger == 1) {
-    $carjack = $gp_carjack;
-    $carjackt = "Carjackings";
-  }
-  else {
-    $carjack = "&nbsp;";
-    $carjackt = "&nbsp;";
-  }
 
   echo <<<EOF
 <br />
@@ -536,48 +515,61 @@ if ($gametval != 9) {
     <td class="smheading" align="center" width="45">Value</td>
   </tr>
   <tr>
-    <td class="dark" align="center">First Blood</td>
+    <td class="dark" align="center" style="white-space:nowrap">First Blood</td>
     <td class="grey" align="center">$fb</td>
-    <td class="dark" align="center">Head Shots</td>
+    <td class="dark" align="center" style="white-space:nowrap">Head Shots</td>
     <td class="grey" align="center">$gp_headshots</td>
-    <td class="dark" align="center">Roadkills</td>
-    <td class="grey" align="center">$gp_roadkills</td>
-    <td class="dark" align="center">$carjackt</td>
-    <td class="grey" align="center">$carjack</td>
-  </tr>
-  <tr>
-    <td class="dark" align="center">Double Kills</td>
+    <td class="dark" align="center" style="white-space:nowrap">Double Kills</td>
     <td class="grey" align="center">$gp_multi1</td>
-    <td class="dark" align="center">Multi Kills</td>
+    <td class="dark" align="center" style="white-space:nowrap">Multi Kills</td>
     <td class="grey" align="center">$gp_multi2</td>
-    <td class="dark" align="center">Mega Kills</td>
+  </tr>
+  <tr>
+    <td class="dark" align="center" style="white-space:nowrap">Mega Kills</td>
     <td class="grey" align="center">$gp_multi3</td>
-    <td class="dark" align="center">Ultra Kills</td>
+    <td class="dark" align="center" style="white-space:nowrap">Ultra Kills</td>
     <td class="grey" align="center">$gp_multi4</td>
-  </tr>
-  <tr>
-    <td class="dark" align="center">Monster Kills</td>
+    <td class="dark" align="center" style="white-space:nowrap">Monster Kills</td>
     <td class="grey" align="center">$gp_multi5</td>
-    <td class="dark" align="center">Ludicrous Kills</td>
+    <td class="dark" align="center" style="white-space:nowrap">Ludicrous Kills</td>
     <td class="grey" align="center">$gp_multi6</td>
-    <td class="dark" align="center">Holy Shit Kills</td>
-    <td class="grey" align="center">$gp_multi7</td>
-    <td class="dark" align="center">Failed Transloc</td>
-    <td class="grey" align="center">$gp_transgib</td>
   </tr>
   <tr>
-    <td class="dark" align="center">Headhunter</td>
-    <td class="grey" align="center">$headhunter</td>
-    <td class="dark" align="center">Flak Monkey</td>
-    <td class="grey" align="center">$flakmonkey</td>
-    <td class="dark" align="center">Combo Whore</td>
-    <td class="grey" align="center">$combowhore</td>
-    <td class="dark" align="center">Road Rampage</td>
-    <td class="grey" align="center">$roadrampage</td>
-  </tr>
-</table>
+    <td class="dark" align="center" style="white-space:nowrap">Holy Shit Kills</td>
+    <td class="grey" align="center">$gp_multi7</td>
+    <td class="dark" align="center" style="white-space:nowrap">Failed Transloc</td>
+    <td class="grey" align="center">$gp_transgib</td>
 
 EOF;
+
+  $col = 2;
+  for ($i = 0; $i < $numspec; $i++) {
+    if ($col == 0)
+      echo "  <tr>\n";
+
+    echo <<<EOF
+    <td class="dark" align="center" style="white-space:nowrap" title="{$special[$i]['desc']}">{$special[$i]['title']}</td>
+    <td class="grey" align="center">{$special[$i]['total']}</td>
+
+EOF;
+
+    $col++;
+    if ($col == 4) {
+      echo "  </tr>\n";
+      $col = 0;
+    }
+  }
+
+  if ($col > 0) {
+    while ($col < 4) {
+      echo "    <td class=\"dark\" align=\"center\">&nbsp;</td>\n    <td class=\"grey\" align=\"center\">&nbsp;</td>\n";
+      $col++;
+    }
+
+    echo "  </tr>\n";
+  }
+
+  echo "</table>\n";
 }
 
 //=============================================================================
