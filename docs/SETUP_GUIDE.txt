@@ -1,0 +1,213 @@
+UTStatsDB
+  Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+
+Easy Setup Guide for Windows systems (step-by-step)
+
+This guide is intended as a step-by-step procedure for setting up a complete web 
+server including SQL and PHP support on a Windows NT based system.  You may be 
+able to get it to work on Windows 98, but it is not recommended.  I make no 
+guarantees in following this document and probably cannot help you if you should 
+have any trouble.  There is no guarantee that this will work for you on your 
+particular setup and all is done at your own risk.  If you're running a server 
+you should have some basic knowledge of Windows systems and Internet security.
+
+===============================================================================
+===== STEP 1: Apache Web Server ===============================================
+===============================================================================
+If you don't currently have a web server installed I recommend installing
+Apache 2.2.  It's fast and stable.
+
+Download and install Apache web server: http://httpd.apache.org/download.cgi
+Download the Win32 Binary (MSI Installer).
+
+Double-click on the .msi file and follow the prompts for installation.  If you 
+don't have a domain name and will just be using IP addresses then it doesn't 
+really matter what you enter and can just put "domain.local" or something for 
+your network domain and server name. You should run under the default port 80 
+unless there's a reason you need to use a different port.  Select "Typical" for 
+the installation type - this will include the Apache documentation but not the 
+module libraries, used for compiling additional libraries.  The server should 
+start automatically.  Test your installation by going to the URL: 
+http://localhost
+A screen should come up with the "Powered By Apache" logo at the bottom.  The 
+server can be stopped or restarted from the Apache service tool in your taskbar 
+by the clock.  Stop the web server for now by left-clicking the taskbar icon, 
+selecting the "Apache2" server, then click "Stop".  Starting and stopping the 
+Apache web server can also be done from the icons added in the start menu.
+
+Edit the Apache configuration file by going to the Apache server folder in your 
+start menu, selecting "Configure Apache Server" and then "Edit the Apache 
+httpd.conf Configuration File".  Scroll down to the section with all the 
+"LoadModule" lines.
+
+After the last LoadModule line: #LoadModule ssl_module modules/mod_ssl.so
+add the following lines:
+
+LoadModule php5_module c:/php/php5apache2.dll
+AddType application/x-httpd-php .php
+
+Find the following line:
+DirectoryIndex index.html index.html.var
+  change to:
+DirectoryIndex index.html index.html.var index.php
+
+Save the file and exit.
+
+===============================================================================
+===== STEP 2: MySQL ===========================================================
+===============================================================================
+This section can be skipped if you wish to use the SQLite database system built 
+into PHP 5 and newer.  The MySQL database is a much more robust system but if 
+you just want this for a small local server and don't want to bother with MySQL 
+then SQLite is fine.
+
+MySQL: Download and install MySQL: http://www.mysql.com/downloads/index.html
+       The latest stable release as of this writing is 5.1:
+       http://dev.mysql.com/downloads/mysql/5.1.html
+
+Scroll down to the "Windows downloads" section and download the standard 
+installer (not the essentials or the zip without the installer).
+
+Unzip the archive to a temporary directory and run setup.  Follow the setup 
+prompts and select "Typical" for installation type.  Creating a MySQL.com 
+account is not required to run MySQL, this step can be skipped.  Once the 
+installation is complete, click next to continue to the MySQL server 
+configuration.
+
+ Select "Detailed Configuration", click Next.
+ Select "Server Machine", click Next.
+ Select "Non-Transactional Database Only", click Next.
+ The default "Decision Support (DSS)/LDAP" is fine, click Next.
+ Make sure "Enable TCP/IP Networking" is checked, default port 3306.  Click Next.
+ "Standard Character Set", click Next.
+ Check both "Install As Windows Service" and "Include Bin Directory in Windows PATH".
+ Leave the default service name as MySQL with "Launch the MySQL Server Automatically"
+ enabled.  Click Next.
+ Enter a password for your root account, repeat it, click Next.
+ Click Execute to save your settings.
+
+Run the MySQL client by clicking Start then Run and entering:
+mysql.exe -u root -p
+
+Enter the root password you specified earlier.
+
+Create the UTStatsDB database:
+
+mysql> CREATE DATABASE utstatsdb;
+
+Create the user (replace 'statspass' with a secure password):
+
+mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX,CREATE TEMPORARY TABLES
+    -> ON utstatsdb.*
+    -> TO utstats@localhost
+    -> IDENTIFIED BY 'statspass';
+
+Note: Old version of MySQL do not support the separate privilege for creating 
+      temporary tables in which case you can just leave out the
+      ",CREATE TEMPORARY TABLES" in the above statement.
+
+Exit the MySQL client:
+
+mysql> QUIT
+
+===============================================================================
+===== STEP 3: PHP =============================================================
+===============================================================================
+Download and install PHP: http://www.php.net/downloads.php
+You want the windows binary zip package, not the exe installer.
+
+Extract the files to "c:\php\".
+
+Rename c:\php\php.ini-recommended to php.ini.
+Edit php.ini and modify the following variables:
+
+memory_limit = 8M
+  change to:
+memory_limit = 64M
+
+error_reporting = E_ALL
+  change to:
+error_reporting = E_ALL & ~E_NOTICE
+
+extension_dir = "./"
+  change to:
+extension_dir = "c:\php\ext"
+
+MySQL: Disable the comments (remove the semi-colons) on the following lines:
+  extension=php_gd2.dll
+  extension=php_mysql.dll
+
+SQLite: Disable the comments (remove the semi-colons) on the following lines:
+  extension=php_gd2.dll
+  extension=php_pdo.dll
+  extension=php_sqlite.dll
+
+===============================================================================
+===== STEP 4: UTStatsDB =======================================================
+===============================================================================
+Start the Apache web browser by left-clicking your Apache monitor icon on the 
+toolbar, select Apache2, and click Start.
+
+Extract the latest UTStatsDB program to your web server's document directory.
+The default for Apache 2.0 would be "c:\Program Files\Apache Group\Apache2\htdocs".
+
+You should now have a directory such as:
+"c:\Program Files\Apache Group\Apache2\htdocs\utstatsdb-3.06".
+
+Rename "utstatsdb-3.06" (or whichever version you extracted) to "utstats".
+
+Edit the file "includes/statsdb.inc.php" in your utstats directory.
+Change the $SQLpw variable from "statspass" to whatever you set for the new user 
+you created in MySQL (not the MySQL root password).  Set $InitPass to something 
+more secure.
+
+SQLite: If you are using the SQLite database instead of MySQL, change $dbtype 
+        from "MySQL" to "SQLite" and set $SQLdb to the name of the database file 
+        you wish to create.  The path must be writable by the web server, but 
+        can be outside your web path.
+
+Save and close the file.
+
+Open a web brower and enter the following URL:
+http://localhost/utstats/admin.php
+
+Enter the init password you specified in statsdb.inc.php.
+If all went well your tables will be created without errors.
+Select Main Config on the left menu bar - use the password "admin" to login.
+Change your admin and update passwords to something more secure, click Save.
+
+Under Logs Config set the path of your log files such as "\UT2004\UserLogs\".
+To parse your logs you can either use the parse button in the admin menu or 
+enter the following URL in your web browser:
+
+http://localhost/utstats/logs.php?pass=updatepass
+
+Replace "updatepass" with the update password you configured in the main 
+configuration (default "pass").
+
+You should now be able to access the stats via: http://localhost/utstats/
+
+===============================================================================
+===== Additional Notes ========================================================
+===============================================================================
+There are many configuration options available which I will not cover in this 
+document.  This is just to help you get a web server up and running with MySQL 
+and PHP in order to use UTStatsDB.  You can easily change configuration options 
+such as the root documents directory for your web pages or the log directory for 
+your UT logs.  I've also not specifically covered security, but following these 
+steps will give you a fairly secure web server.  However, you should still run 
+some sort of firewall.  The only port you will need to have open or directed to 
+your system is port 80 for the web server.
+
+Also note that the user the web server runs under must have write access to your 
+UserLogs directory.  For Linux users this means either setting the UserLogs 
+directory as world writable, or (preferred) set the group to the same as your 
+web server and give the group write access.
+
+Map images can be installed with UTStatsDB for display on various pages.  To use 
+the map pack included on the UTStatsDB download site, simply extract the file to 
+your UTStatsDB direcotry.  See the notes in README.txt for more details.
+
+As a last note, I recommend the use of a PHP caching program such as Zend 
+Platform or eAccelerator. Caching allows your PHP scripts to be cached in memory 
+in compiled form so they don't have to be recompiled every time they are called.

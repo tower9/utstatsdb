@@ -1,0 +1,501 @@
+UTStatsDB
+  Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+
+Release Notes:
+
+Unreleased
+  Fixed not being able to select to display bots or all players in player list.
+  Added Microsoft SQL support.
+  Added server activity by weekday.
+  Added .wgmainbox, .wgsubbox, .wgbarspace, .wgbar, .wgprespace, and .wglabel to style sheets.
+  Adjusted style information for server activity by hour.
+  Added language strings "LANG_ACTIVITYBYWEEKDAY" and "LANG_WEEKDAYS".
+  Fixed server activity for SQLite.
+  Allow use of utlogo(layout).png file for top left logo.  Fallback to utlogo.png if image doesn't exist.
+  Fixed various issues in server query.
+  Rewrote documentation.
+  Added compatibility with non-standard game speeds.
+
+Version 3.06
+  Added Tactical Ops support.
+  Short server name switch now checked for use in all locations where the server name is displayed.
+  Fixed language file not being used in some locations (chat log, match stats).
+  Added match end reason in chat log.
+  Fixed support for log files with or without port in file name.
+  Fixed multi-page display in rankings.
+  Numerous fixes and changes to server query.
+  Updated some server query templates.
+  Added .gsedark and .status to style sheets.
+  Color codes are now stripped from server and player names.
+  Data is now reset properly when match is reset or when practice round ends.
+  Fixed bad ping data causing anomalous average ping display.
+  Fixed issues with saving event data.
+  Removed case sensitivity in UT '99 logs.
+  Added team change checking for UT '99 (!).
+  Fixed search functions when input contains special characters.
+
+Version 3.05
+  Added consolidation and sorting to item totals.
+  Fixes for SQLite updates.
+  Rewrote UT3 server query - vastly improved.
+  Moved AutoParse to main config in database.
+  Added netspeed and packetloss support in match stats.
+
+Version 3.04
+  Various updates for support of Unreal Tournament 3.
+  Fixed problem with properly determining player relogs.
+  Cleaned up some team display issues in server query.
+
+Version 3.03
+  Created German language files.
+  Adjusted time offset for UT '99.
+  Added time offset value for games operating at different real-time speed.
+  Added language switch - can be changed from admin main config menu.
+  Various SQLite fixes.
+  Converted text to use language files, created English language files.
+  Fixed team chat issue where player connection data is not yet received.
+  Added option to bypass logs that lack a matching chat log (for UT '99 chat logs close after the main log).
+  Added server activity graph to main page.
+  Added query support for UT3 servers.
+  Cleaned up HTML and CSS code.
+  Updated to XHTML 1.0 Transitional compliant.
+  Query configuration now saved when adding or moving query configs.
+  Fixed notice on top ranking by gametype.
+  Truncated very long mutator lists to prevent parse errors.
+  Added page selection to view full ranking list.
+  Added player ID search to top ranking list.
+  Updated help page, moved to language directory.
+  Added support for separate chat logs.
+  Added chat log support for UT '99.
+
+Version 3.02
+  Fixed admin connections to MySQL database socket.
+  Added default port 3306 to MySQL connections.
+  Added check for RedeemerDeath in UT '99 logs.
+  Fixed problem with incorrect pickup values.
+  Match dates now based on actual match start time instead of map load time.
+  Connection / Chat/Event log times now relative to match start time.
+  Fixed problem with configset table with newer versions of MySQL.
+
+Version 3.01
+  Added database update utility.
+  Adjusted time between kills to register multikills.
+  Added checking for special characters in weapon names when saving player specific data.
+  Fixed problem with safe mode checking.
+  Added workaround for UT '99 JailBreak logs.
+  Fixed display of error messages with SQLite.
+  Added check for long mutator string in UT '99 logs.
+  Fixed kill matchup checking in UT '99 parsing.
+  Changed handling of demo rec files via ftp.
+  Fixed some server query problems.
+  Corrected problem with Bombs Tossed not getting updated in player career summary (Adny).
+  Created configuration guide (docs/CONFIG_GUIDE.txt) with details and examples.
+  Added option to specify port or socket for MySQL.
+
+Version 3.00
+  Added the administration menu (admin.php).
+  Added dynamic game types - type data is now be saved per custom game types.
+  Added support for up to four teams (i.e. CTF4).
+  Most player match data (kills, deaths, etc.) is saved per team instead of just match totals.
+  Bots now show up under team categories in server query.
+  Fixed bug in career highs - weapon highs.
+  Added "win %" column to player listing (can be used as sort key).
+  Added server IDs to server listing.
+  Added server name column to match listing.
+  Added "track player" option to track players by CD key.
+  Added option to select specific default game type and team/non-team type by log configuration.
+  Added "clear data" option to clear all data but save configuration info.
+  Set table type of MyISAM for MySQL tables to override default.  Some systems have a default of the transactional InnoDB system which greatly reduces performance of UTStatsDB.
+  Improved ability to run with PHP magic quotes enabled.
+  Added map images to match stats, map stats, and query page.
+  Added check for incompletely parsed logs (parser exits on error).  Rerunning parser no longer deletes logs from bad parses.
+  Added event descriptions table.
+  Added Last Man Standing lives remaining graph.
+  Reworked score based ranking for time-based adjustments.
+  Added check to skip UTComp's warmup matches.
+  Added display of game type votes in connection log and chat log.
+  Revised team game rank calculations.
+  Fixed time calculation bug when player relogs before original connection times out.
+  Added templates for some display sections that have multiple layouts.
+  Cleaned up HTML code - all pages pass W3C validation.
+  Updated documentation.
+  Fixed bug with single match weapon highs not reflecting total of different weapon fire modes.
+  Added Draw endgame event for Deathball.
+  Added new vehicles from UT2004 Mega Pack.
+  Added additional (previously omitted) damage types for existing vehicles.
+  Added fix for modified weapon names for NewNet, UTComp, and TAM (UT2Vote and OLStats already added).
+  Fix problems with long Assault objective descriptions.
+  Added checking for special characters in player names.
+  Adjusted a number of database variables to support large servers.
+  Added additional custom weapons.
+  Added switch for top or side bar navigation.
+  Added modified version of OLSendLog.php for compatibility with UTStatsDB 3.0 and improved functionality.
+  Added ability to change display order of server queries.
+  Server query now sorts players by score.
+  Fixed some platform specific issues.
+  Increased mutator line length and added length limit checks.
+  Fixed suicide section not being listed properly for player specific match stats.
+  Remove "pickup" from end of unknown item pickup descriptions.
+  Added php timeout counter reset to log parse loop to prevent timeout during parse of large log files.
+  Includes below changes to 2.22.
+  Many other additional features added.
+
+Version 2.22 (not released)
+  Minor fixes to RPG player routines caused by changes to variables stored in the .ini file in UT2004 v3204.
+  Fixed bug in server query on systems using basic query set (i.e. no ServQuery or ServerExt installed).
+  Stripped color codes from names in server query.
+  Fixed missing variable in update-2.00.
+  Moved career high calculations to match save routines, removed calchighs.php.
+  Fixed problem with logs being parsed multiple times (caused by string length problems in saved map data).
+  Optimized old match removal - no longer removes match data one at a time (order based on match number).
+  Added player linking in serverquery when the pstatsid query is supported (OLStats 3.0+).
+  Fixed problems with ranking by time.
+  Fixed RPG stats not displaying on Windows systems.
+  Added support for UT99 stats (native ngStats format).
+
+Version 2.21
+  Corrected check for image functions in graphs.
+  Removed killing sprees, multi-kills, and weapon specials when killing Invasion monsters.
+  Fixed bug with rank gain when rank points would drop to negative from a positive number.
+  Players in-game for under 10 seconds no longer ranked.
+  Stripped UT color codes from display strings.
+  Increased time variable size in career high weapon data (fixes 46.6 hour cap).
+  Fixed problem with listing top 100 Last Man Standing rankings.
+  Match stats totals show both team and player score totals.
+  Fixed html codes showing in chatlog.
+  Added option to use time (SPH) in non-deathmatch ranking calculations.
+  Added SQL error message output to update-2.10.php.
+
+Version 2.20
+  Added bombing run event summary to player stats.
+  Corrected issue with $plistall variable having no effect.
+  RPG stats for bots are now listed.
+  Added support for multiple packets and packets out of order in server query.
+  Added tracking of (flag/bomb) hold times for CTF and Bombing Run.
+  Cleaned up some HTML code - all pages now validate to HTML 4.01 Transitional.
+  Correct minor server query display problems with IE.
+  Increased maximum log line length (for long SI lines).
+  Fixed and improved rank calculation routines - 255 player connect limit removed.
+  Added Double Domination events summary to match stats and player stats pages.
+  Modified chat log to show and highlight headshots.
+  Added option to add additional menu items to sidebar via UTStatsDB's config file.
+  Added variable prefix for database tables (set in statsdb.inc.php).
+  Fixed incorrect statistics in Bombing Run event summary.  Cleaned up parsing of BR data.
+  Fixed incorrect statistics in CTF event summary.  Cleaned up parsing of CTF data.
+  Cleaned up player career stats for CTF and Bombing Run events.
+  Added check for UT2Vote modified damage types to convert them to standard damage types.
+  Added vote events in connection/chat log.
+  Added alias tracking - tracks players by unique key.
+  Added update utility for updates from versions 2.10 and 2.11.
+  Team change suicides no longer count against player.
+  Added ELO-style ranking system - includes option to ignore bots in ranking.
+  Added ability to include full address in server query display in case of password or other info to pass.
+  Added Mutant event tracking for mutant and bottom feeder.
+  Added Double Domination event tracking for point captures - properly labled "points held" event.
+  Added Last Man Standing support for tracking number of lives and flagging players out in chat log.
+  LMS now ranks the last man standing as first, followed by order of score.
+  Added switch to skip check for in-session logs (noinsession) for systems that use temporary log files (i.e. UT2004).
+  Added switch to allow server tracking by server's short name (OLStats logs this value).
+  Changed SQLite queries to use transactions, drastically improving speed.
+  Fixed failure to update 'last match' in server merge utility.
+  Added info to match stats: GameSpeed, HealthForKills, AllowSuperWeapons, CamperAlarm, AllowPickups, AllowAdrenaline, FullAmmo
+  Added combo whores tracking and to match stats, match player, player stats, and totals.
+  Added additional missing info to totals page.
+  Fixed error in weapon checking in chat log.
+  Added headhunter, flak monkey, and combo whore to career highs.
+  Added road rampage (match stats, match player, player stats, totals, career highs).
+  Changed score totals to use integer only of scores instead of rounding (per in-game scoring).
+  Minor cosmetic changes to display in totals and career highs.
+  Added fix for bug in UT2004 where critical frags don't give enough points - corrects discrepancy with in-game scoring).
+
+Version 2.11
+  Corrected bug in player reconnections showing up as two different players.
+  Fixed player merge utility.
+  Fixed error in career highs "highest FPH" value.
+  Reworked server query display - added additional information and improved output.
+  Fixed MySQL errors after calculating career highs when parsing logs on some systems.
+  Fixed MySQL locking for compatibility with MySQL versions 3.23+.
+  Correct problem with updating ut_pwkills table in update-2.00.php on systems running MySQL 3.x.
+  Fixed player IPs not being saved in the database.
+  Added option to include bots in totals, match, and career highs.
+  Added combos to matchstats and matchplayer stats pages (have always been logged but not displayed).
+  Added Vehicle CTF energy turrets to weapons table.
+  Fixed errors in listing both players and bots on player list views.
+  Modified savesingle variable usage to allow ignoring matches with less than two human players.
+  Added search by map name to map list.
+  Corrected issues with player listings when searching by name.
+  Added player name check to UTRPG match (match by ID and player name).
+  Correct issue with player at bottom of UT2004RPG.ini list failing match.
+  Added 'usesrc' and 'nohtml' switches to plrmerge utility.
+  Added missing bombing run event summary to match stats.
+
+Version 2.10
+  Fixed problems with multiple ftp server configurations.
+  Corrected and added various vehicle entries in the weapons table.
+  Modified the way Invasion matches are parsed and displayed.
+  Invasion Monsters stats (players killed and deaths) now displayed.
+  Corrected a problem with resorting players when searching by name.
+  Added command-line player merge utility to be included in admin system.
+  Cleaned up some SQL queries, reducing memory usage and improving speed.
+  Corrected issue with some match info not showing up on all game types.
+  Fixed problem with gkills table using too small of variables for weapons.
+  Fixed log parse problems with Last Man Standing games.
+  Fixed incomplete player 0 stats.
+  Added support for many added statistics supported by OLStats.
+  Roadkills added to Totals.
+  Most Roadkills added to Career Highs.
+  Most Roadkills added to Match Highs.
+  Added support for carjacking special event.
+  Carjackings added to Totals.
+  Most Carjackings added to Career Highs.
+  Most Carjackings added to Match Highs.
+  All Vehicle and Turret Specific Information now includes Road Kill column.
+  Totals page now reports 'Deaths In' for vehicles.
+  Added Weapon/Vehicle Specific Information to map stats page.
+  Added switch to disable server list on sidebar.
+  Onslaught winning team displayed more prominently.
+  Added support for player accuracy stats (shots fired, hits, damage).
+  Created update-2.00.php update utility for upgrading from version 2.00.
+  Added storing of player IP addresses, netspeed, and average ping times.
+  Added command-line server merge utility (part of future admin system).
+  Invasion matches no longer count towards player's kills/deaths totals.
+  Rewrote file routines in log parsing to decrease memory usage.
+  Added support for demorec files - adds link to the matchstats page if demorec exists.
+  Added support for bot info provided by OLStats 2.1 - shows individual bot stats and skill.
+  Changed internal time storage to centiseconds.
+  Added option to use the UT query instead of GameSpy query protocol.
+  Added check for PHP safe mode before attempting to set script time limit.
+  Changed method of tracking killing sprees to correct problems with some sprees not being counted.
+  Cleaned up output for command-line use of logs and createtables.
+  Moved all SQL commands to functions for future support multiple database types.
+  Added SQLite database support (built into PHP 5).
+  Used unbuffered queries for most operations to improve performance.
+  Added script timeout resets to update script for systems with large databases.
+  *Note: Many of the above added features only work with 3rd party stat logging mods such as OLStats.
+
+Version 2.00
+  Added tracking for multiple servers.
+  Added tracking by map.
+  Added support for UT2004 Assault and Onslaught game types.
+  Added player search.
+  Links to maps and servers where applicable.
+  Separate password for log parser and administrative programs.
+  Added tracking of headhunter and flak monkey events.
+  Added ability to list all matches for player, server, or map.
+  Rewrote player connect routine - fixed player relog problems.
+  Added addition error checking.
+  Cleaned up various code.
+  Added new logos.
+  Added multiple log directory and ftp servers support.
+  Added ability to specify filename prefix.
+  Added switch to save logs that ended on a mapswitch or serverquit.
+  Separated vehicles and turrets from weapons.
+  Optimized SQL queries.
+  Separated player events in team games.
+  Many additional changes and additions.
+
+Version 1.14
+  Fixed server query issues.
+  Replaced PNG images with GIF images due to limited IE compatibility.
+  Added checking for special HTML characters in names.
+  Corrected headshots not being recognized for some weapons.
+  Fixed graphing problems under some circumstances.
+  Miscellaneous minor fixes.
+
+Version 1.13
+  Fixed problem with totals table index.
+  *Systems previously running version 1.12 should run fixtotals.php, available separately.
+
+Version 1.12
+  Various minor bug fixes and table optimizations.
+
+Version 1.11
+  Modified log parser to handle version 2225 logs (backwards compatible with older logs).
+  Added ability to download logs directly from ftp server (including ftps).
+
+Version 1.1
+  *Table update required (run updatetables.php?pass=<adminpass>).
+  Modified layout in game stats page for team games.
+  Added SPH (Score Per Hour) to player list page.
+  Included scores in player score totals for deathmatch games.
+  Added additional color/font schemes, selectable from config file.
+  Color codes used for dark color scheme thanks to dark_wizard.
+  Declared additional variables to avoid notices in logparse.
+  Added separate deathmatch score in player table.
+  Added 104 table update.
+  Corrected score increment problem introduced in v1.03.
+  Fixed problems with graphs corrupting.
+  Uses map filename if untitled map.
+  Updated and combined updatetables (removed individual versions).
+  Added additional game types to tables.
+  Various modifications to graphs and gamestats for new game types.
+  Added function to discard logs with less than two players.
+  Adjusted display of team scores in gamestats.
+  Enabled chat log link when 0 chat messages.
+  Removed blank line after PHP closing tag in include files.
+  Fixed critical error when map names contain special characters.
+  Added logging by player's stats name and password hash (see STATSNAME.txt).
+  Added support for Last Man Standing.
+  Added individual player stats information for new game types.
+  Fixed problem with single player games not being saved even when set to do so.
+  Corrected problem with long server names allowing duplicate log parsing.
+  Score logs now removed when games are purged.
+  Corrected various issues with special characters in totals.
+  Changed graph display for score and/or frags based on game type.
+  Player's most recent games played now sorted by date instead of game number.
+  Added script time counter reset to log parsing.
+  Added killing spree list for all players to gamestats.
+  Set killing spree lists to sort by time.
+
+Version 1.03
+  Weapon specific info no longer displays anything with suicides only (displayed in Suicide table).
+  Removed excess gap in main page.
+  Individual game player screen no longer shows blank info if invalid player number.
+  Fixed bug in game player not showing all opponents in player specific kills and deaths.
+  Fixed divide by zero error when teamgame ends with no players on one team.
+  Renamed utstatsdb.inc.php to statsdb.inc.php.
+  Corrected misnamed variable flagreturndata in game highs.
+  Fixed minor variable declaration problems in log parsing routines.
+  Moved color settings from server query display to the stylesheet (style.css).
+  Fixed mutators not showing up in server query display.
+  Added "Wicked Sick" (30+) killing sprees (*table update required*).
+  Fixed killing spree/multi-kill calculation problem when player is team killed.
+  Added table conversion utility.
+  Added tag for team chat in LocalStats 1.03.
+  Inserted missing "Mega Kills", added to 103 table update.
+  Added frag graphs to team games.
+  Added sort options in player list.
+  Modified individual game stats to display current player name.
+  Added player numbers to player listing.
+
+Version 1.02
+  Include negative score grids in game graphs.
+  Corrected bug in player weapon specific information not displaying correct secondary totals.
+  Cleaned up variables - no more notices are generated.
+  Corrected problems with command line log parsing on some system configurations.
+  Improved grammar in the killing spree list in individual player game stats.
+  Fixed inability to change pages in multi-page player list on some systems.
+  Added server status to main page.
+  Added support for status of multiple servers.
+  Server status support for servers with and without ServQuery 1.07.
+  Fixed bug in player time calculation for relogged players.
+  Corrected bug in sort routine for log parsing by date.
+  Fixed bug in weapon specific stats not showing when only secondary kills exist.
+
+Version 1.01
+  Limited graph to 8 lines max.
+  Improved grammar in the chat log.
+  Added some modified weapons and additional suicides to weapons.sql file.
+  Fixed non-weapon suicides not showing in totals.
+  Removed event suicides from weapon specific totals in totals.php and playerstats.php.
+  Added file exist check to createtables.php.
+  Added check for trailing slash in logpath variable.
+  Fixed item pickup count when parsing multiple log files.
+  Stripped out any lurking line feeds from all source files.
+
+Version 1.00
+  Finished game chat log.
+  Added "Most Recent Games Played" to individual player stats.
+  Added "SniperRifle" to default weapons list as "Lightning Gun".
+  Added combo special event tags for new LocalLogs.
+  Modified chat log messages for suicides and event deaths.
+  Fixed potential problem with special chars in player name.
+  Corrected rank numbers in multi-page main player list.
+  Old chat logs now removed when game logs are deleted.
+  Added team score events to chat log.
+  Fixed slashes in player, server, admin, and email names containing special characters.
+  Fixed incorrect game highs with players that have relogged.
+  Added chat log color key.
+  Changed admin logins in chat log to system message color.
+
+Version 0.99b1
+  Added game start/end to event logs.
+  Added connection log to game stats and game individual player stats.
+  Added 'nohtml' switch to logs and createtables.
+  Fixed player with firstblood shows "No" in individual player stats.
+  Fixed command line createtables.php not working.
+  Fixed game graph incorrect when negative frags reached.
+  Fixed Career Summary in playerstats shows incorrect total for losses.
+  When calculating career highs - clear fph total before finding current high.
+  Allow variable width table for Game Stats list (index).
+  Names clickable in Flag Event Summary in gamestats.
+  Items collected information incorrect in both individual player game stats and totals.
+  Sort order of items collected by quantity and description.
+  Disable weapon "None" from displaying in all sections.
+  Fixed suicide weapons listed separately for primary/secondary in game stats players.
+  Fixed player career suicides show only weapon suicides, not environmental suicides.
+  Fixed no primary/secondary fire in weapon specifics for player careers.
+  Fixed no "ZoomSuperShockRifle" in default weapons list.
+  Fixed "None" weapon in Weapon Specific Totals in totals.
+  Fixed "None" weapon in Most Career Deaths While Holding a Weapon in career and game highs.
+  Fixed "None" weapon in Weapon Specific Information in game stats.
+  Fixed rename "Trans Gib" in player totals to "Failed Translocations".
+  Fixed add totals line in Summary information for totals.
+  Changed "Game End" to "Game Ended" in game stats and game player Connection Log.
+  Remove "a" from Reason Spree Stopped (with a weapon).
+  Fixed game stats connection log shows bots in human colors.
+  Fixed names not clickable in gamestats Connection Log.
+  Changed "CTF and Domination Events Summary" - includes bombing run data (totals and players).
+  Fixed CTF flag event totals incorrect in game stats.
+  Fixed player hours for the Totals Logged and Total Games played by type are inconsistent with each other.
+  Fixed changed database game player types to signed smallint due to -1 player kills (event kills).
+  Fixed group teams in kills match up for team games (game stats).
+  Fixed team game and flag event summaries in game stats should rank by score.
+  Fixed player hours not matching up in various totals.  Game Highs/Career Highs based on humans only.
+  Fixed event suicides not showing as a suicide.
+  Fixed some weapons show up in multiple rows of weapon specific tables in gamestats and player stats.
+  Log team changes by players in the connection log.
+  Fixed "Unknown Weapon" suicides in player career weapon specific totals from team switch death.
+  Fixed error in playerstats when no pickups logged.
+  In flag summary and game summary in game stats, list players on any teams scored for.
+  Added asterisk before name to players in flag summary who ended game on opposing team.
+  No longer imports an existing log based on Server, Map, Type, Date.
+  Added logs.php now keeps most recent two incomplete log files per server name.
+  Added chat log to database (not yet in viewer).
+  Fixed inaccurate/incomplete CTF information in game stats and totals.
+
+Version 0.99b
+  Allow setting of maximum game logs to keep in database.
+  Display players by page.
+  Display games by page.
+  Corrected bug with suicides for player 0.
+  Added individual game player stats - selected from player lists in game stats.
+  Added relog tracking for players who reconnect with same name after disconnect.
+  Added special events section to game stats.
+  Added events to log parsing/database.
+  Primary and secondary function kills in game stats.
+
+Version 0.97b
+  Optimized parser and viewer routines.
+  Item pickups added.
+  Game highs weapon info now shows correct player.
+  Weapon specific information combined for different weapon modes.
+  Totals show weapon specific primary and secondary function kills.
+  Individual player links for career and game highs.
+  Bots excluded from all high scores.
+  Added "Multi" switch to log parser.
+  Added command line capability to log parser.
+  Corrected error in items.sql file.
+  Case insensitive log parsing.
+  Other bug fixes.
+
+Version 0.95b
+  Partial and incomplete log problems fixed.
+  More complete totals page.
+  Weapon stat info corrected.
+  Corrected various FPH calculations.
+  Rankings now accurate and player data matches correct players.
+  Killing spree kills and time tracking.
+  Multi-kill tracking for older LocalLog and MutLocalLog.
+  Logs that skip player numbers now handled correctly.
+  Fix for no server info with blank admin or email names.
+  Restructured file naming format.
+  Potential security issue fix in log parsing/saving.
+  Additional parameters added to log parser.
+  Many other bug fixes.
+
+Version 0.91b
+  Fixed problems parsing LocalLog and MutLogLog log files.
+
+Version 0.90b
+  Initial beta release.

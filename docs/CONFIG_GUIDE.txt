@@ -1,0 +1,131 @@
+UTStatsDB
+  Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+
+===============================================================================
+========== Main Configuration =================================================
+===============================================================================
+         Admin Pass: Password used to access the admin menu.
+        Update Pass: Password used for parsing log files.
+          Title Bar: Title displayed on browser window
+           Language: Language (currently included: EN, DE).
+     PHP Time Limit: Time limit for PHP to time out while processing logs.
+       Max. Matches: Maximum matches to keep (0 = keep all).
+          Lock Name: Set to unique name if running multiple stats systems on one server. Blank to disable.
+          UTRPG Ini: UTRPG .ini file location. Only one per stats server.
+       Demorec Path: Path to locate or store demorecs into.
+  Demorec Extension: Extension of demorec files.
+   Players Per Page: Number of players to list per page.
+   Servers Per Page: Number of servers to list per page.
+      Maps Per Page: Number of maps to list per page.
+   Matches Per Page: Number of matches to list per page.
+     Navigation Bar: Use standard side or top navigation bar.
+             Layout: Layout to use: 1=Default ngStats, 2=Smaller fonts, 3=Dark colors/small fonts, 4=Small/Dark/No bold
+        Date Format: Date format to display: US-12hr / US-24hr / European
+    Min. CH Matches: Minimum matches for player to appear on career highs.
+       Min. CH Time: Minimum time in minutes for player to appear on career highs.
+  Min. Rank Matches: Minimum matches for player to be ranked.
+     Min. Rank Time: Minimum time in minutes for player to be ranked.
+     Use Short Name: Use server short name instead of full name.
+        Rank System: Enable ranking system.
+          Rank Bots: Include bots in ranking system.
+    Minimum Players: Minimum players for match to be logged.
+   Allow Incomplete: Allow incomplete matches.
+  Discard Scoreless: Discard matches without positive scores.
+    Skip In-Session: Enable if matches in session do not use temporary extensions.
+    Ignore Log Type: Enable to remove 'Log' from beginning of game types.
+     Use Stats Name: Enable to track users by global stats name and password instead of player name.
+      Player Search: Enable player search function in player list.
+         Map Search: Enable map search function in map list.
+          Show Bots: Enable to display bots in player list.
+    Player List All: Enable to include bots in player list by default.
+ Full Vehicle Stats: Enable if using OLStats to display full vehicle/turret stats.
+     Allow Switches: Enable to allow debug switches log parser.
+        Server List: Server list option shown on main menu.
+    Invasion Totals: Enable to include Invasion match info in totals and player totals.
+          Bot Highs: Enable to include bots in totals, match highs, and career highs.
+       Critical Fix: Fix for UT2004 bug with critical frags not granting enough points.
+   UT99 Weap Prefix: Add prefix to UT99 weapons to separate from non-UT99 weapons.
+         Auto-parse: Set to true to have OLSendLog automatically parse after receiving a new log.
+      Title Message: Text to display on main page.
+
+===============================================================================
+========== Logs Configuration =================================================
+===============================================================================
+     Log Path: Path to where log files are stored on the stats server (i.e. the 
+               local storage path).  When using FTP to download logs, this is 
+               also where the logs are saved.  This can be a relative or 
+               absolute path.  Examples:
+                 ./Logs/                 Logs are located in the Logs directory 
+                                         within your main UTStatsDB directory.
+                 /UT2004/UserLogs/       Logs are located in /UT2004/Logs on the 
+                                         same drive as UTStatsDB.
+                 C:\\UT2004\\UserLogs\\  Logs are located in C:\UT2004\UserLogs 
+                                         on a Windows system.
+
+  Backup Path: Path to where log files are backed up after successfully parsing. 
+               Leave blank to not backup.  This can be a relative or absolute 
+               path.  Example:
+                 ./Backup/  Logs are backed up to the Backup directory within 
+                            your main UTStatsDB directory.
+
+   Log Prefix: Prefix of log files, before the timestamp or port number.  The 
+               defaults by game type are:
+                    UT3: Stats-
+                 UT2003: Stats_
+                 UT2004: Stats_
+                   UT99: Unreal.ngLog.
+
+      No Port: True/False - Set true if the log filenames do not contain the 
+               server port number.  This should usually be set false.
+
+  Chat Prefix: Prefix of chat log files, excluding timestamp or port number.
+
+ Require Chat: Set to true if only logs with matching chat logs should be 
+               processed.  This ensures that game logs are not processed before 
+               the corresponding chat logs are closed.
+
+   FTP Server: FTP server address, including ftp:// or ftps// and port number 
+               (:21 default).
+
+ Passive Mode: True/False - Set true to use FTP passive mode, false for active 
+               mode.  Generally safe to leave set to true.
+
+     FTP User: FTP server username.
+
+ FTP Password: FTP server password.
+
+     FTP Path: Path to logs on FTP server - relative to path at login.
+
+ Demorec Path: Path to demorec logs on FTP server - relative to path at login.
+
+ Default Type: This sets the default type to use for unknown game types.  Set to 
+               whichever the server most frequently runs.  Recognized game types 
+               are: 0=Other, 1=DM, 2=CTF, 3=BR, 4=TDM, 5=AS, 6=ONS, 7=DD, 8=MU, 
+               9=INV, 10=LMS
+
+    Team Game: True/False - Set true to have new game types default as team games.
+
+     All Logs: True/False - Set false to leave the most recent log on the 
+               server.  Mainly used for certain UT2003 loggeers which did not 
+               generate a .tmp file before creating the final log file.
+
+  Multi-check: True/False - Set true for UTStatsDB to handle calculating multi-
+               kills.  Some loggers do not log multi-kills.
+
+===============================================================================
+========== Query Configuration ================================================
+===============================================================================
+ Query Server: Server address (FQDN or IP) to query (excluding port).
+     Password: Query password for playerhashes query (ServerExt).
+    Game Port: Port number of server (game port).
+   Query Type: Unreal/Game Spy/UT 99 /UT3 - Type of game server to query.
+  Server Link: Full URL to game server (excluding port).
+   Spectators: Enable/Disable - Include spectators in server query status.
+         Bots: Enable/Disable - Include bots in server query status.
+
+===============================================================================
+========== Menu Configuration =================================================
+===============================================================================
+This feature allows you to easily add menu items to the side bar.
+         URL: URL for link
+ Description: Link text

@@ -1,0 +1,119 @@
+body {background: #000000; color: #ffffff}
+.box {border: 1px #666666 solid}
+.titlemsg {color: #ffffff; font-weight: bold}
+.heading {font-family: Arial, Helvetica, Sans-serif; font-size: 12pt; color: #ffffcc; background: #303441; font-weight: bold}
+.medheading {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #ffffff; background: #303441; font-weight: bold}
+.hlheading {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #fdd932; background: #303441; font-weight: bold}
+.hlheadingred {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #d80000; background: #303441; font-weight: bold}
+.hlheadingblue {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #2222e8; background: #303441; font-weight: bold}
+.smheading {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #ffffff; background: #303441; font-weight: bold; text-decoration: none}
+a.smheading:hover {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #af0000; background: #303441; font-weight: bold; text-decoration: none}
+.tinytext {font-family: Arial,Helvetica,Verdana; font-size: 8pt; font-weight: normal}
+
+.dark {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #d2d2d2; background: #000000; font-weight: normal}
+a.dark {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #cecece; background: #000000; font-weight: normal}
+a.dark:hover {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #a80000; background: #000000; font-weight: normal}
+.darkn {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #d2d2d2; background: #000000; font-weight: normal; white-space:nowrap}
+
+.grey {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #cecece; background: #333333; font-weight: normal}
+a.grey {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #c4c4c4; background: #333333; font-weight: normal}
+a.grey:hover {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #b00000; background: #333333; font-weight: normal}
+.greyn {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #cecece; background: #333333; font-weight: normal; white-space:nowrap}
+
+.darkgrey {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #000000; background: #808080; font-weight: normal}
+.warn {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #880000; background: #aeaeae; font-weight: normal}
+.gselog {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #0f5465; background: #aeaeae; font-weight: normal}
+.tclog {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #4d2821; background: #aeaeae; font-weight: normal}
+.opnote {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #af3020; font-weight: normal}
+.gsedark {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #147588; background: #000000; font-weight: normal}
+
+.chatlink {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #ffffff; background: #303441; font-weight: bold}
+a.chatlink {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #ffff00; background: #303441; font-weight: bold}
+a.chatlink:hover {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #ff0000; background: #303441; font-weight: bold}
+
+.chat {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #000000; background: #cccccc; font-weight: normal}
+.chatred {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #800000; background: #cccccc; font-weight: normal}
+.chatblue {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #000080; background: #cccccc; font-weight: normal}
+.chatgreen {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #008000; background: #cccccc; font-weight: normal}
+.chatgold {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #808000; background: #cccccc; font-weight: normal}
+.chatsys {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #408040; background: #cccccc; font-weight: normal}
+.chatkill {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #a4a21c; background: #cccccc; font-weight: normal}
+.votesys {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #006e6d; background: #cccccc; font-weight: normal}
+.chatweapspec {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #74229a; background: #cccccc; font-weight: normal}
+
+.darkhuman {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #fdd932; background: #000000; font-weight: normal; text-decoration: none}
+a.darkhuman {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #fdd932; background: #000000; font-weight: normal; text-decoration: none}
+a.darkhuman:hover {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #ff0000; background: #000000; font-weight: normal; text-decoration: none}
+.greyhuman {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #fdd932; background: #333333; font-weight: normal; text-decoration: none}
+a.greyhuman {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #fdd932; background: #333333; font-weight: normal; text-decoration: none}
+a.greyhuman:hover {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #ff0000; background: #333333; font-weight: normal; text-decoration: none}
+
+.darkbot {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #0575dd; background: #000000; font-weight: normal; text-decoration: none}
+a.darkbot {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #0575dd; background: #000000; font-weight: normal; text-decoration: none}
+a.darkbot:hover {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #ff0000; background: #000000; font-weight: normal; text-decoration: none}
+.greybot {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #0575dd; background: #333333; font-weight: normal; text-decoration: none}
+a.greybot {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #0575dd; background: #333333; font-weight: normal; text-decoration: none}
+a.greybot:hover {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #ff0000; background: #333333; font-weight: normal; text-decoration: none}
+
+.sidebar {font-family: Arial, Helvetica, sans-serif; font-size: 12pt; color: #000000; font-weight: bold}
+a.sidebar {font-family: Arial, Helvetica, sans-serif; font-size: 12pt; color: #000000; background: #909090; font-weight: bold; text-decoration: none}
+a.sidebar:hover {font-family: Arial, Helvetica, sans-serif; font-size: 12pt; color: #ff0000; background: #909090; font-weight: bold; text-decoration: none}
+
+.topbar {font-family: Arial, Helvetica, sans-serif; font-size: 12pt; color: #ffffff; font-weight: bold}
+a.topbar {font-family: Arial, Helvetica, sans-serif; font-size: 12pt; color: #ffffff; font-weight: bold; text-decoration: none}
+a.topbar:hover {font-family: Arial, Helvetica, sans-serif; font-size: 12pt; color: #c00000; font-weight: bold; text-decoration: none}
+
+.pages {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #bdbd8c; font-weight: bold}
+a.pages {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #eeeebb; font-weight: bold; text-decoration: none}
+a.pages:hover {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #ffcc33; font-weight: bold; text-decoration: none}
+
+.searchform {font-family: Verdana,Helvetica; font-size: 8pt; font-weight: bold}
+.searchformbox {font-family: Verdana,Helvetica; font-size: 8pt; font-weight: normal}
+
+.blueteam {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #000000; background: #0000ee; font-weight: bold}
+.redteam {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #000000; background: #ee0000; font-weight: bold}
+.greenteam {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #000000; background: #00ee00; font-weight: bold}
+.goldteam {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #000000; background: #eeee00; font-weight: bold}
+
+.blueteamscore {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #505080; background: #cccccc; font-weight: normal}
+.redteamscore {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #805050; background: #cccccc; font-weight: normal}
+.greenteamscore {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #508050; background: #cccccc; font-weight: bold}
+.goldteamscore {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #808050; background: #cccccc; font-weight: bold}
+
+.lglheading {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #dedeb8; background: #303441; font-weight: bold}
+a.lglheading {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #ffffff; background: #303441; font-weight: bold}
+a.lglheading:hover {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #cc0000; background: #303441; font-weight: bold}
+
+.status {font-family: Verdana,Helvetica; font-size: 9pt; border: 1px #666666 solid; text-align: left}
+a.status {font-family: Verdana,Helvetica; font-size: 9pt; color: #edca2e; text-decoration: none; border: none}
+a.status:hover {font-family: Verdana,Helvetica; font-size: 9pt; color: #bd0000; text-decoration: none; border: none}
+.statusnb {font-family: Verdana,Helvetica; font-size: 9pt; padding-left: 4px}
+.statusnbw {font-family: Verdana,Helvetica; font-size: 9pt; white-space: nowrap; padding-left: 4px}
+.statustitle {font-family: Verdana,Helvetica; font-size: 9pt; color: #ffffcc; background: #303441}
+.spectitle {font-family: Verdana,Helvetica; font-size: 9pt; color: #ffffcc; background: #303441}
+.blueteambar {font-family: Verdana,Helvetica; font-size: 9pt; color: #efefbc; background: #000042}
+.redteambar {font-family: Verdana,Helvetica; font-size: 9pt; color: #efefbc; background: #420000}
+.offline {color: #a50000}
+.mapimage {padding-left: 4px; padding-right: 2px}
+
+#matchup { width: 720px; overflow: auto }
+
+.tgheading  {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #ffffff; background: #d5d5d5; font-weight: bold}
+.tglheading {font-family: Verdana, Arial, Helvetica; font-size: 10pt; color: #000000; background: #d5d5d5; font-weight: bold}
+.tgmainbox  {overflow: hidden; text-align: left; width: 390px; height: 150px}
+.tgsubbox   {font-size: 0pt; width: 390px; height: 130px; background-color: #d5d5d5; border-bottom: 1px solid #666666; float: right}
+.tgbarspace {width: 5px; float: left}
+.tgbar      {font-size: 0pt; width: 9px; background-color: #1ca41c; border: 1px solid #000000; border-bottom-width: 0; float: left; position: relative}
+.tglabel    {font-size: 8pt; font-family: arial,sans-serif; color: #000000; font-weight: normal; font-style: normal; text-decoration: none; width: 9px; text-align: center; float: left; overflow: visible; position: relative; border: 1px solid transparent}
+.tgblank    {font-size: 0pt; height: 0px; clear: both}
+.wgmainbox  {overflow: hidden; text-align: left; width: 180px; height: 150px}
+.wgsubbox   {font-size: 0pt; width: 180px; height: 130px; background-color: #d5d5d5; border-bottom: 1px solid #666666; float: right}
+.wgbarspace {width: 13px; float: left}
+.wgbar      {font-size: 0pt; width: 9px; background-color: #1b289b; border: 1px solid #000000; border-bottom-width: 0; float: left; position: relative}
+.wgprespace {width: 10px; float: left}
+.wglabel    {font-size: 8pt; font-family: arial,sans-serif; color: #000000; font-weight: normal; font-style: normal; text-decoration: none; width: 9px; text-align: center; float: left; overflow: visible; position: relative; border: 1px solid transparent}
+
+.help    {font-family: Arial, Helvetica, Sans-serif; color: #ffffff; font-size: 10pt; text-align: left}
+.helphdr {font-family: Verdana, Helvetica; font-size: 14pt; font-weight: bold}
+a.help   {color: #fdd932; text-decoration: none}
+a.idmatch {font-family: Verdana, Arial, Helvetica; font-size: 8pt; color: #ff0000; background: #000000; font-weight: normal; text-decoration: none}
