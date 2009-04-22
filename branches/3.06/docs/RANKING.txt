@@ -1,0 +1,29 @@
+The ranking system in UTStatsDB is loosely based on the ELO ranking system used 
+in chess.  Each player starts with 0 rank points and gains points primarily by 
+having a higher score than opposing team members or having more kills than other 
+players (Deathmatch and Team Deathmatch).  Each score or frag is weighted 
+against other players based on their rank points.  This means that if two 
+players have 100 rank points for example, and they each kill each other 10 times 
+(without any other modifiers, as explained later), neither will gain or receive 
+points.  On the other hand, if one player has 100 rank points and the other 50 
+rank points, then kill each other 10 times, the person will 100 rank points will 
+lose some of those points while the person with 50 will gain the points the 
+other player lost.
+
+Killing sprees and multi-kills give bonuses when matching up two players to 
+determine points.  The bonuses are counted as if the person had an extra score 
+point or kill for each level of killing spree or multi-kill.  An "Unstoppable" 
+killing spree or an "Ultra Kill" would each count as 4 extra points or kills for 
+the player.
+
+Suicides on the other hand will count against the player.  Suicides are 
+calculated in by dividing up the total number of suicides a player has by their 
+total number of kills or deaths then multiplying that figure by the number of 
+kills and deaths inflicted or suffered against another player.  This figure, 
+rounded up, is then subtracted from the points being calculated in.  The time a 
+player spends in the match compared to the other players also affects rank 
+calculation.
+
+The ranking system for team games (including Team Deathmatch and excluding 
+Invasion) only matches players against players on the other team.  Team Kills 
+are treated as suicides.

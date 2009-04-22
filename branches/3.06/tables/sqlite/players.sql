@@ -1,0 +1,87 @@
+CREATE TABLE %dbpre%players (
+  pnum INTEGER PRIMARY KEY,
+  plr_name varchar(61) NOT NULL default '',
+  plr_bot tinyint(3) NOT NULL default 0,
+  plr_frags mediumint(9) NOT NULL default 0,
+  plr_score int(10) NOT NULL default 0,
+  plr_kills mediumint(8) NOT NULL default 0,
+  plr_deaths mediumint(8) NOT NULL default 0,
+  plr_suicides mediumint(8) NOT NULL default 0,
+  plr_headshots mediumint(8) NOT NULL default 0,
+  plr_firstblood mediumint(8) NOT NULL default 0,
+  plr_transgib mediumint(8) NOT NULL default 0,
+  plr_headhunter mediumint(8) NOT NULL default 0,
+  plr_flakmonkey mediumint(8) NOT NULL default 0,
+  plr_combowhore mediumint(8) NOT NULL default 0,
+  plr_roadrampage mediumint(8) NOT NULL default 0,
+  plr_carjack mediumint(8) NOT NULL default 0,
+  plr_roadkills mediumint(8) NOT NULL default 0,
+  plr_user varchar(35) NOT NULL default '',
+  plr_id varchar(32) NOT NULL default '',
+  plr_key varchar(32) NOT NULL default '',
+  plr_ip varchar(21) NOT NULL default '',
+  plr_netspeed mediumint(8) NOT NULL default 0,
+  plr_rpg tinyint(1) NOT NULL default 0,
+  plr_matches mediumint(8) NOT NULL default 0,
+  plr_time bigint(19) NOT NULL default 0,
+  plr_fph float NOT NULL default 0,
+  plr_sph float NOT NULL default 0,
+  plr_eff float NOT NULL default 0,
+  plr_wins mediumint(8) NOT NULL default 0,
+  plr_teamwins mediumint(8) NOT NULL default 0,
+  plr_losses mediumint(8) NOT NULL default 0,
+  plr_multi1 mediumint(8) NOT NULL default 0,
+  plr_multi2 mediumint(8) NOT NULL default 0,
+  plr_multi3 mediumint(8) NOT NULL default 0,
+  plr_multi4 mediumint(8) NOT NULL default 0,
+  plr_multi5 mediumint(8) NOT NULL default 0,
+  plr_multi6 mediumint(8) NOT NULL default 0,
+  plr_multi7 mediumint(8) NOT NULL default 0,
+  plr_spree1 mediumint(8) NOT NULL default 0,
+  plr_spreet1 int(10) NOT NULL default 0,
+  plr_spreek1 mediumint(8) NOT NULL default 0,
+  plr_spree2 mediumint(8) NOT NULL default 0,
+  plr_spreet2 int(10) NOT NULL default 0,
+  plr_spreek2 mediumint(8) NOT NULL default 0,
+  plr_spree3 mediumint(8) NOT NULL default 0,
+  plr_spreet3 int(10) NOT NULL default 0,
+  plr_spreek3 mediumint(8) NOT NULL default 0,
+  plr_spree4 mediumint(8) NOT NULL default 0,
+  plr_spreet4 int(10) NOT NULL default 0,
+  plr_spreek4 mediumint(8) NOT NULL default 0,
+  plr_spree5 mediumint(8) NOT NULL default 0,
+  plr_spreet5 int(10) NOT NULL default 0,
+  plr_spreek5 mediumint(8) NOT NULL default 0,
+  plr_spree6 mediumint(8) NOT NULL default 0,
+  plr_spreet6 int(10) NOT NULL default 0,
+  plr_spreek6 mediumint(8) NOT NULL default 0,
+  plr_combo1 mediumint(8) NOT NULL default 0,
+  plr_combo2 mediumint(8) NOT NULL default 0,
+  plr_combo3 mediumint(8) NOT NULL default 0,
+  plr_combo4 mediumint(8) NOT NULL default 0,
+  plr_flagcapture mediumint(8) NOT NULL default 0,
+  plr_flagreturn mediumint(8) NOT NULL default 0,
+  plr_flagkill mediumint(8) NOT NULL default 0,
+  plr_cpcapture mediumint(8) NOT NULL default 0,
+  plr_bombcarried mediumint(8) NOT NULL default 0,
+  plr_bombtossed mediumint(8) NOT NULL default 0,
+  plr_bombkill mediumint(8) NOT NULL default 0,
+  plr_nodeconstructed mediumint(8) NOT NULL default 0,
+  plr_nodedestroyed mediumint(8) NOT NULL default 0,
+  plr_nodeconstdestroyed mediumint(8) NOT NULL default 0
+);
+
+CREATE INDEX plr_name ON %dbpre%players (plr_name);
+CREATE INDEX plr_bot ON %dbpre%players (plr_bot,plr_name);
+CREATE INDEX plr_usrid ON %dbpre%players (plr_user,plr_id);
+CREATE INDEX plr_sscore ON %dbpre%players (plr_bot,plr_score,plr_frags,plr_deaths);
+CREATE INDEX plr_skills ON %dbpre%players (plr_bot,plr_kills,plr_frags,plr_deaths);
+CREATE INDEX plr_sdeaths ON %dbpre%players (plr_bot,plr_deaths,plr_frags);
+CREATE INDEX plr_ssuicides ON %dbpre%players (plr_bot,plr_suicides,plr_frags,plr_deaths);
+CREATE INDEX plr_seff ON %dbpre%players (plr_bot,plr_eff,plr_kills,plr_frags,plr_deaths);
+CREATE INDEX plr_sfph ON %dbpre%players (plr_bot,plr_fph,plr_kills,plr_frags,plr_deaths);
+CREATE INDEX plr_ssph ON %dbpre%players (plr_bot,plr_sph,plr_kills,plr_frags,plr_deaths);
+CREATE INDEX plr_smatches ON %dbpre%players (plr_bot,plr_matches,plr_kills,plr_frags,plr_deaths);
+CREATE INDEX plr_stime ON %dbpre%players (plr_bot,plr_time,plr_kills,plr_frags,plr_deaths);
+CREATE INDEX plr_sfrags ON %dbpre%players (plr_bot,plr_frags,plr_deaths);
+CREATE INDEX plr_swins ON %dbpre%players (plr_bot,plr_wins,plr_teamwins,plr_matches,plr_kills,plr_frags,plr_deaths);
