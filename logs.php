@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -385,8 +385,8 @@ $demodir = $config["demodir"];
 $demoext = $config["demoext"];
 if (substr($demodir, -1) != "/")
   $demodir.="/";
-while (isset($conflogs["ftpserver"][$ftpnum])) {
-  if ($conflogs["ftpserver"][$ftpnum] != "") {
+while (isset($conflogs["logpath"][$ftpnum])) {
+  if (isset($conflogs["ftpserver"][$ftpnum]) && $conflogs["ftpserver"][$ftpnum] != "") {
     $ftpserver = $conflogs["ftpserver"][$ftpnum];
     $ftpuser = $conflogs["ftpuser"][$ftpnum];
     $ftppass = $conflogs["ftppass"][$ftpnum];
@@ -423,6 +423,12 @@ while (isset($conflogs["ftpserver"][$ftpnum])) {
       $ftptype = 1;
     else if (strtolower(substr($ftpserver, 0, 7)) == "ftps://")
       $ftptype = 2;
+    else {
+      echo "Error - you must set the ftp type in the server to either ftp or ftps.{$break}\n";
+      release_lock();
+      sql_close($link);
+      exit;
+    }
 
     if ($ftptype) {
       if ($ftptype == 1) {
