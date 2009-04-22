@@ -26,30 +26,69 @@ function update307()
   $link = sql_connect();
 
   echo "Adding {$dbpre}special table....<br />\n";
-  $result = sql_queryn($link, "CREATE TABLE {$dbpre}special (se_num smallint(5) unsigned NOT NULL auto_increment, se_title varchar(30) NOT NULL default '', se_desc varchar(175) NOT NULL default '', se_total mediumint(8) unsigned NOT NULL default 0, UNIQUE KEY se_num (se_num), KEY se_title (se_title)) Type=MyISAM");
+
+  if (strtolower($dbtype) == "sqlite") {
+    $result = sql_queryn($link, "CREATE TABLE {$dbpre}special (se_num INTEGER PRIMARY KEY, se_title varchar(30) NOT NULL default '', se_desc varchar(175) NOT NULL default '', se_total mediumint(8) NOT NULL default 0)");
+    if (!$result) {
+      echo "<br />Error adding {$dbpre}special table.{$break}\n";
+      exit;
+    }
+    $result = sql_queryn($link, "CREATE INDEX se_title ON {$dbpre}special (se_title)");
+  }
+  else
+    $result = sql_queryn($link, "CREATE TABLE {$dbpre}special (se_num smallint(5) unsigned NOT NULL auto_increment, se_title varchar(30) NOT NULL default '', se_desc varchar(175) NOT NULL default '', se_total mediumint(8) unsigned NOT NULL default 0, UNIQUE KEY se_num (se_num), KEY se_title (se_title)) Type=MyISAM");
   if (!$result) {
-    echo "<br />Error adding {$dbpre}special table: ".sql_error($link)."{$break}\n";
+    echo "<br />Error adding {$dbpre}special table.{$break}\n";
     exit;
   }
 
   echo "Adding {$dbpre}specialtypes table....<br />\n";
-  $result = sql_queryn($link, "CREATE TABLE {$dbpre}specialtypes (st_type varchar(40) NOT NULL, st_snum smallint(5) unsigned NOT NULL, KEY st_type (st_type)) Type=MyISAM");
+  if (strtolower($dbtype) == "sqlite") {
+    $result = sql_queryn($link, "CREATE TABLE {$dbpre}specialtypes (st_type varchar(40) NOT NULL default '', st_snum smallint(5) NOT NULL)");
+    if (!$result) {
+      echo "<br />Error adding {$dbpre}specialtypes table.{$break}\n";
+      exit;
+    }
+    $result = sql_queryn($link, "CREATE INDEX st_type ON {$dbpre}specialtypes (st_type)");
+  }
+  else
+    $result = sql_queryn($link, "CREATE TABLE {$dbpre}specialtypes (st_type varchar(40) NOT NULL, st_snum smallint(5) unsigned NOT NULL, KEY st_type (st_type)) Type=MyISAM");
   if (!$result) {
-    echo "<br />Error adding {$dbpre}specialtypes table: ".sql_error($link)."{$break}\n";
+    echo "<br />Error adding {$dbpre}specialtypes table.{$break}\n";
     exit;
   }
 
   echo "Adding {$dbpre}playerspecial table....<br />\n";
-  $result = sql_queryn($link, "CREATE TABLE {$dbpre}playerspecial (ps_pnum mediumint(8) unsigned NOT NULL, ps_stype smallint(5) unsigned NOT NULL, ps_total mediumint(8) unsigned NOT NULL default 0, KEY ps_ptype (ps_pnum,ps_stype)) Type=MyISAM");
+
+  if (strtolower($dbtype) == "sqlite") {
+    $result = sql_queryn($link, "CREATE TABLE {$dbpre}playerspecial (ps_pnum mediumint(8) NOT NULL, ps_stype smallint(5) NOT NULL, ps_total mediumint(8) NOT NULL default 0)");
+    if (!$result) {
+      echo "<br />Error adding {$dbpre}playerspecial table.{$break}\n";
+      exit;
+    }
+    $result = sql_queryn($link, "CREATE INDEX ps_ptype ON {$dbpre}playerspecial (ps_pnum,ps_stype)");
+  }
+  else
+    $result = sql_queryn($link, "CREATE TABLE {$dbpre}playerspecial (ps_pnum mediumint(8) unsigned NOT NULL, ps_stype smallint(5) unsigned NOT NULL, ps_total mediumint(8) unsigned NOT NULL default 0, KEY ps_ptype (ps_pnum,ps_stype)) Type=MyISAM");
   if (!$result) {
-    echo "<br />Error adding {$dbpre}playerspecial table: ".sql_error($link)."{$break}\n";
+    echo "<br />Error adding {$dbpre}playerspecial table.{$break}\n";
     exit;
   }
 
   echo "Adding {$dbpre}gspecials table....<br />\n";
-  $result = sql_queryn($link, "CREATE TABLE {$dbpre}gspecials (gs_match int(10) unsigned NOT NULL, gs_player smallint(5) unsigned NOT NULL, gs_stype smallint(5) unsigned NOT NULL, gs_total mediumint(8) unsigned NOT NULL default 0, KEY gs_mps (gs_match,gs_player,gs_stype)) Type=MyISAM");
+
+  if (strtolower($dbtype) == "sqlite") {
+    $result = sql_queryn($link, "CREATE TABLE {$dbpre}gspecials (gs_match int(10) NOT NULL, gs_player smallint(5) NOT NULL, gs_stype smallint(5) NOT NULL, gs_total mediumint(8) NOT NULL default 0)");
+    if (!$result) {
+      echo "<br />Error adding {$dbpre}gspecials table.{$break}\n";
+      exit;
+    }
+    $result = sql_queryn($link, "CREATE INDEX gs_mps ON {$dbpre}gspecials (gs_match,gs_player,gs_stype)");
+  }
+  else
+    $result = sql_queryn($link, "CREATE TABLE {$dbpre}gspecials (gs_match int(10) unsigned NOT NULL, gs_player smallint(5) unsigned NOT NULL, gs_stype smallint(5) unsigned NOT NULL, gs_total mediumint(8) unsigned NOT NULL default 0, KEY gs_mps (gs_match,gs_player,gs_stype)) Type=MyISAM");
   if (!$result) {
-    echo "<br />Error adding {$dbpre}gspecials table: ".sql_error($link)."{$break}\n";
+    echo "<br />Error adding {$dbpre}gspecials table.{$break}\n";
     exit;
   }
 
@@ -81,7 +120,7 @@ function update307()
     	case 23: $result = sql_queryn($link, "INSERT INTO {$dbpre}special (se_title,se_desc) VALUES('Rejected','Kill an enemy skull carrier just before he captures skulls in Greed.')"); break;
     }
     if (!$result) {
-      echo "<br />Error updating {$dbpre}special data: ".sql_error($link)."{$break}\n";
+      echo "<br />Error updating {$dbpre}special data.{$break}\n";
       exit;
     }
   }
@@ -114,31 +153,40 @@ function update307()
       case 23: $result = sql_queryn($link, "INSERT INTO {$dbpre}specialtypes (st_type,st_snum) SELECT 'RanOver',se_num FROM {$dbpre}special WHERE se_title='Road Rampage'"); break;
     }
     if (!$result) {
-      echo "<br />Error updating {$dbpre}specialtypes data: ".sql_error($link)."{$break}\n";
+      echo "<br />Error updating {$dbpre}specialtypes data.{$break}\n";
       exit;
     }
   }
 
   echo "Transfering special event totals data....<br />\n";
+  $result = sql_queryn($link, "SELECT tl_headhunter,tl_flakmonkey,tl_combowhore,tl_roadrampage,tl_roadkills,tl_carjack FROM {$dbpre}totals");
+  if (!(list($tl_headhunter,$tl_flakmonkey,$tl_combowhore,$tl_roadrampage,$tl_roadkills,$tl_carjack) = sql_fetch_row($result))) {
+    echo "<br />Error updating special event data.{$break}\n";
+    exit;
+  }
+  sql_free_result($result);
   for ($num = 1; $num <= 6; $num++) {
     switch ($num) {
-      case 1: $result = sql_queryn($link, "UPDATE {$dbpre}special,{$dbpre}totals SET se_total=tl_headhunter WHERE se_title='Headhunter'"); break;
-      case 2: $result = sql_queryn($link, "UPDATE {$dbpre}special,{$dbpre}totals SET se_total=tl_flakmonkey WHERE se_title='Flak Master'"); break;
-      case 3: $result = sql_queryn($link, "UPDATE {$dbpre}special,{$dbpre}totals SET se_total=tl_combowhore WHERE se_title='Combo King'"); break;
-      case 4: $result = sql_queryn($link, "UPDATE {$dbpre}special,{$dbpre}totals SET se_total=tl_roadrampage WHERE se_title='Road Rampage'"); break;
-      case 5: $result = sql_queryn($link, "UPDATE {$dbpre}special,{$dbpre}totals SET se_total=tl_roadkills WHERE se_title='Road Kill'"); break;
-      case 6: $result = sql_queryn($link, "UPDATE {$dbpre}special,{$dbpre}totals SET se_total=tl_carjack WHERE se_title='Hijacked'"); break;
+      case 1: $result = sql_queryn($link, "UPDATE {$dbpre}special SET se_total=$tl_headhunter WHERE se_title='Headhunter'"); break;
+      case 2: $result = sql_queryn($link, "UPDATE {$dbpre}special SET se_total=$tl_flakmonkey WHERE se_title='Flak Master'"); break;
+      case 3: $result = sql_queryn($link, "UPDATE {$dbpre}special SET se_total=$tl_combowhore WHERE se_title='Combo King'"); break;
+      case 4: $result = sql_queryn($link, "UPDATE {$dbpre}special SET se_total=$tl_roadrampage WHERE se_title='Road Rampage'"); break;
+      case 5: $result = sql_queryn($link, "UPDATE {$dbpre}special SET se_total=$tl_roadkills WHERE se_title='Road Kill'"); break;
+      case 6: $result = sql_queryn($link, "UPDATE {$dbpre}special SET se_total=$tl_carjack WHERE se_title='Hijacked'"); break;
     }
     if (!$result) {
-      echo "<br />Error updating special event data: ".sql_error($link)."{$break}\n";
+      echo "<br />Error updating special event data.{$break}\n";
       exit;
     }
   }
 
   echo "Updating totals table....<br />\n";
-  $result = sql_queryn($link, "ALTER TABLE {$dbpre}totals DROP tl_headhunter, DROP tl_flakmonkey, DROP tl_combowhore, DROP tl_roadrampage, DROP tl_carjack, DROP tl_roadkills");
+  if (strtolower($dbtype) == "sqlite")
+    $result = sqlite_alter_table($link, "{$dbpre}totals", "DROP tl_headhunter, DROP tl_flakmonkey, DROP tl_combowhore, DROP tl_roadrampage, DROP tl_carjack, DROP tl_roadkills");
+  else
+    $result = sql_queryn($link, "ALTER TABLE {$dbpre}totals DROP tl_headhunter, DROP tl_flakmonkey, DROP tl_combowhore, DROP tl_roadrampage, DROP tl_carjack, DROP tl_roadkills");
   if (!$result) {
-    echo "<br />Error updating totals table: ".sql_error($link)."{$break}\n";
+    echo "<br />Error updating totals table.{$break}\n";
     exit;
   }
 
@@ -153,15 +201,18 @@ function update307()
       case 6: $result = sql_queryn($link, "INSERT INTO {$dbpre}playerspecial (ps_pnum,ps_stype,ps_total) SELECT pnum,se_num,plr_roadkills FROM {$dbpre}players,{$dbpre}special WHERE se_title='Road Kill'"); break;
     }
     if (!$result) {
-      echo "<br />Error updating player special event data: ".sql_error($link)."{$break}\n";
+      echo "<br />Error updating player special event data.{$break}\n";
       exit;
     }
   }
 
   echo "Updating player table....<br />\n";
-  $result = sql_queryn($link, "ALTER TABLE {$dbpre}players DROP plr_headhunter, DROP plr_flakmonkey, DROP plr_combowhore, DROP plr_roadrampage, DROP plr_carjack, DROP plr_roadkills");
+  if (strtolower($dbtype) == "sqlite")
+    $result = sqlite_alter_table($link, "{$dbpre}players", "DROP plr_headhunter, DROP plr_flakmonkey, DROP plr_combowhore, DROP plr_roadrampage, DROP plr_carjack, DROP plr_roadkills");
+  else
+    $result = sql_queryn($link, "ALTER TABLE {$dbpre}players DROP plr_headhunter, DROP plr_flakmonkey, DROP plr_combowhore, DROP plr_roadrampage, DROP plr_carjack, DROP plr_roadkills");
   if (!$result) {
-    echo "<br />Error updating player table: ".sql_error($link)."{$break}\n";
+    echo "<br />Error updating player table.{$break}\n";
     exit;
   }
 
@@ -176,15 +227,18 @@ function update307()
       case 6: $result = sql_queryn($link, "INSERT INTO {$dbpre}gspecials (gs_match,gs_player,gs_stype,gs_total) SELECT gp_match,gp_num,se_num,gp_roadkills FROM {$dbpre}gplayers,{$dbpre}special WHERE se_title='Road Kill'"); break;
     }
     if (!$result) {
-      echo "<br />Error updating match player special event data: ".sql_error($link)."{$break}\n";
+      echo "<br />Error updating match player special event data.{$break}\n";
       exit;
     }
   }
 
   echo "Updating match player table....<br />\n";
-  $result = sql_queryn($link, "ALTER TABLE {$dbpre}gplayers DROP gp_carjack, DROP gp_roadkills, DROP gp_headhunter, DROP gp_flakmonkey, DROP gp_combowhore, DROP gp_roadrampage");
+  if (strtolower($dbtype) == "sqlite")
+    $result = sqlite_alter_table($link, "{$dbpre}gplayers", "DROP gp_carjack, DROP gp_roadkills, DROP gp_headhunter, DROP gp_flakmonkey, DROP gp_combowhore, DROP gp_roadrampage");
+  else
+    $result = sql_queryn($link, "ALTER TABLE {$dbpre}gplayers DROP gp_carjack, DROP gp_roadkills, DROP gp_headhunter, DROP gp_flakmonkey, DROP gp_combowhore, DROP gp_roadrampage");
   if (!$result) {
-    echo "<br />Error updating match player table: ".sql_error($link)."{$break}\n";
+    echo "<br />Error updating match player table.{$break}\n";
     exit;
   }
 
@@ -194,7 +248,7 @@ function update307()
   echo "Updating version....<br />\n";
   $result = sql_queryn($link, "UPDATE {$dbpre}config SET value='3.07' WHERE conf='Version'");
   if (!$result) {
-    echo "<br />Error updating version: ".sql_error($link)."{$break}\n";
+    echo "<br />Error updating version.{$break}\n";
     exit;
   }
 

@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -158,6 +158,7 @@ function sql_queryn($link, $query) {
       break;
     case "sqlite":
       $query = ereg_replace(" USE INDEX \(.*\)", "", $query);
+      $query = str_replace("\'", "&#39;", $query);
       $result = @sqlite_unbuffered_query($link, "$query");
       if (!$result) {
       	$err = "*Error in database query: '$query'";
@@ -167,6 +168,7 @@ function sql_queryn($link, $query) {
       break;
     case "mssql":
       $query = mssql_queryfix($query);
+      $query = str_replace("\'", "' + char(39) + '", $query);
       $result = @mssql_query("$query");
       if ($result == FALSE) {
       	$err = "*Error in database query: '$query'";

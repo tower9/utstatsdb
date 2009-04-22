@@ -1,9 +1,7 @@
 CREATE TABLE %dbpre%specialtypes (
-  st_num INTEGER PRIMARY KEY,
   st_type varchar(40) NOT NULL default '',
-  st_snum smallint(5) NOT NULL,
-  KEY st_type (st_type)
-) Type=MyISAM;
+  st_snum smallint(5) NOT NULL
+);
 
 CREATE INDEX st_type ON %dbpre%specialtypes (st_type);
 
