@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ $magic = get_magic_quotes_gpc();
 $magicrt = get_magic_quotes_runtime();
 $adminver = new AdminVer;
 $adminver->major = 3;
-$adminver->minor = 07;
+$adminver->minor = 06;
 $adminver->extra = "";
 $updatereq = 0;
 
@@ -397,7 +397,6 @@ function menu_top() {
 <head>
   <title>UTStatsDB Admin</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
   <link rel="stylesheet" type="text/css" media="screen" href="resource/admin.css" />
   <meta name="MSSmartTagsPreventParsing" content="TRUE" />
   <link rel="shortcut icon" href="resource/favicon.ico" />
@@ -546,19 +545,6 @@ function updatedb() {
     echo "Updating database to version 3.06....<br /><br />\n";
     include_once("includes/adminupdate.php");
     update306();
-  }
-
-  $ver = currentver();
-  if ($ver == -1) {
-    $versioncheck = "Version check error!<br />\n";
-    menu_bottom();
-    exit;
-  }
-  list($vermajor, $verminor, $verextra) = $ver;
-  if ($vermajor == 3 && $verminor == 6) {
-    echo "Updating database to version 3.07....<br /><br />\n";
-    include_once("includes/adminupdate.php");
-    update307();
   }
 
   menu_bottom();

@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ $link = sql_connect();
 
 // Load game types
 $numtypes = 0;
-$result = sql_queryn($link, "SELECT tp_num,tp_desc,tp_type,tp_team FROM {$dbpre}type");
+$result = sql_queryn($link, "SELECT tp_num,tp_desc,tp_type FROM {$dbpre}type");
 while($row = sql_fetch_row($result))
   $gtype[$numtypes++] = $row;
 sql_free_result($result);
@@ -63,14 +63,10 @@ for ($i = 0; $i < $numtypes && !$gametype; $i++) {
   if ($gtype[$i][0] == $gm_type) {
     $gametype = $gtype[$i][1];
     $gametval = $gtype[$i][2];
-    $teams = $gtype[$i][3];
   }
 }
 $start = strtotime($gm_start);
-$init = strtotime($gm_init);
-$delay = $start - strtotime($gm_init);
 $matchdate = formatdate($start, 1);
-$matchinit = formatdate($init, 1);
 
 // Load Player
 $result = sql_queryn($link, "SELECT * FROM {$dbpre}gplayers WHERE gp_match=$matchnum AND gp_num=$plr LIMIT 1");
@@ -91,7 +87,7 @@ $kills = $gp_kills0 + $gp_kills1 + $gp_kills2 + $gp_kills3;
 $deaths = $gp_deaths0 + $gp_deaths1 + $gp_deaths2 + $gp_deaths3;
 $suicides = $gp_suicides0 + $gp_suicides1 + $gp_suicides2 + $gp_suicides3;
 $frags = $kills - $suicides;
-$ptime = floatval(($gp_time0 + $gp_time1 + $gp_time2 + $gp_time3) / $gm_timeoffset);
+$ptime = floatval(($gp_time0 + $gp_time1 + $gp_time2 + $gp_time3) / 100);
 
 // Get current player name
 $result = sql_queryn($link, "SELECT plr_name FROM {$dbpre}players WHERE pnum=$gp_pnum LIMIT 1");
@@ -128,44 +124,62 @@ if (!$result) {
 }
 list($mp_name) = sql_fetch_row($result);
 sql_free_result($result);
-$mapname = stripspecialchars($mp_name);
+$map = stripspecialchars($mp_name);
 
-$pw = (isset($password) && $password) ? "{$LANG_ENABLED}" : "{$LANG_DISABLED}";
-$stats = (isset($gamestats) && $gamestats) ? "{$LANG_ENABLED}" : "{$LANG_DISABLED}";
-$trans = $gm_translocator ? "{$LANG_ENABLED}" : "{$LANG_DISABLED}";
-$mapvoting = $gm_mapvoting ? "{$LANG_ENABLED}" : "{$LANG_DISABLED}";
-$kickvoting = $gm_kickvoting ? "{$LANG_ENABLED}" : "{$LANG_DISABLED}";
-$balanceteams = $gm_balanceteams ? "{$LANG_ENABLED}" : "{$LANG_DISABLED}";
-$playersbalance = $gm_playersbalanceteams ? "{$LANG_ENABLED}" : "{$LANG_DISABLED}";
-$linksetup = stripspecialchars($gm_linksetup);
-$gamespeed = isset($gm_gamespeed) ? (floatval($gm_gamespeed) * 100.0)."%" : "100%";
-$healthforkills = $gm_healthforkills ? "{$LANG_ENABLED}" : "{$LANG_DISABLED}";
-$allowsuperweapons = $gm_allowsuperweapons ? "{$LANG_ENABLED}" : "{$LANG_DISABLED}";
-$camperalarm = $gm_camperalarm ? "{$LANG_ENABLED}" : "{$LANG_DISABLED}";
-$allowpickups = $gm_allowpickups ? "{$LANG_ENABLED}" : "{$LANG_DISABLED}";
-$allowadrenaline = $gm_allowadrenaline ? "{$LANG_ENABLED}" : "{$LANG_DISABLED}";
-$fullammo = $gm_fullammo ? "{$LANG_ENABLED}" : "{$LANG_DISABLED}";
-$tlabel = $gametval > 1 ? "{$LANG_SCORE}" : "{$LANG_FRAGS}";
+if (isset($password) && $password)
+  $pw = "Enabled";
+else
+  $pw = "Disabled";
+if (isset($gamestats) && $gamestats)
+  $stats = "Enabled";
+else
+  $stats = "Disabled";
+if ($gm_translocator)
+  $trans = "Enabled";
+else
+  $trans = "Disabled";
+
+if ($gametval > 1)
+  $tlabel = "Score";
+else
+  $tlabel = "Frag";
 
 if ($gm_fraglimit && $gm_timelimit)
-  $limits = "$gm_fraglimit $tlabel / $gm_timelimit {$LANG_MINUTES}";
+  $limits = "$gm_fraglimit $tlabel / $gm_timelimit minutes";
 else if ($gm_fraglimit)
   $limits = "$gm_fraglimit $tlabel";
 else if ($gm_timelimit)
-  $limits = "$gm_timelimit {$LANG_MINUTES}";
+  $limits = "$gm_timelimit minutes";
 else
   $limits = "No Limit";
 
 switch ($gm_difficulty) {
-  case 0: $difficulty = "{$LANG_NOVICE}"; break;
-  case 1: $difficulty = "{$LANG_AVERAGE}"; break;
-  case 2: $difficulty = "{$LANG_EXPERIENCED}"; break;
-  case 3: $difficulty = "{$LANG_SKILLED}"; break;
-  case 4: $difficulty = "{$LANG_ADEPT}"; break;
-  case 5: $difficulty = "{$LANG_MASTERFUL}"; break;
-  case 6: $difficulty = "{$LANG_INHUMAN}"; break;
-  case 7: $difficulty = "{$LANG_BOTGODLIKE}"; break;
-  default: $difficulty = "";
+  case 0:
+    $difficulty = "Novice";
+    break;
+  case 1:
+    $difficulty = "Average";
+    break;
+  case 2:
+    $difficulty = "Experienced";
+    break;
+  case 3:
+    $difficulty = "Skilled";
+    break;
+  case 4:
+    $difficulty = "Adept";
+    break;
+  case 5:
+    $difficulty = "Masterful";
+    break;
+  case 6:
+    $difficulty = "Inhuman";
+    break;
+  case 7:
+    $difficulty = "Godlike";
+    break;
+  default:
+    $difficulty = "";
 }
 
 echo <<<EOF
@@ -181,117 +195,46 @@ echo <<<EOF
     <td class="heading" colspan="4" align="center">Match/Player Information</td>
   </tr>
   <tr>
-    <td class="dark" align="center" width="100">{$LANG_MATCHDATE}</td>
-    <td class="grey" align="center" width="220" title="{$LANG_MATCHINIT}: $matchinit">$matchdate</td>
-    <td class="dark" align="center" width="105">{$LANG_SERVER}</td>
+    <td class="dark" align="center" width="80">Match Date</td>
+    <td class="grey" align="center" width="220">$matchdate</td>
+    <td class="dark" align="center" width="90">Server</td>
     <td class="grey" align="center"><a class="grey" href="serverstats.php?server=$gm_server">$servername</a></td>
   </tr>
   <tr>
-    <td class="dark" align="center">{$LANG_GAMETYPE}</td>
+    <td class="dark" align="center">Match Type</td>
     <td class="grey" align="center">$gametype</td>
-    <td class="dark" align="center">{$LANG_ADMINNAME}</td>
+    <td class="dark" align="center">Admin Name</td>
     <td class="grey" align="center">$serveradmin</td>
   </tr>
   <tr>
-    <td class="dark" align="center">{$LANG_MAPNAME}</td>
-    <td class="grey" align="center"><a class="grey" href="mapstats.php?map=$gm_map">$mapname</a></td>
-    <td class="dark" align="center">{$LANG_ADMINEMAIL}</td>
+    <td class="dark" align="center">Map Name</td>
+    <td class="grey" align="center"><a class="grey" href="mapstats.php?map=$gm_map">$map</a></td>
+    <td class="dark" align="center">Admin Email</td>
     <td class="grey" align="center">$serveremail</td>
   </tr>
   <tr>
-    <td class="dark" align="center">{$LANG_GLOBALSTATS}</td>
+    <td class="dark" align="center">Mutators</td>
+    <td class="grey" align="center">$gm_mutators</td>
+    <td class="dark" align="center">Global Stats</td>
     <td class="grey" align="center">$stats</td>
-    <td class="dark" align="center">{$LANG_GAMESPEED}</td>
-    <td class="grey" align="center">$gamespeed</td>
   </tr>
   <tr>
-    <td class="dark" align="center">{$LANG_MATCHLIMIT}</td>
+    <td class="dark" align="center">Match Limit</td>
     <td class="grey" align="center">$limits</td>
-    <td class="dark" align="center">{$LANG_NUMPLAYERS}</td>
-    <td class="grey" align="center">$gm_numplayers</td>
-  </tr>
-  <tr>
-    <td class="dark" align="center">{$LANG_DIFFICULTY}</td>
-    <td class="grey" align="center">$difficulty</td>
-    <td class="dark" align="center">{$LANG_TRANSLOCATOR}</td>
+    <td class="dark" align="center">Translocator</td>
     <td class="grey" align="center">$trans</td>
   </tr>
   <tr>
-    <td class="dark" align="center">{$LANG_MAPVOTING}</td>
-    <td class="grey" align="center">$mapvoting</td>
-    <td class="dark" align="center">{$LANG_KICKVOTING}</td>
-    <td class="grey" align="center">$kickvoting</td>
+    <td class="dark" align="center">Difficulty</td>
+    <td class="grey" align="center">$difficulty</td>
+    <td class="dark" align="center">No. Players</td>
+    <td class="grey" align="center">$gm_numplayers</td>
   </tr>
-  <tr>
-    <td class="dark" align="center">{$LANG_FULLAMMO}</td>
-    <td class="grey" align="center">$fullammo</td>
-    <td class="dark" align="center">{$LANG_HEALTHFORKILLS}</td>
-    <td class="grey" align="center">$healthforkills</td>
-  </tr>
-  <tr>
-    <td class="dark" align="center">{$LANG_CAMPERALARM}</td>
-    <td class="grey" align="center">$camperalarm</td>
-    <td class="dark" align="center">{$LANG_SUPERWEAPONS}</td>
-    <td class="grey" align="center">$allowsuperweapons</td>
-  </tr>
-  <tr>
-    <td class="dark" align="center">{$LANG_PICKUPS}</td>
-    <td class="grey" align="center">$allowpickups</td>
-    <td class="dark" align="center">{$LANG_ADRENALINE}</td>
-    <td class="grey" align="center">$allowadrenaline</td>
-  </tr>
-
-EOF;
-
-if ($teams) {
-  echo <<<EOF
-  <tr>
-    <td class="dark" align="center">{$LANG_BALANCETEAMS}</td>
-    <td class="grey" align="center">$balanceteams</td>
-    <td class="dark" align="center">{$LANG_PLAYERSBALANCE}</td>
-    <td class="grey" align="center">$playersbalance</td>
-  </tr>
-
-EOF;
-
-  if ($gametval == 6) {
-    $SpecialText = "{$LANG_LINKSETUP}";
-    $special = $linksetup;
-  }
-  else if ($gametval == 9 && $gm_logger == 1) {
-    $SpecialText = "{$LANG_WAVES}";
-    $special = $gm_maxwave;
-  }
-  else if ($gametval == 18) {
-  	$SpecialText = "{$LANG_OVERTIME}";
-  	$special = "$gm_overtime {$LANG_MINUTES}";
-  }
-  else {
-    $SpecialText = "&nbsp;";
-    $special = "&nbsp;";
-  }
-
-  echo <<<EOF
-  <tr>
-    <td class="dark" align="center">{$LANG_FRIENDLYFIRE}</td>
-    <td class="grey" align="center">$gm_friendlyfirescale</td>
-    <td class="dark" align="center">$SpecialText</td>
-    <td class="grey" align="center">$special</td>
-  </tr>
-
-EOF;
-}
-
-echo <<<EOF
   <tr>
     <td class="dark" align="center">Netspeed</td>
     <td class="grey" align="center">$gp_netspeed</td>
     <td class="dark" align="center">Avg. Ping</td>
     <td class="grey" align="center">$gp_ping ms</td>
-  </tr>
-  <tr>
-    <td class="dark" align="center">{$LANG_MUTATORS}</td>
-    <td class="grey" align="center" colspan="3">$gm_mutators</td>
   </tr>
 </table>
 
@@ -480,23 +423,35 @@ EOF;
 //========== Special Events ===================================================
 //=============================================================================
 if ($gametval != 9) {
-  $result = sql_queryn($link, "SELECT se_num,se_title,se_desc,gs_total FROM {$dbpre}special LEFT JOIN {$dbpre}gspecials ON gs_stype=se_num WHERE gs_match=$matchnum AND gs_player=$plr ORDER BY se_num");
-  if (!$result) {
-    echo "Player database error.<br />\n";
-    exit;
-  }
-  $numspec = 0;
-  while ($row = sql_fetch_row($result)) {
-    $special[$numspec]["title"] = $row[1];
-    $special[$numspec]["desc"] = $row[2];
-    $special[$numspec++]["total"] = $row[3] != NULL ? $row[3] : 0;
-  }
-  sql_free_result($result);
-
   if ($gm_firstblood == $gp_num)
     $fb = "Yes";
   else
     $fb = "No";
+  if ($gp_headhunter)
+    $headhunter = "Yes";
+  else
+    $headhunter = "No";
+  if ($gp_flakmonkey)
+    $flakmonkey = "Yes";
+  else
+    $flakmonkey = "No";
+  if ($gp_combowhore)
+    $combowhore = "Yes";
+  else
+    $combowhore = "No";
+  if ($gp_roadrampage)
+    $roadrampage = "Yes";
+  else
+    $roadrampage = "No";
+
+  if ($gm_logger == 1) {
+    $carjack = $gp_carjack;
+    $carjackt = "Carjackings";
+  }
+  else {
+    $carjack = "&nbsp;";
+    $carjackt = "&nbsp;";
+  }
 
   echo <<<EOF
 <br />
@@ -515,61 +470,48 @@ if ($gametval != 9) {
     <td class="smheading" align="center" width="45">Value</td>
   </tr>
   <tr>
-    <td class="dark" align="center" style="white-space:nowrap">First Blood</td>
+    <td class="dark" align="center">First Blood</td>
     <td class="grey" align="center">$fb</td>
-    <td class="dark" align="center" style="white-space:nowrap">Head Shots</td>
+    <td class="dark" align="center">Head Shots</td>
     <td class="grey" align="center">$gp_headshots</td>
-    <td class="dark" align="center" style="white-space:nowrap">Double Kills</td>
+    <td class="dark" align="center">Roadkills</td>
+    <td class="grey" align="center">$gp_roadkills</td>
+    <td class="dark" align="center">$carjackt</td>
+    <td class="grey" align="center">$carjack</td>
+  </tr>
+  <tr>
+    <td class="dark" align="center">Double Kills</td>
     <td class="grey" align="center">$gp_multi1</td>
-    <td class="dark" align="center" style="white-space:nowrap">Multi Kills</td>
+    <td class="dark" align="center">Multi Kills</td>
     <td class="grey" align="center">$gp_multi2</td>
-  </tr>
-  <tr>
-    <td class="dark" align="center" style="white-space:nowrap">Mega Kills</td>
+    <td class="dark" align="center">Mega Kills</td>
     <td class="grey" align="center">$gp_multi3</td>
-    <td class="dark" align="center" style="white-space:nowrap">Ultra Kills</td>
+    <td class="dark" align="center">Ultra Kills</td>
     <td class="grey" align="center">$gp_multi4</td>
-    <td class="dark" align="center" style="white-space:nowrap">Monster Kills</td>
-    <td class="grey" align="center">$gp_multi5</td>
-    <td class="dark" align="center" style="white-space:nowrap">Ludicrous Kills</td>
-    <td class="grey" align="center">$gp_multi6</td>
   </tr>
   <tr>
-    <td class="dark" align="center" style="white-space:nowrap">Holy Shit Kills</td>
+    <td class="dark" align="center">Monster Kills</td>
+    <td class="grey" align="center">$gp_multi5</td>
+    <td class="dark" align="center">Ludicrous Kills</td>
+    <td class="grey" align="center">$gp_multi6</td>
+    <td class="dark" align="center">Holy Shit Kills</td>
     <td class="grey" align="center">$gp_multi7</td>
-    <td class="dark" align="center" style="white-space:nowrap">Failed Transloc</td>
+    <td class="dark" align="center">Failed Transloc</td>
     <td class="grey" align="center">$gp_transgib</td>
+  </tr>
+  <tr>
+    <td class="dark" align="center">Headhunter</td>
+    <td class="grey" align="center">$headhunter</td>
+    <td class="dark" align="center">Flak Monkey</td>
+    <td class="grey" align="center">$flakmonkey</td>
+    <td class="dark" align="center">Combo Whore</td>
+    <td class="grey" align="center">$combowhore</td>
+    <td class="dark" align="center">Road Rampage</td>
+    <td class="grey" align="center">$roadrampage</td>
+  </tr>
+</table>
 
 EOF;
-
-  $col = 2;
-  for ($i = 0; $i < $numspec; $i++) {
-    if ($col == 0)
-      echo "  <tr>\n";
-
-    echo <<<EOF
-    <td class="dark" align="center" style="white-space:nowrap" title="{$special[$i]['desc']}">{$special[$i]['title']}</td>
-    <td class="grey" align="center">{$special[$i]['total']}</td>
-
-EOF;
-
-    $col++;
-    if ($col == 4) {
-      echo "  </tr>\n";
-      $col = 0;
-    }
-  }
-
-  if ($col > 0) {
-    while ($col < 4) {
-      echo "    <td class=\"dark\" align=\"center\">&nbsp;</td>\n    <td class=\"grey\" align=\"center\">&nbsp;</td>\n";
-      $col++;
-    }
-
-    echo "  </tr>\n";
-  }
-
-  echo "</table>\n";
 }
 
 //=============================================================================
@@ -1262,8 +1204,8 @@ while ($row = sql_fetch_assoc($result)) {
     while (list ($key, $val) = each ($row))
       ${$key} = $val;
 
-    $time = sprintf("%0.1f", ($ge_time - $ge_length - ($delay * $gm_timeoffset)) / (60.0 * $gm_timeoffset));
-    $length = sprintf("%0.1f", $ge_length / (60.0 * $gm_timeoffset));
+    $time = sprintf("%0.1f", ($ge_time - $ge_length) / 6000);
+    $length = sprintf("%0.1f", $ge_length / 6000);
 
     $type = "";
     if ($ge_quant >= 5 && $ge_quant < 10)
@@ -1533,7 +1475,7 @@ while ($row = sql_fetch_assoc($result)) {
   $plr = $row["ge_plr"];
   $event = $row["ge_event"];
   if ($plr == $gp_num || $event == 3) {
-    $time = sprintf("%0.1f", ($row["ge_time"] - ($delay * $gm_timeoffset)) / (60.0 * $gm_timeoffset));
+    $time = sprintf("%0.1f", $row["ge_time"] / 6000);
     if ($event == 3) {
       switch ($row["ge_reason"]) {
         case 0:

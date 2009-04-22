@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -131,8 +131,8 @@ while ($row = sql_fetch_assoc($result)) {
   while (list ($key, $val) = each ($row))
     ${$key} = $val;
 
-  $time = floatval($gt_time / 100.0);
-  $hours = sprintf("%0.1f", $time / 3600.0);
+  $time = floatval($gt_time / 100);
+  $hours = sprintf("%0.1f", $time / 3600);
   if ($gt_kills + $gt_deaths + $gt_suicides == 0)
     $eff = "0.0";
   else
@@ -418,21 +418,12 @@ echo <<<EOF
 EOF;
 
 //=============================================================================
+//========== Career Summary - Single Player Tournament Games ==================
+//=============================================================================
+
+//=============================================================================
 //========== Special Events ===================================================
 //=============================================================================
-$result = sql_queryn($link, "SELECT se_num,se_title,se_desc,ps_total FROM {$dbpre}special LEFT JOIN {$dbpre}playerspecial ON ps_stype=se_num WHERE ps_pnum=$plr OR ps_pnum IS NULL ORDER BY se_num");
-if (!$result) {
-  echo "Player database error.<br />\n";
-  exit;
-}
-$numspec = 0;
-while ($row = sql_fetch_row($result)) {
-  $special[$numspec]["title"] = $row[1];
-  $special[$numspec]["desc"] = $row[2];
-  $special[$numspec++]["total"] = $row[3] != NULL ? $row[3] : 0;
-}
-sql_free_result($result);
-
 echo <<<EOF
 <br />
 <table cellpadding="1" cellspacing="2" border="0">
@@ -450,59 +441,48 @@ echo <<<EOF
     <td class="smheading" align="center" width="45">Value</td>
   </tr>
   <tr>
-    <td class="dark" align="center" style="white-space:nowrap">First Blood</td>
+    <td class="dark" align="center">First Blood</td>
     <td class="grey" align="center">$plr_firstblood</td>
-    <td class="dark" align="center" style="white-space:nowrap">Double Kills</td>
+    <td class="dark" align="center">Head Shots</td>
+    <td class="grey" align="center">$plr_headshots</td>
+    <td class="dark" align="center">Roadkills</td>
+    <td class="grey" align="center">$plr_roadkills</td>
+    <td class="dark" align="center">Carjackings</td>
+    <td class="grey" align="center">$plr_carjack</td>
+  </tr>
+  <tr>
+    <td class="dark" align="center">Double Kills</td>
     <td class="grey" align="center">$plr_multi1</td>
-    <td class="dark" align="center" style="white-space:nowrap">Multi Kills</td>
+    <td class="dark" align="center">Multi Kills</td>
     <td class="grey" align="center">$plr_multi2</td>
-    <td class="dark" align="center" style="white-space:nowrap">Mega Kills</td>
+    <td class="dark" align="center">Mega Kills</td>
     <td class="grey" align="center">$plr_multi3</td>
-  </tr>
-  <tr>
-    <td class="dark" align="center" style="white-space:nowrap">Ultra Kills</td>
+    <td class="dark" align="center">Ultra Kills</td>
     <td class="grey" align="center">$plr_multi4</td>
-    <td class="dark" align="center" style="white-space:nowrap">Monster Kills</td>
-    <td class="grey" align="center">$plr_multi5</td>
-    <td class="dark" align="center" style="white-space:nowrap">Ludicrous Kills</td>
-    <td class="grey" align="center">$plr_multi6</td>
-    <td class="dark" align="center" style="white-space:nowrap">Holy Shit Kills</td>
-    <td class="grey" align="center">$plr_multi7</td>
   </tr>
   <tr>
-    <td class="dark" align="center" style="white-space:nowrap">Failed Transloc</td>
+    <td class="dark" align="center">Monster Kills</td>
+    <td class="grey" align="center">$plr_multi5</td>
+    <td class="dark" align="center">Ludicrous Kills</td>
+    <td class="grey" align="center">$plr_multi6</td>
+    <td class="dark" align="center">Holy Shit Kills</td>
+    <td class="grey" align="center">$plr_multi7</td>
+    <td class="dark" align="center">Failed Transloc</td>
     <td class="grey" align="center">$plr_transgib</td>
+  </tr>
+  <tr>
+    <td class="dark" align="center">Headhunter</td>
+    <td class="grey" align="center">$plr_headhunter</td>
+    <td class="dark" align="center">Flak Monkey</td>
+    <td class="grey" align="center">$plr_flakmonkey</td>
+    <td class="dark" align="center">Combo Whore</td>
+    <td class="grey" align="center">$plr_combowhore</td>
+    <td class="dark" align="center">Road Rampage</td>
+    <td class="grey" align="center">$plr_roadrampage</td>
+  </tr>
+</table>
 
 EOF;
-
-$col = 1;
-for ($i = 0; $i < $numspec; $i++) {
-  if ($col == 0)
-    echo "  <tr>\n";
-
-  echo <<<EOF
-    <td class="dark" align="center" style="white-space:nowrap" title="{$special[$i]['desc']}">{$special[$i]['title']}</td>
-    <td class="grey" align="center">{$special[$i]['total']}</td>
-
-EOF;
-
-  $col++;
-  if ($col == 4) {
-    echo "  </tr>\n";
-    $col = 0;
-  }
-}
-
-if ($col > 0) {
-  while ($col < 4) {
-    echo "    <td class=\"dark\" align=\"center\">&nbsp;</td>\n    <td class=\"grey\" align=\"center\">&nbsp;</td>\n";
-    $col++;
-  }
-
-  echo "  </tr>\n";
-}
-
-echo "</table>\n";
 
 //=============================================================================
 //========== Combos ===========================================================
@@ -1119,10 +1099,10 @@ echo <<<EOF
 EOF;
 
 $matches = 0;
-$result = sql_querynb($link, "SELECT gm_num,gm_map,gm_type,gm_start,gm_timeoffset,gm_length,gm_numplayers
-  FROM {$dbpre}gplayers,{$dbpre}matches
-  WHERE {$dbpre}gplayers.gp_pnum=$pnum AND {$dbpre}matches.gm_num={$dbpre}gplayers.gp_match
-  ORDER BY {$dbpre}matches.gm_num DESC LIMIT 11");
+$result = sql_querynb($link, "SELECT gm_num,gm_map,gm_type,gm_start,gm_length,gm_numplayers
+                       FROM {$dbpre}gplayers,{$dbpre}matches
+                       WHERE {$dbpre}gplayers.gp_pnum=$pnum AND {$dbpre}matches.gm_num={$dbpre}gplayers.gp_match
+                       ORDER BY {$dbpre}matches.gm_num DESC LIMIT 11");
 if (!$result) {
   echo "Error accessing game and game player tables.<br />\n";
   exit;
@@ -1139,7 +1119,7 @@ while ($row = sql_fetch_assoc($result)) {
     }
     $start = strtotime($gm_start);
     $matchdate = formatdate($start, 1);
-    $length = sprintf("%0.1f", $gm_length / (60.0 * $gm_timeoffset));
+    $length = sprintf("%0.1f", $gm_length / 6000.0);
 
     // Load Map Name
     $result2 = sql_queryn($link, "SELECT mp_name FROM {$dbpre}maps WHERE mp_num=$gm_map LIMIT 1");

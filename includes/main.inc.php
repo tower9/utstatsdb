@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -147,12 +147,9 @@ if (!isset($layout) || !$layout) {
   echo "Configuration error.<br />\n";
   exit;
 }
-
 $stylefile = "style{$layout}.css";
 $logofile = "utstatsdblogo.png";
-$utlogofile = "utlogo{$layout}.png";
-if (!file_exists("resource/{$utlogofile}"))
-  $utlogofile = "utlogo.png";
+$utlogofile = "utlogo.png";
 
 // Team colors
 $teamcolor = array("Red","Blue","Green","Gold");
@@ -168,17 +165,14 @@ echo <<<EOF
 <head>
   <title>$title</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
   <link rel="icon" href="resource/uicon.png" type="image/png" />
   <link rel="stylesheet" href="resource/{$stylefile}" type="text/css" />
   <script language="JavaScript" type="text/JavaScript">
-<!--
     function changePage(newLoc) {
-      nextPage = "index.php?stats=players&type=" + newLoc.options[newLoc.selectedIndex].value
+      nextPage = "index.php?stats=players&amp;type=" + newLoc.options[newLoc.selectedIndex].value
       if (nextPage != "")
         document.location.href = nextPage
     }
--->
   </script>
 </head>
 

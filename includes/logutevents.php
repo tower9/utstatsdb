@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -478,7 +478,7 @@ function tagut_player($i, $data)
       $plr = check_player($data[3]);
       $ping = intval($data[4]);
 
-      if ($plr >= 0 && $ping >= 0 && $ping <= 10000) {
+      if ($plr >= 0 && $ping >= 0) {
         $player[$plr]->ping += $ping;
         $player[$plr]->pingcount++;
       }
@@ -1324,10 +1324,6 @@ function tagut_game_end($i, $data)
       break;
 
     // Tactical Ops
-    case "time limit":
-      $reason = 2;
-      $match->ended = 1;
-      break;
     case "terrorists exterminated!":
       tacopsevent($time, 0, 10);
       $match->ended = 1;

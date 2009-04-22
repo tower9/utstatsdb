@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -485,7 +485,7 @@ echo <<<EOF
 EOF;
 
 $matches = 0;
-$result = sql_queryn($link, "SELECT gm_num,gm_server,gm_type,gm_start,gm_timeoffset,gm_length,gm_numplayers,sv_name,sv_shortname
+$result = sql_queryn($link, "SELECT gm_num,gm_server,gm_type,gm_start,gm_length,gm_numplayers,sv_name,sv_shortname
                        FROM {$dbpre}matches,{$dbpre}servers
                        WHERE gm_map=$mapnum AND {$dbpre}servers.sv_num=gm_server
                        ORDER BY gm_num DESC LIMIT 21");
@@ -505,7 +505,7 @@ while ($row = sql_fetch_assoc($result)) {
     }
     $start = strtotime($gm_start);
     $matchdate = formatdate($start, 1);
-    $length = sprintf("%0.1f", $gm_length / (60.0 * $gm_timeoffset));
+    $length = sprintf("%0.1f", $gm_length / 6000.0);
     if ($useshortname && $sv_shortname != "")
       $servername = stripspecialchars($sv_shortname);
     else

@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -155,123 +155,52 @@ EOF;
 //=============================================================================
 //========== Hourly Activity Graph ============================================
 //=============================================================================
-
   $hactive = array_fill(0, 24, 0);
-
-  if (strtolower($dbtype) == "sqlite")
-    $result = sql_query("SELECT strftime('%H', gm_start) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches,{$dbpre}playersgt WHERE gm_num=gt_num GROUP BY hour");
-  else if (strtolower($dbtype) == "mssql")
-    $result = sql_query("SELECT DATEPART(hour, CONVERT(char(19), gm_start, 20)) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches,{$dbpre}playersgt WHERE gm_num=gt_num GROUP BY DATEPART(hour, CONVERT(char(19), gm_start, 20))");
-  else
-    $result = sql_query("SELECT HOUR(gm_start) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches,{$dbpre}playersgt WHERE gm_num=gt_num GROUP BY hour");
-
+  $result = sql_query("SELECT HOUR(gm_start) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches, {$dbpre}playersgt WHERE gm_num=gt_num GROUP BY hour");
   while ($row = sql_fetch_row($result))
-    $hactive[intval($row[0])] = intval($row[1]);
+    $hactive[$row[0]] = $row[1];
   sql_free_result($result);
   $hmax = max($hactive);
 
   if ($hmax > 0) {
     echo <<<EOF
 <br />
-<table cellpadding="0" cellspacing="0" border="0" width="610">
+<table cellpadding="1" cellspacing="0" border="0" width="500" class="box" align="center">
   <tr>
-    <td>
-      <table cellpadding="1" cellspacing="0" border="0" width="400" class="box" align="center">
-        <tr>
-          <td class="tglheading" align="center"><b>{$LANG_SERVERACTIVITYBYHOUR}</b></td>
-        </tr>
-        <tr>
-          <td class="tgheading" align="center">
-            <div class="tgmainbox">
-              <div class="tgsubbox">&nbsp;</div>
+    <td class="tglheading" align="center"><b>{$LANG_SERVERACTIVITYBYHOUR}</b></td>
+  </tr>
+  <tr>
+    <td class="tgheading" align="center">
+      <div class="tgmainbox">
+        <div class="tgsubbox">&nbsp;</div>
 
 EOF;
 
     for ($i = 0; $i < 24; $i++) {
       $height = round(($hactive[$i] / $hmax) * 0.9 * 142);
       $bottom = $height + 2;
-      echo "              <div class=\"tgbarspace\">&nbsp;</div><div class=\"tgbar\" style=\"height: {$height}px; bottom: {$bottom}px\">&nbsp;</div>\n";
+      echo "          <div class=\"tgbarspace\">&nbsp;</div><div class=\"tgbar\" style=\"height: {$height}px; bottom: {$bottom}px \">&nbsp;</div>\n";
     }
 
-    echo "              <div class=\"tgblank\">&nbsp;</div>\n";
+    echo "          <div class=\"tgblank\">&nbsp;</div>\n";
 
     for ($i = 0; $i < 24; $i++)
     {
       $hr = sprintf("%02d", $i);
-      echo "              <div class=\"tgbarspace\">&nbsp;</div><div class=\"tglabel\" style=\"bottom: 127px\">$hr</div>\n";
+      echo "          <div class=\"tgbarspace\">&nbsp;</div><div class=\"tglabel\" style=\"bottom: 127px\">$hr</div>\n";
     }
 
     echo <<<EOF
-              <div class="tgblank">&nbsp;</div>
-            </div>
-          </td>
-        </tr>
-      </table>
-    </td>
-
-EOF;
-  }
-
-//=============================================================================
-//========== Weekly Activity Graph ============================================
-//=============================================================================
-  $wactive = array_fill(0, 7, 0);
-
-  if (strtolower($dbtype) == "sqlite")
-    $result = sql_query("SELECT strftime('%w', gm_start) + 1 AS weekday, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches,{$dbpre}playersgt WHERE gm_num=gt_num GROUP BY weekday");
-  else if (strtolower($dbtype) == "mssql")
-    $result = sql_query("SELECT DATEPART(weekday, CONVERT(char(19), gm_start, 20)) AS hour, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches,{$dbpre}playersgt WHERE gm_num=gt_num GROUP BY DATEPART(weekday, CONVERT(char(19), gm_start, 20))");
-  else
-    $result = sql_query("SELECT DAYOFWEEK(gm_start) AS weekday, COUNT(gt_pnum) AS pcount FROM {$dbpre}matches,{$dbpre}playersgt WHERE gm_num=gt_num GROUP BY weekday");
-
-  while ($row = sql_fetch_row($result))
-    $wactive[intval($row[0])] = intval($row[1]);
-  sql_free_result($result);
-  $hmax = max($wactive);
-
-  if ($hmax > 0) {
-    echo <<<EOF
-    <td>
-      <table cellpadding="1" cellspacing="0" border="0" width="200" class="box" align="center">
-        <tr>
-          <td class="tglheading" align="center"><b>{$LANG_ACTIVITYBYWEEKDAY}</b></td>
-        </tr>
-        <tr>
-          <td class="tgheading" align="center">
-            <div class="wgmainbox">
-              <div class="wgsubbox">&nbsp;</div>
-
-EOF;
-
-    for ($i = 1; $i <= 7; $i++) {
-      $height = round(($wactive[$i] / $hmax) * 0.9 * 142);
-      $bottom = $height + 2;
-      echo "              <div class=\"wgbarspace\">&nbsp;</div><div class=\"wgbar\" style=\"height: {$height}px; bottom: {$bottom}px\">&nbsp;</div>\n";
-    }
-
-    echo "              <div class=\"tgblank\">&nbsp;</div>\n";
-
-    for ($i = 1; $i <= 7; $i++)
-    {
-      $wd = $LANG_WEEKDAYS[$i - 1];
-      $space = $i == 1 ? "wgprespace" : "wgbarspace";
-      echo "              <div class=\"$space\">&nbsp;</div><div class=\"wglabel\" style=\"bottom: 127px\">$wd</div>\n";
-    }
-
-    echo <<<EOF
-              <div class="tgblank">&nbsp;</div>
-            </div>
-          </td>
-        </tr>
-      </table>
+          <div class="tgblank">&nbsp;</div>
+        </div>
     </td>
   </tr>
 </table>
 
 EOF;
   }
-
 }
+
 echo <<<EOF
 
 </td>

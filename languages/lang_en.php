@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -220,6 +220,7 @@ $LANG_TOTALS = "Totals";
 // matchhighs.php
 $LANG_DATABASEERROR = "Database error.";
 $LANG_NOTOTALSDATA = "No data in stat totals database.";
+$LANG_TOTALS = "Totals";
 
 // totals.php
 // careerhighs.php
@@ -422,7 +423,7 @@ $LANG_SKILLED = "Skilled";
 $LANG_ADEPT = "Adept";
 $LANG_MASTERFUL = "Masterful";
 $LANG_INHUMAN = "Inhuman";
-$LANG_BOTGODLIKE = "Godlike";
+$LANG_GODLIKE = "Godlike";
 $LANG_MATCHSTATSFOR = "Match Stats for";
 $LANG_UNREALTOURNAMENTMATCHSTATS = "Unreal Tournament Match Stats";
 $LANG_MATCHDATE = "Match Date";
@@ -499,7 +500,6 @@ $LANG_BALLTIME = "Ball Time";
 $LANG_JAILBREAKEVENTSUMMARY = "JailBreak Event Summary";
 $LANG_TEAMCAPTURED = "Team Captured";
 $LANG_TEAMRELEASED = "Team Released";
-$LANG_TEAMSCORES = "Team Scores";
 $LANG_TEAMSCORINGGRAPH = "Team Scoring Graph";
 $LANG_TEAMSUMMARY = "Team Summary";
 $LANG_COLORBAR = "Color Bar";
@@ -601,7 +601,6 @@ $LANG_THEREWERENOITEMPICKUPSLOGGED = "There Were No Item Pickups Logged";
 $LANG_PLAYERNETSPEEDANDPINGTIME = "Player Netspeed and Ping Time";
 $LANG_NETSPEED = "Netspeed";
 $LANG_AVGPING = "Avg. Ping";
-$LANG_PACKETLOSS = "Packet Loss";
 $LANG_CONNECTIONLOG = "Connection Log";
 $LANG_STATUS = "Status";
 $LANG_ERRORLOADINGCONNECTIONEVENTS = "Error loading connection events.";
@@ -636,14 +635,4 @@ $LANG_CHATMESSAGES = "chat messages";
 
 // serverstats.php
 
-// main.inc.php
-$LANG_INC_MAIN = "Main";
-$LANG_INC_MATCHES = "Matches";
-$LANG_INC_PLAYERS = "Players";
-$LANG_INC_RANKINGS = "Rankings";
-$LANG_INC_MAPS = "Maps";
-$LANG_INC_SERVERS = "Servers";
-$LANG_INC_TOTALS = "Totals";
-$LANG_INC_CAREERHIGHS = "Career&nbsp;Highs";
-$LANG_INC_MATCHHIGHS = "Match&nbsp;Highs";
-$LANG_INC_HELP = "Help";
+// includes/help.php ?

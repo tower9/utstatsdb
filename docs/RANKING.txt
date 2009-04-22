@@ -1,6 +1,3 @@
-UTStatsDB
-  Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
-
 The ranking system in UTStatsDB is loosely based on the ELO ranking system used 
 in chess.  Each player starts with 0 rank points and gains points primarily by 
 having a higher score than opposing team members or having more kills than other 

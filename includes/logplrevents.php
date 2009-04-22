@@ -183,11 +183,8 @@ function tag_pp ($i, $data)
   if ($plr < 0)
     return;
 
-  if ($ping >= 0 && $ping <= 10000) {
-    $player[$plr]->ping += $ping;
-    $player[$plr]->pingcount++;
-  }
-
+  $player[$plr]->ping += $ping;
+  $player[$plr]->pingcount++;
   if ($i > 4)
     $player[$plr]->packetloss += $packetloss;
   if ($i > 5)

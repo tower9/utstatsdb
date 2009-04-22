@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -97,9 +97,9 @@ while ($row = sql_fetch_assoc($result)) {
     if ($tp_gtime == 0)
       $fph = "0.0";
     else
-      $fph = sprintf("%0.1f", $frags * (3600.0 / $tp_gtime));
+      $fph = sprintf("%0.1f", $frags * (3600 / $tp_gtime));
     $ttl = sprintf("%0.1f", $tp_gtime / ($tp_deaths + $tp_suicides + 1));
-    $hours = sprintf("%0.1f", $tp_gtime / 3600.0);
+    $hours = sprintf("%0.1f", $tp_gtime / 3600);
     
     $tot_score += $tp_score;
     $tot_frags += $frags;
@@ -228,19 +228,6 @@ EOF;
 //=============================================================================
 //========== Special Events ===================================================
 //=============================================================================
-$result = sql_queryn($link, "SELECT se_num,se_title,se_desc,se_total FROM {$dbpre}special ORDER BY se_num");
-if (!$result) {
-  echo "Special event database error.<br />\n";
-  exit;
-}
-$numspec = 0;
-while ($row = sql_fetch_row($result)) {
-  $special[$numspec]["title"] = $row[1];
-  $special[$numspec]["desc"] = $row[2];
-  $special[$numspec++]["total"] = $row[3] != NULL ? $row[3] : 0;
-}
-sql_free_result($result);
-
 echo <<<EOF
 <font size="1"><br /></font>
 <table cellpadding="1" cellspacing="2" border="0" class="box">
@@ -248,60 +235,48 @@ echo <<<EOF
     <td class="medheading" align="center" colspan="6">$LANG_SPECTIALEVENTS</td>
   </tr>
   <tr>
-    <td class="dark" align="center" style="white-space:nowrap" width="100">{$LANG_HEADSHOTS}</td>
+    <td class="dark" align="center" width="100">{$LANG_HEADSHOTS}</td>
     <td class="grey" align="center" width="45">$tl_headshots</td>
-    <td class="dark" align="center" style="white-space:nowrap" width="105">{$LANG_FAILEDTRANSLOC}</td>
+    <td class="dark" align="center" width="105">{$LANG_FAILEDTRANSLOC}</td>
     <td class="grey" align="center" width="45">$tl_transgib</td>
-    <td class="dark" align="center" style="white-space:nowrap" width="95">{$LANG_DOUBLEKILLS}</td>
+    <td class="dark" align="center" width="95">{$LANG_DOUBLEKILLS}</td>
     <td class="grey" align="center" width="45">$tl_multi1</td>
   </tr>
   <tr>
-    <td class="dark" align="center" style="white-space:nowrap">{$LANG_MULTIKILLS}</td>
+    <td class="dark" align="center">{$LANG_MULTIKILLS}</td>
     <td class="grey" align="center">$tl_multi2</td>
-    <td class="dark" align="center" style="white-space:nowrap">{$LANG_MEGAKILLS}</td>
+    <td class="dark" align="center">{$LANG_MEGAKILLS}</td>
     <td class="grey" align="center">$tl_multi3</td>
-    <td class="dark" align="center" style="white-space:nowrap">{$LANG_ULTRAKILLS}</td>
+    <td class="dark" align="center">{$LANG_ULTRAKILLS}</td>
     <td class="grey" align="center">$tl_multi4</td>
   </tr>
   <tr>
-    <td class="dark" align="center" style="white-space:nowrap">{$LANG_MONSTERKILLS}</td>
+    <td class="dark" align="center">{$LANG_MONSTERKILLS}</td>
     <td class="grey" align="center">$tl_multi5</td>
-    <td class="dark" align="center" style="white-space:nowrap">{$LANG_LUDICROUSKILLS}</td>
+    <td class="dark" align="center">{$LANG_LUDICROUSKILLS}</td>
     <td class="grey" align="center">$tl_multi6</td>
-    <td class="dark" align="center" style="white-space:nowrap">{$LANG_HOLYSHITKILLS}</td>
+    <td class="dark" align="center">{$LANG_HOLYSHITKILLS}</td>
     <td class="grey" align="center">$tl_multi7</td>
   </tr>
+  <tr>
+    <td class="dark" align="center">{$LANG_HEADHUNTER}</td>
+    <td class="grey" align="center">$tl_headhunter</td>
+    <td class="dark" align="center">{$LANG_FLAKMONKEY}</td>
+    <td class="grey" align="center">$tl_flakmonkey</td>
+    <td class="dark" align="center">{$LANG_COMBOWHORE}</td>
+    <td class="grey" align="center">$tl_combowhore</td>
+  </tr>
+  <tr>
+    <td class="dark" align="center">{$LANG_ROADRAMPAGE}</td>
+    <td class="grey" align="center">$tl_roadrampage</td>
+    <td class="dark" align="center">{$LANG_ROADKILLS}</td>
+    <td class="grey" align="center">$tl_roadkills</td>
+    <td class="dark" align="center">{$LANG_CARJACKINGS}</td>
+    <td class="grey" align="center">$tl_carjack</td>
+  </tr>
+</table>
 
 EOF;
-
-$col = 0;
-for ($i = 0; $i < $numspec; $i++) {
-  if ($col == 0)
-    echo "  <tr>\n";
-
-  echo <<<EOF
-    <td class="dark" align="center" style="white-space:nowrap" title="{$special[$i]['desc']}">{$special[$i]['title']}</td>
-    <td class="grey" align="center">{$special[$i]['total']}</td>
-
-EOF;
-
-  $col++;
-  if ($col == 3) {
-    echo "  </tr>\n";
-    $col = 0;
-  }
-}
-
-if ($col > 0) {
-  while ($col < 3) {
-    echo "    <td class=\"dark\" align=\"center\">&nbsp;</td>\n    <td class=\"grey\" align=\"center\">&nbsp;</td>\n";
-    $col++;
-  }
-
-  echo "  </tr>\n";
-}
-
-echo "</table>\n";
 
 //=============================================================================
 //========== Weapon Specific Totals ===========================================

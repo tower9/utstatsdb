@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -150,11 +150,11 @@ sql_free_result($result);
 $matches = 0;
 $start = ($page * $matchespage) - $matchespage;
 if ($plr > 0)
-  $result = sql_queryn($link, "SELECT gm_num,gm_type,gm_start,gm_timeoffset,gm_length,gm_map,gm_numplayers,mp_name FROM {$dbpre}gplayers,{$dbpre}matches,{$dbpre}maps WHERE {$dbpre}gplayers.gp_pnum=$plr AND {$dbpre}matches.gm_num={$dbpre}gplayers.gp_match AND {$dbpre}maps.mp_num=gm_map ORDER BY gm_num DESC LIMIT $start,$matchespage");
+  $result = sql_queryn($link, "SELECT gm_num,gm_type,gm_start,gm_length,gm_map,gm_numplayers,mp_name FROM {$dbpre}gplayers,{$dbpre}matches,{$dbpre}maps WHERE {$dbpre}gplayers.gp_pnum=$plr AND {$dbpre}matches.gm_num={$dbpre}gplayers.gp_match AND {$dbpre}maps.mp_num=gm_map ORDER BY gm_num DESC LIMIT $start,$matchespage");
 else if ($servernum > 0)
-  $result = sql_queryn($link, "SELECT gm_num,gm_type,gm_start,gm_timeoffset,gm_length,gm_map,gm_numplayers,mp_name FROM {$dbpre}matches USE INDEX (gm_svnum),{$dbpre}maps WHERE gm_server=$servernum AND {$dbpre}maps.mp_num=gm_map ORDER BY gm_num DESC LIMIT $start,$matchespage");
+  $result = sql_queryn($link, "SELECT gm_num,gm_type,gm_start,gm_length,gm_map,gm_numplayers,mp_name FROM {$dbpre}matches USE INDEX (gm_svnum),{$dbpre}maps WHERE gm_server=$servernum AND {$dbpre}maps.mp_num=gm_map ORDER BY gm_num DESC LIMIT $start,$matchespage");
 else
-  $result = sql_queryn($link, "SELECT gm_num,gm_type,gm_start,gm_timeoffset,gm_length,gm_map,gm_numplayers,mp_name FROM {$dbpre}matches,{$dbpre}maps WHERE gm_map=$mapnum AND {$dbpre}maps.mp_num=gm_map ORDER BY gm_num DESC LIMIT $start,$matchespage");
+  $result = sql_queryn($link, "SELECT gm_num,gm_type,gm_start,gm_length,gm_map,gm_numplayers,mp_name FROM {$dbpre}matches,{$dbpre}maps WHERE gm_map=$mapnum AND {$dbpre}maps.mp_num=gm_map ORDER BY gm_num DESC LIMIT $start,$matchespage");
 if (!$result) {
   echo "Game database error.<br>\n";
   exit;
@@ -170,7 +170,7 @@ while($row = sql_fetch_assoc($result)) {
   }
   $start = strtotime($gm_start);
   $matchdate = formatdate($start, 1);
-  $length = sprintf("%0.1f", $gm_length / (60.0 * $gm_timeoffset));
+  $length = sprintf("%0.1f", $gm_length / 6000.0);
   $map = stripspecialchars($mp_name);
   $matches++;
 

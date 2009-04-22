@@ -1,26 +1,9 @@
-UTStatsDB
-  Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
-
 Release Notes:
-
-Unreleased
-  Fixed not being able to select to display bots or all players in player list.
-  Added Microsoft SQL support.
-  Added server activity by weekday.
-  Added .wgmainbox, .wgsubbox, .wgbarspace, .wgbar, .wgprespace, and .wglabel to style sheets.
-  Adjusted style information for server activity by hour.
-  Added language strings "LANG_ACTIVITYBYWEEKDAY" and "LANG_WEEKDAYS".
-  Fixed server activity for SQLite.
-  Allow use of utlogo(layout).png file for top left logo.  Fallback to utlogo.png if image doesn't exist.
-  Fixed various issues in server query.
-  Rewrote documentation.
-  Added compatibility with non-standard game speeds.
 
 Version 3.06
   Added Tactical Ops support.
   Short server name switch now checked for use in all locations where the server name is displayed.
   Fixed language file not being used in some locations (chat log, match stats).
-  Added match end reason in chat log.
   Fixed support for log files with or without port in file name.
   Fixed multi-page display in rankings.
   Numerous fixes and changes to server query.

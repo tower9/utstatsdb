@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2007  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -167,31 +167,6 @@ EOF;
         }
         else
           echo "No existing database.<br />\n";
-        break;
-      case "mssql":
-        $link = sql_connect();
-        $result = sql_querynb($link, "EXEC sp_tables");
-        while ($row = sql_fetch_row($result)) {
-          if ($row[3] == "TABLE") {
-            $table = $row[2];
-            echo "$table....";
-            if (substr($table, 0, strlen($dbpre)) == $dbpre) {
-              if ($reinit == 2 && stristr($table, "config"))
-                echo "skipped config.<br />\n";
-              else {
-                $result2 = sql_queryn($link, "DROP TABLE $table");
-                if ($result)
-                  echo "removed.<br />\n";
-                else
-                  echo "Error Removing!<br />\n";
-              }
-            }
-            else
-              echo "skipped.<br />\n";
-          }
-        }
-        sql_free_result($result);
-        sql_close($link);
         break;
     }
     echo "<br />\n";

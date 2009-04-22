@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,22 +42,13 @@ function InitQuery($ip, $port)
 function SendQuery($fs, $query)
 {
   $data = "";
+
   if ( !fwrite($fs, $query) ) {
     fclose($fs);
     return $data;
   }
 
-  $data = "";
-  do {
-    $datain = @fread($fs, 2048);
-
-    if (strlen($datain) > 7) {
-      if (strlen($data))
-        $data .= substr($datain, 5);
-      else
-        $data .= $datain;
-    }
-  } while (strlen($datain) > 7);
+  $data = @fread($fs, 2048);
 
   return $data;
 }
@@ -150,16 +141,12 @@ function SendQuery3($fs, $query)
     if (strlen($datain) < 19)
       break;
 
-    $qid = ord(substr($datain, 14, 1));
+    $qid = ord(substr($datain, 15, 1));
+    $datax[$qid] = $datain;
 
     // Set last packet number
-    if ($qid & 0x80)
-    {
-      $qid &= 0x7F;
+    if (substr($datain, -3) == "\x00\x00\x00")
       $lastpacket = $qid;
-    }
-
-    $datax[$qid] = $datain;
 
     // Check to see if we've received all packets
     if ($lastpacket >= 0) {
@@ -174,7 +161,7 @@ function SendQuery3($fs, $query)
   // Reorder packets
   $datay = array();
   for ($i = 0; isset($datax[$i]); $i++) {
-    $x = ord(substr($datax[$i], 14, 1)) & 0x7f;
+    $x = ord(substr($datax[$i], 15, 1));
     $datay[$x] = $datax[$i];
   }
 
@@ -266,103 +253,6 @@ function ParseQuery(&$data, &$param, &$val, &$num)
   return $ok;
 }
 
-function ut3_params($param, $val)
-{
-  global $sq_server, $mutators;
-
-  switch ($param) {
-    case "hostname": $sq_server["hostname"] = $val; break;
-    case "hostport": $sq_server["hostport"] = $val; break;
-    case "p1073741826":
-      switch ($val) {
-        case "UTGame.UTDeathmatch": $sq_server["gametype"] = "Deathmatch"; break;
-        case "UTGameContent.UTCTFGame_Content": $sq_server["gametype"] = "CTF"; break;
-        case "UTGameContent.UTOnslaughtGame_Content": $sq_server["gametype"] = "Warfare"; break;
-        case "UTGameContent.UTVehicleCTFGame_Content": $sq_server["gametype"] = "Vehicle CTF"; break;
-        case "UTGame.UTTeamGame": $sq_server["gametype"] = "Team Deathmatch"; break;
-        case "UTGame.UTGame.UTDuelGame": $sq_server["gametype"] = "Duel"; break;
-        default: $sq_server["gametype"] = $val;
-      }
-      break;
-    case "p1073741825": $sq_server["mapname"] = $val; break;
-    case "numplayers": $sq_server["numplayers"] = $val; break;
-    case "maxplayers": $sq_server["maxplayers"] = $val; break;
-    case "p268435704": $sq_server["goalscore"] = $val; break;
-    case "p268435705": $sq_server["timelimit"] = $val; break;
-    case "p268435703": $sq_server["numbots"] = $val; break;
-    case "bUsesStats": $sq_server["gamestats"] = ($val ? "Enabled" : "Disabled"); break;
-    case "gamemode": $sq_server["joininprogress"] = ($val == "openplaying" ? "Allowed" : "Disallowed"); break;
-    case "NumOpenPublicConnections": $sq_server["playerslots"] = $val; break;
-    case "s0":
-      switch ($val) {
-        case 1: $sq_server["botskill"] = "Novice"; break;
-        case 2: $sq_server["botskill"] = "Average"; break;
-        case 3: $sq_server["botskill"] = "Experienced"; break;
-        case 4: $sq_server["botskill"] = "Skilled"; break;
-        case 5: $sq_server["botskill"] = "Adept"; break;
-        case 6: $sq_server["botskill"] = "Masterful"; break;
-        case 7: $sq_server["botskill"] = "Inhuman"; break;
-        case 8: $sq_server["botskill"] = "Godlike"; break;
-        default: $sq_server["botskill"] = $val;
-      }
-      break;
-    case "s6": $sq_server["standard"] = ($val ? "Yes" : "No"); break;
-    case "s7": $sq_server["password"] = ($val == 0 ? "None" : "Required"); break;
-    case "s8":
-      switch ($val) {
-        case 0: $sq_server["vsbots"] = "Disabled"; break;
-        case 1: $sq_server["vsbots"] = "Enabled"; break;
-        case 2: $sq_server["vsbots"] = "1:1"; break;
-        case 3: $sq_server["vsbots"] = "3:2"; break;
-        case 4: $sq_server["vsbots"] = "2:1"; break;
-        default: $sq_server["vsbots"] = $val;
-      }
-      break;
-    case "s10": $sq_server["forcedrespawn"] = ($val == 0 ? "No" : "Yes"); break;
-    case "p1073741827": $sq_server["description"] = $val; break;
-    case "p268435717":
-    {
-      $ival = intval($val);
-      if ($ival & 0x0001)
-        $mutators[] = "Kills Slow Time"; // UTGame.UTMutator_???? = 1
-      if ($ival & 0x0002)
-        $mutators[] = "Big Head"; // UTGame.UTMutator_BigHead = 2
-      if ($ival & 0x0008)
-        $mutators[] = "Friendly Fire"; // UTGame.UTMutator_FriendlyFire = 8
-      if ($ival & 0x0010)
-        $mutators[] = "Handicap"; // UTGame.UTMutator_Handicap = 16
-      if ($ival & 0x0020)
-        $mutators[] = "Instagib"; // UTGame.UTMutator_Instagib = 32
-      if ($ival & 0x0040)
-        $mutators[] = "Low Gravity"; // UTGame.UTMutator_LowGrav = 64
-      if ($ival & 0x0080)
-        $mutators[] = "No Super Pickups"; // UTGame.UTMutator_NoPowerups = 128
-      if ($ival & 0x0100)
-        $mutators[] = "No Translocator"; // UTGame.UTMutator_NoTranslocator = 256
-      if ($ival & 0x0200)
-        $mutators[] = "Slo Mo"; // UTGame.UTMutator_Slomo = 512
-      if ($ival & 0x0400)
-        $mutators[] = "Speed Freak"; // UTGame.UTMutator_SpeedFreak = 1024
-      if ($ival & 0x0800)
-        $mutators[] = "Super Berserk"; // UTGame.UTMutator_SuperBerserk = 2048
-      if ($ival & 0x1000)
-        $mutators[] = "Weapon Replacement"; // UTGame.UTMutator_WeaponReplacement = 8192
-      if ($ival & 0x2000)
-        $mutators[] = "Weapons Respawn"; // UTGame.UTMutator_WeaponsRespawn = 16384
-      break;
-    }
-    case "p1073741828":
-    {
-      $mut = explode("\x1C", $val);
-      for ($y = 0; isset($mut[$y]); $y++)
-        $mutators[] = $mut[$y];
-      break;
-    }
-    case "NumPrivateConnections": $sq_server["maxspectators"] = $val; break;
-    case "NumOpenPrivateConnections": $sq_server["spectateslots"] = $val; break;
-  }
-}
-
 function GetStatus($ip, $port)
 {
   global $query_type, $query_password, $sq_server, $sq_player, $sq_team, $sq_spect, $sq_bot;
@@ -391,7 +281,7 @@ function GetStatus($ip, $port)
     return false;
 
   if ($query_type == 1) {
-    // GameSpy Protocol - Server Info
+    // Server Info
     $mutators = array();
     $data = SendQuery($fs, "\x7f\x00\x00\x00\x00");
 
@@ -404,8 +294,7 @@ function GetStatus($ip, $port)
     $len2 = 0;
     $sq_server["hostport"] = ord($data[11]) * 256 + ord($data[10]);
     for ($i = 0; $i < 3; $i++) {
-      // $len = ord($data[$len2 + 18 + $i]); // Buggy protocol - doesn't always return accurate length
-      $len = strpos(substr($data, $len2 + 18 + $i), "\x00"); // Check for null character instead
+      $len = ord($data[$len2 + 18 + $i]);
       if ($len) {
         $val = substr($data, $len2 + $i + 19, $len - 1);
         $len2 += $len;
@@ -542,37 +431,18 @@ function GetStatus($ip, $port)
       $len2 = 0;
       $num = 0;
       while ($len2 < $datalen - 21) {
+        $num++;
         $len = ord($data[$len2 + 9]);
         if ($len > 0) {
-          $pplayer = stripspecialchars(substr($data, $len2 + 10, $len - 1));
-          $pping = ord($data[$len2 + $len + 11]) * 256 + ord($data[$len2 + $len + 10]);
-          $pscore = ord($data[$len2 + $len + 15]) * 256 + ord($data[$len2 + $len + 14]);
-
-          if ($pplayer == "Red Team Score") {
-            $sq_team[0]["team"] = "Red";
-            $sq_team[0]["score"] = $pscore;
-            $sq_team[0]["size"] = 0;
-            $teams = -1;
-          }
-          else if ($pplayer == "Blue Team Score") {
-            $sq_team[1]["team"] = "Blue";
-            $sq_team[1]["score"] = $pscore;
-            $sq_team[1]["size"] = 0;
-            $teams = -1;
-          }
-          else {
-            $num++;
-            $sq_player[$num]["player"] = $pplayer;
-            $sq_player[$num]["ping"] = $pping;
-            $sq_player[$num]["score"] = $pscore;
-          }
+          $sq_player[$num]["player"] = stripspecialchars(substr($data, $len2 + 10, $len - 1));
+          $sq_player[$num]["ping"] = ord($data[$len2 + $len + 11]) * 256 + ord($data[$len2 + $len + 10]);
+          $sq_player[$num]["score"] = ord($data[$len2 + $len + 15]) * 256 + ord($data[$len2 + $len + 14]);
         }
         $len2 += $len + 17;
       }
     }
   }
   else if ($query_type == 0 || $query_type == 2) {
-  	// Unreal or UT '99 Protocol
     $mutators = array();
     $data = SendQuery2($fs, "\\basic\\\\info\\\\rules\\\\gamestatus\\\\echo\\nothing");
     while (strlen($data)) {
@@ -762,8 +632,7 @@ function GetStatus($ip, $port)
       }
     }
   }
-  else if ($query_type == 3) {
-  	// UT3 Protocol
+  else if ($query_type == 3) { // UT3
     if ( !fwrite($fs, "\xFE\xFD\x09\x10\x20\x30\x40\xFF\xFF\xFF\x01") ) {
       fclose($fs);
       return false;
@@ -820,15 +689,105 @@ function GetStatus($ip, $port)
           $md = 0;
           while (isset($mdata[$md])) {
             if (($eq = strpos($mdata[$md], "=")) !== FALSE) {
-              $param = substr($mdata[$md], 0, $eq);
+              $param = substr($mdata[$md], 0, $eq - 1);
               $val = substr($mdata[$md], $eq + 1);
-              ut3_params($param, $val);
             }
             $md++;
           }
         }
-        else
-          ut3_params($param, $val);
+        else {
+          switch ($param) {
+            case "hostname": $sq_server["hostname"] = $val; break;
+            case "hostport": $sq_server["hostport"] = $val; break;
+            case "p1073741826":
+              switch ($val) {
+                case "UTGame.UTDeathmatch": $sq_server["gametype"] = "Deathmatch"; break;
+                case "UTGameContent.UTCTFGame_Content": $sq_server["gametype"] = "CTF"; break;
+                case "UTGameContent.UTOnslaughtGame_Content": $sq_server["gametype"] = "Warfare"; break;
+                case "UTGameContent.UTVehicleCTFGame_Content": $sq_server["gametype"] = "Vehicle CTF"; break;
+                case "UTGame.UTTeamGame": $sq_server["gametype"] = "Team Deathmatch"; break;
+                case "UTGame.UTGame.UTDuelGame": $sq_server["gametype"] = "Duel"; break;
+                default: $sq_server["gametype"] = $val;
+              }
+              break;
+            case "p1073741825": $sq_server["mapname"] = $val; break;
+            case "numplayers": $sq_server["numplayers"] = $val; break;
+            case "maxplayers": $sq_server["maxplayers"] = $val; break;
+            case "p268435704": $sq_server["goalscore"] = $val; break;
+            case "p268435705": $sq_server["timelimit"] = $val; break;
+            case "p268435703": $sq_server["numbots"] = $val; break;
+            case "bUsesStats": $sq_server["gamestats"] = ($val ? "Enabled" : "Disabled"); break;
+            case "gamemode": $sq_server["joininprogress"] = ($val == "openplaying" ? "Allowed" : "Disallowed"); break;
+            case "NumOpenPublicConnections": $sq_server["playerslots"] = $val; break;
+            case "s0":
+              switch ($val) {
+                case 1: $sq_server["botskill"] = "Novice"; break;
+                case 2: $sq_server["botskill"] = "Average"; break;
+                case 3: $sq_server["botskill"] = "Experienced"; break;
+                case 4: $sq_server["botskill"] = "Skilled"; break;
+                case 5: $sq_server["botskill"] = "Adept"; break;
+                case 6: $sq_server["botskill"] = "Masterful"; break;
+                case 7: $sq_server["botskill"] = "Inhuman"; break;
+                case 8: $sq_server["botskill"] = "Godlike"; break;
+                default: $sq_server["botskill"] = $val;
+              }
+              break;
+            case "s6": $sq_server["standard"] = ($val ? "Yes" : "No"); break;
+            case "s7": $sq_server["password"] = ($val == 0 ? "None" : "Required"); break;
+            case "s8":
+              switch ($val) {
+                case 0: $sq_server["vsbots"] = "Disabled"; break;
+                case 1: $sq_server["vsbots"] = "Enabled"; break;
+                case 2: $sq_server["vsbots"] = "1:1"; break;
+                case 3: $sq_server["vsbots"] = "3:2"; break;
+                case 4: $sq_server["vsbots"] = "2:1"; break;
+                default: $sq_server["vsbots"] = $val;
+              }
+              break;
+            case "s10": $sq_server["forcedrespawn"] = ($val == 0 ? "No" : "Yes"); break;
+            case "p1073741827": $sq_server["description"] = $val; break;
+            case "p268435717":
+            {
+              $ival = intval($val);
+              if ($ival & 0x0001)
+                $mutators[] = "Kills Slow Time"; // UTGame.UTMutator_???? = 1
+              if ($ival & 0x0002)
+                $mutators[] = "Big Head"; // UTGame.UTMutator_BigHead = 2
+              if ($ival & 0x0008)
+                $mutators[] = "Friendly Fire"; // UTGame.UTMutator_FriendlyFire = 8
+              if ($ival & 0x0010)
+                $mutators[] = "Handicap"; // UTGame.UTMutator_Handicap = 16
+              if ($ival & 0x0020)
+                $mutators[] = "Instagib"; // UTGame.UTMutator_Instagib = 32
+              if ($ival & 0x0040)
+                $mutators[] = "Low Gravity"; // UTGame.UTMutator_LowGrav = 64
+              if ($ival & 0x0080)
+                $mutators[] = "No Super Pickups"; // UTGame.UTMutator_NoPowerups = 128
+              if ($ival & 0x0100)
+                $mutators[] = "No Translocator"; // UTGame.UTMutator_NoTranslocator = 256
+              if ($ival & 0x0200)
+                $mutators[] = "Slo Mo"; // UTGame.UTMutator_Slomo = 512
+              if ($ival & 0x0400)
+                $mutators[] = "Speed Freak"; // UTGame.UTMutator_SpeedFreak = 1024
+              if ($ival & 0x0800)
+                $mutators[] = "Super Berserk"; // UTGame.UTMutator_SuperBerserk = 2048
+              if ($ival & 0x1000)
+                $mutators[] = "Weapon Replacement"; // UTGame.UTMutator_WeaponReplacement = 8192
+              if ($ival & 0x2000)
+                $mutators[] = "Weapons Respawn"; // UTGame.UTMutator_WeaponsRespawn = 16384
+              break;
+            }
+            case "p1073741828":
+            {
+              $mut = explode("\x1C", $val);
+              for ($y = 0; isset($mut[$y]); $y++)
+                $mutators[] = $mut[$y];
+              break;
+            }
+            case "NumPrivateConnections": $sq_server["maxspectators"] = $val; break;
+            case "NumOpenPrivateConnections": $sq_server["spectateslots"] = $val; break;
+          }
+        }
       }
     }
 
@@ -1342,12 +1301,8 @@ EOF;
         }
       }
     }
-    if ($numplr) {
-      if (isset($team))
-        array_multisort($score, SORT_NUMERIC, SORT_DESC, $name, $ping, $team);
-      else
-        array_multisort($score, SORT_NUMERIC, SORT_DESC, $name, $ping);
-    }
+    if ($numplr)
+      array_multisort($score, SORT_NUMERIC, SORT_DESC, $name, $ping, $team);
 
     $header = 0;
     for ($i = 0; $i < $numplr; $i++) {
@@ -1359,7 +1314,7 @@ EOF;
 
 EOF;
 
-        if ($teamnum <= 0) {
+        if (!$teamnum) {
           echo <<<EOF
             <tr>
               <td class="statustitle" align="center" colspan="3">
@@ -1380,7 +1335,7 @@ EOF;
         $header = 1;
       }
 
-      if (isset($name[$i]) && ($teamnum <= 0 || (isset($team[$i]) && $team[$i] == $teamnum - 1))) {
+      if (isset($name[$i]) && (!$teamnum || (isset($team[$i]) && $team[$i] == $teamnum - 1))) {
         echo <<<EOF
             <tr>
               <td>{$name[$i]}</td>
