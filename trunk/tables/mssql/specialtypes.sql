@@ -1,8 +1,7 @@
-CREATE TABLE %dbpre%specialtypes (
-  st_num smallint NOT NULL identity(1, 1),
+CREATE TABLE %dbpre%specialtypes
+(
   st_type varchar(40) NOT NULL default '',
-  st_snum smallint NOT NULL,
-  CONSTRAINT st_num primary key (st_num)
+  st_snum smallint NOT NULL
 );
 
 CREATE INDEX st_type ON %dbpre%specialtypes (st_type);

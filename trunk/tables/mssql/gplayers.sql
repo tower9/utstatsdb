@@ -32,8 +32,6 @@ CREATE TABLE %dbpre%gplayers
    gp_rchange decimal(14,8) NOT NULL default 0,
    gp_headshots smallint NOT NULL default 0,
    gp_firstblood tinyint NOT NULL default 0,
-   gp_carjack smallint NOT NULL default 0,
-   gp_roadkills smallint NOT NULL default 0,
    gp_teamkills0 smallint NOT NULL default 0,
    gp_teamkills1 smallint NOT NULL default 0,
    gp_teamkills2 smallint NOT NULL default 0,
@@ -108,10 +106,6 @@ CREATE TABLE %dbpre%gplayers
    gp_combo3 smallint NOT NULL default 0,
    gp_combo4 smallint NOT NULL default 0,
    gp_transgib smallint NOT NULL default 0,
-   gp_headhunter tinyint NOT NULL default 0,
-   gp_flakmonkey tinyint NOT NULL default 0,
-   gp_combowhore tinyint NOT NULL default 0,
-   gp_roadrampage tinyint NOT NULL default 0,
    gp_rank tinyint NOT NULL default 0,
    gp_team smallint NOT NULL default 0
 );
