@@ -1183,7 +1183,10 @@ function DisplayPlayers($teamnum)
       if (isset($plr["player"])) {
       	if (isset($plr["player"])) {
       	  $name[] = $plr["player"];
-          $score[] = $plr["score"];
+          if (isset($plr["score"]))
+            $score[] = $plr["score"];
+          else
+            $score[] = "";
           if (isset($plr["deaths"]))
             $deaths[] = $plr["deaths"];
           else

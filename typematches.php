@@ -210,6 +210,9 @@ echo <<<EOF
   </tr>
 </table>
 
+</body>
+</html>
+
 EOF;
 
 ?>
