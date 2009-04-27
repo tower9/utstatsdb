@@ -39,6 +39,7 @@ function parselog($file,$chatfile)
   global $events, $pickups, $gkills, $gscores, $tkills, $chatlog, $safemode;
   global $spree, $multi, $tchange, $uselimit, $assist, $relog, $pwastats;
   global $stattype, $nohtml, $flagstatus, $killmatch, $mutantstat, $lms;
+  global $special, $numspec, $specialtypes, $numspectypes;
 
   if ($nohtml)
     $break = "";
@@ -63,6 +64,38 @@ function parselog($file,$chatfile)
   $uselimit = 0;
   if (strtolower($dbtype) == "mysql" && ($mysqlverh > 3 || ($mysqlverh == 3 && $mysqlverl >= 23)))
     $uselimit = 1;
+
+  // Load Special Events
+  $result = sql_queryn($link, "SELECT se_num,se_title,se_trigtype,se_trignum FROM {$dbpre}special ORDER BY se_num");
+  if (!$result) {
+    echo "Special event database error.<br />\n";
+    exit;
+  }
+  $numspec = 0;
+  $special = array(array ());
+  while ($row = sql_fetch_row($result)) {
+    $special[$numspec][0] = intval($row[0]);
+    $special[$numspec][1] = $row[1];
+    $special[$numspec][2] = intval($row[2]);
+    if ($special[$numspec][2] == 2)
+      $match->roadkill = $numspec;
+    if ($special[$numspec][2] == 3)
+      $match->roadrampage = $numspec;
+    $special[$numspec++][3] = intval($row[3]);
+  }
+  sql_free_result($result);
+  $result = sql_queryn($link, "SELECT st_type,st_snum FROM {$dbpre}specialtypes");
+  if (!$result) {
+    echo "Special event type database error.<br />\n";
+    exit;
+  }
+  $numspectypes = 0;
+  $specialtypes = array(array ());
+  while ($row = sql_fetch_row($result)) {
+    $specialtypes[$numspec][0] = $row[0];
+    $specialtypes[$numspec++][1] = intval($row[1]);
+  }
+  sql_free_result($result);
 
   $numlogfiles = $chatfile != "" ? 2 : 1;
   for ($logfiles = 0; $logfiles < $numlogfiles; $logfiles++) {

@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ if (preg_match("/logkillevents.php/i", $_SERVER["PHP_SELF"])) {
 function tag_k ($i, $data)
 {
   global $match, $player, $gkills, $spree, $multi, $killmatch, $tchange;
+  global $special, $numspec, $specialtypes, $numspectypes;
 
   if ($i < 6 || $match->ended || !$match->started)
     return;
@@ -107,43 +108,31 @@ function tag_k ($i, $data)
     else
       $killmatch[$killer][$victim] = 1;
 
-    // Check for headhunter
-    if (stristr($killweapon, "HeadShot")) {
-      $player[$killer]->headshots++; // Head Shots
-      $match->headshots++;
-      if ($player[$killer]->headshots >= 15 && !$player[$killer]->headhunter) {
-        $player[$killer]->headhunter = 1;
-        weaponspecial($killtime, $killer, 1, 0);
-      }
-    }
-
-    // Check for flak monkey
-    if (stristr($killweapon, "DamTypeFlakChunk") || stristr($killweapon, "DamTypeFlakShell")) {
-      $player[$killer]->flakkills++;
-      if ($player[$killer]->flakkills >= 15 && !$player[$killer]->flakmonkey) {
-        $player[$killer]->flakmonkey = 1;
-        weaponspecial($killtime, $killer, 2, 0);
-      }
-    }
-
-    // Check for combo whore
-    if (stristr($killweapon, "DamTypeShockCombo")) {
-      $player[$killer]->combokills++;
-      if ($player[$killer]->combokills >= 15 && !$player[$killer]->combowhore) {
-        $player[$killer]->combowhore = 1;
-        weaponspecial($killtime, $killer, 4, 0);
+    // Check for special event
+    for ($i = 0; $i < $numspectypes; $i++) {
+      if ($specialtypes[$i][2] == 0 && $specialtypes[$i][3] > 0 && stristr($killweapon, $specialtypes[$i][1])) {
+        $player[$killer]->specialcount[$specialtypes[$i][0]]++;
+        if ($player[$killer]->specialcount[$specialtypes[$i][0]] == $specialtypes[$i][3]) {
+          $player[$killer]->specialevents[$specialtypes[$i][0]]++;
+          $match->specialevents[$specialtypes[$i][0]]++;
+          weaponspecial($killtime, $killer, $specialtypes[$i][0], 0);
+          $player[$killer]->specialcount[$specialtypes[$i][0]] = 0;
+        }
       }
     }
 
     // Check for road kill
-    if ($killweapsec == 4)
-      $player[$killer]->roadkills++;
+    if ($killweapsec == 4) {
+      $i = array_search(specialtypes[
+      $player[$killer]->specialcount[$specialtypes[$i][0]]++; // roadkills++;
 
-    // Check for road rampage
-    if ($player[$killer]->roadkills >= 15 && !$player[$killer]->roadrampage) {
-      $player[$killer]->roadrampage = 1;
-      weaponspecial($killtime, $killer, 5, 0);
+      // Check for road rampage
+      if ($player[$killer]->roadkills >= 15 && !$player[$killer]->roadrampage) {
+        $player[$killer]->roadrampage = 1;
+        weaponspecial($killtime, $killer, 5, 0);
+      }
     }
+*/
 
     // Track Killing Sprees for Killer
     if (!$spree[$killer][1]) {

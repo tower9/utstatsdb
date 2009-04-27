@@ -243,16 +243,6 @@ function storedata()
         $plr_headshots += $player[$i]->headshots;
         $plr_firstblood += $player[$i]->firstblood;
         $plr_transgib += $player[$i]->transgib;
-        if ($player[$i]->headhunter)
-          $plr_headhunter++;
-        if ($player[$i]->flakmonkey)
-          $plr_flakmonkey++;
-        if ($player[$i]->combowhore)
-          $plr_combowhore++;
-        if ($player[$i]->roadrampage)
-          $plr_roadrampage++;
-        $plr_carjack += $player[$i]->carjack;
-        $plr_roadkills += $player[$i]->roadkills;
         $plr_multi1 += $player[$i]->multi[0];
         $plr_multi2 += $player[$i]->multi[1];
         $plr_multi3 += $player[$i]->multi[2];
@@ -282,6 +272,19 @@ function storedata()
         $plr_combo2 += $player[$i]->combo[1];
         $plr_combo3 += $player[$i]->combo[2];
         $plr_combo4 += $player[$i]->combo[3];
+
+/*		*tag*
+        $plr_carjack += $player[$i]->carjack;
+        $plr_roadkills += $player[$i]->roadkills;
+        if ($player[$i]->headhunter)
+          $plr_headhunter++;
+        if ($player[$i]->flakmonkey)
+          $plr_flakmonkey++;
+        if ($player[$i]->combowhore)
+          $plr_combowhore++;
+        if ($player[$i]->roadrampage)
+          $plr_roadrampage++;
+*/
       }
       $plr_matches++;
 
@@ -450,7 +453,7 @@ plr_bot=$plr_bot,
 plr_frags=$plr_frags,plr_score=$plr_score,plr_kills=$plr_kills,plr_deaths=$plr_deaths,plr_suicides=$plr_suicides,
 plr_headshots=$plr_headshots,plr_firstblood=$plr_firstblood,
 plr_transgib=$plr_transgib,plr_headhunter=$plr_headhunter,plr_flakmonkey=$plr_flakmonkey,plr_combowhore=$plr_combowhore,
-plr_roadrampage=$plr_roadrampage,plr_carjack=$plr_carjack,plr_roadkills=$plr_roadkills,
+*tag* plr_roadrampage=$plr_roadrampage,plr_carjack=$plr_carjack,plr_roadkills=$plr_roadkills,
 plr_user='$plr_user',
 plr_id='$plr_id',
 plr_key='$plr_key',
@@ -482,7 +485,7 @@ $plr_bot,
 $plr_frags,$plr_score,$plr_kills,$plr_deaths,$plr_suicides,
 $plr_headshots,$plr_firstblood,
 $plr_transgib,$plr_headhunter,$plr_flakmonkey,$plr_combowhore,
-$plr_roadrampage,$plr_carjack,$plr_roadkills,
+*tag* $plr_roadrampage,$plr_carjack,$plr_roadkills,
 '$plr_user',
 '$plr_id',
 '$plr_key',
@@ -601,7 +604,7 @@ $gt_extraa,$gt_extrab,$gt_extrac)");
         {$player[$i]->spree[0]},{$player[$i]->spree[1]},{$player[$i]->spree[2]},{$player[$i]->spree[3]},{$player[$i]->spree[4]},{$player[$i]->spree[5]},
         {$player[$i]->combo[0]},{$player[$i]->combo[1]},{$player[$i]->combo[2]},{$player[$i]->combo[3]},
         {$player[$i]->transgib},
-        {$player[$i]->headhunter},{$player[$i]->flakmonkey},{$player[$i]->combowhore},{$player[$i]->roadrampage},
+        *tag* {$player[$i]->headhunter},{$player[$i]->flakmonkey},{$player[$i]->combowhore},{$player[$i]->roadrampage},
         {$player[$i]->rank},
         {$player[$i]->team})");
       if (!$result) {
@@ -683,7 +686,7 @@ $gt_extraa,$gt_extrab,$gt_extrac)");
           $tl_flakmonkey++;
         if ($player[$i]->combowhore)
           $tl_combowhore++;
-        if ($player[$i]->roadrampage)
+        *tag* if ($player[$i]->roadrampage)
           $tl_roadrampage++;
         $tl_carjack += $player[$i]->carjack;
         $tl_roadkills += $player[$i]->roadkills;
@@ -1000,7 +1003,7 @@ $gt_extraa,$gt_extrab,$gt_extrac)");
             $tl_chcombowhore_gms = $plr_matches;
             $tl_chcombowhore_tm = $plr_time;
           }
-          if ($plr_roadrampage > $tl_chroadrampage) {
+          *tag* if ($plr_roadrampage > $tl_chroadrampage) {
             $tl_chroadrampage = $plr_roadrampage;
             $tl_chroadrampage_plr = $pnum;
             $tl_chroadrampage_gms = $plr_matches;
@@ -1146,7 +1149,7 @@ tl_spree5=$tl_spree5,tl_spreet5=$tl_spreet5,tl_spreek5=$tl_spreek5,
 tl_spree6=$tl_spree6,tl_spreet6=$tl_spreet6,tl_spreek6=$tl_spreek6,
 tl_combo1=$tl_combo1,tl_combo2=$tl_combo2,tl_combo3=$tl_combo3,tl_combo4=$tl_combo4,
 tl_transgib=$tl_transgib,tl_headhunter=$tl_headhunter,tl_flakmonkey=$tl_flakmonkey,tl_combowhore=$tl_combowhore,
-tl_roadrampage=$tl_roadrampage,tl_carjack=$tl_carjack,tl_roadkills=$tl_roadkills,
+*tag* tl_roadrampage=$tl_roadrampage,tl_carjack=$tl_carjack,tl_roadkills=$tl_roadkills,
 tl_chfrags=$tl_chfrags,tl_chfrags_plr=$tl_chfrags_plr,tl_chfrags_gms=$tl_chfrags_gms,tl_chfrags_tm=$tl_chfrags_tm,
 tl_chkills=$tl_chkills,tl_chkills_plr=$tl_chkills_plr,tl_chkills_gms=$tl_chkills_gms,tl_chkills_tm=$tl_chkills_tm,
 tl_chdeaths=$tl_chdeaths,tl_chdeaths_plr=$tl_chdeaths_plr,tl_chdeaths_gms=$tl_chdeaths_gms,tl_chdeaths_tm=$tl_chdeaths_tm,
@@ -1182,7 +1185,7 @@ tl_chnodeconstdestroyed=$tl_chnodeconstdestroyed,tl_chnodeconstdestroyed_plr=$tl
 tl_chheadhunter=$tl_chheadhunter,tl_chheadhunter_plr=$tl_chheadhunter_plr,tl_chheadhunter_gms=$tl_chheadhunter_gms,tl_chheadhunter_tm=$tl_chheadhunter_tm,
 tl_chflakmonkey=$tl_chflakmonkey,tl_chflakmonkey_plr=$tl_chflakmonkey_plr,tl_chflakmonkey_gms=$tl_chflakmonkey_gms,tl_chflakmonkey_tm=$tl_chflakmonkey_tm,
 tl_chcombowhore=$tl_chcombowhore,tl_chcombowhore_plr=$tl_chcombowhore_plr,tl_chcombowhore_gms=$tl_chcombowhore_gms,tl_chcombowhore_tm=$tl_chcombowhore_tm,
-tl_chroadrampage=$tl_chroadrampage,tl_chroadrampage_plr=$tl_chroadrampage_plr,tl_chroadrampage_gms=$tl_chroadrampage_gms,tl_chroadrampage_tm=$tl_chroadrampage_tm,
+*tag* tl_chroadrampage=$tl_chroadrampage,tl_chroadrampage_plr=$tl_chroadrampage_plr,tl_chroadrampage_gms=$tl_chroadrampage_gms,tl_chroadrampage_tm=$tl_chroadrampage_tm,
 tl_chwins=$tl_chwins,tl_chwins_plr=$tl_chwins_plr,tl_chwins_gms=$tl_chwins_gms,tl_chwins_tm=$tl_chwins_tm,
 tl_chteamwins=$tl_chteamwins,tl_chteamwins_plr=$tl_chteamwins_plr,tl_chteamwins_gms=$tl_chteamwins_gms,tl_chteamwins_tm=$tl_chteamwins_tm,
 tl_chfragssg=$tl_chfragssg,tl_chfragssg_plr=$tl_chfragssg_plr,tl_chfragssg_tm=$tl_chfragssg_tm,tl_chfragssg_map=$tl_chfragssg_map,tl_chfragssg_date='$tl_chfragssg_date',
@@ -1225,7 +1228,7 @@ $tl_spree5,$tl_spreet5,$tl_spreek5,
 $tl_spree6,$tl_spreet6,$tl_spreek6,
 $tl_combo1,$tl_combo2,$tl_combo3,$tl_combo4,
 $tl_transgib,$tl_headhunter,$tl_flakmonkey,$tl_combowhore,
-$tl_roadrampage,$tl_carjack,$tl_roadkills,
+*tag* $tl_roadrampage,$tl_carjack,$tl_roadkills,
 $tl_chfrags,$tl_chfrags_plr,$tl_chfrags_gms,$tl_chfrags_tm,
 $tl_chkills,$tl_chkills_plr,$tl_chkills_gms,$tl_chkills_tm,
 $tl_chdeaths,$tl_chdeaths_plr,$tl_chdeaths_gms,$tl_chdeaths_tm,
@@ -1261,7 +1264,7 @@ $tl_chnodeconstdestroyed,$tl_chnodeconstdestroyed_plr,$tl_chnodeconstdestroyed_g
 $tl_chheadhunter,$tl_chheadhunter_plr,$tl_chheadhunter_gms,$tl_chheadhunter_tm,
 $tl_chflakmonkey,$tl_chflakmonkey_plr,$tl_chflakmonkey_gms,$tl_chflakmonkey_tm,
 $tl_chcombowhore,$tl_chcombowhore_plr,$tl_chcombowhore_gms,$tl_chcombowhore_tm,
-$tl_chroadrampage,$tl_chroadrampage_plr,$tl_chroadrampage_gms,$tl_chroadrampage_tm,
+*tag* $tl_chroadrampage,$tl_chroadrampage_plr,$tl_chroadrampage_gms,$tl_chroadrampage_tm,
 $tl_chwins,$tl_chwins_plr,$tl_chwins_gms,$tl_chwins_tm,
 $tl_chteamwins,$tl_chteamwins_plr,$tl_chteamwins_gms,$tl_chteamwins_tm,
 $tl_chfragssg,$tl_chfragssg_plr,$tl_chfragssg_tm,$tl_chfragssg_map,'$tl_chfragssg_date',

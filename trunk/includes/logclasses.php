@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -108,6 +108,10 @@ class Match {
   var $gscount = 0;
   var $tkcount = 0;
   var $numchat = 0;
+
+  var $specialevents = array();
+  var $roadkill = 0;
+  var $roadrampage = 0;
 }
 
 class Player {
@@ -155,14 +159,6 @@ class Player {
   var $tossed = array(0, 0, 0, 0);
   var $holdtime = array(0, 0, 0, 0);
   var $transgib = 0;
-  var $headhunter = 0;
-  var $flakkills = 0;
-  var $flakmonkey = 0;
-  var $combokills = 0;
-  var $combowhore = 0;
-  var $roadrampage = 0;
-  var $carjack = 0;
-  var $roadkills = 0;
   var $rank = 0;
   var $num = 0;
   var $named = false;
@@ -172,6 +168,8 @@ class Player {
   var $globalmatches = 0;
   var $globaltime = 0;
   var $lms = 0;
+  var $specialevents = array();
+  var $specialcount = array();
 
   function is_bot()
   {

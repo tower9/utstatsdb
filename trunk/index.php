@@ -188,9 +188,10 @@ EOF;
 EOF;
 
     for ($i = 0; $i < 24; $i++) {
-      $height = round(($hactive[$i] / $hmax) * 0.9 * 142);
+      $num = $hactive[$i];
+      $height = round(($num / $hmax) * 0.9 * 142);
       $bottom = $height + 2;
-      echo "              <div class=\"tgbarspace\">&nbsp;</div><div class=\"tgbar\" style=\"height: {$height}px; bottom: {$bottom}px\">&nbsp;</div>\n";
+      echo "              <div class=\"tgbarspace\">&nbsp;</div><div class=\"tgbar\" style=\"height: {$height}px; bottom: {$bottom}px\" title=\"{$num}\">&nbsp;</div>\n";
     }
 
     echo "              <div class=\"tgblank\">&nbsp;</div>\n";
@@ -244,9 +245,10 @@ EOF;
 EOF;
 
     for ($i = 1; $i <= 7; $i++) {
-      $height = round(($wactive[$i] / $hmax) * 0.9 * 142);
+      $num = $wactive[$i];
+      $height = round(($num / $hmax) * 0.9 * 142);
       $bottom = $height + 2;
-      echo "              <div class=\"wgbarspace\">&nbsp;</div><div class=\"wgbar\" style=\"height: {$height}px; bottom: {$bottom}px\">&nbsp;</div>\n";
+      echo "              <div class=\"wgbarspace\">&nbsp;</div><div class=\"wgbar\" style=\"height: {$height}px; bottom: {$bottom}px\" title=\"{$num}\">&nbsp;</div>\n";
     }
 
     echo "              <div class=\"tgblank\">&nbsp;</div>\n";
