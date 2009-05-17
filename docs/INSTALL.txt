@@ -154,13 +154,13 @@ Optional Parameters:
 &nohtml   - Doesn't display html tags (for command line use).
 
 The logs.php file can be run from the command line.  You can run it using:
-php logs.php pass=test
+php logs.php pass=<updatepass> nohtml
 
-You can easily add this to your crontab or task scheduler to run periodically.
+This can be added to your crontab or task scheduler to run periodically.
 
-When the log parser is run, it will delete all but the last two incomplete logs
-for each individual server name.  This is to prevent the system from deleting
-logs for games that are still in session.
+When the log parser is run (without the savelogs parameter), it will delete all 
+but the last two incomplete logs for each individual server name.  This is to 
+prevent the system from deleting logs for games that are still in session.
 
 Only matches that have an EndGame (EG) tag line for a frag/score limit or time 
 limit reached will be added to the database.  By default, if the server is shut 
