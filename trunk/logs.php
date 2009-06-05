@@ -217,7 +217,7 @@ function checkfile($pre, $noport, $file, &$fdate)
 }
 
 function rawlist($conn_id, $path)
-{ 
+{
   $list = ftp_nlist($conn_id, $path);
   $newlist = array();
   while (list($row) = each($list)) {
@@ -227,7 +227,7 @@ function rawlist($conn_id, $path)
       $newlist[] = $buf;
     }
   }
-  return $newlist; 
+  return $newlist;
 }
 
 function release_lock()
@@ -703,7 +703,7 @@ while (isset($conflogs["logpath"][$lognum])) {
 
   if (($uid = @getmyuid()) != FALSE)
 	  $gid = @getmygid();
-  if ( $uid != FALSE && $gid != FALSE ) {
+  if ($uid != FALSE && $gid != FALSE) {
     echo "{$bold}Setting permissions in directory '$logpath' for '{$logprefix}*':{$ebold}{$break}\n";
     $lp = $logpath."{$logprefix}*";
     @chown($lp, $uid);
@@ -712,205 +712,208 @@ while (isset($conflogs["logpath"][$lognum])) {
   }
 
   echo "{$bold}Processing directory '$logpath' for '{$logprefix}*':{$ebold}{$break}\n";
-  $handle = opendir($logpath);
-  while (($file = readdir($handle)) != false) {
-    if (substr($file, 0, strlen($logprefix)) == $logprefix) {
-      $fdate = "";
-      if ($stattype = checkfile($logprefix, $noport, $file, $fdate)) {
-        $logs[$files] = $file;
-        $logtype[$files] = $stattype;
-        $chatlogs[$files] = "";
-        if ($chatprefix != "")
-        {
-          $chatfile = $chatprefix.substr($file, strlen($logprefix));
-          if (file_exists($logpath.$chatfile))
-            $chatlogs[$files] = $chatfile;
+  if (($handle = @opendir($logpath)) == FALSE)
+    echo "{$bold}Error opening log files - check your local log path '{$logpath}'.{$ebold}{$break}\n";
+  else {
+    while (($file = readdir($handle)) != FALSE) {
+      if (substr($file, 0, strlen($logprefix)) == $logprefix) {
+        $fdate = "";
+        if ($stattype = checkfile($logprefix, $noport, $file, $fdate)) {
+          $logs[$files] = $file;
+          $logtype[$files] = $stattype;
+          $chatlogs[$files] = "";
+          if ($chatprefix != "")
+          {
+            $chatfile = $chatprefix.substr($file, strlen($logprefix));
+            if (file_exists($logpath.$chatfile))
+              $chatlogs[$files] = $chatfile;
+          }
+          $logdate[$files++] = $fdate;
         }
-        $logdate[$files++] = $fdate;
+        if ($test)
+          echo "[$stattype] $file / $fdate{$break}\n";
       }
-      if ($test)
-        echo "[$stattype] $file / $fdate{$break}\n";
     }
-  }
-  closedir($handle); 
-  if ($files > 1)
-    array_multisort($logdate, $logs, $chatlogs, $logtype, SORT_NUMERIC, SORT_ASC);
+    closedir($handle);
+    if ($files > 1)
+      array_multisort($logdate, $logs, $chatlogs, $logtype, SORT_NUMERIC, SORT_ASC);
 
-  $numinc = 0;
-  $incomplete = array();
-  for ($i = 0; $i < $files; $i++) {
-    if (!$safemode)
-      set_time_limit($config["php_timelimit"]); // Reset script timeout counter
-    echo "Processing log '$logs[$i]'...";
-    $file = $logpath.$logs[$i];
-    if ($chatlogs[$i] != "")
-      $chatfile = $logpath.$chatlogs[$i];
-    else
-      $chatfile = "";
-    $logname = $logs[$i];
-    $stattype = $logtype[$i];
+    $numinc = 0;
+    $incomplete = array();
+    for ($i = 0; $i < $files; $i++) {
+      if (!$safemode)
+        set_time_limit($config["php_timelimit"]); // Reset script timeout counter
+      echo "Processing log '$logs[$i]'...";
+      $file = $logpath.$logs[$i];
+      if ($chatlogs[$i] != "")
+        $chatfile = $logpath.$chatlogs[$i];
+      else
+        $chatfile = "";
+      $logname = $logs[$i];
+      $stattype = $logtype[$i];
 
-    if ($chatfile == "" && $chatreq)
-      $match->ended = 18;
-    else {
-      $match->ended = parselog($file,$chatfile);
+      if ($chatfile == "" && $chatreq)
+        $match->ended = 18;
+      else {
+        $match->ended = parselog($file,$chatfile);
 
-      // Check for ended on map switch or server quit - set new ended type
-      if ($config["allowincomplete"] && $match->ended == 6) // Map Change
-        $match->ended = 16;
-      else if  ($config["allowincomplete"] >= 2 && $match->ended == 2) // Other Endgame
-        $match->ended = 12;
-      else if  ($config["allowincomplete"] >= 3 && $match->ended == 7) // Server Quit
-        $match->ended = 17;
+        // Check for ended on map switch or server quit - set new ended type
+        if ($config["allowincomplete"] && $match->ended == 6) // Map Change
+          $match->ended = 16;
+        else if  ($config["allowincomplete"] >= 2 && $match->ended == 2) // Other Endgame
+          $match->ended = 12;
+        else if  ($config["allowincomplete"] >= 3 && $match->ended == 7) // Server Quit
+          $match->ended = 17;
 
-      if ($match->numhumans < 2 && !$config["savesingle"] && ($match->ended == 1 || $match->ended == 12 || $match->ended == 16 || $match->ended == 17))
-        $match->ended = 8;
-      else if ($match->numplayers < 2 && $config["savesingle"] == 1 && ($match->ended == 1 || $match->ended == 12 || $match->ended == 16 || $match->ended == 17))
-        $match->ended = 5;
-    }
+        if ($match->numhumans < 2 && !$config["savesingle"] && ($match->ended == 1 || $match->ended == 12 || $match->ended == 16 || $match->ended == 17))
+          $match->ended = 8;
+        else if ($match->numplayers < 2 && $config["savesingle"] == 1 && ($match->ended == 1 || $match->ended == 12 || $match->ended == 16 || $match->ended == 17))
+          $match->ended = 5;
+      }
 
-    switch ($match->ended) {
-      case -1:
-        break;
-      case 1:
-      case 12:
-      case 16:
-      case 17:
-        if ($test) {
-          echo "Debug - not stored.{$break}\n";
-          $logs_saved++;
-        }
-        else {
-          if ($matchnum = storedata()) {
-            echo "match $matchnum successfully processed.{$break}\n";
+      switch ($match->ended) {
+        case -1:
+          break;
+        case 1:
+        case 12:
+        case 16:
+        case 17:
+          if ($test) {
+            echo "Debug - not stored.{$break}\n";
             $logs_saved++;
           }
-          else
-            echo "not processed.{$break}\n";
-        }
-        if (isset($backuppath) && $backuppath) {
-          copy($file, "{$backuppath}{$logs[$i]}");
-          if ($chatfile != "" && file_exists($chatfile))
-            copy($chatfile, "{$backuppath}{$chatlogs[$i]}");
-        }
-        if (!$save)
-          dellog($file,$chatfile);
-        break;
-      case 2:
-        echo "unknown endgame reason.{$break}\n";
-        if (!$save)
-          dellog($file,$chatfile);
-        break;
-      case 3:
-        echo "invalid.{$break}\n";
-        if (!$save)
-          dellog($file,$chatfile);
-        break;
-      case 4:
-        echo "already in database.{$break}\n";
-        if (!$save)
-          dellog($file,$chatfile);
-        break;
-      case 5:
-        echo "insufficient players.{$break}\n";
-        if (!$save)
-          dellog($file,$chatfile);
-        break;
-      case 6:
-        echo "mapchange.{$break}\n";
-        if (!$save)
-          dellog($file,$chatfile);
-        break;
-      case 7:
-        echo "serverquit.{$break}\n";
-        if (!$save)
-          dellog($file,$chatfile);
-        break;
-      case 8:
-        echo "insufficient human players.{$break}\n";
-        if (!$save)
-          dellog($file,$chatfile);
-        break;
-      case 9:
-        echo "scoreless match.{$break}\n";
-        if (!$save)
-          dellog($file,$chatfile);
-        break;
-      case 10:
-        echo "bad parse in database.{$break}\n";
-        break;
-      case 11:
-        echo "warm-up match.{$break}\n";
-        if (!$save)
-          dellog($file,$chatfile);
-        break;
-      case 18:
-        echo "no chat log.{$break}\n";
-        break;
-      default:
-        if (!$config["skipinsession"]) {
-          echo "incomplete.{$break}\n";
+          else {
+            if ($matchnum = storedata()) {
+              echo "match $matchnum successfully processed.{$break}\n";
+              $logs_saved++;
+            }
+            else
+              echo "not processed.{$break}\n";
+          }
+          if (isset($backuppath) && $backuppath) {
+            copy($file, "{$backuppath}{$logs[$i]}");
+            if ($chatfile != "" && file_exists($chatfile))
+              copy($chatfile, "{$backuppath}{$chatlogs[$i]}");
+          }
           if (!$save)
-          dellog($file,$chatfile);
-        }
-        else {
-          echo "incomplete (in session?).{$break}\n";
-          $incomplete[$numinc][0] = $file;
-          $incomplete[$numinc++][1] = $servername;
-        }
+            dellog($file,$chatfile);
+          break;
+        case 2:
+          echo "unknown endgame reason.{$break}\n";
+          if (!$save)
+            dellog($file,$chatfile);
+          break;
+        case 3:
+          echo "invalid.{$break}\n";
+          if (!$save)
+            dellog($file,$chatfile);
+          break;
+        case 4:
+          echo "already in database.{$break}\n";
+          if (!$save)
+            dellog($file,$chatfile);
+          break;
+        case 5:
+          echo "insufficient players.{$break}\n";
+          if (!$save)
+            dellog($file,$chatfile);
+          break;
+        case 6:
+          echo "mapchange.{$break}\n";
+          if (!$save)
+            dellog($file,$chatfile);
+          break;
+        case 7:
+          echo "serverquit.{$break}\n";
+          if (!$save)
+            dellog($file,$chatfile);
+          break;
+        case 8:
+          echo "insufficient human players.{$break}\n";
+          if (!$save)
+            dellog($file,$chatfile);
+          break;
+        case 9:
+          echo "scoreless match.{$break}\n";
+          if (!$save)
+            dellog($file,$chatfile);
+          break;
+        case 10:
+          echo "bad parse in database.{$break}\n";
+          break;
+        case 11:
+          echo "warm-up match.{$break}\n";
+          if (!$save)
+            dellog($file,$chatfile);
+          break;
+        case 18:
+          echo "no chat log.{$break}\n";
+          break;
+        default:
+          if (!$config["skipinsession"]) {
+            echo "incomplete.{$break}\n";
+            if (!$save)
+            dellog($file,$chatfile);
+          }
+          else {
+            echo "incomplete (in session?).{$break}\n";
+            $incomplete[$numinc][0] = $file;
+            $incomplete[$numinc++][1] = $servername;
+          }
+      }
     }
-  }
 
-  if (!$files)
-    echo "{$bold}No log files to process.{$ebold}{$break}\n";
-  else if (!$logs_saved)
-    echo "{$bold}0 of $files logs processed - No new logs added.{$ebold}{$break}\n";
-  else {
-    // Remove all but most recent two incomplete log files per server
-    if (!$safemode)
-      set_time_limit($config["php_timelimit"]); // Reset script timeout counter
-    if (!$save) {
-      $numservers = 0;
-      $serverlist = array();
-      for ($i = $numinc - 1; $i >= 0; $i--) {
-        $file = $incomplete[$i][0];
-        $servername = $incomplete[$i][1];
-        for ($i2 = 0, $cserver = -1; $i2 < $numservers && $cserver < 0; $i2++) {
-          if (!strcmp($servername, $serverlist[$i2][0]))
-            $cserver = $i2;
-        }
-        if ($cserver >= 0) {
-          $serverlist[$cserver][1]++;
-          if ($serverlist[$cserver][1] > 2) {
-            unlink($file);
-            $serverlist[$cserver][2]++;
-            // Remove associated demo logs - need to figure out way to identify demo files based on log filename
+    if (!$files)
+      echo "{$bold}No log files to process.{$ebold}{$break}\n";
+    else if (!$logs_saved)
+      echo "{$bold}0 of $files logs processed - No new logs added.{$ebold}{$break}\n";
+    else {
+      // Remove all but most recent two incomplete log files per server
+      if (!$safemode)
+        set_time_limit($config["php_timelimit"]); // Reset script timeout counter
+      if (!$save) {
+        $numservers = 0;
+        $serverlist = array();
+        for ($i = $numinc - 1; $i >= 0; $i--) {
+          $file = $incomplete[$i][0];
+          $servername = $incomplete[$i][1];
+          for ($i2 = 0, $cserver = -1; $i2 < $numservers && $cserver < 0; $i2++) {
+            if (!strcmp($servername, $serverlist[$i2][0]))
+              $cserver = $i2;
+          }
+          if ($cserver >= 0) {
+            $serverlist[$cserver][1]++;
+            if ($serverlist[$cserver][1] > 2) {
+              unlink($file);
+              $serverlist[$cserver][2]++;
+              // Remove associated demo logs - need to figure out way to identify demo files based on log filename
+            }
+          }
+          else {
+            $serverlist[$numservers][0] = $servername;
+            $serverlist[$numservers][1] = 1;
+            $serverlist[$numservers++][2] = 0;
           }
         }
-        else {
-          $serverlist[$numservers][0] = $servername;
-          $serverlist[$numservers][1] = 1;
-          $serverlist[$numservers++][2] = 0;
-        }
-      }
-      for ($i = 0, $i2 = 0; $i < $numservers; $i++) {
-        if ($serverlist[$i][2]) {
-        	if (!$i2) {
-        	  echo "{$break}\n";
-            $i2 = 1;
+        for ($i = 0, $i2 = 0; $i < $numservers; $i++) {
+          if ($serverlist[$i][2]) {
+          	if (!$i2) {
+          	  echo "{$break}\n";
+              $i2 = 1;
+            }
+            if ($serverlist[$i][2] > 1)
+              $lgs = "logs";
+            else
+              $lgs = "log";
+            echo "Removed {$serverlist[$i][2]} incomplete $lgs for {$serverlist[$i][0]}.{$break}\n";
           }
-          if ($serverlist[$i][2] > 1)
-            $lgs = "logs";
-          else
-            $lgs = "log";
-          echo "Removed {$serverlist[$i][2]} incomplete $lgs for {$serverlist[$i][0]}.{$break}\n";
         }
       }
+      echo "{$bold}$logs_saved of $files logs processed.{$ebold}{$break}\n";
+      $total_saved += $logs_saved;
     }
-    echo "{$bold}$logs_saved of $files logs processed.{$ebold}{$break}\n";
-    $total_saved += $logs_saved;
+    $lognum++;
   }
-  $lognum++;
 }
 
 if ($lognum > 2)
