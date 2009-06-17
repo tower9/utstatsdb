@@ -211,6 +211,64 @@ Query Port:
   Unreal = UT2003 or UT2004 ("Game Spy" can optionally be used - not recommended)
   UT3 = Unreal Tournament 3
 
+In order for the query option to work in UTStatsDB, your UT server must be 
+configured to respond to queries.  The following are sample configurations:
+
+Unreal Tournament:
+  Edit System\UnrealTournament.ini to enable query capability:
+
+  [Engine.GameEngine]
+  ServerActors=IpServer.UdpServerQuery
+
+Unreal Tournament 2004:
+  Edit System\UT2004.ini to enable query capability:
+
+  Method 1: Enable the master server and GameSpy uplinks:
+    [Engine.GameEngine]
+    ServerActors=IpDrv.MasterServerUplink
+
+    [IpDrv.MasterServerUplink]
+    DoUplink=True
+    UplinkToGamespy=True
+
+  Method 2: Install and enable El Muerte's ServerExt ServQuery:
+    [Engine.GameEngine]
+    ;ServerActors=IpDrv.MasterServerUplink
+    ServerActors=ServerExt.SQMSUplink
+
+    [ServerExt.SQMSUplink]
+    bGameSpyQueries=True
+    UdpGamespyQueryClass=ServerExt.ServQuery
+
+    [ServerExt.ServQuery]
+    bVerbose=false
+    sReplyTo=ABEGMST
+    ePType=PT_PerFrame
+
+  Method 3: Install and enable OverloadUT's OLStats query:
+    [Engine.GameEngine]
+    ;ServerActors=IpDrv.MasterServerUplink
+    ServerActors=OLStats.OLSQMSUplink
+
+    [OLStats.OLSQMSUplink]
+    bGameSpyQueries=True
+    UdpGamespyQueryClass=OLStats.OLServQuery
+
+    [OLStats.OLServQuery]
+    bVerbose=false
+    sReplyTo=TASGMEBHO
+    ePType=PT_None
+
+  Unreal Tournament 3:
+    UTGame/Config/UTEngine.ini
+
+    [OnlineSubsystemGameSpy.OnlineSubsystemGameSpy]
+    QueryPort=6500
+
+    You can set this port to any UDP port you wish to use for querying the server.
+    In your server startup line you must include a valid GameSpy login:
+    -login=<user> -password=<pass>
+
 ===============================================================================
 ========== DemoRec Files ======================================================
 ===============================================================================
