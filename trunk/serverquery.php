@@ -384,7 +384,7 @@ function getvals($data, &$pos)
   $orig = $pos;
   $term = strpos($data, "\x00\x00", $pos + 1);
   if ($term === false)
-    $pos = strlen($data) - 1;
+    $pos = strlen($data);
   else {
     while (isset($data[$term + 1]) && $data[$term] == "\x00" && $data[$term + 1] == "\x00") {
     	$pos = $term;
