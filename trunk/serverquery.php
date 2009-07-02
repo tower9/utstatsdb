@@ -851,8 +851,7 @@ function GetStatus($ip, $port)
             if (($eq = strpos($mdata[$md], "=")) !== FALSE) {
               $param = substr($mdata[$md], 0, $eq);
               $val = substr($mdata[$md], $eq + 1);
-              if ($param != "p268435717" && $param != "p1073741828")
-                ut3_params($param, $val);
+              ut3_params($param, $val);
             }
             $md++;
           }
@@ -862,6 +861,7 @@ function GetStatus($ip, $port)
       }
     }
 
+    $mutators = array_unique($mutators);
     if (count($mutators) > 0) {
       $sq_server["mutator"] = "";
       for ($i = 0; isset($mutators[$i]); $i++) {
