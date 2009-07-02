@@ -146,6 +146,8 @@ function SendQuery3($fs, $query)
   $datax = array();
   for ($i = 0, $lastpacket = -1; $i < 4; $i++) {
     $datain = @fread($fs, 2048);
+    // $datain = file_get_contents("Logs/mpdatain{$i}.dat"); // *tag*
+
     if (strlen($datain) < 19)
       break;
 
@@ -190,9 +192,9 @@ function SendQuery3($fs, $query)
 
   for ($i = 1; isset($datay[$i]) && strlen($datay[$i]) > 16; $i++) {
     if (substr($datay[$i], -3) == "\x00\x00\x00")
-      $datay[$i] = substr($datay[$i], 16, -2);
+      $datay[$i] = substr($datay[$i], 15, -2);
     else
-      $datay[$i] = substr($datay[$i], 16);
+      $datay[$i] = substr($datay[$i], 15);
 
     $p = strpos($datay[$i], "\x00");
       if ($p < 3)
@@ -226,6 +228,7 @@ function SendQuery3($fs, $query)
 
   $data = substr($datay[0], 0, -1); // Remove null from end
 
+  // file_put_contents("Logs/mpdata.dat", $data); // *tag*
   return $data;
 }
 
@@ -820,7 +823,6 @@ function GetStatus($ip, $port)
     $data_main = explode("\x00\x00", $temp[0]);
     if (isset($temp[1])) {
       $temp = explode("\x00\x00\x02", $temp[1]);
-
       $data_plr = isset($temp[0]) ? $temp[0] : "";
       $data_team = isset($temp[1]) ? $temp[1] : "";
     }
