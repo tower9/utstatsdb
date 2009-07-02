@@ -345,9 +345,11 @@ function ut3_params($param, $val)
       if ($ival & 0x0800)
         $mutators[] = "Super Berserk"; // UTGame.UTMutator_SuperBerserk = 2048
       if ($ival & 0x1000)
-        $mutators[] = "Weapon Replacement"; // UTGame.UTMutator_WeaponReplacement = 8192
+        $mutators[] = "Weapon Replacement"; // UTGame.UTMutator_WeaponReplacement = 4096
       if ($ival & 0x2000)
-        $mutators[] = "Weapons Respawn"; // UTGame.UTMutator_WeaponsRespawn = 16384
+        $mutators[] = "Weapons Respawn"; // UTGame.UTMutator_WeaponsRespawn = 8192
+      if ($ival & 0x8000)
+        $mutators[] = "Titan"; // UTGame.UTMutator_Hero = 32768
       break;
     }
     case "p1073741828":
@@ -400,7 +402,7 @@ function getvals($data, &$pos)
 function GetStatus($ip, $port)
 {
   global $query_type, $query_password, $sq_server, $sq_player, $sq_team, $sq_spect, $sq_bot;
-  global $query_spectators, $query_bots, $teams, $teamcount;
+  global $query_spectators, $query_bots, $teams, $teamcount, $mutators;
 
   $ok = 0;
   $sq_server = array();
@@ -849,7 +851,8 @@ function GetStatus($ip, $port)
             if (($eq = strpos($mdata[$md], "=")) !== FALSE) {
               $param = substr($mdata[$md], 0, $eq);
               $val = substr($mdata[$md], $eq + 1);
-              ut3_params($param, $val);
+              if ($param != "p268435717" && $param != "p1073741828")
+                ut3_params($param, $val);
             }
             $md++;
           }
