@@ -146,7 +146,6 @@ function SendQuery3($fs, $query)
   $datax = array();
   for ($i = 0, $lastpacket = -1; $i < 4; $i++) {
     $datain = @fread($fs, 2048);
-    // $datain = file_get_contents("Logs/mpdatain{$i}.dat"); // *tag*
 
     if (strlen($datain) < 19)
       break;
@@ -228,7 +227,6 @@ function SendQuery3($fs, $query)
 
   $data = substr($datay[0], 0, -1); // Remove null from end
 
-  // file_put_contents("Logs/mpdata.dat", $data); // *tag*
   return $data;
 }
 
@@ -908,8 +906,16 @@ function GetStatus($ip, $port)
           case "team_":
             $data = explode("\x00", $vals);
             $x = 0;
-            foreach ($data as $tempd)
-              $sq_player[$x++]["team"] = $tempd;
+            foreach ($data as $tempd) {
+              if ($tempd != "" && is_numeric($tempd)) {
+                $y = intval($tempd);
+                $sq_player[$x++]["team"] = $y;
+                if (!isset($sq_team[$y]["size"]))
+                  $sq_team[$y]["size"] = 1;
+                else
+                  $sq_team[$y]["size"]++;
+              }
+            }
             break;
           case "deaths_":
             $data = explode("\x00", $vals);
@@ -946,8 +952,9 @@ function GetStatus($ip, $port)
                 case 3: $sq_team[$teams]["team"] = "Color4"; break;
                 default: $sq_team[$teams]["team"] = "TeamX";
               }
-              $sq_team[$teams]["size"] = 0; // Team info incomplete in UT3 query
-              $sq_team[$teams++]["score"] = $tempd;
+              if (!isset($sq_team[$teams]["size"]))
+                $sq_team[$teams]["size"] = 0; // Team info incomplete in UT3 query
+              $sq_team[$teams++]["score"] = intval($tempd);
             }
             break;
         }
