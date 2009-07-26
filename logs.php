@@ -287,6 +287,9 @@ else {
     $argc = $_SERVER["argc"];
     $argv = $_SERVER["argv"];
   }
+  else
+    $argc = 0;
+
   for ($i = 1; $i < $argc; $i++) {
     $pos = strpos($argv[$i], "=");
     if ($pos !== FALSE && strlen($argv[$i]) > $pos) {
