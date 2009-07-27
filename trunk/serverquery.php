@@ -357,7 +357,10 @@ function ut3_params($param, $val)
     {
       $mut = explode("\x1C", $val);
       for ($y = 0; isset($mut[$y]); $y++)
-        $mutators[] = $mut[$y];
+      {
+      	if ($mut[$y] != "")
+          $mutators[] = $mut[$y];
+      }
       break;
     }
     case "NumPrivateConnections": $sq_server["maxspectators"] = $val; break;
@@ -881,8 +884,8 @@ function GetStatus($ip, $port)
     $pos = 0;
     $dataend = false;
     do {
-      $param = getparam($data_plr, &$pos);
-      $vals = getvals($data_plr, &$pos);
+      $param = getparam($data_plr, $pos);
+      $vals = getvals($data_plr, $pos);
       if (strlen($param) > 0 && strlen($vals) > 0) {
         switch ($param) {
           case "player_":
@@ -935,8 +938,8 @@ function GetStatus($ip, $port)
     $pos = 0;
     $dataend = false;
     do {
-      $param = getparam($data_team, &$pos);
-      $vals = getvals($data_team, &$pos);
+      $param = getparam($data_team, $pos);
+      $vals = getvals($data_team, $pos);
       if (strlen($param) > 0 && strlen($vals) > 0) {
         switch ($param) {
           case "team_t":
