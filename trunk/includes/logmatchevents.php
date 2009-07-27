@@ -58,13 +58,15 @@ function tag_ng ($i, $data)
   if (substr($match->gname, -12) == "Game_Content")
     $match->gname = substr($match->gname, 0, -12);
   switch ($match->gname) {
-    case "UTDeathmatch": $match->gname = "Deathmatch";       break;
-    case "UTCTF":        $match->gname = "Capture the Flag"; break;
-    case "UTOnslaught":  $match->gname = "Warfare";          break;
-    case "UTVehicleCTF": $match->gname = "Vehicle CTF";      break;
-    case "UTTeamGame":   $match->gname = "Team Deathmatch";  break;
-    case "UTDuelGame":   $match->gname = "Duel";             break;
-    case "UTBRGame":     $match->gname = "Bombing Run";      break;
+    case "UTDeathmatch":   $match->gname = "Deathmatch";       break;
+    case "UTCTF":          $match->gname = "Capture the Flag"; break;
+    case "UTOnslaught":    $match->gname = "Warfare";          break;
+    case "UTVehicleCTF":   $match->gname = "Vehicle CTF";      break;
+    case "UTTeamGame":     $match->gname = "Team Deathmatch";  break;
+    case "UTDuelGame":     $match->gname = "Duel";             break;
+    case "UTBRGame":       $match->gname = "Bombing Run";      break;
+    case "UTGreed":        $match->gname = "Greed";            break;
+    case "UTBetrayalGame": $match->gname = "Betrayal";         break;
   }
 
   // Look up game type
