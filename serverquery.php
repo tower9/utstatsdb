@@ -72,6 +72,7 @@ function SendQuery2($fs, $query)
 
   // Packets may not be received in correct order
   $datax = array();
+
   for ($i = 0, $lastpacket = -1; $i < 4; $i++) {
     $datain = @fread($fs, 2048);
 
@@ -186,10 +187,7 @@ function SendQuery3($fs, $query)
   }
 
   // Remove header from first packet
-  if (substr($datay[0], -3) == "\x00\x00\x00")
-    $datay[0] = substr($datay[0], 16, -2);
-  else
-    $datay[0] = substr($datay[0], 16);
+    $datay[0] = substr($datay[0], 16, -1);
 
   // Check for last group
   if (strpos($datay[0], "\x00\x00\x02") !== FALSE)
@@ -202,18 +200,10 @@ function SendQuery3($fs, $query)
   // Join packets
   for ($i = 1; isset($datay[$i]) && strlen($datay[$i]) > 16; $i++) {
     // Remove header
-    if (substr($datay[$i], -3) == "\x00\x00\x00") {
-      if (ord($datay[$i][15]) == $lastgroup)
-        $datay[$i] = substr($datay[$i], 16, -2);
-      else
-        $datay[$i] = substr($datay[$i], 15, -2);
-    }
-    else {
-      if (ord($datay[$i][15]) == $lastgroup)
-        $datay[$i] = substr($datay[$i], 16);
-      else
-        $datay[$i] = substr($datay[$i], 15);
-    }
+    if (ord($datay[$i][15]) == $lastgroup)
+      $datay[$i] = substr($datay[$i], 16, -1);
+    else
+      $datay[$i] = substr($datay[$i], 15, -1);
 
     $p = strpos($datay[$i], "\x00");
       if ($p < 3)
