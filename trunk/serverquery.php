@@ -178,22 +178,42 @@ function SendQuery3($fs, $query)
     $datay[$x] = $datax[$i];
   }
 
+  // Validate length of first packet
   if ( !isset($datay[0]) || strlen($datay[0]) < 30)
   {
     fclose($fs);
     return $data;
   }
 
+  // Remove header from first packet
   if (substr($datay[0], -3) == "\x00\x00\x00")
     $datay[0] = substr($datay[0], 16, -2);
   else
     $datay[0] = substr($datay[0], 16);
 
+  // Check for last group
+  if (strpos($datay[0], "\x00\x00\x02") !== FALSE)
+    $lastgroup = 2;
+  else if (strpos($datay[0], "\x00\x00\x01") !== FALSE)
+    $lastgroup = 1;
+  else
+    $lastgroup = 0;
+
+  // Join packets
   for ($i = 1; isset($datay[$i]) && strlen($datay[$i]) > 16; $i++) {
-    if (substr($datay[$i], -3) == "\x00\x00\x00")
-      $datay[$i] = substr($datay[$i], 15, -2);
-    else
-      $datay[$i] = substr($datay[$i], 15);
+    // Remove header
+    if (substr($datay[$i], -3) == "\x00\x00\x00") {
+      if (ord($datay[$i][15]) == $lastgroup)
+        $datay[$i] = substr($datay[$i], 16, -2);
+      else
+        $datay[$i] = substr($datay[$i], 15, -2);
+    }
+    else {
+      if (ord($datay[$i][15]) == $lastgroup)
+        $datay[$i] = substr($datay[$i], 16);
+      else
+        $datay[$i] = substr($datay[$i], 15);
+    }
 
     $p = strpos($datay[$i], "\x00");
       if ($p < 3)
@@ -223,6 +243,12 @@ function SendQuery3($fs, $query)
         $datay[0] .= substr($datay[$i], $p + 2);
       }
     }
+
+    // Check for last group
+    if (strpos($datay[$i], "\x00\x00\x02") !== FALSE)
+      $lastgroup = 2;
+    else if (strpos($datay[$i], "\x00\x00\x01") !== FALSE)
+      $lastgroup = 1;
   }
 
   $data = substr($datay[0], 0, -1); // Remove null from end
@@ -281,6 +307,8 @@ function ut3_params($param, $val)
         case "UTGameContent.UTVehicleCTFGame_Content": $sq_server["gametype"] = "Vehicle CTF"; break;
         case "UTGame.UTTeamGame": $sq_server["gametype"] = "Team Deathmatch"; break;
         case "UTGame.UTGame.UTDuelGame": $sq_server["gametype"] = "Duel"; break;
+        case "UT3GoldGame.UTGreedGame_Content": $sq_server["gametype"] = "Greed"; break;
+        case "UTGame.UTBetrayalGame": $sq_server["gametype"] = "Betrayal"; break;
         default: $sq_server["gametype"] = $val;
       }
       break;
