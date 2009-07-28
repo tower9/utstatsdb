@@ -57,7 +57,7 @@ function dtime($tm) // Convert Time Format
 
 function stripspecialchars($str)
 {
-  $nstr = htmlspecialchars(ereg_replace("\x1b...", "", $str));
+  $nstr = htmlspecialchars(preg_replace("/\x1b.../", "", $str));
   return $nstr;
 }
 
