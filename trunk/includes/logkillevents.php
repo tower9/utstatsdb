@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2010  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -110,7 +110,7 @@ function tag_k ($i, $data)
 
     // Check for special event
     for ($i = 0; $i < $numspectypes; $i++) {
-      if ($specialtypes[$i][2] == 0 && $specialtypes[$i][3] > 0 && stristr($killweapon, $specialtypes[$i][1])) {
+      if (stristr($killweapon, $specialtypes[$i][1]) && $special[$specialtypes[$i][0]][2] == 0 && $special[$specialtypes[$i][0]][3] > 0) {
         $player[$killer]->specialcount[$specialtypes[$i][0]]++;
         if ($player[$killer]->specialcount[$specialtypes[$i][0]] == $specialtypes[$i][3]) {
           $player[$killer]->specialevents[$specialtypes[$i][0]]++;
@@ -123,8 +123,15 @@ function tag_k ($i, $data)
 
     // Check for road kill
     if ($killweapsec == 4) {
-      $i = array_search(specialtypes[
-      $player[$killer]->specialcount[$specialtypes[$i][0]]++; // roadkills++;
+      for ($i = 0, $roadkill = -1; $i < $numspectypes; $i++) {
+        if (stristr("Road Kill", $specialtypes[$i][1]) && $specialtypes[$i][3] == 2) {
+          $roadkill = $i;
+          break;
+        }
+      }
+
+      if ($roadkill >= 0)
+        $player[$killer]->specialcount[$specialtypes[$roadkill][0]]++; // roadkills++;
 
       // Check for road rampage
       if ($player[$killer]->roadkills >= 15 && !$player[$killer]->roadrampage) {
@@ -132,7 +139,6 @@ function tag_k ($i, $data)
         weaponspecial($killtime, $killer, 5, 0);
       }
     }
-*/
 
     // Track Killing Sprees for Killer
     if (!$spree[$killer][1]) {

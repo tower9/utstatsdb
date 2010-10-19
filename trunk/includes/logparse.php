@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2010  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -90,10 +90,10 @@ function parselog($file,$chatfile)
     exit;
   }
   $numspectypes = 0;
-  $specialtypes = array(array ());
+  $specialtypes = array(array());
   while ($row = sql_fetch_row($result)) {
-    $specialtypes[$numspec][0] = $row[0];
-    $specialtypes[$numspec++][1] = intval($row[1]);
+    $specialtypes[$numspectypes][0] = $row[0];
+    $specialtypes[$numspectypes++][1] = intval($row[1]);
   }
   sql_free_result($result);
 

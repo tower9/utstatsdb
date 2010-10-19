@@ -373,6 +373,27 @@ function sql_num_rows($result) {
   return $num;
 }
 
+function sql_affected_rows($link) {
+  global $dbtype;
+
+  switch (strtolower($dbtype)) {
+    case "mysql":
+      $num = mysql_affected_rows($link);
+      break;
+    case "sqlite":
+      $num = sqlite_changes($link);
+      break;
+    case "mssql":
+      $num = mssql_rows_affected($link);
+      break;
+    default:
+      echo "Database type error.\n";
+      exit;
+      break;
+  }
+  return $num;
+}
+
 function sql_close($link) {
   global $dbtype;
 

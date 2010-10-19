@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2010  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -390,13 +390,15 @@ function menu_top() {
   else
     $versioncheck = "";
 
+  header('Content-Type:text/html; charset=utf-8');
+
   echo <<<EOF
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>UTStatsDB Admin</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <link rel="stylesheet" type="text/css" media="screen" href="resource/admin.css" />
   <meta name="MSSmartTagsPreventParsing" content="TRUE" />
@@ -636,13 +638,15 @@ function logparse() {
 //========== Login Screen =====================================================
 //=============================================================================
 function login() {
+  header('Content-Type:text/html; charset=utf-8');
+
   echo <<<EOF
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>UTStatsDB Admin Login</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="icon" href="resource/uicon.png" type="image/png" />
   <style type="text/css">
     .sidebox {border: 1px #000000 solid}
@@ -688,13 +692,15 @@ EOF;
 }
 
 function invalid_login() {
+  header('Content-Type:text/html; charset=utf-8');
+
   echo <<<EOF
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>Invalid Login</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="icon" href="resource/uicon.png" type="image/png" />
 </head>
 <body text="#ff0000">
@@ -710,13 +716,15 @@ EOF;
 }
 
 function auth_required() {
+  header('Content-Type:text/html; charset=utf-8');
+
   echo <<<EOF
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>Authorization Required</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="icon" href="resource/uicon.png" type="image/png" />
 </head>
 <body text="#ff0000">

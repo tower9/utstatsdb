@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2010  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -161,13 +161,15 @@ $teamclass = array("redteam","blueteam","greenteam","goldteam");
 $teamchat = array("chatred","chatblue","chatgreen","chatgold");
 $teamscore = array("redteamscore","blueteamscore","greenteamscore","goldteamscore");
 
+header('Content-Type:text/html; charset=utf-8');
+
 echo <<<EOF
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>$title</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <link rel="icon" href="resource/uicon.png" type="image/png" />
   <link rel="stylesheet" href="resource/{$stylefile}" type="text/css" />
