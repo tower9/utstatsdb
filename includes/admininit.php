@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2008  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2010  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,13 +25,15 @@
 function initcheck($reinit) {
   global $dbtype;
 
+  header('Content-Type:text/html; charset=utf-8');
+
   echo <<<EOF
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>UTStatsDB Initialization</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="icon" href="resource/uicon.png" type="image/png" />
   <style type="text/css">
     .sidebox {border: 1px #000000 solid}
@@ -100,7 +102,8 @@ function initconfig($reinit) {
                    "matches","players","playersgt","aliases","maps","weapons",
                    "servers","totals","gplayers","gkills","gscores","tkills",
                    "gevents","pwkills","type","items","pitems","gitems","gchat",
-                   "objectives","mwkills","gwaccuracy","gbots","connections","eventdesc");
+                   "objectives","mwkills","gwaccuracy","gbots","connections",
+                   "eventdesc","special","specialtypes");
 
   if ($IPass != $InitPass) {
     echo <<<EOF

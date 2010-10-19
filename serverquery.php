@@ -147,6 +147,7 @@ function SendQuery3($fs, $query)
   $datax = array();
   for ($i = 0, $lastpacket = -1; $i < 4; $i++) {
     $datain = @fread($fs, 2048);
+    //file_put_contents("Logs/data$i.dat", $datain); // *tag*
 
     if (strlen($datain) < 19)
       break;

@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2010  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -703,8 +703,8 @@ while ($row = sql_fetch_row($result)) {
         $wskills[3][$held]++;
       }
     }
-    else if ($killer == $victim) {
-      if ($killer == $gp_num)
+    else if ($killer == $victim || ($killer == -1 && $victim >= 0)) {
+      if ($killer < 0 || $killer == $gp_num)
         $wskills[4][$weapon]++; // Suicide
     }
     else {

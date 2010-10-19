@@ -1,5 +1,5 @@
 UTStatsDB
-  Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+  Copyright (C) 2002-2010  Patrick Contreras / Paul Gallier
 
 Release Notes:
 
@@ -15,6 +15,9 @@ Unreleased
   Fixed various issues in server query.
   Rewrote documentation.
   Added compatibility with non-standard game speeds.
+  Replaced depecated ereg_replace function.
+  Fixed suicide info for player specific match stats.
+  Added tables for handling special kill and weapon events.
 
 Version 3.06
   Added Tactical Ops support.
