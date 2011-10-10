@@ -58,9 +58,26 @@ LocalLog (Mod) by ^(Hellraiser)^ & McNaz
 UT '99 has native logging capability which can be configured by editing your 
 UnrealTournament.ini file:
 
+[Engine.GameInfo]
+bLocalLog=True
+bWorldLog=False
+
 [Engine.StatLog]
+LocalStatsURL=http://www.domain.com/ut/
 LocalLogDir=../Logs
 bLogTypingEvents=True
+
+In order to facilitate automatic log processing, you can configure the following:
+
+[Engine.GameInfo]
+bBatchLocal=True
+
+[Engine.StatLog]
+LocalBatcherURL=/usr/bin/elinks
+LocalBatcherParams=--dump http://www.domain.com/ut/logs.php?pass=updatepass > /dev/null
+
+Also, you can download the chat logger mutator found in the downloads section to 
+include player chat in the logs (see the included documentation for installation notes).
 
 ===============================================================================
 ========== FTP Notes ==========================================================
