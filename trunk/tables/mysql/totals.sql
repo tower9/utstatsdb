@@ -291,6 +291,6 @@ CREATE TABLE %dbpre%totals (
   tl_chnodedestroyedsg_map mediumint(8) unsigned NOT NULL default 0,
   tl_chnodedestroyedsg_date datetime NOT NULL default '0000-00-00 00:00:00',
   UNIQUE KEY tl_tot (tl_totals)
-) Type=MyISAM;
+) Engine=MyISAM;
 
 INSERT INTO %dbpre%totals (tl_totals) VALUES('Totals');

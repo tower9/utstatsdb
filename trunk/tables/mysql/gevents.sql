@@ -12,4 +12,4 @@ CREATE TABLE %dbpre%gevents (
   UNIQUE KEY ge_num (ge_num),
   KEY ge_gnumev (ge_match,ge_event,ge_num),
   KEY ge_kstype (ge_event,ge_match,ge_plr,ge_time)
-) Type=MyISAM;
+) Engine=MyISAM;

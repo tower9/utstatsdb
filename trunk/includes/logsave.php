@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2010  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2011  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1335,9 +1335,9 @@ $tl_chnodedestroyedsg,$tl_chnodedestroyedsg_plr,$tl_chnodedestroyedsg_tm,$tl_chn
   }
   else {
     sql_queryn($link, "DROP TABLE IF EXISTS temp_wtkills");
-    $result = sql_queryn($link, "CREATE TEMPORARY TABLE temp_wtkills (wt_plr mediumint(8) unsigned NOT NULL, wt_desc varchar(35) NOT NULL default '', wt_num smallint(5) unsigned NOT NULL default 0, wt_intnum smallint(5) unsigned NOT NULL default 0, wt_kills int(10) unsigned NOT NULL default 0, wt_deaths int(10) unsigned NOT NULL default 0, wt_held int(10) unsigned NOT NULL default 0, wt_suicides int(10) unsigned NOT NULL default 0, UNIQUE KEY wt_plrdesc (wt_plr,wt_desc)) Type=HEAP");
+    $result = sql_queryn($link, "CREATE TEMPORARY TABLE temp_wtkills (wt_plr mediumint(8) unsigned NOT NULL, wt_desc varchar(35) NOT NULL default '', wt_num smallint(5) unsigned NOT NULL default 0, wt_intnum smallint(5) unsigned NOT NULL default 0, wt_kills int(10) unsigned NOT NULL default 0, wt_deaths int(10) unsigned NOT NULL default 0, wt_held int(10) unsigned NOT NULL default 0, wt_suicides int(10) unsigned NOT NULL default 0, UNIQUE KEY wt_plrdesc (wt_plr,wt_desc)) Engine=HEAP");
     if (!$result) {
-      $result = sql_queryn($link, "CREATE TABLE temp_wtkills (wt_plr mediumint(8) unsigned NOT NULL, wt_desc varchar(35) NOT NULL default '', wt_num smallint(5) unsigned NOT NULL default 0, wt_intnum smallint(5) unsigned NOT NULL default 0, wt_kills int(10) unsigned NOT NULL default 0, wt_deaths int(10) unsigned NOT NULL default 0, wt_held int(10) unsigned NOT NULL default 0, wt_suicides int(10) unsigned NOT NULL default 0, UNIQUE KEY wt_plrdesc (wt_plr,wt_desc)) Type=HEAP");
+      $result = sql_queryn($link, "CREATE TABLE temp_wtkills (wt_plr mediumint(8) unsigned NOT NULL, wt_desc varchar(35) NOT NULL default '', wt_num smallint(5) unsigned NOT NULL default 0, wt_intnum smallint(5) unsigned NOT NULL default 0, wt_kills int(10) unsigned NOT NULL default 0, wt_deaths int(10) unsigned NOT NULL default 0, wt_held int(10) unsigned NOT NULL default 0, wt_suicides int(10) unsigned NOT NULL default 0, UNIQUE KEY wt_plrdesc (wt_plr,wt_desc)) Engine=HEAP");
       if (!$result) {
         echo "Error creating temp table for weapon specific per player totals.{$break}\n";
         exit;

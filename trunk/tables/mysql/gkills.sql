@@ -8,4 +8,4 @@ CREATE TABLE %dbpre%gkills (
   gk_kteam tinyint(4) NOT NULL default 0,
   gk_vteam tinyint(4) NOT NULL default 0,
   KEY gk_gnum (gk_match)
-) Type=MyISAM;
+) Engine=MyISAM;

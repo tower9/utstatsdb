@@ -6,7 +6,7 @@ CREATE TABLE %dbpre%config (
   name varchar(30) NOT NULL default '',
   descr varchar(100) NOT NULL default '',
   UNIQUE KEY num (num)
-) Type=MyISAM;
+) Engine=MyISAM;
 
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('Version','h0','3.07','Version','UTStatsDB version.');
 INSERT INTO %dbpre%config (conf,type,value,name,descr) VALUES('AdminPass','p30','admin','Admin Pass','Administrative password.');

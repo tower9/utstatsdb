@@ -51,7 +51,7 @@ CREATE TABLE %dbpre%weapons (
   UNIQUE KEY wp_num (wp_num),
   UNIQUE KEY wp_type (wp_type),
   KEY wp_weaptype (wp_weaptype)
-) Type=MyISAM;
+) Engine=MyISAM;
 
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('None','None');
 INSERT INTO %dbpre%weapons (wp_type,wp_desc) VALUES('TransLauncher','Translocator');

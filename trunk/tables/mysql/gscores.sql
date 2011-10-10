@@ -5,4 +5,4 @@ CREATE TABLE %dbpre%gscores (
   gs_score float NOT NULL default 0,
   gs_team tinyint(4) NOT NULL default 0,
   KEY gs_gnumtime (gs_match,gs_time)
-) Type=MyISAM;
+) Engine=MyISAM;

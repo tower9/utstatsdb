@@ -5,7 +5,7 @@ CREATE TABLE %dbpre%items (
   it_pickups mediumint(8) unsigned NOT NULL default 0,
   UNIQUE KEY it_num (it_num),
   UNIQUE KEY it_typ (it_type)
-) Type=MyISAM;
+) Engine=MyISAM;
 
 INSERT INTO %dbpre%items (it_type,it_desc) VALUES('ShieldGunPickup','Shield Gun');
 INSERT INTO %dbpre%items (it_type,it_desc) VALUES('AssaultRifle','Assault Rifle');

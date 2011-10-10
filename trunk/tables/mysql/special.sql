@@ -7,7 +7,7 @@ CREATE TABLE %dbpre%special (
   se_total mediumint(8) unsigned NOT NULL default 0,
   UNIQUE KEY se_num (se_num),
   KEY se_title (se_title)
-) Type=MyISAM;
+) Engine=MyISAM;
 
 INSERT INTO %dbpre%special (se_title,se_desc,se_trignum) VALUES('Jackhammer','15 kills with the Impact Hammer',15);
 INSERT INTO %dbpre%special (se_title,se_desc,se_trignum) VALUES('Gunslinger','15 kills with the Enforcer',15);

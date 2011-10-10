@@ -32,4 +32,4 @@ CREATE TABLE %dbpre%playersgt (
   UNIQUE KEY gt_num (gt_num),
   KEY gt_pnumt (gt_pnum,gt_type),
   KEY gt_rank (gt_rank)
-) Type=MyISAM;
+) Engine=MyISAM;

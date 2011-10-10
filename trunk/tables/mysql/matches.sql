@@ -52,4 +52,4 @@ CREATE TABLE %dbpre%matches (
   KEY gm_svnum (gm_server,gm_num),
   KEY gm_svmap (gm_server,gm_map),
   KEY gm_mapnum (gm_map,gm_num)
-) Type=MyISAM;
+) Engine=MyISAM;

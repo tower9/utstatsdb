@@ -13,4 +13,4 @@ CREATE TABLE %dbpre%gbots (
   gb_jumpiness float NOT NULL default 0,
   gb_favorite smallint(5) unsigned NOT NULL default 0,
   KEY gb_mbot (gb_match,gb_bot)
-) Type=MyISAM;
+) Engine=MyISAM;

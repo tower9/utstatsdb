@@ -6,4 +6,4 @@ CREATE TABLE %dbpre%connections (
   KEY cn_matchplr (cn_match,cn_pnum),
   KEY cn_matchdt (cn_match,cn_dtime),
   KEY cn_times (cn_ctime,cn_dtime)
-) Type=MyISAM;
+) Engine=MyISAM;

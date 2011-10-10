@@ -8,4 +8,4 @@ CREATE TABLE %dbpre%configquery (
   spectators tinyint(1) NOT NULL default 1,
   bots tinyint(1) NOT NULL default 1,
   UNIQUE KEY num (num)
-) Type=MyISAM;
+) Engine=MyISAM;
