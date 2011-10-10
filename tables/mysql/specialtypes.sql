@@ -2,7 +2,7 @@ CREATE TABLE %dbpre%specialtypes (
   st_type varchar(40) NOT NULL,
   st_snum smallint(5) unsigned NOT NULL,
   KEY st_type (st_type)
-) Type=MyISAM;
+) Engine=MyISAM;
 
 INSERT INTO %dbpre%specialtypes (st_type,st_snum) SELECT 'UTDmgType_ImpactHammer',se_num FROM %dbpre%special WHERE se_title='Jackhammer';
 INSERT INTO %dbpre%specialtypes (st_type,st_snum) SELECT 'DamTypeShieldImpact',se_num FROM %dbpre%special WHERE se_title='Jackhammer';

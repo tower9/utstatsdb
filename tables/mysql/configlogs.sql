@@ -17,7 +17,7 @@ CREATE TABLE %dbpre%configlogs (
   demoftppath varchar(200) NOT NULL default '',
   multicheck tinyint(1) NOT NULL default 0,
   UNIQUE KEY num (num)
-) Type=MyISAM;
+) Engine=MyISAM;
 
 INSERT INTO %dbpre%configlogs (logpath,prefix) VALUES('./Logs/','Stats_');
 #INSERT INTO %dbpre%configlogs (logpath,prefix) VALUES('./Logs/','Unreal.ngLog.');

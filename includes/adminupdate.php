@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2011  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ function update307()
     $result = sql_queryn($link, "CREATE INDEX se_title ON {$dbpre}special (se_title)");
   }
   else
-    $result = sql_queryn($link, "CREATE TABLE {$dbpre}special (se_num smallint(5) unsigned NOT NULL auto_increment, se_title varchar(30) NOT NULL default '', se_desc varchar(175) NOT NULL default '', se_total mediumint(8) unsigned NOT NULL default 0, UNIQUE KEY se_num (se_num), KEY se_title (se_title)) Type=MyISAM");
+    $result = sql_queryn($link, "CREATE TABLE {$dbpre}special (se_num smallint(5) unsigned NOT NULL auto_increment, se_title varchar(30) NOT NULL default '', se_desc varchar(175) NOT NULL default '', se_total mediumint(8) unsigned NOT NULL default 0, UNIQUE KEY se_num (se_num), KEY se_title (se_title)) Engine=MyISAM");
   if (!$result) {
     echo "<br />Error adding {$dbpre}special table.{$break}\n";
     exit;
@@ -52,7 +52,7 @@ function update307()
     $result = sql_queryn($link, "CREATE INDEX st_type ON {$dbpre}specialtypes (st_type)");
   }
   else
-    $result = sql_queryn($link, "CREATE TABLE {$dbpre}specialtypes (st_type varchar(40) NOT NULL, st_snum smallint(5) unsigned NOT NULL, KEY st_type (st_type)) Type=MyISAM");
+    $result = sql_queryn($link, "CREATE TABLE {$dbpre}specialtypes (st_type varchar(40) NOT NULL, st_snum smallint(5) unsigned NOT NULL, KEY st_type (st_type)) Engine=MyISAM");
   if (!$result) {
     echo "<br />Error adding {$dbpre}specialtypes table.{$break}\n";
     exit;
@@ -69,7 +69,7 @@ function update307()
     $result = sql_queryn($link, "CREATE INDEX ps_ptype ON {$dbpre}playerspecial (ps_pnum,ps_stype)");
   }
   else
-    $result = sql_queryn($link, "CREATE TABLE {$dbpre}playerspecial (ps_pnum mediumint(8) unsigned NOT NULL, ps_stype smallint(5) unsigned NOT NULL, ps_total mediumint(8) unsigned NOT NULL default 0, KEY ps_ptype (ps_pnum,ps_stype)) Type=MyISAM");
+    $result = sql_queryn($link, "CREATE TABLE {$dbpre}playerspecial (ps_pnum mediumint(8) unsigned NOT NULL, ps_stype smallint(5) unsigned NOT NULL, ps_total mediumint(8) unsigned NOT NULL default 0, KEY ps_ptype (ps_pnum,ps_stype)) Engine=MyISAM");
   if (!$result) {
     echo "<br />Error adding {$dbpre}playerspecial table.{$break}\n";
     exit;
@@ -86,7 +86,7 @@ function update307()
     $result = sql_queryn($link, "CREATE INDEX gs_mps ON {$dbpre}gspecials (gs_match,gs_player,gs_stype)");
   }
   else
-    $result = sql_queryn($link, "CREATE TABLE {$dbpre}gspecials (gs_match int(10) unsigned NOT NULL, gs_player smallint(5) unsigned NOT NULL, gs_stype smallint(5) unsigned NOT NULL, gs_total mediumint(8) unsigned NOT NULL default 0, KEY gs_mps (gs_match,gs_player,gs_stype)) Type=MyISAM");
+    $result = sql_queryn($link, "CREATE TABLE {$dbpre}gspecials (gs_match int(10) unsigned NOT NULL, gs_player smallint(5) unsigned NOT NULL, gs_stype smallint(5) unsigned NOT NULL, gs_total mediumint(8) unsigned NOT NULL default 0, KEY gs_mps (gs_match,gs_player,gs_stype)) Engine=MyISAM");
   if (!$result) {
     echo "<br />Error adding {$dbpre}gspecials table.{$break}\n";
     exit;

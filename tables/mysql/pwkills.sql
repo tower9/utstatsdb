@@ -12,4 +12,4 @@ CREATE TABLE %dbpre%pwkills (
   pwk_damage int(10) unsigned NOT NULL default 0,
   UNIQUE KEY pwk_num (pwk_num),
   KEY pwk_plrwp (pwk_player,pwk_weapon)
-) Type=MyISAM;
+) Engine=MyISAM;

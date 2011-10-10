@@ -14,4 +14,4 @@ CREATE TABLE %dbpre%servers (
   UNIQUE KEY sv_num (sv_num),
   KEY sv_name (sv_name),
   KEY sv_shortname (sv_shortname)
-) Type=MyISAM;
+) Engine=MyISAM;

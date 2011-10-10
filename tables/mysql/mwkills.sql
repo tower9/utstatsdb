@@ -8,4 +8,4 @@ CREATE TABLE %dbpre%mwkills (
   mwk_suicides mediumint(8) unsigned NOT NULL default 0,
   UNIQUE KEY mwk_num (mwk_num),
   KEY mwk_mapwp (mwk_map,mwk_weapon)
-) Type=MyISAM;
+) Engine=MyISAM;

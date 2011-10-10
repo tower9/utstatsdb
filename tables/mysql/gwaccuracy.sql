@@ -8,4 +8,4 @@ CREATE TABLE %dbpre%gwaccuracy (
   gwa_damage int(10) unsigned NOT NULL default 0,
   UNIQUE KEY gwa_num (gwa_num),
   KEY gwa_mplrwp (gwa_match,gwa_player,gwa_weapon)
-) Type=MyISAM;
+) Engine=MyISAM;

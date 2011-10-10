@@ -12,7 +12,7 @@ CREATE TABLE %dbpre%maps (
   mp_lastmatch datetime NOT NULL default '0000-00-00 00:00:00',
   UNIQUE KEY mp_mapnum (mp_num),
   KEY mp_nameauth (mp_name,mp_author)
-) Type=MyISAM;
+) Engine=MyISAM;
 
 #INSERT INTO %dbpre%maps (mp_num,mp_name,mp_desc,mp_author) VALUES(1,'DM-Rankin','Rankin','Sjoerd De Jong');
 #INSERT INTO %dbpre%maps (mp_num,mp_name,mp_desc,mp_author) VALUES(2,'CTF-BridgeOfFate','Bridge of Fate','Bastiaan (Checker) Frank');

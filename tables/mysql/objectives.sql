@@ -10,7 +10,7 @@ CREATE TABLE %dbpre%objectives (
   UNIQUE KEY obj_num (obj_num),
   KEY obj_desc (obj_desc),
   KEY obj_map (obj_map)
-) Type=MyISAM;
+) Engine=MyISAM;
 
 #INSERT INTO %dbpre%objectives (obj_map,obj_priority,obj_secondary,obj_desc) VALUES(4,0,1,'Open the panel');
 #INSERT INTO %dbpre%objectives (obj_map,obj_priority,obj_desc) VALUES(4,0,'Extend the boarding platform');

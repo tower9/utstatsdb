@@ -109,4 +109,4 @@ CREATE TABLE %dbpre%gplayers (
   KEY gp_pnum (gp_pnum),
   KEY gp_plrgame (gp_pnum,gp_match),
   KEY gp_gnumrank (gp_match,gp_rank)
-) Type=MyISAM;
+) Engine=MyISAM;

@@ -13,7 +13,7 @@ CREATE TABLE %dbpre%type (
   tp_teamkills mediumint(8) unsigned NOT NULL default 0,
   UNIQUE KEY tp_tnum (tp_num),
   KEY tp_desc (tp_desc)
-) Type=MyISAM;
+) Engine=MyISAM;
 
 INSERT INTO %dbpre%type (tp_desc,tp_type) VALUES('Deathmatch',1);
 INSERT INTO %dbpre%type (tp_desc,tp_type,tp_team) VALUES('Capture the Flag',2,1);

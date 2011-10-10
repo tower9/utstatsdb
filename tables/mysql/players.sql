@@ -76,4 +76,4 @@ CREATE TABLE %dbpre%players (
   KEY plr_stime (plr_bot,plr_time,plr_kills,plr_frags,plr_deaths),
   KEY plr_sfrags (plr_bot,plr_frags,plr_deaths),
   KEY plr_swins (plr_bot,plr_wins,plr_teamwins,plr_matches,plr_kills,plr_frags,plr_deaths)
-) Type=MyISAM;
+) Engine=MyISAM;

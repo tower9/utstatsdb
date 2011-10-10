@@ -7,4 +7,4 @@ CREATE TABLE %dbpre%gchat (
   gc_text varchar(255) NOT NULL default '',
   UNIQUE KEY gc_cnum (gc_num),
   KEY gc_matchtime (gc_match,gc_time)
-) Type=MyISAM;
+) Engine=MyISAM;
