@@ -2,7 +2,7 @@
 
 /*
     UTStatsDB
-    Copyright (C) 2002-2009  Patrick Contreras / Paul Gallier
+    Copyright (C) 2002-2011  Patrick Contreras / Paul Gallier
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -46,6 +46,25 @@ function sql_query($query) {
         error_log($err);
       }
       @mysql_close($link);
+      break;
+    case "mysqli":
+      if (!function_exists("mysqli_connect"))
+        die("No MySQLi support found!");
+      if (!isset($SQLport) || $SQLport == "")
+        $SQLport = 3306;
+      $link = @mysqli_connect("$SQLhost:$SQLport","$SQLus","$SQLpw","$SQLdb");
+      if (mysqli_connect_errno()) {
+        echo "Database access error.\n";
+        exit;
+      }
+      $result = @mysqli_query($link, $query);
+      if (!$result) {
+      	$err = "*Error in database query: '$query'";
+      	error_log($err);
+        $err = mysqli_errno($link) . ": " . mysqli_error($link);
+        error_log($err);
+      }
+      @mysqli_close($link);
       break;
     case "sqlite":
       if (!function_exists("sqlite_open"))
@@ -110,6 +129,15 @@ function sql_connect() {
         exit;
       }
       break;
+    case "mysqli":
+      if (!isset($SQLport) || $SQLport == "")
+        $SQLport = 3306;
+      $link = @mysqli_connect("$SQLhost:$SQLport","$SQLus","$SQLpw","$SQLdb");
+      if (!$link) {
+        echo "Database access error.\n";
+        exit;
+      }
+      break;
     case "sqlite":
       $link = @sqlite_open("$SQLdb", 0640, $sqlite_err);
       if (!$link) {
@@ -153,6 +181,15 @@ function sql_queryn($link, $query) {
       	$err = "*Error in database query: '$query'";
       	error_log($err);
         $err = mysql_errno($link) . ": " . mysql_error($link);
+        error_log($err);
+      }
+      break;
+    case "mysqli":
+      $result = @mysqli_query($link, $query);
+      if (!$result) {
+      	$err = "*Error in database query: '$query'";
+      	error_log($err);
+        $err = mysqli_errno($link) . ": " . mysqli_error($link);
         error_log($err);
       }
       break;
@@ -200,6 +237,15 @@ function sql_querynb($link, $query) {
         error_log($err);
       }
       break;
+    case "mysqli":
+      $result = @mysqli_query($link, $query);
+      if (!$result) {
+      	$err = "*Error in database query: '$query'";
+      	error_log($err);
+        $err = mysqli_errno($link) . ": " . mysqli_error($link);
+        error_log($err);
+      }
+      break;
     case "sqlite":
       $query = ereg_replace(" USE INDEX \(.*\)", "", $query);
       $result = @sqlite_query($link, "$query");
@@ -232,6 +278,9 @@ function sql_fetch_row($result) {
     case "mysql":
       $row = @mysql_fetch_row($result);
       break;
+    case "mysqli":
+      $row = @mysqli_fetch_row($result);
+      break;
     case "sqlite":
       $row = @sqlite_fetch_array($result, SQLITE_NUM);
       break;
@@ -263,6 +312,9 @@ function sql_fetch_assoc($result) {
     case "mysql":
       $row = @mysql_fetch_assoc($result);
       break;
+    case "mysqli":
+      $row = @mysqli_fetch_assoc($result);
+      break;
     case "sqlite":
       $row = @sqlite_fetch_array($result, SQLITE_ASSOC);
       break;
@@ -286,6 +338,9 @@ function sql_fetch_array($result) {
   switch (strtolower($dbtype)) {
     case "mysql":
       $row = @mysql_fetch_array($result);
+      break;
+    case "mysqli":
+      $row = @mysqli_fetch_array($result);
       break;
     case "sqlite":
       $row = @sqlite_fetch_array($result, SQLITE_BOTH);
@@ -311,6 +366,9 @@ function sql_free_result($result) {
     case "mysql":
       @mysql_free_result($result);
       break;
+    case "mysqli":
+      @mysqli_stmt_free_result($result);
+      break;
     case "sqlite":
       break;
     case "mssql":
@@ -330,6 +388,9 @@ function sql_insert_id($link) {
   switch (strtolower($dbtype)) {
     case "mysql":
       $num = @mysql_insert_id();
+      break;
+    case "mysqli":
+      $num = @mysqli_insert_id();
       break;
     case "sqlite":
       $num = @sqlite_last_insert_rowid($link);
@@ -359,6 +420,9 @@ function sql_num_rows($result) {
     case "mysql": // Not available in unbuffered mode
       $num = mysql_num_rows($result);
       break;
+    case "mysqli": // Not available in unbuffered mode
+      $num = mysqli_num_rows($result);
+      break;
     case "sqlite": // Not available in unbuffered mode
       $num = sqlite_num_rows($result);
       break;
@@ -380,6 +444,9 @@ function sql_affected_rows($link) {
     case "mysql":
       $num = mysql_affected_rows($link);
       break;
+    case "mysqli":
+      $num = mysqli_affected_rows($link);
+      break;
     case "sqlite":
       $num = sqlite_changes($link);
       break;
@@ -400,6 +467,9 @@ function sql_close($link) {
   switch (strtolower($dbtype)) {
     case "mysql":
       mysql_close($link);
+      break;
+    case "mysqli":
+      mysqli_close($link);
       break;
     case "sqlite":
       sqlite_unbuffered_query($link, "COMMIT");
@@ -443,6 +513,9 @@ function sql_error($link) {
     case "mysql":
       $err = mysql_error($link);
       break;
+    case "mysqli":
+      $err = mysqli_error($link);
+      break;
     case "mssql":
       $err = "";
       break;
@@ -484,6 +557,17 @@ function sql_show_tables($query) {
       }
       $result = mysql_query("$query");
       mysql_close($link);
+      break;
+    case "mysqli":
+      if (!isset($SQLport) || $SQLport == "")
+        $SQLport = 3306;
+      $link = @mysqli_connect("$SQLhost:$SQLport","$SQLus","$SQLpw","$SQLdb");
+      if (!$link) {
+        echo "Database access error.\n";
+        exit;
+      }
+      $result = @mysqli_query($link, $query);
+      mysqli_close($link);
       break;
     case "sqlite":
       $link = sqlite_open("$SQLdb", 0640, $sqlite_err);
