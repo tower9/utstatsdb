@@ -62,7 +62,7 @@ function parselog($file,$chatfile)
 
   // Check database version
   $uselimit = 0;
-  if (strtolower($dbtype) == "mysql" && ($mysqlverh > 3 || ($mysqlverh == 3 && $mysqlverl >= 23)))
+  if ((strtolower($dbtype) == "mysql" || strtolower($dbtype) == "mysqli") && ($mysqlverh > 3 || ($mysqlverh == 3 && $mysqlverl >= 23)))
     $uselimit = 1;
 
   // Load Special Events

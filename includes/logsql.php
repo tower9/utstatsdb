@@ -492,6 +492,9 @@ function sql_addslashes($str) {
     case "mysql":
       $str = addslashes($str);
       break;
+    case "mysqli":
+      $str = addslashes($str);
+      break;
     case "sqlite":
       $str = sqlite_escape_string($str);
       break;

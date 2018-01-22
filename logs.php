@@ -359,9 +359,24 @@ if (strtolower($dbtype) == "mysql") {
   }
   $mysqlverl = (int) substr($mysqlver, $dot + 1, $dot2 - $dot - 1);
 }
+if (strtolower($dbtype) == "mysqli") {
+  $mysqlver = mysqli_get_server_info($link);
+  $dot = strpos($mysqlver, ".");
+  if ($dot === FALSE) {
+    echo "Unable to determine MySQL version.<br />\n";
+    exit;
+  }
+  $mysqlverh = (int) substr($mysqlver, 0, $dot);
+  $dot2 = strpos($mysqlver, ".", $dot + 1);
+  if ($dot2 === FALSE) {
+    echo "Unable to determine MySQL version.<br />\n";
+    exit;
+  }
+  $mysqlverl = (int) substr($mysqlver, $dot + 1, $dot2 - $dot - 1);
+}
 
 // Obtain MySQL lock to insure only one copy of logs.php is running
-if ($config["lockname"] != "" && strtolower($dbtype) == "mysql" && ($mysqlverh > 3 || ($mysqlverh == 3 && $mysqlverl >= 23))) {
+if ($config["lockname"] != "" && (strtolower($dbtype) == "mysql" || strtolower($dbtype) == "mysqli") && ($mysqlverh > 3 || ($mysqlverh == 3 && $mysqlverl >= 23))) {
   $result = sql_queryn($link, "SELECT GET_LOCK('{$config['lockname']}',0)");
   if (!$result) {
     echo "Unable to obtain MySQL lock.{$break}\n";

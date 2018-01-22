@@ -39,7 +39,7 @@ function initcheck($reinit) {
     .sidebox {border: 1px #000000 solid}
   </style>
   <script language="Javascript" type="text/JavaScript">
-    function setFocus() { 
+    function setFocus() {
       document.login_form.IPass.focus();
     }
   </script>
@@ -117,6 +117,9 @@ EOF;
 
   switch (strtolower($dbtype)) {
     case "mysql":
+      $tdir = "mysql";
+      break;
+    case "mysqli":
       $tdir = "mysql";
       break;
     case "sqlite":
