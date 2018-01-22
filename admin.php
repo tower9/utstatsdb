@@ -142,6 +142,21 @@ switch (strtolower($dbtype)) {
     }
     mysql_close($link);
     break;
+  case "mysqli":
+    if (!isset($SQLport) || $SQLport == "")
+      $SQLport = 3306;
+    $link = mysqli_connect("$SQLhost:$SQLport","$SQLus","$SQLpw");
+    if (!$link) {
+      echo "Database access error.\n";
+      exit;
+    }
+    $result = mysqli_select_db($link, "$SQLdb");
+    if (!$result) {
+      echo "Error selecting database '$SQLdb'.\n";
+      exit;
+    }
+    mysqli_close($link);
+    break;
   case "sqlite":
 /*  This can be created directly
     $link = sqlite_open("$SQLdb", 0640, $sqlite_err);
