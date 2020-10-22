@@ -9,7 +9,7 @@ CREATE TABLE %dbpre%maps (
   mp_deaths mediumint(8) unsigned NOT NULL default 0,
   mp_suicides mediumint(8) unsigned NOT NULL default 0,
   mp_time bigint(19) unsigned NOT NULL default 0,
-  mp_lastmatch datetime NOT NULL default '0000-00-00 00:00:00',
+  mp_lastmatch datetime NOT NULL default '2004-03-16 00:00:00',
   UNIQUE KEY mp_mapnum (mp_num),
   KEY mp_nameauth (mp_name,mp_author)
 ) Engine=MyISAM;

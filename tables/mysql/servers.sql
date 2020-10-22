@@ -7,7 +7,7 @@ CREATE TABLE %dbpre%servers (
   sv_frags int(11) NOT NULL default 0,
   sv_score int(11) NOT NULL default 0,
   sv_time bigint(19) unsigned NOT NULL default 0,
-  sv_lastmatch datetime NOT NULL default '0000-00-00 00:00:00',
+  sv_lastmatch datetime NOT NULL default '2004-03-16 00:00:00',
   sv_admin varchar(35) NOT NULL default '',
   sv_email varchar(45) NOT NULL default '',
   sv_address varchar(21) NOT NULL default '',
